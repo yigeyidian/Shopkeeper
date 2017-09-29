@@ -438,30 +438,6 @@ class BillPresenter extends BasePresenter<IBillView> {
                 });
     }
 
-    public void getScore(String scoreStr) {
-        DialogUtils.showDialog(context, "获取数据中");
-        RetrofitHelper.getInstance()
-                .getApi()
-                .getScore("14", App.INSTANCE().getShopID(), scoreStr)
-                .compose(getActivityLifecycleProvider().bindToLifecycle())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(stringModel -> {
-                    DialogUtils.hintDialog();
-                    if (stringModel.getCode().equals("1")) {
-                        iView.scoreSuccess(stringModel.getResult());
-                    } else {
-                        iView.scoreSuccess("");
-                        iView.error("兑换失败");
-                    }
-                }, throwable -> {
-                    DialogUtils.hintDialog();
-                    throwable.printStackTrace();
-                    iView.scoreSuccess("");
-                    iView.error("兑换失败");
-                });
-    }
-
     public void searchMember(String orderId, String idStr) {
         DialogUtils.showDialog(context, "获取数据中");
         RetrofitHelper.getInstance()

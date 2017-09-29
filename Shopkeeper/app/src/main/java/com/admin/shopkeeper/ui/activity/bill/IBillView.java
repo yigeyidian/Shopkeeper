@@ -37,8 +37,6 @@ public interface IBillView extends IBaseView {
 
     void guazhangSuccess(List<GuaZhangBean> result, PayMeEntity entity);
 
-    void scoreSuccess(String result);
-
     void saleSuccess(MemberBean member, List<CardBean> cardBeens);
 
     void success(List<WeixinOrderBean> weixinOrderBeen);

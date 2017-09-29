@@ -123,6 +123,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
     private int youhuiMoney;//优惠
     private int scoreMoney = 0;
+    private int scoreCount = 0;
     private int cardMoney = 0;
     private double needMoney = 0;
 
@@ -188,6 +189,12 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                String scoreStr = editText.getText().toString();
+                if (!TextUtils.isEmpty(scoreStr)) {
+                    showToast("使用积分后不能使用卡券");
+                    return;
+                }
+
                 CardBean cardBean = cardBeenList.get(position);
                 if (cardBean.isSelect()) {
                     cardBean.setSelect(false);
@@ -211,6 +218,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     if (card.isSelect()) {
                         cardMoney += card.getMoney();
                     }
+                }
+                if (cardMoney > 0) {
+                    editText.setEnabled(false);
+                }else {
+                    editText.setEnabled(true);
                 }
                 initPay();
                 getNeed();
@@ -310,6 +322,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     showToast("优惠金额不能大于应付金额");
                     return;
                 }
+
+                scoreCount = scoreNum;
                 initPay();
                 getNeed();
                 intText();
@@ -410,6 +424,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 jsonBase.setPice(scoreMoney + "");
                 jsonBase.setSate("0");
                 jsonBase.setGuid(System.currentTimeMillis() + "00");
+                jsonBase.setPiceGuid(scoreCount + "");
                 t.add(jsonBase);
             }
             for (int i = 0; i < cardBeenList.size(); i++) {
@@ -1091,18 +1106,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             }
         });
         guaZhangDialog.show();
-    }
-
-    @Override
-    public void scoreSuccess(String result) {
-        if (TextUtils.isEmpty(result)) {
-            scoreMoney = 0;
-        } else {
-            scoreMoney = Integer.parseInt(result);
-        }
-        initPay();
-        getNeed();
-        intText();
     }
 
     @Override
