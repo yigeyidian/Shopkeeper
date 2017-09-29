@@ -1,0 +1,48 @@
+package com.admin.shopkeeper.entity;
+
+/**
+ * Created by Administrator on 2017/7/9 0009.
+ * 支付方式实体
+ */
+
+public class PayMeEntity {
+    private String name;
+    private boolean selected;
+    private double money;
+
+    public PayMeEntity(String name, boolean selected, double money) {
+        this.name = name;
+        this.selected = selected;
+        this.money = money;
+    }
+
+    public PayMeEntity(String name, boolean selected) {
+        this.name = name;
+        this.selected = selected;
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+}

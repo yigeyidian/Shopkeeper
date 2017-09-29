@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.admin.shopkeeper.ui.activity.activityOfBoss.boss.BossMainActivity">
+
+    <include layout="@layout/boss_common_toolbar" />
+
+    <com.admin.shopkeeper.weight.HomeViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:id="@+id/mHsv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_112sdp"
+        android:background="#f7f7fa"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tab_market"
+            style="@style/navbarItemStyle"
+            android:drawableTop="@mipmap/navbar_marketing_hover"
+            android:text="营销"
+            android:textColor="@color/navbar_selected" />
+
+        <TextView
+            android:id="@+id/tab_statement"
+            style="@style/navbarItemStyle"
+            android:drawableTop="@mipmap/navbar_statistics"
+            android:text="报表" />
+
+
+        <TextView
+            android:id="@+id/tab_basic"
+            style="@style/navbarItemStyle"
+            android:drawableTop="@mipmap/navbar_configuration"
+            android:text="基础配置" />
+
+        <TextView
+            android:id="@+id/tab_setting"
+            style="@style/navbarItemStyle"
+            android:drawableTop="@mipmap/navbar_settings"
+            android:text="设置" />
+    </LinearLayout>
+
+
+</LinearLayout>

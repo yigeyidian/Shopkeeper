@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/setting_bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/my_rl_setting"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_176sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:background="@drawable/selector_item">
+
+        <!--固定不需要从接口获取-->
+        <ImageView
+            android:id="@+id/iv_setting"
+            android:layout_width="@dimen/_130sdp"
+            android:layout_height="@dimen/_130sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_30sdp"
+            android:src="@mipmap/setting_advar_man" />
+
+        <TextView
+            android:id="@+id/restaurant_name_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_34sdp"
+            android:layout_marginLeft="@dimen/_23sdp"
+            android:layout_marginTop="@dimen/_41sdp"
+            android:layout_toRightOf="@id/iv_setting"
+            android:text="智慧餐厅"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/username_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_34sdp"
+            android:layout_below="@id/restaurant_name_setting"
+            android:layout_marginLeft="@dimen/_23sdp"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_toRightOf="@id/iv_setting"
+            android:text="userName"
+            android:textColor="@color/setting_username_tv" />
+
+        <ImageView
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/_30sdp"
+            android:src="@mipmap/list_icon_arrow_right" />
+    </RelativeLayout>
+
+    <!--基本设置-->
+    <RelativeLayout
+        android:id="@+id/basic_sets_rl_setting"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:background="@drawable/selector_item">
+
+        <ImageView
+            android:id="@+id/basic_set_iv_setting"
+            android:layout_width="@dimen/_58sdp"
+            android:layout_height="@dimen/_58sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_30sdp"
+            android:src="@mipmap/settint_icon_set" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_34sdp"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_28sdp"
+            android:layout_toRightOf="@id/basic_set_iv_setting"
+            android:text="基本设置"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/_30sdp"
+            android:src="@mipmap/list_icon_arrow_right" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="@dimen/_31sdp"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/white" />
+
+    <RelativeLayout
+        android:id="@+id/shop_permission_manage_rl_setting"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:background="@drawable/selector_item">
+
+        <ImageView
+            android:id="@+id/management_iv_setting"
+            android:layout_width="@dimen/_58sdp"
+            android:layout_height="@dimen/_58sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_30sdp"
+            android:src="@mipmap/settint_icon_jurisdiction" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_34sdp"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_28sdp"
+            android:layout_toRightOf="@id/management_iv_setting"
+            android:text="商家权限管理"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/_30sdp"
+            android:src="@mipmap/list_icon_arrow_right" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="@dimen/_31sdp"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/white" />
+
+    <LinearLayout
+        android:id="@+id/setting_checkdata"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:background="@drawable/selector_item"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/_58sdp"
+            android:layout_height="@dimen/_58sdp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/_30sdp"
+            android:src="@mipmap/settint_icon_data" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_weight="1"
+            android:text="数据校验"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/_30sdp"
+            android:src="@mipmap/list_icon_arrow_right" />
+    </LinearLayout>
+
+    <View style="@style/LineHorStyle" />
+
+
+    <View
+        style="@style/LineHorStyle"
+        android:layout_marginTop="@dimen/_30sdp" />
+
+    <!--桌位营业情况-->
+    <LinearLayout
+        android:id="@+id/setting_unlogin"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:background="@drawable/selector_item"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/_58sdp"
+            android:layout_height="@dimen/_58sdp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/_30sdp"
+            android:src="@mipmap/settint_icon_exit" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_weight="1"
+            android:text="退出登录"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/_30sdp"
+            android:src="@mipmap/list_icon_arrow_right" />
+    </LinearLayout>
+
+    <View style="@style/LineHorStyle" />
+</LinearLayout>
