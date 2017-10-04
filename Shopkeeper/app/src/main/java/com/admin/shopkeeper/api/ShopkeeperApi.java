@@ -1568,10 +1568,10 @@ public interface ShopkeeperApi {
             @Field("WeiXinOrder") String weiXinOrder,
             @Field("EnableCenter") int jifenAdding,
             @Field("EnableOrder") int jifenExchange,
-            @Field("WeiXinYuDin") int weiXinYuDin,
-            @Field("WeiXinWaiMai") int weiXinWaiMai,
-            @Field("WeiXinKuaiCan") int weiXinKuaiCan,
-            @Field("TanDian") int tanDian,
+            @Field("WeiXinYuDin") String weiXinYuDin,
+            @Field("WeiXinWaiMai") String weiXinWaiMai,
+            @Field("WeiXinKuaiCan") String weiXinKuaiCan,
+            @Field("TanDian") String tanDian,
             @Field("RESTAURANTID") String shopId);
 
     @FormUrlEncoded

@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.ListDialog;
+import com.admin.shopkeeper.dialog.MutiSelectDialog;
+import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.entity.WechatBean;
 import com.gyf.barlibrary.ImmersionBar;
 
@@ -42,12 +44,12 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
     @BindView(R.id.jifen_exchange)
     RadioGroup rgJifenExchange;
 
-    int yuding = 1;
-    int kuaican = 1;
-    int waimai = 1;
-    int tandian = 1;
+    String yuding = "";
+    String kuaican = "";
+    String waimai = "";
+    String tandian = "";
 
-    List<String> selectTypeStr = new ArrayList<>();
+    List<MutiBean> selectTypeStr = new ArrayList<>();
 
     @Override
     protected void initPresenter() {
@@ -71,10 +73,10 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
-        selectTypeStr.add("积分兑换");
-        selectTypeStr.add("优惠券");
-        selectTypeStr.add("团购(商品)券");
-        selectTypeStr.add("无");
+        selectTypeStr.add(new MutiBean("积分兑换", false, 1));
+        selectTypeStr.add(new MutiBean("优惠券", false, 2));
+        selectTypeStr.add(new MutiBean("团购(商品)券", false, 4));
+        selectTypeStr.add(new MutiBean("无", false, 5));
 
         presenter.getData();
     }
@@ -99,93 +101,46 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
 
     @OnClick(R.id.ll_yuding)
     public void yudingClick() {
-        showSelectDialog("微信预定", 1);
+        showSelectDialog("微信预定", yuding);
     }
 
     @OnClick(R.id.ll_kuaican)
     public void kuaicanClick() {
-        showSelectDialog("快餐", 2);
+        showSelectDialog("快餐", kuaican);
     }
 
     @OnClick(R.id.ll_waimai)
     public void waimaiClick() {
-        showSelectDialog("外卖", 3);
+        showSelectDialog("外卖", waimai);
     }
 
     @OnClick(R.id.ll_saoma)
     public void tandianClick() {
-        showSelectDialog("扫码点餐", 4);
+        showSelectDialog("扫码点餐", tandian);
     }
 
-    private void showSelectDialog(String title, int type) {
-        ListDialog.Builder builder = new ListDialog.Builder(this, R.style.OrderDialogStyle);
+    private void showSelectDialog(String title, String selectText) {
+        MutiSelectDialog.Builder builder = new MutiSelectDialog.Builder(this, R.style.OrderDialogStyle);
         builder.setTitle(title);
         builder.setReasons(selectTypeStr);
-        builder.setButtonClick(new ListDialog.OnButtonClick() {
+        builder.setSelect(selectText);
+        builder.setButtonClick(new MutiSelectDialog.OnButtonClick() {
+
 
             @Override
-            public void onItemClick(int i, String str) {
-                switch (str) {
-                    case "积分兑换":
-                        if (type == 1) {
-                            yuding = 1;
-                            tvYuding.setText(str);
-                        } else if (type == 2) {
-                            kuaican = 1;
-                            tvKuaican.setText(str);
-                        } else if (type == 3) {
-                            waimai = 1;
-                            tvWaimai.setText(str);
-                        } else if (type == 4) {
-                            tandian = 1;
-                            tvTandian.setText(str);
-                        }
-                        break;
-                    case "优惠券":
-                        if (type == 1) {
-                            yuding = 2;
-                            tvYuding.setText(str);
-                        } else if (type == 2) {
-                            kuaican = 2;
-                            tvKuaican.setText(str);
-                        } else if (type == 3) {
-                            waimai = 2;
-                            tvWaimai.setText(str);
-                        } else if (type == 4) {
-                            tandian = 2;
-                            tvTandian.setText(str);
-                        }
-                        break;
-                    case "团购(商品)券":
-                        if (type == 1) {
-                            yuding = 4;
-                            tvYuding.setText(str);
-                        } else if (type == 2) {
-                            kuaican = 4;
-                            tvKuaican.setText(str);
-                        } else if (type == 3) {
-                            waimai = 4;
-                            tvWaimai.setText(str);
-                        } else if (type == 4) {
-                            tandian = 4;
-                            tvTandian.setText(str);
-                        }
-                        break;
-                    case "无":
-                        if (type == 1) {
-                            yuding = 5;
-                            tvYuding.setText(str);
-                        } else if (type == 2) {
-                            kuaican = 5;
-                            tvKuaican.setText(str);
-                        } else if (type == 3) {
-                            waimai = 5;
-                            tvWaimai.setText(str);
-                        } else if (type == 4) {
-                            tandian = 5;
-                            tvTandian.setText(str);
-                        }
-                        break;
+            public void onOk(String text, String value) {
+                if (title.equals("微信预定")) {
+                    yuding = value;
+                    tvYuding.setText(text);
+                } else if (title.equals("快餐")) {
+                    kuaican = value;
+                    tvKuaican.setText(text);
+                } else if (title.equals("外卖")) {
+                    waimai = value;
+                    tvWaimai.setText(text);
+                } else {
+                    tandian = value;
+                    tvTandian.setText(text);
                 }
             }
         });
@@ -231,44 +186,36 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
         waimai = bean.getWeixinWaimai();
         tandian = bean.getTandian();
 
-        if (yuding == 1) {
-            tvYuding.setText(selectTypeStr.get(0));
-        } else if (yuding == 2) {
-            tvYuding.setText(selectTypeStr.get(1));
-        } else if (yuding == 4) {
-            tvYuding.setText(selectTypeStr.get(2));
-        } else {
-            tvYuding.setText(selectTypeStr.get(3));
-        }
+        String yudingStr = "";
+        String kuaicanStr = "";
+        String waimaiStr = "";
+        String tandianStr = "";
 
-        if (kuaican == 1) {
-            tvKuaican.setText(selectTypeStr.get(0));
-        } else if (kuaican == 2) {
-            tvKuaican.setText(selectTypeStr.get(1));
-        } else if (kuaican == 4) {
-            tvKuaican.setText(selectTypeStr.get(2));
-        } else {
-            tvKuaican.setText(selectTypeStr.get(3));
+        for (MutiBean mutiBean : selectTypeStr) {
+            if (yuding.contains(mutiBean.getValue() + "")) {
+                yudingStr += mutiBean.getText() + ",";
+            }
+            if (kuaican.contains(mutiBean.getValue() + "")) {
+                kuaicanStr += mutiBean.getText() + ",";
+            }
+            if (waimai.contains(mutiBean.getValue() + "")) {
+                waimaiStr += mutiBean.getText() + ",";
+            }
+            if (tandian.contains(mutiBean.getValue() + "")) {
+                tandianStr += mutiBean.getText() + ",";
+            }
         }
-
-        if (waimai == 1) {
-            tvWaimai.setText(selectTypeStr.get(0));
-        } else if (waimai == 2) {
-            tvWaimai.setText(selectTypeStr.get(1));
-        } else if (waimai == 4) {
-            tvWaimai.setText(selectTypeStr.get(2));
-        } else {
-            tvWaimai.setText(selectTypeStr.get(3));
+        if (yudingStr.length() > 0) {
+            tvYuding.setText(yudingStr.substring(0, yudingStr.length() - 1));
         }
-
-        if (tandian == 1) {
-            tvTandian.setText(selectTypeStr.get(0));
-        } else if (tandian == 2) {
-            tvTandian.setText(selectTypeStr.get(1));
-        } else if (tandian == 4) {
-            tvTandian.setText(selectTypeStr.get(2));
-        } else {
-            tvTandian.setText(selectTypeStr.get(3));
+        if (kuaicanStr.length() > 0) {
+            tvKuaican.setText(kuaicanStr.substring(0, kuaicanStr.length() - 1));
+        }
+        if (waimaiStr.length() > 0) {
+            tvWaimai.setText(waimaiStr.substring(0, waimaiStr.length() - 1));
+        }
+        if (tandianStr.length() > 0) {
+            tvTandian.setText(tandianStr.substring(0, tandianStr.length() - 1));
         }
 
         if (bean.getJifenAdding() == 1) {

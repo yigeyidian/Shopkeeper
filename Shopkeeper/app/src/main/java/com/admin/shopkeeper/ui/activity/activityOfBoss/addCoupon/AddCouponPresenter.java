@@ -105,6 +105,32 @@ public class AddCouponPresenter extends BasePresenter<IAddCouponView> {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
+                .getCommodityCouponInfo("6", App.INSTANCE().getShopID())
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if (stringModel.getCode().equals("1")) {
+                        if (stringModel.getResult().equals("1")) {
+                            iView.error("暂无数据");
+                        } else {
+                            ProductBean[] productBeen = new Gson().fromJson(stringModel.getResult(), ProductBean[].class);
+                            iView.productsuccess(Arrays.asList(productBeen));
+                        }
+                    } else {
+                        iView.error("加载失败");
+                    }
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    iView.error("加载失败");
+                });
+    }
+
+    public void getMealData() {
+        DialogUtils.showDialog(context, "数据加载中");
+        RetrofitHelper.getInstance()
+                .getApi()
                 .getProductInfo("5", App.INSTANCE().getShopID())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())

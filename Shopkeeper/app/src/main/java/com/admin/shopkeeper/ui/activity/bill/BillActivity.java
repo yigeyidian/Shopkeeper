@@ -263,6 +263,10 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             if (memberBean.getRate() != 0 && poptype == 1) {
                 llEdit.setVisibility(View.VISIBLE);
+                editText.setHint("最多可兑换" + (int) ((getYinfuMoney() + scoreMoney) / memberBean.getRate()) + "积分");
+                if (scoreCount > 0) {
+                    editText.setText(scoreCount + "");
+                }
             } else {
                 llEdit.setVisibility(View.GONE);
             }
@@ -274,9 +278,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             tvMoney.setText("会员余额：" + memberBean.getMoney());
         }
 
-        if (scoreCount > 0) {
-            editText.setText(scoreCount + "");
-        }
 
         ivQrcode.setOnClickListener(v -> {
             Intent intent = new Intent(BillActivity.this, CaptureActivity.class);
@@ -1131,12 +1132,13 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         llMember.setVisibility(View.VISIBLE);
         if (memberBean.getRate() != 0 && poptype == 1) {
             llEdit.setVisibility(View.VISIBLE);
+
+            editText.setHint("最多可兑换" + (int) ((getYinfuMoney() + scoreMoney) / memberBean.getRate()) + "积分");
+            if (scoreCount > 0) {
+                editText.setText(scoreCount + "");
+            }
         } else {
             llEdit.setVisibility(View.GONE);
-        }
-
-        if (scoreCount > 0) {
-            editText.setText(scoreCount + "");
         }
 
         tvNo.setText("会员编号：" + memberBean.getNo());
