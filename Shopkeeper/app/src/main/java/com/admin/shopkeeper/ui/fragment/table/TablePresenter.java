@@ -359,7 +359,7 @@ class TablePresenter extends BasePresenter<ITableView> {
     //    type	接口类型	12
 //    id	店铺ID
 //    TABLEID	桌位ID	多个逗号分隔
-    public void getOrderList(String tableId,Order masterOrder) {
+    public void getOrderList(String tableId, Order masterOrder) {
         DialogUtils.showDialog(context, "获取订单列表");
         RetrofitHelper.getInstance()
                 .getApi()
@@ -382,10 +382,12 @@ class TablePresenter extends BasePresenter<ITableView> {
                             String oTableId = "";
                             String oTableName = "";
                             String id = "";
+                            double price = 0;
                             for (int i = 0; i < orders.length; i++) {
                                 Order o = orders[i];
                                 tableWareCount += o.getTableWareCount();
                                 peopleCount += o.getPeopleCount();
+                                price += o.getPayPrice();
                                 if (i == orders.length - 1) {
                                     id += o.getId();
                                     billId += o.getBillid();
@@ -405,6 +407,7 @@ class TablePresenter extends BasePresenter<ITableView> {
                             order.setBillid(billId);
                             order.setTableId(oTableId);
                             order.setType(masterOrder.getType());
+                            order.setPayPrice(price);
                             Timber.d("oTableName" + oTableName);
                             order.setTableName(oTableName);
                             iView.orderListSuccess(order, Arrays.asList(detailFoods));
