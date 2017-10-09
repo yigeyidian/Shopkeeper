@@ -235,6 +235,7 @@ public interface ShopkeeperApi {
 //    id	店铺ID
 //    TableName	桌位名称
 //    Username	操作人
+//    USERID	操作人id
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortKaiDanAshx.ashx")
     Observable<IntModel> undo(
@@ -244,7 +245,8 @@ public interface ShopkeeperApi {
             @Field("id") String id,
             @Field("price") String price,
             @Field("TableName") String tableName,
-            @Field("Username") String username
+            @Field("Username") String username,
+            @Field("USERID") String userID
     );
 
     //    Type	类型	6

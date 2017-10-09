@@ -94,7 +94,7 @@ class OrderDetailPresenter extends BasePresenter<IOrderDetailView> {
         DialogUtils.showDialog(context, "数据提交中...");
         RetrofitHelper.getInstance()
                 .getApi()
-                .undo("4", tableId, billid, App.INSTANCE().getShopID(),price, tableName, App.INSTANCE().getUser().getName())
+                .undo("4", tableId, billid, App.INSTANCE().getShopID(),price, tableName, App.INSTANCE().getUser().getName(),App.INSTANCE().getUser().getId())
                 .compose(getFragmentLifecycleProvider().bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
