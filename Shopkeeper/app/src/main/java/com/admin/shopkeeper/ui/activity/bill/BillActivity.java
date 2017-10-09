@@ -152,6 +152,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     private TextView tvPhone;
     private TextView tvScore;
     private TextView tvMoney;
+    private EditText editText;
 
     @OnClick(R.id.bill_print)
     public void printClick() {
@@ -177,7 +178,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         tvMoney = (TextView) laheiView.findViewById(R.id.text_remain_money);
         TextView tvOk = (TextView) laheiView.findViewById(R.id.pop_ok);
         TextView tvCancel = (TextView) laheiView.findViewById(R.id.pop_cancel);
-        EditText editText = (EditText) laheiView.findViewById(R.id.pop_edit);
+        editText = (EditText) laheiView.findViewById(R.id.pop_edit);
         EditText etSearch = (EditText) laheiView.findViewById(R.id.pop_edit_search);
         TextView tvSearch = (TextView) laheiView.findViewById(R.id.pop_btn_search);
         ImageView ivQrcode = (ImageView) laheiView.findViewById(R.id.pop_qrcode);
@@ -221,7 +222,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 }
                 if (cardMoney > 0) {
                     editText.setEnabled(false);
-                }else {
+                } else {
                     editText.setEnabled(true);
                 }
                 initPay();
@@ -261,6 +262,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             if (memberBean.getRate() != 0 && memberPayEntity == null) {
                 llEdit.setVisibility(View.VISIBLE);
+                editText.setHint("最多可使用" + ((int)getYinfuMoney() / memberBean.getRate()) + "积分");
             } else {
                 llEdit.setVisibility(View.GONE);
             }
@@ -1131,6 +1133,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         llMember.setVisibility(View.VISIBLE);
         if (memberBean.getRate() != 0 && memberPayEntity == null) {
             llEdit.setVisibility(View.VISIBLE);
+            editText.setHint("最多可使用" + getYinfuMoney() / memberBean.getRate() + "积分");
         } else {
             llEdit.setVisibility(View.GONE);
         }

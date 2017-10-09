@@ -46,6 +46,15 @@ public class MutiSelectDialog extends AppCompatDialog {
 
         private String title;
         private List<MutiBean> reasons;
+        private String select;
+
+        public String getSelect() {
+            return select;
+        }
+
+        public void setSelect(String select) {
+            this.select = select;
+        }
 
         public List<MutiBean> getReasons() {
             return reasons;
@@ -85,6 +94,8 @@ public class MutiSelectDialog extends AppCompatDialog {
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.scrollView);
 
             titletv.setText(title);
+
+
             oneBtn.setOnClickListener(v -> {
                 dismiss();
             });
@@ -109,11 +120,22 @@ public class MutiSelectDialog extends AppCompatDialog {
                 dismiss();
             });
 
+            if (!TextUtils.isEmpty(select)) {
+                for (MutiBean mutiBean : getReasons()) {
+                    if (select.contains(mutiBean.getValue() + "")) {
+                        mutiBean.setSelect(true);
+                    } else {
+                        mutiBean.setSelect(false);
+                    }
+                }
+            }
+
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             adapter = new MutiDialogAdapter(R.layout.item_muti, getReasons());
             recyclerView.setHasFixedSize(true);
             recyclerView.addItemDecoration(new MarginDecoration(context, R.dimen._10sdp));
             recyclerView.setAdapter(adapter);
+
 
             adapter.setOnItemClickListener((adapter, view1, position) -> {
                 if (getReasons().get(position).isSelect()) {

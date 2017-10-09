@@ -27,7 +27,7 @@ public class WechatPresenter extends BasePresenter<IWechatView> {
     }
 
 
-    public void save(String personCenter, String weixinOrder, int jifenAdding, int jifenExchange, int yuding, int waimai, int kuaican, int tandian) {
+    public void save(String personCenter, String weixinOrder, int jifenAdding, int jifenExchange, String yuding, String waimai, String kuaican, String tandian) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
                 .getApi()

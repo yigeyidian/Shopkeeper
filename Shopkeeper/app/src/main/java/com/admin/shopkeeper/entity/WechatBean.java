@@ -27,33 +27,17 @@ public class WechatBean implements Serializable {
     @SerializedName("WeiXinOrder")
     private double weixinOrder;
     @SerializedName("WeiXinYuDin")
-    private int weixinYuding;
+    private String weixinYuding;
     @SerializedName("WeiXinWaiMai")
-    private int weixinWaimai;
+    private String weixinWaimai;
     @SerializedName("WeiXinKuaiCan")
-    private int weixinKuaican;
+    private String weixinKuaican;
     @SerializedName("TanDian")
-    private int tandian;
+    private String tandian;
     @SerializedName("EnableCenter")
-    private int jifenAdding;
+    private String jifenAdding;
     @SerializedName("EnableOrder")
-    private int jifenExchange;
-
-    public int getJifenAdding() {
-        return jifenAdding;
-    }
-
-    public void setJifenAdding(int jifenAdding) {
-        this.jifenAdding = jifenAdding;
-    }
-
-    public int getJifenExchange() {
-        return jifenExchange;
-    }
-
-    public void setJifenExchange(int jifenExchange) {
-        this.jifenExchange = jifenExchange;
-    }
+    private String jifenExchange;
 
     public String getGuid() {
         return guid;
@@ -87,35 +71,51 @@ public class WechatBean implements Serializable {
         this.weixinOrder = weixinOrder;
     }
 
-    public int getWeixinYuding() {
+    public String getWeixinYuding() {
         return weixinYuding;
     }
 
-    public void setWeixinYuding(int weixinYuding) {
+    public void setWeixinYuding(String weixinYuding) {
         this.weixinYuding = weixinYuding;
     }
 
-    public int getWeixinWaimai() {
+    public String getWeixinWaimai() {
         return weixinWaimai;
     }
 
-    public void setWeixinWaimai(int weixinWaimai) {
+    public void setWeixinWaimai(String weixinWaimai) {
         this.weixinWaimai = weixinWaimai;
     }
 
-    public int getWeixinKuaican() {
+    public String getWeixinKuaican() {
         return weixinKuaican;
     }
 
-    public void setWeixinKuaican(int weixinKuaican) {
+    public void setWeixinKuaican(String weixinKuaican) {
         this.weixinKuaican = weixinKuaican;
     }
 
-    public int getTandian() {
+    public String getTandian() {
         return tandian;
     }
 
-    public void setTandian(int tandian) {
+    public void setTandian(String tandian) {
         this.tandian = tandian;
+    }
+
+    public String getJifenAdding() {
+        return jifenAdding;
+    }
+
+    public void setJifenAdding(String jifenAdding) {
+        this.jifenAdding = jifenAdding;
+    }
+
+    public String getJifenExchange() {
+        return jifenExchange;
+    }
+
+    public void setJifenExchange(String jifenExchange) {
+        this.jifenExchange = jifenExchange;
     }
 }
