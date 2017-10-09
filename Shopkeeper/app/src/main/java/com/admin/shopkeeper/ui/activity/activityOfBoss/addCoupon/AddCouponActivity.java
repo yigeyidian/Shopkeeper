@@ -79,6 +79,8 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
     Spinner spinner;
     @BindView(R.id.ll_prduct)
     LinearLayout llProduct;
+    @BindView(R.id.ll_type)
+    LinearLayout llType;
 
     private String titleStr;
 
@@ -146,8 +148,17 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
 //        foodTypeAdapter = new EditFoodTypeAdapter(this);
 //        foodSpinner.setAdapter(foodTypeAdapter);
 
-        if (titleStr.equals("团购券管理") || titleStr.equals("商品券管理")) {
+        if (titleStr.equals("团购券管理")) {
             llProduct.setVisibility(View.VISIBLE);
+            llType.setVisibility(View.GONE);
+
+            adapter = new ProductAdapter(this);
+            spinner.setAdapter(adapter);
+
+            presenter.getMealData();
+        } else if (titleStr.equals("商品券管理")) {
+            llProduct.setVisibility(View.VISIBLE);
+            llType.setVisibility(View.GONE);
 
             adapter = new ProductAdapter(this);
             spinner.setAdapter(adapter);
@@ -155,7 +166,10 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
             presenter.getProductData();
         } else {
             llProduct.setVisibility(View.GONE);
+            llType.setVisibility(View.VISIBLE);
         }
+
+
     }
 
     @Override
@@ -307,7 +321,7 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
             typeWaimai = 2;
         } else if (((RadioButton) rgWaiMai.getChildAt(2)).isChecked()) {
             typeWaimai = 3;
-        }else{
+        } else {
             typeWaimai = 4;
         }
         String limitStr = etLimit.getText().toString().trim();

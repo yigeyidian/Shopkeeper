@@ -154,13 +154,15 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     private TextView tvMoney;
     private EditText editText;
 
+    private int poptype = 1;
+
     @OnClick(R.id.bill_print)
     public void printClick() {
-        if (order == null) {
+        if (order == null || weixinOrderBean == null) {
             return;
         }
         presenter.print(order.getBillid(), order.getPeopleCount(), order.getTableId(), order.getTableName(),
-                order.getPayPrice(), order.getPayPrice(), 0, "8");
+                weixinOrderBean.getYuanjia(), getYinfuMoney(), getYouhuiMoney(), "8");
     }
 
     @OnClick(R.id.layout)
@@ -236,7 +238,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         // /笑笑@满30送5块@5.00@908fe556-e5b7-4446-ac26-0848c991061c@1^笑笑@满20抵20@20.00@5fda66e3-d879-4f14-932b-1c3f71699269@2"
         // ,"message":"0"}
 
-        if (memberPayEntity != null) {
+        if (poptype == 2) {
             //popList.setVisibility(View.INVISIBLE);
             tvOk.setText("立即支付");
             if (memberBean != null) {
@@ -260,9 +262,12 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         } else {
             llMember.setVisibility(View.VISIBLE);
 
-            if (memberBean.getRate() != 0 && memberPayEntity == null) {
+            if (memberBean.getRate() != 0 && poptype == 1) {
                 llEdit.setVisibility(View.VISIBLE);
                 editText.setHint("最多可使用" + ((int)getYinfuMoney() / memberBean.getRate()) + "积分");
+                if (scoreCount > 0) {
+                    editText.setText(scoreCount + "");
+                }
             } else {
                 llEdit.setVisibility(View.GONE);
             }
@@ -296,7 +301,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             }
             memberId = memberBean.getId();
 
-            if (memberPayEntity != null) {
+            if (poptype == 2) {
                 if (needMoney == 0) {
                     billClick();
                 } else {
@@ -340,6 +345,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         saleWindow.setFocusable(true);
         saleWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33000000")));
         saleWindow.setOnDismissListener(() -> {
+            poptype = 1;
             backgroundAlpha(1f);
         });
         saleWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM
@@ -566,24 +572,24 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             pays.setQuanxian(p);
             String pStr = new Gson().toJson(pays);
 
-            double result = weixinOrderBean.getYuanjia() - weixinOrderBean.getYufupice() - weixinOrderBean.getYouhui() - getYouhuiMoney();
+            double result = getYinfuMoney();
 
             Log.i("ttt", "totleMoney:" + result);
 
             memberId = memberBean == null ? "" : memberBean.getId();
             if (type == P3) {
                 presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
-                        memberId, yuanjia, weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "",
+                        memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "",
                         getYouhuiMoney(), "4", guiId);
             } else if (type == P4) {
                 presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
-                        memberId, yuanjia, weixinOrderBean.getCanju(), qStr
+                        memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
                         , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", getYouhuiMoney(), "3", guiId);
             } else if (type == P6) {
-                presenter.rebill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, yuanjia, weixinOrderBean.getCanju(), qStr
+                presenter.rebill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
                         , tStr, pStr, order.getType().equals("7") ? "7" : "4", getYouhuiMoney(), order.getBillid(), result);
             } else {
-                presenter.bill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, yuanjia, weixinOrderBean.getCanju(), qStr
+                presenter.bill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
                         , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), getYouhuiMoney(), "7", guiId);
             }
         }
@@ -833,6 +839,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                         adapter.notifyDataSetChanged();
                         billAdapter.notifyDataSetChanged();
                         memberPayEntity = entity;
+                        poptype = 2;
                         cardClick();
                         break;
                     default:
@@ -897,6 +904,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                                     if (entity.getName().equals("会员卡")) {
                                         //if (memberBean == null) {
                                         memberPayEntity = entity;
+                                        poptype = 2;
                                         cardClick();
 //                                        } else {
 //                                            if (memberBean.getMoney() < entity.getMoney()) {
@@ -964,12 +972,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         }
         list = orderDetailFoods;
 
-        yuanjia = 0;
-        for (OrderDetailFood detailFood : orderDetailFoods) {
-            yuanjia += detailFood.getPrice() * detailFood.getWeight() * detailFood.getCount();
-            yuanjia += detailFood.getSeasonPrice() * detailFood.getCount();
-        }
-
         intText();
     }
 
@@ -995,8 +997,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     private double getYinfuMoney() {
         return weixinOrderBean.getYuanjia() - weixinOrderBean.getYufupice() - weixinOrderBean.getYouhui() - getYouhuiMoney();
     }
-
-    int yuanjia = 0;
 
     private void intText() {
         if (weixinOrderBean == null) {
@@ -1119,7 +1119,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         }
         //cardBeenList.addAll(cardBeens);
 
-        if (memberPayEntity != null) {
+        if (poptype == 2) {
             if (memberPayEntity.getMoney() > memberBean.getMoney()) {
                 showToast("会员余额不足");
                 memberPayEntity.setMoney(memberBean.getMoney());
@@ -1131,9 +1131,12 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         }
 
         llMember.setVisibility(View.VISIBLE);
-        if (memberBean.getRate() != 0 && memberPayEntity == null) {
+        if (memberBean.getRate() != 0 && poptype == 1) {
             llEdit.setVisibility(View.VISIBLE);
-            editText.setHint("最多可使用" + getYinfuMoney() / memberBean.getRate() + "积分");
+            editText.setHint("最多可兑换" + (int) ((getYinfuMoney() + scoreMoney) / memberBean.getRate()) + "积分");
+            if (scoreCount > 0) {
+                editText.setText(scoreCount + "");
+            }
         } else {
             llEdit.setVisibility(View.GONE);
         }

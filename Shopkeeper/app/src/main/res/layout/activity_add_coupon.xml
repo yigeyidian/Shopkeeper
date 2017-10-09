@@ -24,7 +24,9 @@
                 style="@style/LineHorStyle"
                 android:layout_marginTop="@dimen/_30sdp" />
 
-            <LinearLayout style="@style/SettingItemStyle">
+            <LinearLayout
+                android:id="@+id/ll_type"
+                style="@style/SettingItemStyle">
 
                 <TextView
                     style="@style/SettingItemTextStyle"

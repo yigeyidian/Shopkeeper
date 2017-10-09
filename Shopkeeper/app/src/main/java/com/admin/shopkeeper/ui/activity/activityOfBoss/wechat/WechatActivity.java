@@ -101,127 +101,51 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
 
     @OnClick(R.id.ll_yuding)
     public void yudingClick() {
-        showSelectDialog("微信预定", 1, yuding);
+        showSelectDialog("微信预定", yuding);
     }
 
     @OnClick(R.id.ll_kuaican)
     public void kuaicanClick() {
-        showSelectDialog("快餐", 2, kuaican);
+        showSelectDialog("快餐", kuaican);
     }
 
     @OnClick(R.id.ll_waimai)
     public void waimaiClick() {
-        showSelectDialog("外卖", 3, waimai);
+        showSelectDialog("外卖", waimai);
     }
 
     @OnClick(R.id.ll_saoma)
     public void tandianClick() {
-        showSelectDialog("扫码点餐", 4, tandian);
+        showSelectDialog("扫码点餐", tandian);
     }
 
-    private void showSelectDialog(String title, int type, String selected) {
+
+
+    private void showSelectDialog(String title, String selectText) {
         MutiSelectDialog.Builder builder = new MutiSelectDialog.Builder(this, R.style.OrderDialogStyle);
         builder.setTitle(title);
         builder.setReasons(selectTypeStr);
-        builder.setSelect(selected);
+        builder.setSelect(selectText);
         builder.setButtonClick(new MutiSelectDialog.OnButtonClick() {
 
             @Override
             public void onOk(String text, String value) {
-                switch (type) {
-                    case 1:
-                        yuding = value;
-                        tvYuding.setText(text);
-                        break;
-                    case 2:
-                        kuaican = value;
-                        tvKuaican.setText(text);
-                        break;
-                    case 3:
-                        waimai = value;
-                        tvWaimai.setText(text);
-                        break;
-                    case 4:
-                        tandian = value;
-                        tvTandian.setText(text);
-                        break;
+                if (title.equals("微信预定")) {
+                    yuding = value;
+                    tvYuding.setText(text);
+                } else if (title.equals("快餐")) {
+                    kuaican = value;
+                    tvKuaican.setText(text);
+                } else if (title.equals("外卖")) {
+                    waimai = value;
+                    tvWaimai.setText(text);
+                } else {
+                    tandian = value;
+                    tvTandian.setText(text);
                 }
             }
         });
         builder.creater().show();
-
-//        ListDialog.Builder builder = new ListDialog.Builder(this, R.style.OrderDialogStyle);
-//        builder.setTitle(title);
-//        builder.setReasons(selectTypeStr);
-//        builder.setButtonClick(new ListDialog.OnButtonClick() {
-//
-//            @Override
-//            public void onItemClick(int i, String str) {
-//                switch (str) {
-//                    case "积分兑换":
-//                        if (type == 1) {
-//                            yuding = 1;
-//                            tvYuding.setText(str);
-//                        } else if (type == 2) {
-//                            kuaican = 1;
-//                            tvKuaican.setText(str);
-//                        } else if (type == 3) {
-//                            waimai = 1;
-//                            tvWaimai.setText(str);
-//                        } else if (type == 4) {
-//                            tandian = 1;
-//                            tvTandian.setText(str);
-//                        }
-//                        break;
-//                    case "优惠券":
-//                        if (type == 1) {
-//                            yuding = 2;
-//                            tvYuding.setText(str);
-//                        } else if (type == 2) {
-//                            kuaican = 2;
-//                            tvKuaican.setText(str);
-//                        } else if (type == 3) {
-//                            waimai = 2;
-//                            tvWaimai.setText(str);
-//                        } else if (type == 4) {
-//                            tandian = 2;
-//                            tvTandian.setText(str);
-//                        }
-//                        break;
-//                    case "团购(商品)券":
-//                        if (type == 1) {
-//                            yuding = 4;
-//                            tvYuding.setText(str);
-//                        } else if (type == 2) {
-//                            kuaican = 4;
-//                            tvKuaican.setText(str);
-//                        } else if (type == 3) {
-//                            waimai = 4;
-//                            tvWaimai.setText(str);
-//                        } else if (type == 4) {
-//                            tandian = 4;
-//                            tvTandian.setText(str);
-//                        }
-//                        break;
-//                    case "无":
-//                        if (type == 1) {
-//                            yuding = 5;
-//                            tvYuding.setText(str);
-//                        } else if (type == 2) {
-//                            kuaican = 5;
-//                            tvKuaican.setText(str);
-//                        } else if (type == 3) {
-//                            waimai = 5;
-//                            tvWaimai.setText(str);
-//                        } else if (type == 4) {
-//                            tandian = 5;
-//                            tvTandian.setText(str);
-//                        }
-//                        break;
-//                }
-//            }
-//        });
-//        builder.creater().show();
     }
 
     @Override
