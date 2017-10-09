@@ -119,13 +119,14 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
         showSelectDialog("扫码点餐", tandian);
     }
 
+
+
     private void showSelectDialog(String title, String selectText) {
         MutiSelectDialog.Builder builder = new MutiSelectDialog.Builder(this, R.style.OrderDialogStyle);
         builder.setTitle(title);
         builder.setReasons(selectTypeStr);
         builder.setSelect(selectText);
         builder.setButtonClick(new MutiSelectDialog.OnButtonClick() {
-
 
             @Override
             public void onOk(String text, String value) {
@@ -162,7 +163,6 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public void error(String msg) {
         showFailToast(msg);
@@ -190,7 +190,6 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
         String kuaicanStr = "";
         String waimaiStr = "";
         String tandianStr = "";
-
         for (MutiBean mutiBean : selectTypeStr) {
             if (yuding.contains(mutiBean.getValue() + "")) {
                 yudingStr += mutiBean.getText() + ",";
@@ -205,25 +204,25 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
                 tandianStr += mutiBean.getText() + ",";
             }
         }
-        if (yudingStr.length() > 0) {
+        if (!TextUtils.isEmpty(yudingStr)) {
             tvYuding.setText(yudingStr.substring(0, yudingStr.length() - 1));
         }
-        if (kuaicanStr.length() > 0) {
+        if (!TextUtils.isEmpty(kuaicanStr)) {
             tvKuaican.setText(kuaicanStr.substring(0, kuaicanStr.length() - 1));
         }
-        if (waimaiStr.length() > 0) {
+        if (!TextUtils.isEmpty(waimaiStr)) {
             tvWaimai.setText(waimaiStr.substring(0, waimaiStr.length() - 1));
         }
-        if (tandianStr.length() > 0) {
+        if (!TextUtils.isEmpty(tandianStr)) {
             tvTandian.setText(tandianStr.substring(0, tandianStr.length() - 1));
         }
 
-        if (bean.getJifenAdding() == 1) {
+        if (bean.getJifenAdding().equals("1")) {
             ((RadioButton) rgJifenAdding.getChildAt(0)).setChecked(true);
         } else {
             ((RadioButton) rgJifenAdding.getChildAt(1)).setChecked(true);
         }
-        if (bean.getJifenExchange() == 1) {
+        if (bean.getJifenExchange().equals("1")) {
             ((RadioButton) rgJifenExchange.getChildAt(0)).setChecked(true);
         } else {
             ((RadioButton) rgJifenExchange.getChildAt(1)).setChecked(true);

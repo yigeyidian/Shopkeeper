@@ -153,6 +153,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     private TextView tvScore;
     private TextView tvMoney;
     private EditText editText;
+
     private int poptype = 1;
 
     @OnClick(R.id.bill_print)
@@ -263,7 +264,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             if (memberBean.getRate() != 0 && poptype == 1) {
                 llEdit.setVisibility(View.VISIBLE);
-                editText.setHint("最多可兑换" + (int) ((getYinfuMoney() + scoreMoney) / memberBean.getRate()) + "积分");
+                editText.setHint("最多可使用" + ((int)getYinfuMoney() / memberBean.getRate()) + "积分");
                 if (scoreCount > 0) {
                     editText.setText(scoreCount + "");
                 }
@@ -1132,7 +1133,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         llMember.setVisibility(View.VISIBLE);
         if (memberBean.getRate() != 0 && poptype == 1) {
             llEdit.setVisibility(View.VISIBLE);
-
             editText.setHint("最多可兑换" + (int) ((getYinfuMoney() + scoreMoney) / memberBean.getRate()) + "积分");
             if (scoreCount > 0) {
                 editText.setText(scoreCount + "");

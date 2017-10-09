@@ -94,6 +94,8 @@ public class MutiSelectDialog extends AppCompatDialog {
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.scrollView);
 
             titletv.setText(title);
+
+
             oneBtn.setOnClickListener(v -> {
                 dismiss();
             });
@@ -133,6 +135,7 @@ public class MutiSelectDialog extends AppCompatDialog {
             recyclerView.setHasFixedSize(true);
             recyclerView.addItemDecoration(new MarginDecoration(context, R.dimen._10sdp));
             recyclerView.setAdapter(adapter);
+
 
             adapter.setOnItemClickListener((adapter, view1, position) -> {
                 if (getReasons().get(position).isSelect()) {

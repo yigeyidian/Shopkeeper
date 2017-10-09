@@ -35,9 +35,9 @@ public class WechatBean implements Serializable {
     @SerializedName("TanDian")
     private String tandian;
     @SerializedName("EnableCenter")
-    private int jifenAdding;
+    private String jifenAdding;
     @SerializedName("EnableOrder")
-    private int jifenExchange;
+    private String jifenExchange;
 
     public String getGuid() {
         return guid;
@@ -103,19 +103,19 @@ public class WechatBean implements Serializable {
         this.tandian = tandian;
     }
 
-    public int getJifenAdding() {
+    public String getJifenAdding() {
         return jifenAdding;
     }
 
-    public void setJifenAdding(int jifenAdding) {
+    public void setJifenAdding(String jifenAdding) {
         this.jifenAdding = jifenAdding;
     }
 
-    public int getJifenExchange() {
+    public String getJifenExchange() {
         return jifenExchange;
     }
 
-    public void setJifenExchange(int jifenExchange) {
+    public void setJifenExchange(String jifenExchange) {
         this.jifenExchange = jifenExchange;
     }
 }
