@@ -39,7 +39,6 @@ public class MenuTypeEntity implements Serializable {
     private String productTypeID;
 
     @ToMany(referencedJoinProperty = "productTypeID")
-    @OrderBy("pinYin ASC")
     private List<FoodEntity> foods;
 
 
