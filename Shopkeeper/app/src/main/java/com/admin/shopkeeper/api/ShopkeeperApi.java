@@ -286,7 +286,9 @@ public interface ShopkeeperApi {
             @Field("Id") String id,
             @Field("Type") String type,
             @Field("tableid") String tableId,
-            @Field("billid") String billid
+            @Field("billid") String billid,
+            @Field("Username") String userName,
+            @Field("USERID") String userId
 
     );
 

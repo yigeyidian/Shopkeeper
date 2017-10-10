@@ -193,7 +193,7 @@ class TablePresenter extends BasePresenter<ITableView> {
     void qingtai(int position, String billID, String roomTableID) {
 
         DialogUtils.showDialog(context, "清台中...");
-        RetrofitHelper.getInstance().getApi().qingtai(App.INSTANCE().getShopID(), "3", roomTableID, billID)
+        RetrofitHelper.getInstance().getApi().qingtai(App.INSTANCE().getShopID(), "3", roomTableID, billID,App.INSTANCE().getUser().getName(),App.INSTANCE().getUser().getId())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
