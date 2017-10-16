@@ -7,4 +7,8 @@ import com.admin.shopkeeper.base.IBaseView;
  */
 
 public interface ISplashView  extends IBaseView{
+
+    void update(int code);
+
+    void error(String msg);
 }

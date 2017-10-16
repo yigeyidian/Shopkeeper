@@ -18,6 +18,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -264,7 +265,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             if (memberBean.getRate() != 0 && poptype == 1) {
                 llEdit.setVisibility(View.VISIBLE);
-                editText.setHint("最多可使用" + ((int)getYinfuMoney() / memberBean.getRate()) + "积分");
+                editText.setHint("最多可使用" + ((int) getYinfuMoney() / memberBean.getRate()) + "积分");
                 if (scoreCount > 0) {
                     editText.setText(scoreCount + "");
                 }
@@ -685,6 +686,16 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             presenter.getOrderData(billId, "4");
         } else {
             presenter.getOrderData(billId, order.getType());
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            presenter.cancelBill(billId);
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
         }
     }
 
@@ -1177,6 +1188,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     }
 
     @Override
+    public void cancelSuccess() {
+        finish();
+    }
+
+    @Override
     public void warning(String s) {
         Toasty.warning(this, s, Toast.LENGTH_SHORT, true).show();
     }
@@ -1417,7 +1433,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (type == P1) {
+                    presenter.cancelBill(billId);
+                } else {
+                    finish();
+                }
                 break;
             case R.id.action_detail:
                 foodDetailClick();

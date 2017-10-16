@@ -193,7 +193,7 @@ class TablePresenter extends BasePresenter<ITableView> {
     void qingtai(int position, String billID, String roomTableID) {
 
         DialogUtils.showDialog(context, "清台中...");
-        RetrofitHelper.getInstance().getApi().qingtai(App.INSTANCE().getShopID(), "3", roomTableID, billID,App.INSTANCE().getUser().getName(),App.INSTANCE().getUser().getId())
+        RetrofitHelper.getInstance().getApi().qingtai(App.INSTANCE().getShopID(), "3", roomTableID, billID, App.INSTANCE().getUser().getName(), App.INSTANCE().getUser().getId())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -220,10 +220,10 @@ class TablePresenter extends BasePresenter<ITableView> {
                 });
     }
 
-    public void getOrder(String roomTableID, int position) {
+    public void getOrder(TableEntity entity, int position) {
         DialogUtils.showDialog(context, "加载中...");
         RetrofitHelper.getInstance().getApi()
-                .getOrder("9", roomTableID)
+                .getOrder("9", entity.getRoomTableID())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -234,7 +234,11 @@ class TablePresenter extends BasePresenter<ITableView> {
                             String[] result = stringModel.getResult().split("∞");
                             Order order = new Gson().fromJson(result[0], Order.class);
                             OrderDetailFood[] detailFoods = new Gson().fromJson(result[1], OrderDetailFood[].class);
-                            iView.orderSuccess(order, Arrays.asList(detailFoods), position);
+                            if (entity.getOpen().equals("4")) {
+                                iView.showCancelDialog(order);
+                            } else {
+                                iView.orderSuccess(order, Arrays.asList(detailFoods), position);
+                            }
                             break;
                         case Config.REQUEST_FAILED:
                             iView.warning("获取订单失败");
@@ -254,7 +258,7 @@ class TablePresenter extends BasePresenter<ITableView> {
         DialogUtils.showDialog(context, "撤单中...");
         RetrofitHelper.getInstance()
                 .getApi()
-                .undo("4", tableId, billid, App.INSTANCE().getShopID(), price, tableName, App.INSTANCE().getUser().getName(),App.INSTANCE().getUser().getId())
+                .undo("4", tableId, billid, App.INSTANCE().getShopID(), price, tableName, App.INSTANCE().getUser().getName(), App.INSTANCE().getUser().getId())
                 .compose(getFragmentLifecycleProvider().bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -422,6 +426,65 @@ class TablePresenter extends BasePresenter<ITableView> {
                 }, throwable -> {
                     DialogUtils.hintDialog();
                     iView.warning("获取订单失败");
+                });
+    }
+
+    public void inBill(Order order, List<OrderDetailFood> orderDetailFoods, int position) {
+        RetrofitHelper.getInstance()
+                .getApi()
+                .inBill("18", order.getBillid())
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(stringModel -> {
+                    if (stringModel.getCode().equals("1")) {
+                        iView.inBillSuccess(order, orderDetailFoods, position);
+                    } else {
+                        iView.error("修改状态失败");
+                    }
+                }, throwable -> {
+                    iView.error("修改状态失败");
+                });
+    }
+
+    public void cancelBill(String billId) {
+        RetrofitHelper.getInstance()
+                .getApi()
+                .inBill("19", billId)
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(stringModel -> {
+                    if (stringModel.getCode().equals("1")) {
+                        iView.cancelSuccess();
+                    } else {
+                        iView.error("修改状态失败");
+                    }
+                }, throwable -> {
+                    iView.error("修改状态失败");
+                });
+    }
+
+    public void getTableData(String tableId, int position) {
+        RetrofitHelper.getInstance()
+                .getApi()
+                .getTableData("20", App.INSTANCE().getShopID(), tableId)
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(stringModel -> {
+                    if (stringModel.getCode().equals("1")) {
+                        TableEntity[] entities = new Gson().fromJson(stringModel.getResult(), TableEntity[].class);
+                        if (entities == null || entities.length == 0) {
+                            iView.error("获取数据失败");
+                        } else {
+                            iView.showTable(entities[0], position);
+                        }
+                    } else {
+                        iView.error("获取数据失败");
+                    }
+                }, throwable -> {
+                    iView.error("获取数据失败");
                 });
     }
 }

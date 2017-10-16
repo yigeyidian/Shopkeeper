@@ -516,6 +516,19 @@ public interface ShopkeeperApi {
             @Field("Name") String name,
             @Field("TableName") String tableName);
 
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortBillManagerNweASHX.ashx")
+    Observable<StringModel> inBill(
+            @Field("Type") String type,
+            @Field("BILLId") String billID);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortBillManagerNweASHX.ashx")
+    Observable<StringModel> getTableData(
+            @Field("Type") String type,
+            @Field("RESTAURANTID") String shopId,
+            @Field("ROOMTABLEID") String tableId);
+
 
     //    Type	类型	2
 //    DETAILID	订单详情ID
@@ -1583,6 +1596,11 @@ public interface ShopkeeperApi {
     Observable<StringModel> getWechat(
             @Field("type") String type,
             @Field("RESTAURANTID") String shopId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "hospitaldetails.ashx")
+    Observable<StringModel> getVersion(
+            @Field("type") String type);
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortLineUPOrder.ashx")

@@ -17,6 +17,8 @@ public interface ITableView extends IBaseView {
 
     void showTable(List<TableEntity> list);
 
+    void showTable(TableEntity entity, int position);
+
     void warning(String s);
 
 
@@ -37,5 +39,11 @@ public interface ITableView extends IBaseView {
     void bindSuccess(String tableId, String tableName);
 
     void orderListSuccess(Order order, List<OrderDetailFood> orderDetailFoods);
+
+    void inBillSuccess(Order order, List<OrderDetailFood> orderDetailFoods, int position);
+
+    void cancelSuccess();
+
+    void showCancelDialog(Order order);
 }
 

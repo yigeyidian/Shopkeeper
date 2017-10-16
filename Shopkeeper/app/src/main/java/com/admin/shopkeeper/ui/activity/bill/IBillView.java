@@ -44,4 +44,6 @@ public interface IBillView extends IBaseView {
     void fail();
 
     void success(String msg);
+
+    void cancelSuccess();
 }

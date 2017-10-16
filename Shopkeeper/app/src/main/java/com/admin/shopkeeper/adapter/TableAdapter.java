@@ -86,6 +86,25 @@ public class TableAdapter extends BaseQuickAdapter<TableEntity, BaseViewHolder> 
                 helper.setBackgroundColor(R.id.tv_table_extra, Color.TRANSPARENT);
                 helper.setTextColor(R.id.tv_table_extra, Color.WHITE);
                 break;
+            case "4":
+                //已经开桌
+                helper.setText(R.id.tv_table_status, "已开台");
+                helper.setBackgroundRes(R.id.tv_table_status, R.drawable.selector_table_status_1);
+                helper.setVisible(R.id.tv_table_people, true);
+
+                helper.setText(R.id.tv_table_people, String.valueOf(item.getPersonCounts()) + "人");
+                helper.setText(R.id.tv_table_extra, "￥" + item.getPrice());
+                helper.setText(R.id.tv_table_time, StringUtils.friendly_time(CalendarUtils.stringToDate(item.getKaiTime())));
+
+                helper.setVisible(R.id.tv_table_extra, true);
+                helper.setVisible(R.id.tv_table_time, true);
+
+                helper.setBackgroundRes(R.id.item_bg, R.drawable.bg_table_billing);
+                helper.setBackgroundColor(R.id.tv_table_extra, Color.WHITE);
+                helper.setTextColor(R.id.tv_table_extra, Color.parseColor("#27AE60"));
+                helper.setBackgroundColor(R.id.tv_table_time, Color.parseColor("#35BB6D"));
+                break;
+
         }
 
     }

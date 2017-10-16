@@ -8,8 +8,17 @@ import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
 
 import com.admin.shopkeeper.db.AppDbHelper;
+import com.admin.shopkeeper.entity.QueueBean;
+import com.admin.shopkeeper.entity.TableEntity;
 import com.admin.shopkeeper.entity.User;
+import com.admin.shopkeeper.entity.VersionBean;
+import com.admin.shopkeeper.helper.RetrofitHelper;
+import com.admin.shopkeeper.utils.DialogUtils;
 import com.admin.shopkeeper.utils.SPUtils;
+import com.admin.shopkeeper.utils.Tools;
+import com.google.gson.Gson;
+
+import java.util.Arrays;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -21,6 +30,8 @@ import timber.log.Timber;
  */
 
 class SplashPresenter extends BasePresenter<ISplashView> {
+    private Object update;
+
     SplashPresenter(Context context, ISplashView iView) {
         super(context, iView);
     }
@@ -32,7 +43,7 @@ class SplashPresenter extends BasePresenter<ISplashView> {
         }
     }
 
-     void getUser() {
+    void getUser() {
         AppDbHelper.INSTANCE().getUser()
                 .compose(getActivityLifecycleProvider().<User>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -40,5 +51,31 @@ class SplashPresenter extends BasePresenter<ISplashView> {
                 .subscribe(user -> {
                     App.INSTANCE().setUser(user);
                 }, Throwable::printStackTrace);
+    }
+
+    public void getUpdate() {
+        RetrofitHelper.getInstance()
+                .getApi()
+                .getVersion("6")
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if (stringModel.getCode().equals("1")) {
+                        VersionBean[] versionBeens = new Gson().fromJson(stringModel.getResult(), VersionBean[].class);
+                        for (VersionBean versionBean : versionBeens) {
+                            if (versionBean.getVersionType().equals("A")) {
+                                iView.update(Integer.parseInt(versionBean.getVersionCode()));
+                                break;
+                            }
+                        }
+                    } else {
+                        iView.error("获取数据失败，请检查网络");
+                    }
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    iView.error("获取数据失败，请检查网络");
+                });
     }
 }

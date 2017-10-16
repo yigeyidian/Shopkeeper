@@ -541,4 +541,22 @@ class BillPresenter extends BasePresenter<IBillView> {
     private void print(String result) {
         new Thread(() -> Print.socketDataArrivalHandler(result)).start();
     }
+
+    public void cancelBill(String billId) {
+        RetrofitHelper.getInstance()
+                .getApi()
+                .inBill("19", billId)
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(stringModel -> {
+                    if (stringModel.getCode().equals("1")) {
+                        iView.cancelSuccess();
+                    } else {
+                        iView.error("修改状态失败");
+                    }
+                }, throwable -> {
+                    iView.error("修改状态失败");
+                });
+    }
 }

@@ -1,20 +1,21 @@
 package com.admin.shopkeeper.ui.activity.splash;
 
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 
 import com.admin.shopkeeper.App;
+import com.admin.shopkeeper.MsgEvent;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.boss.BossMainActivity;
 import com.admin.shopkeeper.ui.activity.home.HomeActivity;
 import com.admin.shopkeeper.ui.activity.login.LoginActivity;
 import com.admin.shopkeeper.utils.SPUtils;
+import com.admin.shopkeeper.utils.Tools;
 import com.gyf.barlibrary.ImmersionBar;
 
 
 public class SplashActivity extends BaseActivity<SplashPresenter> implements ISplashView {
-    private CountDownTimer timer;
-
 
     @Override
     protected void initPresenter() {
@@ -33,30 +34,9 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements ISp
                 .statusBarColor(R.color.colorPrimaryDark, 0.4f)
                 .init();
 
+        presenter.getUpdate();
         presenter.getUser();
         presenter.getConfig();
-        //两秒钟后关闭引导页
-        timer = new CountDownTimer(2000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                if (App.INSTANCE().getUser() != null && SPUtils.getInstance().getBoolean(SPUtils.PREFERENCE_LOGIN, false)) {
-                    if (App.INSTANCE().getUser().getRoleID().equals("2")) {
-                        startActivity(BossMainActivity.class);
-                    } else {
-                        startActivity(HomeActivity.class);
-                    }
-                } else {
-                    startActivity(LoginActivity.class);
-                }
-                finish();
-            }
-        };
-        timer.start();
     }
 
     @Override
@@ -68,9 +48,35 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements ISp
         super.onDestroy();
         presenter.doDestroy();
         ImmersionBar.with(this).init();
-        if (timer != null) {
-            timer.cancel();
-        }
+    }
 
+    @Override
+    public void update(int code) {
+        if (code > Tools.getVersionCode(this)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("更新提示");
+            builder.setMessage("请下载最新版本。");
+            builder.setPositiveButton("确定", (dialog, which) -> {
+                finish();
+            });
+            builder.setCancelable(false);
+            builder.show();
+        } else {
+            if (App.INSTANCE().getUser() != null && SPUtils.getInstance().getBoolean(SPUtils.PREFERENCE_LOGIN, false)) {
+                if (App.INSTANCE().getUser().getRoleID().equals("2")) {
+                    startActivity(BossMainActivity.class);
+                } else {
+                    startActivity(HomeActivity.class);
+                }
+            } else {
+                startActivity(LoginActivity.class);
+            }
+            finish();
+        }
+    }
+
+    @Override
+    public void error(String msg) {
+        showToast(msg);
     }
 }

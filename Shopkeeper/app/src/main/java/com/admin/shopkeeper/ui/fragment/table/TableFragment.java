@@ -134,42 +134,9 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                TableEntity entity = (TableEntity) adapter.getItem(position);
-                Log.i("ttt", "---type:" + type);
+                TableEntity entity = mAdapter.getItem(position);
                 assert entity != null;
-                switch (entity.getOpen()) {
-                    case "1":
-                        //已经开桌
-                        //presenter.toFoods();
-                        showDialog(entity, position);
-                        break;
-                    case "2":
-                        //已下单
-                        if (type == 2) {
-                            entity.setSelector(!entity.isSelector());
-                            mAdapter.setMerge(true);
-                            mAdapter.notifyItemChanged(position, entity);
-//                            showChangeTable(position, entity, "是否合并桌台：");
-                        } else if (type == 3) {
-                            showChangeTable(position, entity, "是否转菜到桌台：");
-                        } else {
-                            presenter.getOrder(entity.getRoomTableID(), position);
-                        }
-                        break;
-                    case "0":
-                        //空闲
-                        if (type == 1) {
-                            showChangeTable(position, entity, "是否换到桌台：");
-                        } else if (type == MsgEvent.bindTable) {
-                            showChangeTable(position, entity, "是否绑定到桌台：");
-                        } else if (type == MsgEvent.kuaican) {
-                            showChangeTable(position, entity, "是否快餐在桌台：");
-                        } else {
-                            showKaiDan(entity, position);
-                        }
-
-                        break;
-                }
+                presenter.getTableData(entity.getRoomTableID(), position);
             }
         });
     }
@@ -219,7 +186,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
                     intent.putExtra(Config.PARAM1, OrderFoodActivity.P1);//堂点
                     intent.putExtra(Config.PARAM2, entity);
                     intent.putExtra(Config.PARAM3, position);
-                    startActivity(intent);
+                    startActivityForResult(intent, 998);
                     break;
                 case 1:
                     presenter.qingtai(position, entity.getBillID(), entity.getRoomTableID());
@@ -347,6 +314,47 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
     }
 
     @Override
+    public void showTable(TableEntity entity, int position) {
+        assert entity != null;
+        mAdapter.setData(position, entity);
+        switch (entity.getOpen()) {
+            case "1":
+                //已经开桌
+                //presenter.toFoods();
+                showDialog(entity, position);
+                break;
+            case "2":
+                //已下单
+                if (type == 2) {
+                    entity.setSelector(!entity.isSelector());
+                    mAdapter.setMerge(true);
+                    mAdapter.notifyItemChanged(position, entity);
+//                            showChangeTable(position, entity, "是否合并桌台：");
+                } else if (type == 3) {
+                    showChangeTable(position, entity, "是否转菜到桌台：");
+                } else {
+                    presenter.getOrder(entity, position);
+                }
+                break;
+            case "0":
+                //空闲
+                if (type == 1) {
+                    showChangeTable(position, entity, "是否换到桌台：");
+                } else if (type == MsgEvent.bindTable) {
+                    showChangeTable(position, entity, "是否绑定到桌台：");
+                } else if (type == MsgEvent.kuaican) {
+                    showChangeTable(position, entity, "是否快餐在桌台：");
+                } else {
+                    showKaiDan(entity, position);
+                }
+                break;
+            case "4":
+                presenter.getOrder(entity, position);
+                break;
+        }
+    }
+
+    @Override
     public void warning(String s) {
         refreshComplete();
         Toasty.warning(getContext(), s, Toast.LENGTH_SHORT, true).show();
@@ -365,7 +373,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
             intent.putExtra(Config.PARAM1, OrderFoodActivity.P1);//堂点
             intent.putExtra(Config.PARAM2, entity);
             intent.putExtra(Config.PARAM3, position);
-            startActivity(intent);
+            startActivityForResult(intent, 998);
         } else {
             assert entity != null;
             ptrLayout.postDelayed(() -> ptrLayout.autoRefresh(), 100);
@@ -425,22 +433,23 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
             switch (p) {
                 case 0:
                     if (App.INSTANCE().getUser().getPermissionValue().contains("jiesuan")) {
-                        intent = new Intent(getActivity(), BillActivity.class);
-                        double detailFood = 0;
+                        presenter.inBill(order, orderDetailFoods, position);
+//                        intent = new Intent(getActivity(), BillActivity.class);
+//                        double detailFood = 0;
+////                        for (int i = 0; i < orderDetailFoods.size(); i++) {
+////                            detailFood += orderDetailFoods.get(i).getPrice() * orderDetailFoods.get(i).getAmmount();
+////                            detailFood += orderDetailFoods.get(i).getSeasonPrice() * orderDetailFoods.get(i).getAmmount();
+////                        }
 //                        for (int i = 0; i < orderDetailFoods.size(); i++) {
-//                            detailFood += orderDetailFoods.get(i).getPrice() * orderDetailFoods.get(i).getAmmount();
-//                            detailFood += orderDetailFoods.get(i).getSeasonPrice() * orderDetailFoods.get(i).getAmmount();
+//                            detailFood += orderDetailFoods.get(i).getPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
+//                            detailFood += orderDetailFoods.get(i).getSeasonPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
 //                        }
-                        for (int i = 0; i < orderDetailFoods.size(); i++) {
-                            detailFood += orderDetailFoods.get(i).getPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
-                            detailFood += orderDetailFoods.get(i).getSeasonPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
-                        }
-                        intent.putExtra(Config.PARAM2, detailFood);//总价
-                        intent.putExtra(Config.PARAM3, order);
-                        intent.putExtra(Config.PARAM4, (Serializable) orderDetailFoods);
-                        intent.putExtra(Config.PARAM1, position);
-                        intent.putExtra(Config.PARAM5, BillActivity.P1);
-                        startActivity(intent);
+//                        intent.putExtra(Config.PARAM2, detailFood);//总价
+//                        intent.putExtra(Config.PARAM3, order);
+//                        intent.putExtra(Config.PARAM4, (Serializable) orderDetailFoods);
+//                        intent.putExtra(Config.PARAM1, position);
+//                        intent.putExtra(Config.PARAM5, BillActivity.P1);
+//                        startActivity(intent);
                     } else {
                         warning("没有结算权限");
                     }
@@ -450,7 +459,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
                         intent = new Intent(getActivity(), OrderFoodActivity.class);
                         intent.putExtra(Config.PARAM1, OrderFoodActivity.P3);
                         intent.putExtra(Config.PARAM2, order);
-                        startActivity(intent);
+                        startActivityForResult(intent, 998);
                     } else {
                         warning("没有加菜权限");
                     }
@@ -461,7 +470,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
                     intent.putExtra(Config.PARAM2, (Serializable) orderDetailFoods);
                     intent.putExtra(Config.PARAM3, position);
                     intent.putExtra(Config.PARAM4, OrderDetailActivity.P2);
-                    startActivity(intent);
+                    startActivityForResult(intent, 998);
                     break;
 
                 case 3:
@@ -506,7 +515,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
         //intent.putExtra(Config.PARAM4, );
         intent.putExtra(Config.PARAM1, s);
         intent.putExtra(Config.PARAM5, BillActivity.P3);
-        startActivity(intent);
+        startActivityForResult(intent, 998);
         getActivity().finish();
 
     }
@@ -534,9 +543,43 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
         intent.putExtra(Config.PARAM3, order);
         intent.putExtra(Config.PARAM4, (Serializable) orderDetailFoods);
         intent.putExtra(Config.PARAM5, BillActivity.P5);
-        startActivity(intent);
+        startActivityForResult(intent, 998);
 
         getActivity().finish();
+    }
+
+    @Override
+    public void inBillSuccess(Order order, List<OrderDetailFood> orderDetailFoods, int position) {
+        Intent intent = new Intent(getActivity(), BillActivity.class);
+        double detailFood = 0;
+        for (int i = 0; i < orderDetailFoods.size(); i++) {
+            detailFood += orderDetailFoods.get(i).getPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
+            detailFood += orderDetailFoods.get(i).getSeasonPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
+        }
+        intent.putExtra(Config.PARAM2, detailFood);//总价
+        intent.putExtra(Config.PARAM3, order);
+        intent.putExtra(Config.PARAM4, (Serializable) orderDetailFoods);
+        intent.putExtra(Config.PARAM1, position);
+        intent.putExtra(Config.PARAM5, BillActivity.P1);
+        startActivityForResult(intent, 998);
+    }
+
+    @Override
+    public void cancelSuccess() {
+        Toasty.success(getContext(), "取消成功", Toast.LENGTH_SHORT, true).show();
+        presenter.getTables(mParam1);
+    }
+
+    @Override
+    public void showCancelDialog(Order order) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("提示");
+        builder.setMessage("是否取消结账？");
+        builder.setPositiveButton("确定", (dialog, which) -> {
+            presenter.cancelBill(order.getBillid());
+        });
+        builder.setNegativeButton("取消", null);
+        builder.show();
     }
 
     @Override
@@ -634,13 +677,21 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
             builder.setTitle("并单提示");
             builder.setMessage("是否并单处理" + name + order.getTableName());
             builder.setPositiveButton("确定", (dialog, which) -> {
-                presenter.getOrderList(string + order.getTableId(),order);
+                presenter.getOrderList(string + order.getTableId(), order);
             });
             builder.show();
 
         }
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 998) {
+            presenter.getTables(mParam1);
+        }
+    }
 
     private String string = "";
 
