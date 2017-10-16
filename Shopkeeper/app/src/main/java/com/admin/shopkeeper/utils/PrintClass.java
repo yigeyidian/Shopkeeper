@@ -62,7 +62,7 @@ public class PrintClass {
     }
 
 
-    private void connectedCallback(Socket socket, String ipPrint, int port) throws IOException {
+    private void connectedCallback(Socket socket, String ipPrint, int port) throws Exception {
 
 
         boolean b = true;
@@ -72,7 +72,6 @@ public class PrintClass {
         byte[] bty_tmp = new byte[]{29, 86, 1, 49};//切纸
         byte[] Internal = new byte[]{27, 64};//初始化打印机
         byte[] Internals = new byte[]{27, 83};//初始化打印机
-        try {
 
             socket.connect(new InetSocketAddress(ipPrint, port), 2000);
             OutputStream socketwriter = new DataOutputStream(socket.getOutputStream());
@@ -683,11 +682,7 @@ public class PrintClass {
             }
             socketwriter.close();
             socketwriter.flush();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            socket.close();
-        }
+
     }
 
 //    public byte[] open_money() {

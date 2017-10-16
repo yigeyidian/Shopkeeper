@@ -49,7 +49,7 @@ public class Print {
                     //后厨
                     if (enty[3].equals("1")) {
                         if (enty[10].equals("0")) {
-                            Thread.sleep(1000);
+                            Thread.sleep(3000);
                             PrintClass58 p = new PrintClass58(enty[0], enty[3], enty[11], enty[1], enty[2], enty[5], enty[6], enty[7], enty[8], enty[9]);
                             boolean t = p.Print();
 //                            if (t) {
@@ -66,7 +66,7 @@ public class Print {
                                         .subscribe();
                             }
                         } else {
-                            Thread.sleep(1000);
+                            Thread.sleep(3000);
                             PrintClass p = new PrintClass(enty[0], enty[3], enty[11], enty[1], enty[2], enty[5], enty[6], enty[7], enty[8], enty[9]);
                             boolean t = p.Print();
 //                            if (t) {

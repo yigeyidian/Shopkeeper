@@ -80,7 +80,10 @@ public class MoreFragment extends BaseFragment<MorePresenter> implements IMoreVi
 
 
         List<Label> labels = new ArrayList<>();
-        labels.add(new Label("堂点", R.mipmap.person_center_01));
+
+        if(App.INSTANCE().getUser().getOperaType().equals("1")){
+            labels.add(new Label("堂点", R.mipmap.person_center_01));
+        }
         labels.add(new Label("快餐", R.mipmap.person_center_02));
         labels.add(new Label("店内预定", R.mipmap.person_center_03));
         labels.add(new Label("交班打印", R.mipmap.person_center_07));
