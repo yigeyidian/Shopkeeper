@@ -127,7 +127,8 @@ public class AppDbHelper implements DbHelper {
                 .getMenuTypeEntityDao()
                 .queryBuilder()
                 .where(MenuTypeEntityDao.Properties.RestaurantID.like(id))
-                .orderAsc(MenuTypeEntityDao.Properties.OrderNO).list());
+                .orderAsc(MenuTypeEntityDao.Properties.OrderNO)
+                .list());
     }
 
     @Override
