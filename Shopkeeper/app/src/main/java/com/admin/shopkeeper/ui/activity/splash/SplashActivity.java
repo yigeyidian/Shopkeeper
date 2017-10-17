@@ -1,5 +1,8 @@
 package com.admin.shopkeeper.ui.activity.splash;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 
@@ -57,7 +60,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements ISp
             builder.setTitle("更新提示");
             builder.setMessage("请下载最新版本。");
             builder.setPositiveButton("确定", (dialog, which) -> {
-                finish();
+                goToMarket();
             });
             builder.setCancelable(false);
             builder.show();
@@ -72,6 +75,17 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements ISp
                 startActivity(LoginActivity.class);
             }
             finish();
+        }
+    }
+
+    public void goToMarket() {
+        Uri uri = Uri.parse("market://details?id=com.admin.shopkeeper");
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            goToMarket.setClassName("com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
+            startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
