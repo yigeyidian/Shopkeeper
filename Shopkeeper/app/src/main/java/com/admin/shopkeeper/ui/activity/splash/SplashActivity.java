@@ -85,6 +85,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements ISp
             goToMarket.setClassName("com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
             startActivity(goToMarket);
         } catch (ActivityNotFoundException e) {
+            showToast("请前往应用宝下载最新版本");
             e.printStackTrace();
         }
     }
