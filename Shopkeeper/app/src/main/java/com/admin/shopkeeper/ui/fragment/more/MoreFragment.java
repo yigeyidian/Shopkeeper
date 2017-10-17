@@ -80,11 +80,18 @@ public class MoreFragment extends BaseFragment<MorePresenter> implements IMoreVi
 
 
         List<Label> labels = new ArrayList<>();
+        /**
+         * 是否显示堂点的那个得修改一下  因为那个值是多选的   1 代表堂点  2代表快餐无桌位   3代表快餐有桌位
+         * 需要去判断的的是 这个值里面有1 就显示堂点   有2或者3 就显示快餐  如果没有就不显示
+         */
 
-        if(App.INSTANCE().getUser().getOperaType().equals("1")){
+        if(App.INSTANCE().getUser().getOperaType().contains("1")){
             labels.add(new Label("堂点", R.mipmap.person_center_01));
         }
-        labels.add(new Label("快餐", R.mipmap.person_center_02));
+        if(App.INSTANCE().getUser().getOperaType().contains("2")||App.INSTANCE().getUser().getOperaType().contains("3")){
+            labels.add(new Label("快餐", R.mipmap.person_center_02));
+        }
+
         labels.add(new Label("店内预定", R.mipmap.person_center_03));
         labels.add(new Label("交班打印", R.mipmap.person_center_07));
         labels.add(new Label("消息", R.mipmap.message_manager));
