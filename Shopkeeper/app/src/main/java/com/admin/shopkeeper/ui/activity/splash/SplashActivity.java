@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.MsgEvent;
@@ -16,6 +17,8 @@ import com.admin.shopkeeper.ui.activity.login.LoginActivity;
 import com.admin.shopkeeper.utils.SPUtils;
 import com.admin.shopkeeper.utils.Tools;
 import com.gyf.barlibrary.ImmersionBar;
+
+import es.dmoral.toasty.Toasty;
 
 
 public class SplashActivity extends BaseActivity<SplashPresenter> implements ISplashView {
@@ -85,8 +88,8 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements ISp
             goToMarket.setClassName("com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
             goToMarket.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(goToMarket);
-        } catch (Exception e) {
-            showToast("请前往应用宝下载最新版本");
+        }catch (Exception e){
+            Toasty.warning(SplashActivity.this, "请先安装应用宝，再下载最新版本", Toast.LENGTH_SHORT, true).show();
             e.printStackTrace();
         }
     }
