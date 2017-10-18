@@ -474,6 +474,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         presenter.getDBFood();
 
         cartBtn.setOnClickListener(v -> {
+            queryLayout.setVisibility(View.GONE);
             showBottomSheet();
         });
 
@@ -656,19 +657,15 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     } else {
                         foodEntity.setNumber(99);
                     }
-
                     queryAdapter.notifyItemChanged(position1, foodEntity);
-
                     entity = new OrderfoodEntity();
                     for (int i = 0; i < menuAdapter.getData().size(); i++) {
-
                         MenuTypeEntity m = menuAdapter.getItem(i);
                         if (m.getProductTypeID().equals(foodEntity.getProductTypeID())) {
                             entity.setMenuPosition(i);
                             break;
                         }
                     }
-
                     for (int i = 0; i < contactAdapter.getDatas().size(); i++) {
                         f = contactAdapter.getItem(i);
                         if (f.getProductID().equals(foodEntity.getProductID())) {
@@ -692,12 +689,12 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     entity.setNumber(foodEntity.getNumber());//设置份数
                     entity.setPrice(foodEntity.getMemberPice());
                     entity.setUnit(foodEntity.getUnit());
-                    if (foodEntity.getProductShuXing().equals("0")) {
-                        entity.setKouWeis(AppDbHelper.INSTANCE().getKouWeis(App.INSTANCE().getShopID(), foodEntity.getProductID()));
-                    }
-                    if (foodEntity.getProductShuXing().equals("1")) {
-                        entity.setShowWeight(true);
-                    }
+//                    if (foodEntity.getProductShuXing().equals("0")) {
+//                        entity.setKouWeis(AppDbHelper.INSTANCE().getKouWeis(App.INSTANCE().getShopID(), foodEntity.getProductID()));
+//                    }
+//                    if (foodEntity.getProductShuXing().equals("1")) {
+//                        entity.setShowWeight(true);
+//                    }
                     entity.setOriginalPrice(foodEntity.getMemberPice());
 
                     if (!carts.contains(entity)) {
@@ -1481,14 +1478,6 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             int num;
             switch (view1.getId()) {
                 case R.id.add:
-//                    if (entity.isShowWeight()) {
-//                        double weight = entity.getWeight();
-//                        if (weight < 99) {
-//                            entity.setWeight(weight + 1);
-//                        } else {
-//                            entity.setWeight(99);
-//                        }
-//                    } else {
                     num = entity.getNumber();
                     if (num < 99) {
                         entity.setNumber(num + 1);
@@ -1504,22 +1493,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     }
                     showCart();
                     break;
+
                 case R.id.reduce:
-//                    if (entity.isShowWeight()) {
-//                        double num = entity.getWeight();
-//                        if (num == 1) {
-//                            carts.remove(position);
-//                            bottomAdapter.notifyItemRemoved(position);
-//                            contactAdapter.notifyDataSetChanged();
-//                        } else if (num > 1) {
-//                            entity.setWeight(num - 1);
-//                            if (entity.getGivingnum() > num) {
-//                                entity.setGivingnum((int) num);
-//                            }
-//                            bottomAdapter.notifyItemChanged(position, entity);
-//                            contactAdapter.notifyDataSetChanged();
-//                        }
-//                    } else {
                     num = entity.getNumber();
                     if (num == 1) {
                         carts.remove(position);
@@ -1539,7 +1514,6 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                             contactAdapter.notifyItemChanged(entity.getFoodPosition(), foodEntity);
                         }
                     }
-                    //}
 
                     showCart();
                     break;
@@ -1749,7 +1723,6 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         }
         finish();
     }
-
 
     public double getTotal() {
         double total = 0;
