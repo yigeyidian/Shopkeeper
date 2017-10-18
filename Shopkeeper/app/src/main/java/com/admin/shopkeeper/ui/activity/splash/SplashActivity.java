@@ -83,8 +83,9 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements ISp
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         try {
             goToMarket.setClassName("com.tencent.android.qqdownloader", "com.tencent.pangu.link.LinkProxyActivity");
+            goToMarket.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(goToMarket);
-        } catch (ActivityNotFoundException e) {
+        } catch (Exception e) {
             showToast("请前往应用宝下载最新版本");
             e.printStackTrace();
         }
