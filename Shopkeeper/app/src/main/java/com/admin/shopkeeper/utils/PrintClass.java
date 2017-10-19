@@ -367,10 +367,10 @@ public class PrintClass {
                 socketwriter.write(temps, 0, temps.length);//设置字符集
                 byte[] temp5 = new byte[]{27, 69, 1};//1D 21 选择字体大小,0x01放大一倍
                 socketwriter.write(temp5, 0, temp5.length);//设置字符集
-                byte[] datas2 = ("桌位:" + oldshu[1] + "              结账员:" + username + "\n").getBytes("gbk");
+                byte[] datas2 = ("桌位:" + oldshu[1] + " 人数:" + personcount + "  结账员:" + username + "\n").getBytes("gbk");
                 socketwriter.write(datas2, 0, datas2.length);//输出文字
                 socketwriter.write(Internal, 0, Internal.length);
-                byte[] datas8 = ("打单日期:" + getTime() + "       人数:" + personcount + "\n").getBytes("gbk");
+                byte[] datas8 = ("打单日期:" + getTime() + "\n").getBytes("gbk");
                 socketwriter.write(datas8, 0, datas8.length);//输出文字
                 byte[] datas9 = ("订单号:" + oldshu[2] + "\n------------------------------------------------\n").getBytes("gbk");
                 socketwriter.write(datas9, 0, datas9.length);//输出文字
