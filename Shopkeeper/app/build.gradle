@@ -23,7 +23,7 @@ android {
         }
 
         p {
-            buildConfigField 'String', 'API_URL', '"https://www.xcyytc.com:8099/"'
+            buildConfigField 'String', 'API_URL', '"https://www.xcyytc.com:8097/"'
             buildConfigField 'String', 'APK_SUFFIX', '""'
         }
     }
