@@ -11,8 +11,8 @@ android {
         applicationId "com.admin.shopkeeper"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 12
-        versionName "1.11"
+        versionCode 13
+        versionName "1.12"
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -23,7 +23,7 @@ android {
         }
 
         p {
-            buildConfigField 'String', 'API_URL', '"https://www.xcyytc.com:8099/"'
+            buildConfigField 'String', 'API_URL', '"https://www.xcyytc.com:8097/"'
             buildConfigField 'String', 'APK_SUFFIX', '""'
         }
     }

@@ -488,13 +488,13 @@ public class PrintClass58 {
                 socketwriter.write(Internal, 0, Internal.length);
                 byte[] datas7 = ("-------------------------------\n").getBytes("gbk");
                 socketwriter.write(datas7, 0, datas7.length);//输出文字
-                byte[] temp4 = new byte[]{27, 50};//1D 21 选择字体大小,0x01放大一倍
-                socketwriter.write(temp4, 0, temp4.length);//设置字符集
-                byte[] temps = new byte[]{29, 33, 0};//1D 21 选择字体大小,0x01放大一倍
-                socketwriter.write(temps, 0, temps.length);//设置字符集
-                byte[] temp5 = new byte[]{27, 69, 1};//1D 21 选择字体大小,0x01放大一倍
-                socketwriter.write(temp5, 0, temp5.length);//设置字符集
-                byte[] datas21 = (oldshu[2].split("@")[1] + "\n订单号:" + oldshu[2].split("@")[0] + "\n").getBytes("gbk");
+                socketwriter.write(big, 0, big.length);
+			   byte[] datas82 =("" + oldshu[2].split("@")[1]+ "\n").getBytes("gbk");
+                        socketwriter.write(datas82, 0, datas82.length);//输出文字
+						  socketwriter.write(small, 0, small.length);
+						   byte[] paihao = ("-------------------------------\n").getBytes("gbk");
+                socketwriter.write(paihao, 0, paihao.length);//输出文字
+                byte[] datas21 = ("订单号:" + oldshu[2].split("@")[0] + "\n").getBytes("gbk");
                 socketwriter.write(datas21, 0, datas21.length);//输出文字
                 socketwriter.write(Internal, 0, Internal.length);
                 byte[] datas8 = ("打单日期:" + getTime() + "\n").getBytes("gbk");
@@ -541,7 +541,7 @@ public class PrintClass58 {
 
                 byte[] temp7 = new byte[]{27, 69, 1};
                 socketwriter.write(temp7, 0, temp7.length);
-                byte[] datas12 = ("                交班单收银统计表\n").getBytes("gbk");
+                byte[] datas12 = ("       交班单收银统计表\n").getBytes("gbk");
                 socketwriter.write(datas12, 0, datas12.length);
 
 
