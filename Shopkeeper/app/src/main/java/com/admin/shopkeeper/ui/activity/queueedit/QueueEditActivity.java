@@ -1,21 +1,15 @@
 package com.admin.shopkeeper.ui.activity.queueedit;
 
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
-import com.admin.shopkeeper.dialog.ListDialog;
-import com.admin.shopkeeper.dialog.MenuSingleSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
-import com.admin.shopkeeper.entity.DeskBean;
 import com.admin.shopkeeper.entity.DeskTypeBean;
 import com.admin.shopkeeper.entity.QueueBean;
 import com.admin.shopkeeper.entity.RoomEntity;

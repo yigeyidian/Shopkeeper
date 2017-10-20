@@ -24,6 +24,7 @@ import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
 import com.admin.shopkeeper.ui.activity.orderList.OrderListActivity;
 import com.admin.shopkeeper.ui.activity.person.setting.PersonSettingActivity;
 import com.admin.shopkeeper.ui.activity.queue.QueueActivity;
+import com.admin.shopkeeper.ui.activity.recharge.RechargeActivity;
 import com.admin.shopkeeper.ui.activity.table.TableOperationActivity;
 import com.admin.shopkeeper.utils.SPUtils;
 import com.iflytek.cloud.InitListener;
@@ -97,6 +98,7 @@ public class MoreFragment extends BaseFragment<MorePresenter> implements IMoreVi
         labels.add(new Label("消息", R.mipmap.message_manager));
         labels.add(new Label("订单管理", R.mipmap.order_manager));
         labels.add(new Label("排号", R.mipmap.person_center_04));
+        labels.add(new Label("会员充值", R.mipmap.person_center_04));
 
         textView.setText(App.INSTANCE().getUser().getName());
 
@@ -147,6 +149,10 @@ public class MoreFragment extends BaseFragment<MorePresenter> implements IMoreVi
                     break;
                 case 6:
                     intent = new Intent(getActivity(), QueueActivity.class);
+                    startActivity(intent);
+                    break;
+                case 7:
+                    intent = new Intent(getActivity(), RechargeActivity.class);
                     startActivity(intent);
                     break;
             }

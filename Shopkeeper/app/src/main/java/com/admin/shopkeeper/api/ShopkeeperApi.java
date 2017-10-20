@@ -1636,4 +1636,66 @@ public interface ShopkeeperApi {
     Observable<StringModel> deleteQueue(
             @Field("Type") String type,
             @Field("orderid") String orderid);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "Merchants.ashx")
+    Observable<StringModel> getRechargeMember(
+            @Field("Type") String type,
+            @Field("RESTAURANTID") String shopId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "Merchants.ashx")
+    Observable<StringModel> getRecharge(
+            @Field("Type") String type,
+            @Field("RESTAURANTID") String shopId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortBillManagerNweASHX.ashx")
+    Observable<StringModel> getMemberDetail(
+            @Field("Type") String type,
+            @Field("id") String billId,
+            @Field("rid") String rid,
+            @Field("coue") String coue);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "Merchants.ashx")
+    Observable<StringModel> addRechage(
+            @Field("Type") String type,
+            @Field("RESTAURANTID") String shopId,
+            @Field("StaffTel") String staffTel,
+            @Field("StaffDepart") String staffDepart);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "Merchants.ashx")
+    Observable<StringModel> memberRechage(
+            @Field("Type") String type,
+            @Field("UserID") String userID,
+            @Field("PriceCounts") String priceCounts,
+            @Field("PriceFill") String priceFill,
+            @Field("RESTAURANTID") String shopId,
+            @Field("Effective") String effective,
+            @Field("CardID") String cardID);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "Merchants.ashx")
+    Observable<StringModel> checkCode(
+            @Field("Type") String type,
+            @Field("RESTAURANTID") String shopId,
+            @Field("PassWord") String passWord);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "Merchants.ashx")
+    Observable<StringModel> moneyCharge(
+            @Field("Type") String type,
+            @Field("UserID") String userID,
+            @Field("RESTAURANTID") String shopId,
+            @Field("Price") String price);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "Merchants.ashx")
+    Observable<StringModel> productCharge(
+            @Field("Type") String type,
+            @Field("UserID") String userID,
+            @Field("RESTAURANTID") String shopId,
+            @Field("CardID") String cardID);
 }

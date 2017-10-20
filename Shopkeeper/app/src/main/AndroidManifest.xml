@@ -11,7 +11,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-
     <uses-permission android:name="android.permission.READ_LOGS" />
 
     <uses-feature android:name="android.hardware.camera" />
@@ -302,7 +301,10 @@
             android:theme="@style/BossTheme"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".ui.activity.queue.QueueActivity" />
-        <activity android:name=".ui.activity.queueedit.QueueEditActivity"></activity>
+        <activity android:name=".ui.activity.queueedit.QueueEditActivity" />
+        <activity android:name=".ui.activity.recharge.RechargeActivity" />
+        <activity android:name=".ui.activity.rechargeedit.RechargeEditActivity" />
+        <activity android:name=".ui.activity.rechargedetail.RechargeDetailActivity"></activity>
     </application>
 
 </manifest>
