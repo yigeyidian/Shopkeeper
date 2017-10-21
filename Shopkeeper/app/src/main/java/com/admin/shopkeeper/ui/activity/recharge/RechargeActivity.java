@@ -83,11 +83,11 @@ public class RechargeActivity extends BaseActivity<RechargePresenter> implements
             popupWindow.dismiss();
         });
         laheiView.findViewById(R.id.pop_recharge).setOnClickListener(v -> {
-            showCheckDialog(0, bean);
+            gotoRechargeDetailActivity(0,bean);
             popupWindow.dismiss();
         });
         laheiView.findViewById(R.id.pop_recharge_product).setOnClickListener(v -> {
-            showCheckDialog(1, bean);
+            gotoRechargeDetailActivity(1,bean);
             popupWindow.dismiss();
         });
 
@@ -102,26 +102,13 @@ public class RechargeActivity extends BaseActivity<RechargePresenter> implements
         backgroundAlpha(0.5f);
     }
 
-    private void showCheckDialog(int i, RechargeBean bean) {
-        CheckDialog.Builder builder = new CheckDialog.Builder(this, R.style.OrderDialogStyle);
-        builder.setTitle("验证校验码");
-        builder.setButtonClick(new CheckDialog.OnButtonClick() {
-            @Override
-            public void onOk(String checkCode) {
-                if (TextUtils.isEmpty(checkCode)) {
-                    showToast("请输入校验码");
-                    return;
-                }
-                presenter.check(checkCode, i, bean);
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
-        builder.creater().show();
+    private void gotoRechargeDetailActivity(int i, RechargeBean bean) {
+        Intent intent = new Intent(RechargeActivity.this, RechargeDetailActivity.class);
+        intent.putExtra("type", i);
+        intent.putExtra("bean", bean);
+        startActivity(intent);
     }
+
 
     @OnClick(R.id.fl_search)
     public void searchClick() {

@@ -145,4 +145,25 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
                     iView.error("充值失败");
                 });
     }
+
+    public void check(String checkCode, int type, RechargeBean bean) {
+        DialogUtils.showDialog(context, "数据提交中");
+        RetrofitHelper.getInstance()
+                .getApi()
+                .checkCode("10", App.INSTANCE().getShopID(), checkCode)
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if (stringModel.getCode().equals("1")) {
+                        iView.checkSuccess(type , bean);
+                    } else {
+                        iView.error("校验失败");
+                    }
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    iView.error("校验失败");
+                });
+    }
 }

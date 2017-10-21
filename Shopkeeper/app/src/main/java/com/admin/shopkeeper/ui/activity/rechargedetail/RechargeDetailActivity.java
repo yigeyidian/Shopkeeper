@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
+import com.admin.shopkeeper.dialog.CheckDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.DeskTypeBean;
 import com.admin.shopkeeper.entity.MemberBean;
@@ -99,22 +100,42 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
                 showToast("请输入充值金额");
                 return;
             }
-
-            presenter.moneyCommit(memberBean.getId(), moneyStr);
+            showCheckDialog(type, bean);
         } else {
             if (selectItem == null) {
                 showToast("请选择充值产品");
                 return;
             }
-
-            presenter.productCommit(memberBean.getId(), selectItem.getGuid());
+            showCheckDialog(type, bean);
         }
+    }
+
+    private void showCheckDialog(int i, RechargeBean bean) {
+        CheckDialog.Builder builder = new CheckDialog.Builder(this, R.style.OrderDialogStyle);
+        builder.setTitle("验证校验码");
+        builder.setButtonClick(new CheckDialog.OnButtonClick() {
+            @Override
+            public void onOk(String checkCode) {
+                if (TextUtils.isEmpty(checkCode)) {
+                    showToast("请输入校验码");
+                    return;
+                }
+
+                presenter.check(checkCode, i, bean);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+        builder.creater().show();
     }
 
     @OnClick(R.id.ll_product)
     public void productClick() {
 
-        if(datas == null){
+        if (datas == null) {
             showToast("获取产品数据失败");
         }
 
@@ -173,6 +194,17 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
     public void productSuccess(List<RechargeItemBean> rechargeItemBeen) {
         this.datas = rechargeItemBeen;
     }
+
+    @Override
+    public void checkSuccess(int type, RechargeBean bean) {
+        if (type == 0) {
+            String moneyStr = editText.getText().toString();
+            presenter.moneyCommit(memberBean.getId(), moneyStr);
+        } else {
+            presenter.productCommit(memberBean.getId(), selectItem.getGuid());
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

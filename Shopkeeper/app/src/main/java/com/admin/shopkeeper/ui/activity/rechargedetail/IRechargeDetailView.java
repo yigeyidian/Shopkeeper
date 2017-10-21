@@ -2,6 +2,7 @@ package com.admin.shopkeeper.ui.activity.rechargedetail;
 
 import com.admin.shopkeeper.base.IBaseView;
 import com.admin.shopkeeper.entity.MemberBean;
+import com.admin.shopkeeper.entity.RechargeBean;
 import com.admin.shopkeeper.entity.RechargeItemBean;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface IRechargeDetailView extends IBaseView {
     void saleSuccess(MemberBean memberBean);
 
     void productSuccess(List<RechargeItemBean> rechargeItemBeen);
+
+    void checkSuccess(int type , RechargeBean bean);
 }
