@@ -21,8 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:drawablePadding="@dimen/_12sdp"
             android:drawableLeft="@mipmap/searchbar_icon"
+            android:drawablePadding="@dimen/_12sdp"
             android:text="查询" />
     </FrameLayout>
 
@@ -75,10 +75,17 @@
 
     <View style="@style/LineHorStyle" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

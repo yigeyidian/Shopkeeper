@@ -65,15 +65,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_88sdp"
-        android:background="@color/white"
         android:layout_marginTop="@dimen/_39sdp"
+        android:background="@color/white"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_32sdp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:layout_marginLeft="@dimen/_32sdp"
             android:text="序号"
             android:textColor="#888888"
             android:textSize="@dimen/_32ssp" />
@@ -99,20 +100,28 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/_30sdp"
             android:layout_weight="2"
             android:gravity="center_vertical"
-            android:text="电话"
             android:singleLine="true"
+            android:text="电话"
             android:textColor="#888888"
-            android:layout_marginRight="@dimen/_30sdp"
             android:textSize="@dimen/_32ssp" />
     </LinearLayout>
+
     <View style="@style/LineHorStyle" />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-         />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

@@ -1641,7 +1641,9 @@ public interface ShopkeeperApi {
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "Merchants.ashx")
     Observable<StringModel> getRechargeMember(
             @Field("Type") String type,
-            @Field("RESTAURANTID") String shopId);
+            @Field("RESTAURANTID") String shopId,
+            @Field("pageIndex") int pageIndex,
+            @Field("pageSize") int pageSize);
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "Merchants.ashx")

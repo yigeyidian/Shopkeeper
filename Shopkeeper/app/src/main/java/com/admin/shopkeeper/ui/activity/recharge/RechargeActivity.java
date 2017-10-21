@@ -4,6 +4,7 @@ package com.admin.shopkeeper.ui.activity.recharge;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,7 @@ import com.admin.shopkeeper.dialog.CheckDialog;
 import com.admin.shopkeeper.entity.RechargeBean;
 import com.admin.shopkeeper.ui.activity.rechargedetail.RechargeDetailActivity;
 import com.admin.shopkeeper.ui.activity.rechargeedit.RechargeEditActivity;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -38,8 +40,12 @@ public class RechargeActivity extends BaseActivity<RechargePresenter> implements
     Toolbar toolbar;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
 
     private RechargeAdapter adapter;
+
+    int page = 1;
 
     @Override
     protected void initPresenter() {
@@ -71,8 +77,24 @@ public class RechargeActivity extends BaseActivity<RechargePresenter> implements
         adapter.setOnItemClickListener((adapter1, view, position) -> {
             showPop(adapter.getData().get(position));
         });
+        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                page++;
+                presenter.getData(page);
+            }
+        }, recyclerView);
 
-        presenter.getData();
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                presenter.getData(page);
+            }
+        });
+
+
+        presenter.getData(page);
     }
 
     public void showPop(RechargeBean bean) {
@@ -83,11 +105,11 @@ public class RechargeActivity extends BaseActivity<RechargePresenter> implements
             popupWindow.dismiss();
         });
         laheiView.findViewById(R.id.pop_recharge).setOnClickListener(v -> {
-            gotoRechargeDetailActivity(0,bean);
+            gotoRechargeDetailActivity(0, bean);
             popupWindow.dismiss();
         });
         laheiView.findViewById(R.id.pop_recharge_product).setOnClickListener(v -> {
-            gotoRechargeDetailActivity(1,bean);
+            gotoRechargeDetailActivity(1, bean);
             popupWindow.dismiss();
         });
 
@@ -187,14 +209,21 @@ public class RechargeActivity extends BaseActivity<RechargePresenter> implements
     @Override
     public void error(String msg) {
         showFailToast(msg);
+        adapter.loadMoreEnd();
+        refreshLayout.setRefreshing(false);
     }
 
-    List<RechargeBean> datas;
+    List<RechargeBean> datas = new ArrayList<>();
 
     @Override
     public void success(List<RechargeBean> list) {
-        this.datas = list;
-        adapter.setNewData(list);
+        if (page == 1) {
+            this.datas.clear();
+        }
+        this.datas.addAll(list);
+        adapter.setNewData(datas);
+        adapter.loadMoreComplete();
+        refreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -209,7 +238,8 @@ public class RechargeActivity extends BaseActivity<RechargePresenter> implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            presenter.getData();
+            page = 1;
+            presenter.getData(page);
         }
     }
 }

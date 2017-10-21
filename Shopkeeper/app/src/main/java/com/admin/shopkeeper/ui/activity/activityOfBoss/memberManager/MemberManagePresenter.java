@@ -25,11 +25,10 @@ public class MemberManagePresenter extends BasePresenter<IMemberManageView> {
         super(context, iView);
     }
 
-    public void getMemberInfo() {
-        DialogUtils.showDialog(context, "数据加载中");
+    public void getMemberInfo(int page) {
         RetrofitHelper.getInstance()
                 .getApi()
-                .getMembersInfo("1", App.INSTANCE().getShopID())
+                .getRechargeMember("1", App.INSTANCE().getShopID(), page, 20)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -43,16 +42,15 @@ public class MemberManagePresenter extends BasePresenter<IMemberManageView> {
                     }
 
                 }, throwable -> {
-                    DialogUtils.hintDialog();
                     iView.error("加载失败");
                 });
     }
 
-    public void queryInfo(int type ,String userID) {
+    public void queryInfo(int type, String userID) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getMemberInfo(type+"", userID)
+                .getMemberInfo(type + "", userID)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

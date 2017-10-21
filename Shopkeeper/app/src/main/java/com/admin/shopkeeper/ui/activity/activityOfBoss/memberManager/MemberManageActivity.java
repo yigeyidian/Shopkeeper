@@ -3,6 +3,7 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.memberManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
+import com.admin.shopkeeper.adapter.MemberManaAdapter;
 import com.admin.shopkeeper.adapter.MemberManagerAdapter;
 import com.admin.shopkeeper.adapter.ShopPermissionManageAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
@@ -28,7 +30,9 @@ import com.admin.shopkeeper.entity.ShopPermissionManageBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.MemberInfo.MemberInfoActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.edit.EditActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.returncause.ReturnCauseActivity;
+import com.admin.shopkeeper.utils.DialogUtils;
 import com.admin.shopkeeper.utils.UIUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -55,13 +59,18 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
     TextView tvState;
     @BindView(R.id.staff_manage_select)
     TextView tvSelect;
-    private MemberManagerAdapter adapter;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
+
+    //private MemberManagerAdapter adapter;
     private PopupWindow laheiPop;
-    List<MemberInfoBean> data;
+    List<MemberInfoBean> data = new ArrayList<>();
+
+    int page = 1;
+    private MemberManaAdapter memberManaAdapter;
 
     @Override
     protected void initPresenter() {
-
         presenter = new MemberManagePresenter(this, this);
         presenter.init();
     }
@@ -88,15 +97,35 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
                 .marginResId(R.dimen._1sdp, R.dimen._1sdp)
                 .color(getResources().getColor(R.color.item_line_color))
                 .build());
-        adapter = new MemberManagerAdapter(this);
-        recyclerView.setAdapter(adapter);
-        presenter.getMemberInfo();
+
+        memberManaAdapter = new MemberManaAdapter(R.layout.item_member_manage);
+        memberManaAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                showDeletePop(memberManaAdapter.getItem(position));
+            }
+        });
+        recyclerView.setAdapter(memberManaAdapter);
+
+        memberManaAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                page++;
+                presenter.getMemberInfo(page);
+            }
+        }, recyclerView);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                presenter.getMemberInfo(page);
+            }
+        });
+
+
+        presenter.getMemberInfo(page);
     }
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add, menu);
-        return super.onCreateOptionsMenu(menu);
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -130,7 +159,7 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
                     return -1;
                 }
             });
-            adapter.setDatas(newData);
+            memberManaAdapter.setNewData(newData);
         } else if (defaultType % 3 == 2) {
             UIUtils.setDrawableRight(tvDefault, R.mipmap.sort_z_a);
             List<MemberInfoBean> newData = new ArrayList<>();
@@ -144,10 +173,10 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
                     return 1;
                 }
             });
-            adapter.setDatas(newData);
+            memberManaAdapter.setNewData(newData);
         } else {
             UIUtils.setDrawableRight(tvDefault, R.mipmap.sort_default);
-            adapter.setDatas(data);
+            memberManaAdapter.setNewData(data);
         }
         UIUtils.setDrawableRight(tvName, R.mipmap.sort_default);
         UIUtils.setDrawableRight(tvState, R.mipmap.sort_default);
@@ -171,7 +200,7 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
                     return -1;
                 }
             });
-            adapter.setDatas(newData);
+            memberManaAdapter.setNewData(newData);
         } else if (nameType % 3 == 2) {
             UIUtils.setDrawableRight(tvName, R.mipmap.sort_z_a);
             List<MemberInfoBean> newData = new ArrayList<>();
@@ -185,9 +214,10 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
                     return 1;
                 }
             });
-            adapter.setDatas(newData);
+            memberManaAdapter.setNewData(newData);
         } else {
             UIUtils.setDrawableRight(tvName, R.mipmap.sort_default);
+            memberManaAdapter.setNewData(data);
         }
         UIUtils.setDrawableRight(tvDefault, R.mipmap.sort_default);
         UIUtils.setDrawableRight(tvState, R.mipmap.sort_default);
@@ -211,7 +241,7 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
                     return -1;
                 }
             });
-            adapter.setDatas(newData);
+            memberManaAdapter.setNewData(newData);
         } else if (stateType % 3 == 2) {
             UIUtils.setDrawableRight(tvState, R.mipmap.sort_z_a);
             List<MemberInfoBean> newData = new ArrayList<>();
@@ -225,7 +255,7 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
                     return 1;
                 }
             });
-            adapter.setDatas(newData);
+            memberManaAdapter.setNewData(newData);
         } else {
             UIUtils.setDrawableRight(tvState, R.mipmap.sort_default);
         }
@@ -235,19 +265,25 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
 
     @Override
     public void error(String msg) {
-
+        showFailToast(msg);
+        memberManaAdapter.loadMoreEnd();
+        refreshLayout.setRefreshing(false);
     }
 
     @Override
     public void success(String msg) {
-
+        showSuccessToast(msg);
     }
 
     @Override
     public void success(List<MemberInfoBean> memberInfoBeanList) {
-        this.data = memberInfoBeanList;
-        adapter.setDatas(memberInfoBeanList);
-
+        if (page == 1) {
+            this.data.clear();
+        }
+        this.data.addAll(memberInfoBeanList);
+        memberManaAdapter.setNewData(data);
+        memberManaAdapter.loadMoreComplete();
+        refreshLayout.setRefreshing(false);
     }
 
     public void showDeletePop(MemberInfoBean bean) {

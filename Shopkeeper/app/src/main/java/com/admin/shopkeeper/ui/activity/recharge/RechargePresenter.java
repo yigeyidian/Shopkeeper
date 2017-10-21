@@ -25,16 +25,14 @@ public class RechargePresenter extends BasePresenter<IRechargeView> {
         super(context, iView);
     }
 
-    public void getData() {
-        DialogUtils.showDialog(context, "数据加载中");
+    public void getData(int page) {
         RetrofitHelper.getInstance()
                 .getApi()
-                .getRechargeMember("1", App.INSTANCE().getShopID())
+                .getRechargeMember("1", App.INSTANCE().getShopID(), page, 20)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
-                    DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
                         RechargeBean[] beens = new Gson().fromJson(stringModel.getResult(), RechargeBean[].class);
                         iView.success(Arrays.asList(beens));
@@ -42,7 +40,6 @@ public class RechargePresenter extends BasePresenter<IRechargeView> {
                         iView.error("加载失败");
                     }
                 }, throwable -> {
-                    DialogUtils.hintDialog();
                     iView.error("加载失败");
                 });
     }
