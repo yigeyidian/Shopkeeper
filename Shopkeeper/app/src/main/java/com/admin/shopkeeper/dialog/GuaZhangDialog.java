@@ -150,7 +150,7 @@ public class GuaZhangDialog extends AppCompatDialog {
                             return;
                         }
 
-                        buttonClick.onBtnClick(Integer.parseInt(str), guaZhangBean);
+                        buttonClick.onBtnClick(Double.parseDouble(str), guaZhangBean);
                     }
                 }
             });
@@ -202,7 +202,7 @@ public class GuaZhangDialog extends AppCompatDialog {
 
     public interface OnButtonClick {
 
-        void onBtnClick(int money, GuaZhangBean bean);
+        void onBtnClick(double money, GuaZhangBean bean);
 
         void onCancel();
     }

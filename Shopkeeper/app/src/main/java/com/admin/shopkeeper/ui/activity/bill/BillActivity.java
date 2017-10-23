@@ -1080,7 +1080,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         guaZhangDialog = builder.creater();
         builder.setButtonClick(new GuaZhangDialog.OnButtonClick() {
             @Override
-            public void onBtnClick(int money, GuaZhangBean bean) {
+            public void onBtnClick(double money, GuaZhangBean bean) {
                 if (money <= (needMoney + entity.getMoney()) && money >= 0) {
                     if (money == 0) {
                         entity.setSelected(false);
