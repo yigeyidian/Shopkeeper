@@ -296,11 +296,13 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
             }
             mAdapter.setNewData(newList);
         } else if (type == MsgEvent.kuaican) {
-//            List<TableEntity> newList = new ArrayList<>();
+            List<TableEntity> newList = new ArrayList<>();
             for (TableEntity entity : list) {
-                entity.setOpen("0");
+                if ((entity.getOpen().equals("0"))) {
+                    newList.add(entity);
+                }
             }
-            mAdapter.setNewData(list);
+            mAdapter.setNewData(newList);
         } else if (type == MsgEvent.bindTable) {
             List<TableEntity> newList = new ArrayList<>();
             for (TableEntity entity : list) {

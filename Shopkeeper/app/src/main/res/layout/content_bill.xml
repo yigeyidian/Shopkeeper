@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_34sdp"
-                android:text="优惠促销"
+                android:text="会员识别"
                 android:textColor="#000000"
                 android:textSize="@dimen/_34ssp" />
 
