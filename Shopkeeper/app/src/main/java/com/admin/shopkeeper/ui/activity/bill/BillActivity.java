@@ -234,13 +234,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             }
         });
 
-        //{"code":"1","result":"
-        // 王月@17778063182@170912111453435214@668@495.00@947230e5-a8dc-4c22-8e31-215b33a375c8
-        // /笑笑@满30送5块@5.00@908fe556-e5b7-4446-ac26-0848c991061c@1^笑笑@满20抵20@20.00@5fda66e3-d879-4f14-932b-1c3f71699269@2"
-        // ,"message":"0"}
-
         if (poptype == 2) {
-            //popList.setVisibility(View.INVISIBLE);
             tvOk.setText("立即支付");
             if (memberBean != null) {
                 if (memberPayEntity.getMoney() > memberBean.getMoney()) {
@@ -847,6 +841,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                         }
                         entity.setMoney(getYinfuMoney());
                         entity.setSelected(true);
+                        getNeed();
+                        intText();
                         adapter.notifyDataSetChanged();
                         billAdapter.notifyDataSetChanged();
                         memberPayEntity = entity;
