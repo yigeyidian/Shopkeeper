@@ -16,4 +16,6 @@ public interface IRechargeView extends IBaseView {
     void success(List<RechargeBean> list);
 
     void checkSuccess(int type,RechargeBean bean);
+
+    void searchSuccess(List<RechargeBean> rechargeBeen);
 }

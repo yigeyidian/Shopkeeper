@@ -263,6 +263,7 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
         UIUtils.setDrawableRight(tvName, R.mipmap.sort_default);
         UIUtils.setDrawableRight(tvDefault, R.mipmap.sort_default);
     }
+
     @OnClick(R.id.staff_manage_select)
     public void selectClick() {
         View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_search, null);
@@ -287,7 +288,7 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
                 if (TextUtils.isEmpty(nameStr) && TextUtils.isEmpty(phoneStr)) {
                     memberManaAdapter.setNewData(data);
                 } else {
-                    presenter.searchMemberInfo(nameStr,phoneStr);
+                    presenter.searchMemberInfo(nameStr, phoneStr);
                 }
                 searchPop.dismiss();
             }
@@ -332,8 +333,8 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
         this.data.clear();
         this.data.addAll(memberInfoBeanList);
         memberManaAdapter.setNewData(data);
-//        memberManaAdapter.loadMoreComplete();
-        refreshLayout.setRefreshing(true);
+        memberManaAdapter.loadMoreEnd();
+        refreshLayout.setRefreshing(false);
     }
 
     public void showDeletePop(MemberInfoBean bean) {

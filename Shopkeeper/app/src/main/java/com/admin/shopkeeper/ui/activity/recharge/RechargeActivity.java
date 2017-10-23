@@ -156,7 +156,7 @@ public class RechargeActivity extends BaseActivity<RechargePresenter> implements
                 if (TextUtils.isEmpty(nameStr) && TextUtils.isEmpty(phoneStr)) {
                     adapter.setNewData(datas);
                 } else {
-                    presenter.serchData(nameStr,phoneStr);
+                    presenter.serchData(nameStr, phoneStr);
                 }
                 searchPop.dismiss();
             }
@@ -232,6 +232,15 @@ public class RechargeActivity extends BaseActivity<RechargePresenter> implements
         intent.putExtra("type", type);
         intent.putExtra("bean", bean);
         startActivity(intent);
+    }
+
+    @Override
+    public void searchSuccess(List<RechargeBean> rechargeBeen) {
+        this.datas.clear();
+        this.datas.addAll(rechargeBeen);
+        adapter.setNewData(datas);
+        adapter.loadMoreEnd();
+        refreshLayout.setRefreshing(false);
     }
 
     @Override
