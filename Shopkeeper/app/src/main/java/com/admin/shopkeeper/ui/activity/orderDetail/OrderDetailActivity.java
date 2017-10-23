@@ -544,9 +544,10 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
             p = (int) event.getOther();
             p2_type = P2_CHANGE;
         } else if (i == MsgEvent.bindTableSuccess) {
-
             order = (Order) event.getData();
             table_id.setText(String.format(getString(R.string.string_table_id), order.getTableName()));
+            setResult(RESULT_OK);
+            finish();
         } else if (i == MsgEvent.billSuccess) {
             if (order.getOrderSource().equals("1")) {
                 order.setOrderSate("3");

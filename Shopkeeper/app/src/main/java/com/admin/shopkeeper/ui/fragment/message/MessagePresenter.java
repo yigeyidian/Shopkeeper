@@ -37,19 +37,7 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
                     switch (stringModel.getCode()) {
                         case Config.REQUEST_SUCCESS:
                             Order[] orders = new Gson().fromJson(stringModel.getResult(), Order[].class);
-                            List<Order> test = new ArrayList<Order>();
-                            test.addAll(Arrays.asList(orders));
-                            if (test.size() > 0) {
-                                iView.success(test);
-                            } else {
-                                if (index == 1) {
-                                    iView.warning("消息列表数据为空");
-                                }else {
-                                    iView.nodata();
-                                }
-
-                            }
-
+                            iView.success(Arrays.asList(orders));
                             break;
                         case Config.REQUEST_FAILED:
                             iView.warning(stringModel.getMessage());
@@ -65,8 +53,7 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
                 });
     }
 
-    public   void getOrderDetail(Order item ,int position) {
-
+    public void getOrderDetail(Order item, int position) {
         RetrofitHelper.getInstance().getApi().getOrderDetail(App.INSTANCE().getShopID(), "9", item.getBillid())
                 .compose(getFragmentLifecycleProvider().<StringModel>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
@@ -76,7 +63,7 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
                     switch (stringModel.getCode()) {
                         case Config.REQUEST_SUCCESS:
                             OrderDetailFood[] detailFoods = new Gson().fromJson(stringModel.getResult(), OrderDetailFood[].class);
-                            iView.toDetail(item, Arrays.asList(detailFoods),position);
+                            iView.toDetail(item, Arrays.asList(detailFoods), position);
                             break;
                         case Config.REQUEST_FAILED:
                             iView.warning(stringModel.getMessage());

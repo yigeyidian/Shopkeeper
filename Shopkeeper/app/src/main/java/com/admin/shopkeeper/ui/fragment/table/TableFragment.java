@@ -522,9 +522,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
 
     @Override
     public void bindSuccess(String tableId, String tableName) {
-
         Toasty.success(getContext(), "绑定成功", Toast.LENGTH_SHORT, true).show();
-
         order.setTableId(tableId);
         order.setTableName(tableName);
         MsgEvent msgEvent = new MsgEvent(MsgEvent.bindTableSuccess, order);

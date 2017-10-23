@@ -105,14 +105,14 @@ public class MessageListActivity extends BaseActivity<MessagePresenter> implemen
     @Override
     public void success(List<Order> orders) {
         refreshComplete();
-
         if (index == 1) {
-
             adapter.setNewData(orders);
             index++;
             adapter.setEnableLoadMore(true);
+            if(orders.size() == 0){
+                showToast("消息列表数据为空");
+            }
         } else {
-
             if (orders.size() > 0) {
                 adapter.addData(new ArrayList<>(orders));
                 index++;
@@ -120,14 +120,11 @@ public class MessageListActivity extends BaseActivity<MessagePresenter> implemen
             } else {
                 adapter.loadMoreEnd();
             }
-
-
         }
     }
 
     @Override
     public void warning(String message) {
-
         refreshComplete();
         Toasty.warning(this, message, Toast.LENGTH_SHORT, true).show();
     }
@@ -156,7 +153,7 @@ public class MessageListActivity extends BaseActivity<MessagePresenter> implemen
         intent.putExtra(Config.PARAM2, (Serializable) detailFoods);
         intent.putExtra(Config.PARAM3, position);
         intent.putExtra(Config.PARAM4, OrderDetailActivity.P3);
-        startActivity(intent);
+        startActivityForResult(intent, 109);
 
     }
 
@@ -199,7 +196,6 @@ public class MessageListActivity extends BaseActivity<MessagePresenter> implemen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMsgEvent(MsgEvent event) {
-
         switch (event.getType()) {
             case MsgEvent.message:
                 int i = (int) event.getData();
@@ -219,5 +215,14 @@ public class MessageListActivity extends BaseActivity<MessagePresenter> implemen
         presenter.doDestroy();
         EventBus.getDefault().unregister(this);
         ImmersionBar.with(this).destroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            index = 1;
+            presenter.getMessage(index, size);
+        }
     }
 }
