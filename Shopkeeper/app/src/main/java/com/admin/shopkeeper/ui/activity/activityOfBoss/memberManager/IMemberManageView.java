@@ -16,4 +16,6 @@ public interface IMemberManageView extends IBaseView {
     void success(String msg);
 
     void success(List<MemberInfoBean> memberInfoBeanList);
+
+    void searchsuccess(List<MemberInfoBean> memberInfoBeanList);
 }

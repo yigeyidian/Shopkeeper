@@ -32,10 +32,12 @@ public class RechargeEditPresenter extends BasePresenter<IRechargeEditView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
-                    if (stringModel.getCode().equals("1")) {
+                    if (stringModel.getResult().equals("1")) {
                         iView.success("提交成功");
-                    } else {
+                    } else if(stringModel.getResult().equals("0")){
                         iView.error("提交失败");
+                    }else{
+                        iView.error("该号码已注册");
                     }
                 }, throwable -> {
                     DialogUtils.hintDialog();

@@ -28,15 +28,45 @@ public class MemberManagePresenter extends BasePresenter<IMemberManageView> {
     public void getMemberInfo(int page) {
         RetrofitHelper.getInstance()
                 .getApi()
-                .getRechargeMember("1", App.INSTANCE().getShopID(), page, 20)
+                .getRechargeMember("1", App.INSTANCE().getShopID(), page+"", 20+"","","")
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        MemberInfoBean[] memberInfoBean = new Gson().fromJson(stringModel.getResult(), MemberInfoBean[].class);
-                        iView.success(Arrays.asList(memberInfoBean));
+                        if(stringModel.getResult().equals("0")){
+                            iView.error("没有更多数据");
+                        }else{
+                            MemberInfoBean[] memberInfoBean = new Gson().fromJson(stringModel.getResult(), MemberInfoBean[].class);
+                            iView.success(Arrays.asList(memberInfoBean));
+                        }
+
+                    } else {
+                        iView.error("加载失败");
+                    }
+
+                }, throwable -> {
+                    iView.error("加载失败");
+                });
+    }
+    public void searchMemberInfo(String name , String phone) {
+        RetrofitHelper.getInstance()
+                .getApi()
+                .getRechargeMember("1", App.INSTANCE().getShopID(), "", "",name,phone)
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if (stringModel.getCode().equals("1")) {
+                        if(stringModel.getResult().equals("0")){
+                            iView.error("没有该数据");
+                        }else{
+                            MemberInfoBean[] memberInfoBean = new Gson().fromJson(stringModel.getResult(), MemberInfoBean[].class);
+                            iView.searchsuccess(Arrays.asList(memberInfoBean));
+                        }
+
                     } else {
                         iView.error("加载失败");
                     }

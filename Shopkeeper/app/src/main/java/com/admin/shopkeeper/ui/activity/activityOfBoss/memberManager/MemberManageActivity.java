@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -262,6 +263,46 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
         UIUtils.setDrawableRight(tvName, R.mipmap.sort_default);
         UIUtils.setDrawableRight(tvDefault, R.mipmap.sort_default);
     }
+    @OnClick(R.id.staff_manage_select)
+    public void selectClick() {
+        View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_search, null);
+        PopupWindow searchPop = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
+        EditText etName = (EditText) laheiView.findViewById(R.id.pop_name);
+        EditText etPhone = (EditText) laheiView.findViewById(R.id.pop_phone);
+
+        laheiView.findViewById(R.id.pop_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                memberManaAdapter.setNewData(data);
+                searchPop.dismiss();
+            }
+        });
+
+        laheiView.findViewById(R.id.pop_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String nameStr = etName.getText().toString().trim();
+                String phoneStr = etPhone.getText().toString().trim();
+                if (TextUtils.isEmpty(nameStr) && TextUtils.isEmpty(phoneStr)) {
+                    memberManaAdapter.setNewData(data);
+                } else {
+                    presenter.searchMemberInfo(nameStr,phoneStr);
+                }
+                searchPop.dismiss();
+            }
+        });
+
+        searchPop.setOutsideTouchable(true);
+        searchPop.setFocusable(true);
+        searchPop.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33000000")));
+        searchPop.setOnDismissListener(() -> {
+            backgroundAlpha(1f);
+        });
+        searchPop.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM
+                | Gravity.CENTER_HORIZONTAL, 0, 0);
+        backgroundAlpha(0.5f);
+    }
 
     @Override
     public void error(String msg) {
@@ -284,6 +325,15 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
         memberManaAdapter.setNewData(data);
         memberManaAdapter.loadMoreComplete();
         refreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void searchsuccess(List<MemberInfoBean> memberInfoBeanList) {
+        this.data.clear();
+        this.data.addAll(memberInfoBeanList);
+        memberManaAdapter.setNewData(data);
+//        memberManaAdapter.loadMoreComplete();
+        refreshLayout.setRefreshing(true);
     }
 
     public void showDeletePop(MemberInfoBean bean) {

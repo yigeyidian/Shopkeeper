@@ -156,7 +156,7 @@ public class RechargeActivity extends BaseActivity<RechargePresenter> implements
                 if (TextUtils.isEmpty(nameStr) && TextUtils.isEmpty(phoneStr)) {
                     adapter.setNewData(datas);
                 } else {
-                    selectDatas(nameStr, phoneStr);
+                    presenter.serchData(nameStr,phoneStr);
                 }
                 searchPop.dismiss();
             }

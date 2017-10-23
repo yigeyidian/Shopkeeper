@@ -156,10 +156,10 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
-                    if (stringModel.getCode().equals("1")) {
+                    if (stringModel.getResult().equals("1")) {
                         iView.checkSuccess(type , bean);
                     } else {
-                        iView.error("校验失败");
+                        iView.error("校验码错误");
                     }
                 }, throwable -> {
                     DialogUtils.hintDialog();

@@ -98,7 +98,7 @@ public class MoreFragment extends BaseFragment<MorePresenter> implements IMoreVi
         labels.add(new Label("消息", R.mipmap.message_manager));
         labels.add(new Label("订单管理", R.mipmap.order_manager));
         labels.add(new Label("排号", R.mipmap.person_center_04));
-        labels.add(new Label("会员充值", R.mipmap.person_center_04));
+        labels.add(new Label("会员充值", R.mipmap.more_recharge));
 
         textView.setText(App.INSTANCE().getUser().getName());
 

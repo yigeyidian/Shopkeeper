@@ -157,8 +157,10 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         //state=1上架
         if (item.getState() == 2) {
             holder.ibadd.setVisibility(View.INVISIBLE);
+            holder.button.setVisibility(View.INVISIBLE);
         } else {
             holder.ibadd.setVisibility(View.VISIBLE);
+            holder.button.setVisibility(View.VISIBLE);
         }
 
         holder.imageView.setOnClickListener(v -> {

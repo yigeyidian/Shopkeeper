@@ -622,10 +622,16 @@ public interface ShopkeeperApi {
 
     //    http://182.140.132.196:8097/Port/PortAndroidUpdateState.ashx
     @FormUrlEncoded
-    @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortAndroidUpdateState.ashx")
+    @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortPrinterManager.ashx")
     Observable<StringModel> updatePrint(
-            @Field("id") String s);
-
+            @Field("type") String type,
+            @Field("BILLID") String billId,
+            @Field("IPADDRESS") String ipAddress);
+    //修改打印状态
+   /* @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortPrinterManager.ashx")
+    Observable<StringModel> updatePrint(
+            @Field("id") String s);*/
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortKaiDanAshx.ashx")
     Observable<StringModel> getMergeOrderList(
@@ -1642,8 +1648,10 @@ public interface ShopkeeperApi {
     Observable<StringModel> getRechargeMember(
             @Field("Type") String type,
             @Field("RESTAURANTID") String shopId,
-            @Field("pageIndex") int pageIndex,
-            @Field("pageSize") int pageSize);
+            @Field("pageIndex") String pageIndex,
+            @Field("pageSize") String pageSize,
+            @Field("Name") String name,
+            @Field("phone") String phone);
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "Merchants.ashx")

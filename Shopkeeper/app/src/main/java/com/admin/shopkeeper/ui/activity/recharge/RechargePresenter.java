@@ -28,14 +28,19 @@ public class RechargePresenter extends BasePresenter<IRechargeView> {
     public void getData(int page) {
         RetrofitHelper.getInstance()
                 .getApi()
-                .getRechargeMember("1", App.INSTANCE().getShopID(), page, 20)
+                .getRechargeMember("1", App.INSTANCE().getShopID(), page+"","20","","")
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     if (stringModel.getCode().equals("1")) {
-                        RechargeBean[] beens = new Gson().fromJson(stringModel.getResult(), RechargeBean[].class);
-                        iView.success(Arrays.asList(beens));
+                        if(stringModel.getResult().equals("0")){
+                            iView.error("没有更多数据");
+                        }else{
+                            RechargeBean[] beens = new Gson().fromJson(stringModel.getResult(), RechargeBean[].class);
+                            iView.success(Arrays.asList(beens));
+                        }
+
                     } else {
                         iView.error("加载失败");
                     }
@@ -44,24 +49,31 @@ public class RechargePresenter extends BasePresenter<IRechargeView> {
                 });
     }
 
-    public void check(String checkCode, int type, RechargeBean bean) {
-        DialogUtils.showDialog(context, "数据提交中");
+    /**
+     * 查询
+     * @param
+     */
+    public void serchData(String name , String phone) {
         RetrofitHelper.getInstance()
                 .getApi()
-                .checkCode("10", App.INSTANCE().getShopID(), checkCode)
+                .getRechargeMember("1", App.INSTANCE().getShopID(), "", "",name,phone)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
-                    DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        iView.checkSuccess(type, bean);
+                        if(stringModel.getResult().equals("0")){
+                            iView.error("没有该数据");
+                        }else{
+                            RechargeBean[] beens = new Gson().fromJson(stringModel.getResult(), RechargeBean[].class);
+                            iView.success(Arrays.asList(beens));
+                        }
+
                     } else {
-                        iView.error("校验失败");
+                        iView.error("加载失败");
                     }
                 }, throwable -> {
-                    DialogUtils.hintDialog();
-                    iView.error("校验失败");
+                    iView.error("加载失败");
                 });
     }
 }
