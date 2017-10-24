@@ -6,6 +6,7 @@ import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.entity.BussinessBean;
 import com.admin.shopkeeper.entity.DeskBussinessBean;
+import com.admin.shopkeeper.entity.FoodBussinessBean;
 import com.admin.shopkeeper.entity.SaleBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.ui.fragment.market.IMarketView;
@@ -48,6 +49,28 @@ class StatementPresenter extends BasePresenter<IStatementView> {
                         iView.error("加载失败");
                     }
                 }, throwable -> {
+                    iView.error("加载失败");
+                });
+    }
+    public void getData(String type, String startTime, String endTime) {
+
+        DialogUtils.showDialog(context, "数据加载中");
+        RetrofitHelper.getInstance()
+                .getApi()
+                .getDeskBussiness(type, startTime, endTime, App.INSTANCE().getShopID())
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if (stringModel.getCode().equals("1")) {
+                        FoodBussinessBean[] printBeens = new Gson().fromJson(stringModel.getResult(), FoodBussinessBean[].class);
+                        iView.successOfHotFood(Arrays.asList(printBeens));
+                    } else {
+                        iView.error("加载失败");
+                    }
+                }, throwable -> {
+                    DialogUtils.hintDialog();
                     iView.error("加载失败");
                 });
     }

@@ -20,9 +20,10 @@ public class SaleBussinessAdapter extends BaseQuickAdapter<FoodBussinessBean, Ba
 
     @Override
     protected void convert(BaseViewHolder helper, FoodBussinessBean item) {
+        helper.setText(R.id.item_ranking,  "");
         helper.setText(R.id.item_name, item.getProductName() + "");
         helper.setText(R.id.item_count, item.getCounts() + "");
-        helper.setVisible(R.id.item_price, false);
+        helper.setText(R.id.item_price, item.getPrice() + "");
     }
 
 }

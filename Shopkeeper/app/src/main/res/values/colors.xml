@@ -4,9 +4,9 @@
     <color name="colorPrimaryDark">#f06142</color>
     <color name="colorAccent">#ff2d4b</color>
 
-    <color name="bosscolorPrimary">#7695e1</color>
-    <color name="bosscolorPrimaryDark">#6a61c5</color>
-    <color name="bosscolorAccent">#537ed7</color>
+    <color name="bosscolorPrimary">#4BAE4F</color>
+    <color name="bosscolorPrimaryDark">#378D3B</color>
+    <color name="bosscolorAccent">#4BAE4F</color>
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorPress">#dddddd</color>
@@ -56,4 +56,5 @@
     <color name="text_red">#e64340</color>
     <color name="text_grey">#888888</color>
 
+    <color name="navbar_selected_two">#4BAE4F</color>
 </resources>

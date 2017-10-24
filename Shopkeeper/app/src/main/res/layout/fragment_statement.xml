@@ -9,7 +9,10 @@
         android:id="@+id/state_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -17,14 +20,14 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_349sdp"
                 android:background="@drawable/bg_static">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_159sdp"
+                    android:layout_marginTop="@dimen/_29sdp"
                     android:text="今日营业金额(元)"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_28ssp" />
@@ -34,8 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="@dimen/_230sdp"
-                    android:layout_marginTop="@dimen/_204sdp"
+                    android:layout_marginTop="@dimen/_70sdp"
                     android:text="0.00"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_60ssp" />
@@ -45,33 +47,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_112sdp"
                     android:layout_gravity="bottom"
-                    android:background="#22000000"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/state_count"
+                        android:id="@+id/state_totle_recharge"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:lineSpacingExtra="@dimen/_10sdp"
-                        android:text="来客人数\n0"
+                        android:text="总充值收入\n0.00"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_24ssp" />
 
                     <TextView
-                        android:id="@+id/state_price"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:lineSpacingExtra="@dimen/_10sdp"
-                        android:text="客单价(元)\n0.00"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_24ssp" />
-
-                    <TextView
-                        android:id="@+id/state_rate"
+                        android:id="@+id/state_youhui"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -81,13 +71,22 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/_24ssp" />
 
+                    <TextView
+                        android:id="@+id/state_totle_sale"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:lineSpacingExtra="@dimen/_10sdp"
+                        android:text="销售总实收\n0.00"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_24ssp" />
+
+
                 </LinearLayout>
 
             </FrameLayout>
 
-            <View
-                style="@style/LineHorStyle"
-                android:layout_marginTop="@dimen/_29sdp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,53 +94,189 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/state_bussiness"
+                    android:id="@+id/state_customer_nums"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/selector_item"
-                    android:drawableTop="@mipmap/reporting_bussiness"
                     android:gravity="center"
+                    android:lineSpacingExtra="@dimen/_10sdp"
                     android:padding="@dimen/_24sdp"
-                    android:text="营业收款"
+                    android:text="0.0\n来客人数"
                     android:textColor="@color/text_black"
-                    android:textSize="@dimen/_28ssp" />
+                    android:textSize="@dimen/_23ssp" />
 
                 <View style="@style/LineVerStyle" />
 
                 <TextView
-                    android:id="@+id/state_sale"
+                    android:id="@+id/state_unit_price"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/selector_item"
-                    android:drawableTop="@mipmap/reporting_sale"
                     android:gravity="center"
+                    android:lineSpacingExtra="@dimen/_10sdp"
                     android:padding="@dimen/_24sdp"
-                    android:text="销售排行"
+                    android:text="0.0\n客单价"
                     android:textColor="@color/text_black"
-                    android:textSize="@dimen/_28ssp" />
+                    android:textSize="@dimen/_23ssp" />
 
                 <View style="@style/LineVerStyle" />
 
                 <TextView
-                    android:id="@+id/state_return"
+                    android:id="@+id/state_cancel_order_nums"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/selector_item"
-                    android:drawableTop="@mipmap/reporting_retreat"
                     android:gravity="center"
+                    android:lineSpacingExtra="@dimen/_10sdp"
                     android:padding="@dimen/_24sdp"
-                    android:text="退菜分析"
+                    android:text="0\n撤单次数"
                     android:textColor="@color/text_black"
-                    android:textSize="@dimen/_28ssp" />
+                    android:textSize="@dimen/_23ssp" />
+
+                <View style="@style/LineVerStyle" />
+
+                <TextView
+                    android:id="@+id/state_rebill_nums"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_item"
+                    android:gravity="center"
+                    android:lineSpacingExtra="@dimen/_10sdp"
+                    android:padding="@dimen/_24sdp"
+                    android:text="0\n反结账次数"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/_23ssp" />
 
             </LinearLayout>
 
             <View style="@style/LineHorStyle" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_81sdp"
+                android:text="热销商品排行前十"
+                android:textSize="@dimen/_27ssp"
+                android:paddingLeft="@dimen/_32sdp"
+                android:paddingTop="@dimen/_37sdp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_88sdp"
+                android:background="@color/white"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_32sdp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="排行"
+                    android:textColor="#888888"
+                    android:textSize="@dimen/_32ssp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:text="商品名称"
+                    android:textColor="#888888"
+                    android:textSize="@dimen/_32ssp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:text="销售数量"
+                    android:textColor="#888888"
+                    android:textSize="@dimen/_32ssp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/_30sdp"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="销售金额"
+                    android:textColor="#888888"
+                    android:textSize="@dimen/_32ssp" />
+            </LinearLayout>
+
+            <View style="@style/LineHorStyle" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"/>
+            <View style="@style/LineHorStyle" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_81sdp"
+                android:text="滞销商品排行前十"
+                android:textSize="@dimen/_27ssp"
+                android:paddingLeft="@dimen/_32sdp"
+                android:paddingTop="@dimen/_37sdp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_88sdp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_32sdp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="排行"
+                    android:textColor="#888888"
+                    android:textSize="@dimen/_32ssp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:text="商品名称"
+                    android:textColor="#888888"
+                    android:textSize="@dimen/_32ssp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:text="销售数量"
+                    android:textColor="#888888"
+                    android:textSize="@dimen/_32ssp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/_30sdp"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="销售金额"
+                    android:textColor="#888888"
+                    android:textSize="@dimen/_32ssp" />
+            </LinearLayout>
+            <View style="@style/LineHorStyle" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"/>
         </LinearLayout>
 
+        </ScrollView>
     </in.srain.cube.views.ptr.PtrFrameLayout>
 </LinearLayout>

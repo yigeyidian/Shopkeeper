@@ -25,18 +25,20 @@ import butterknife.OnClick;
 
 public class BossMainActivity extends BaseActivity<BossMainPresenter> implements IBossMainView {
 
-    public static final String[] tabs = {"营销", "报表", "基础配置", "设置"};
+    public static final String[] tabs = {"首页", "报表", "订单", "营销", "设置"};
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.viewPager)
     HomeViewPager viewPager;
-    @BindView(R.id.tab_market)
-    TextView tvMarket;
+    @BindView(R.id.tab_home)
+    TextView tvHome;
     @BindView(R.id.tab_statement)
     TextView tvStatistics;
-    @BindView(R.id.tab_basic)
-    TextView tvConfig;
+    @BindView(R.id.tab_order_list)
+    TextView tvOrderList;
+    @BindView(R.id.tab_market)
+    TextView tvMarket;
     @BindView(R.id.tab_setting)
     TextView tvSetting;
 
@@ -79,7 +81,7 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
                 }
                 switch (position) {
                     case 0:
-                        fragment = new MarketFragment();
+                        fragment = new StatementFragment();
                         break;
                     case 1:
                         fragment = new StatementFragment();
@@ -88,6 +90,9 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
                         fragment = new BasicFragment();
                         break;
                     case 3:
+                        fragment = new MarketFragment();
+                        break;
+                    case 4:
                         fragment = new SettingFragment();
                         break;
                 }
@@ -97,8 +102,8 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
         viewPager.setNoScroll(true);
     }
 
-    @OnClick(R.id.tab_market)
-    public void marketClick() {
+    @OnClick(R.id.tab_home)
+    public void homeClick() {
         changePage(0);
     }
 
@@ -107,14 +112,19 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
         changePage(1);
     }
 
-    @OnClick(R.id.tab_basic)
-    public void basicClick() {
+    @OnClick(R.id.tab_order_list)
+    public void orderListClick() {
         changePage(2);
+    }
+
+    @OnClick(R.id.tab_market)
+    public void marketClick() {
+        changePage(3);
     }
 
     @OnClick(R.id.tab_setting)
     public void settingClick() {
-        changePage(3);
+        changePage(4);
     }
 
     private void changePage(int index) {
@@ -122,60 +132,84 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
             return;
         }
         viewPager.setCurrentItem(index, false);
+//        "首页", "报表", "订单", "营销", "设置"
         switch (index) {
             case 0:
-                setImmersionBar(true, "营销");
+                setImmersionBar(true, "首页");
                 toolbar.setVisibility(View.VISIBLE);
-                tvMarket.setTextColor(getResources().getColor(R.color.navbar_selected));
+                tvHome.setTextColor(getResources().getColor(R.color.navbar_selected_two));
                 tvStatistics.setTextColor(getResources().getColor(R.color.navbar_normal));
-                tvConfig.setTextColor(getResources().getColor(R.color.navbar_normal));
+                tvOrderList.setTextColor(getResources().getColor(R.color.navbar_normal));
+                tvMarket.setTextColor(getResources().getColor(R.color.navbar_normal));
                 tvSetting.setTextColor(getResources().getColor(R.color.navbar_normal));
 
-                UIUtils.setDrawableTop(tvMarket, R.mipmap.navbar_marketing_hover);
-                UIUtils.setDrawableTop(tvStatistics, R.mipmap.navbar_statistics);
-                UIUtils.setDrawableTop(tvConfig, R.mipmap.navbar_configuration);
+                UIUtils.setDrawableTop(tvHome, R.mipmap.menu_bar_icon_home_fill);
+                UIUtils.setDrawableTop(tvStatistics, R.mipmap.menu_bar_icon_statistics);
+                UIUtils.setDrawableTop(tvOrderList, R.mipmap.menu_bar_icon_orderlist);
+                UIUtils.setDrawableTop(tvMarket, R.mipmap.menu_bar_icon_marketing);
                 UIUtils.setDrawableTop(tvSetting, R.mipmap.navbar_settings);
                 break;
 
             case 1:
-                toolbar.setVisibility(View.GONE);
+                setImmersionBar(false, "报表");
+                toolbar.setVisibility(View.VISIBLE);
+                tvHome.setTextColor(getResources().getColor(R.color.navbar_normal));
+                tvStatistics.setTextColor(getResources().getColor(R.color.navbar_selected_two));
+                tvOrderList.setTextColor(getResources().getColor(R.color.navbar_normal));
                 tvMarket.setTextColor(getResources().getColor(R.color.navbar_normal));
-                tvStatistics.setTextColor(getResources().getColor(R.color.navbar_selected));
-                tvConfig.setTextColor(getResources().getColor(R.color.navbar_normal));
                 tvSetting.setTextColor(getResources().getColor(R.color.navbar_normal));
 
-                UIUtils.setDrawableTop(tvMarket, R.mipmap.navbar_marketing);
-                UIUtils.setDrawableTop(tvStatistics, R.mipmap.navbar_statistics_hover);
-                UIUtils.setDrawableTop(tvConfig, R.mipmap.navbar_configuration);
+                UIUtils.setDrawableTop(tvHome, R.mipmap.menu_bar_icon_home);
+                UIUtils.setDrawableTop(tvStatistics, R.mipmap.menu_bar_icon_statistics_fill);
+                UIUtils.setDrawableTop(tvOrderList, R.mipmap.menu_bar_icon_orderlist);
+                UIUtils.setDrawableTop(tvMarket, R.mipmap.menu_bar_icon_marketing);
                 UIUtils.setDrawableTop(tvSetting, R.mipmap.navbar_settings);
                 break;
 
             case 2:
-                setImmersionBar(false, "基础设置");
+                setImmersionBar(false, "订单");
                 toolbar.setVisibility(View.VISIBLE);
-                tvMarket.setTextColor(getResources().getColor(R.color.navbar_normal));
+                tvHome.setTextColor(getResources().getColor(R.color.navbar_normal));
                 tvStatistics.setTextColor(getResources().getColor(R.color.navbar_normal));
-                tvConfig.setTextColor(getResources().getColor(R.color.navbar_selected));
+                tvOrderList.setTextColor(getResources().getColor(R.color.navbar_selected_two));
+                tvMarket.setTextColor(getResources().getColor(R.color.navbar_normal));
                 tvSetting.setTextColor(getResources().getColor(R.color.navbar_normal));
 
-                UIUtils.setDrawableTop(tvMarket, R.mipmap.navbar_marketing);
-                UIUtils.setDrawableTop(tvStatistics, R.mipmap.navbar_statistics);
-                UIUtils.setDrawableTop(tvConfig, R.mipmap.navbar_configuration_hover);
+                UIUtils.setDrawableTop(tvHome, R.mipmap.menu_bar_icon_home);
+                UIUtils.setDrawableTop(tvStatistics, R.mipmap.menu_bar_icon_statistics);
+                UIUtils.setDrawableTop(tvOrderList, R.mipmap.menu_bar_icon_orderlist_fill);
+                UIUtils.setDrawableTop(tvMarket, R.mipmap.menu_bar_icon_marketing);
                 UIUtils.setDrawableTop(tvSetting, R.mipmap.navbar_settings);
                 break;
-
             case 3:
+                setImmersionBar(true, "营销");
+                toolbar.setVisibility(View.VISIBLE);
+                tvHome.setTextColor(getResources().getColor(R.color.navbar_normal));
+                tvStatistics.setTextColor(getResources().getColor(R.color.navbar_normal));
+                tvOrderList.setTextColor(getResources().getColor(R.color.navbar_normal));
+                tvMarket.setTextColor(getResources().getColor(R.color.navbar_selected_two));
+                tvSetting.setTextColor(getResources().getColor(R.color.navbar_normal));
+
+                UIUtils.setDrawableTop(tvHome, R.mipmap.menu_bar_icon_home);
+                UIUtils.setDrawableTop(tvStatistics, R.mipmap.menu_bar_icon_statistics);
+                UIUtils.setDrawableTop(tvOrderList, R.mipmap.menu_bar_icon_orderlist);
+                UIUtils.setDrawableTop(tvMarket, R.mipmap.menu_bar_icon_marketing_fill);
+                UIUtils.setDrawableTop(tvSetting, R.mipmap.navbar_settings);
+                break;
+            case 4:
                 setImmersionBar(false, "设置");
                 toolbar.setVisibility(View.VISIBLE);
-                tvMarket.setTextColor(getResources().getColor(R.color.navbar_normal));
+                tvHome.setTextColor(getResources().getColor(R.color.navbar_normal));
                 tvStatistics.setTextColor(getResources().getColor(R.color.navbar_normal));
-                tvConfig.setTextColor(getResources().getColor(R.color.navbar_normal));
-                tvSetting.setTextColor(getResources().getColor(R.color.navbar_selected));
+                tvOrderList.setTextColor(getResources().getColor(R.color.navbar_normal));
+                tvMarket.setTextColor(getResources().getColor(R.color.navbar_normal));
+                tvSetting.setTextColor(getResources().getColor(R.color.navbar_selected_two));
 
-                UIUtils.setDrawableTop(tvMarket, R.mipmap.navbar_marketing);
-                UIUtils.setDrawableTop(tvStatistics, R.mipmap.navbar_statistics);
-                UIUtils.setDrawableTop(tvConfig, R.mipmap.navbar_configuration);
-                UIUtils.setDrawableTop(tvSetting, R.mipmap.navbar_settings_hover);
+                UIUtils.setDrawableTop(tvHome, R.mipmap.menu_bar_icon_home);
+                UIUtils.setDrawableTop(tvStatistics, R.mipmap.menu_bar_icon_statistics);
+                UIUtils.setDrawableTop(tvOrderList, R.mipmap.menu_bar_icon_orderlist);
+                UIUtils.setDrawableTop(tvMarket, R.mipmap.menu_bar_icon_marketing);
+                UIUtils.setDrawableTop(tvSetting, R.mipmap.menu_bar_icon_settings_fill);
                 break;
         }
     }

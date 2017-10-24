@@ -1,14 +1,20 @@
 package com.admin.shopkeeper.ui.fragment.statement;
 
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
+import com.admin.shopkeeper.adapter.SaleBussinessAdapter;
 import com.admin.shopkeeper.base.BaseFragment;
 import com.admin.shopkeeper.entity.BussinessBean;
+import com.admin.shopkeeper.entity.FoodBussinessBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.bussiness.BussinessActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.returnanalysis.ReturnAnalysisActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.salerank.SaleRankActivity;
+import com.admin.shopkeeper.utils.Tools;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.List;
 
@@ -27,15 +33,27 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
 
     @BindView(R.id.state_totle)
     TextView tvTotle;
-    @BindView(R.id.state_count)
-    TextView tvCount;
-    @BindView(R.id.state_price)
+    @BindView(R.id.state_totle_recharge)
+    TextView tvTotleOfRecharge;
+    @BindView(R.id.state_youhui)
+    TextView tvYouHui;
+    @BindView(R.id.state_totle_sale)
+    TextView tvTotleOfSale;
+    @BindView(R.id.state_customer_nums)
+    TextView tvCustomerNums;
+    @BindView(R.id.state_unit_price)
     TextView tvPrice;
-    @BindView(R.id.state_rate)
-    TextView tvRate;
+    @BindView(R.id.state_cancel_order_nums)
+    TextView tvCancleOrderNums;
+    @BindView(R.id.state_rebill_nums)
+    TextView tvRebillNums;
     @BindView(R.id.state_refresh)
     PtrFrameLayout frameLayout;
-
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.recyclerView1)
+    RecyclerView recyclerView1;
+    private SaleBussinessAdapter adapter;
     @Override
     public void initView() {
 
@@ -55,6 +73,15 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
                 presenter.getData();
             }
         });
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity())
+                .marginResId(R.dimen._30sdp, R.dimen._1sdp)
+                .color(getResources().getColor(R.color.item_line_color))
+                .build());
+        adapter = new SaleBussinessAdapter(R.layout.item_foodbussiness);
+        recyclerView.setAdapter(adapter);
+
+        presenter.getData("8", "1999-01-01", Tools.formatNowDate("yyyy-MM-dd"));
     }
 
     @Override
@@ -74,7 +101,7 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
         presenter.init();
     }
 
-    @OnClick(R.id.state_bussiness)
+    /*@OnClick(R.id.state_bussiness)
     public void bussinessClick() {
         startActivity(BussinessActivity.class);
     }
@@ -87,7 +114,7 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
     @OnClick(R.id.state_return)
     public void returnClick() {
         startActivity(ReturnAnalysisActivity.class);
-    }
+    }*/
 
     @Override
     public void error(String msg) {
@@ -101,9 +128,24 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
         if (bussinessBeen.size() > 0) {
             BussinessBean bean = bussinessBeen.get(0);
             tvTotle.setText(""+bean.getChargeMoney());
-            tvCount.setText("来客人数\n" + bean.getPersonCount());
-            tvPrice.setText("客单价(元)\n" + bean.getCount());
-            tvRate.setText("优惠金额\n" + (bean.getFreeMoney()));
+            tvTotleOfRecharge.setText("总充值收入\n" + bean.getTableCount());
+            tvYouHui.setText("优惠金额\n" + bean.getFreeMoney());
+            tvTotleOfSale.setText("销售总实收\n" + (bean.getTotalMoney()));
+
+            tvCustomerNums.setText((bean.getPersonCount()+"\n来客人数"));
+            tvPrice.setText((bean.getCount()+"\n客单价"));
+            tvCancleOrderNums.setText((bean.getCheTableCount()+"\n撤单次数"));
+            tvRebillNums.setText((bean.getFanCount()+"\n反结账次数"));
         }
+    }
+
+    @Override
+    public void successOfHotFood(List<FoodBussinessBean> data) {
+            adapter.setNewData(data);
+    }
+
+    @Override
+    public void successOfCoolFood(List<FoodBussinessBean> data) {
+
     }
 }
