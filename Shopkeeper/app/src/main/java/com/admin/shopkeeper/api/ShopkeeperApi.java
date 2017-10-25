@@ -1720,4 +1720,11 @@ public interface ShopkeeperApi {
             @Field("TimeEdn") String timeEdn,
             @Field("ShangJiaID") String shangJiaID,
             @Field("SelectType") int selectType);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> getCollectionDetail(
+            @Field("Type") String type,
+            @Field("Time") String time,
+            @Field("Rid") String rid);
 }

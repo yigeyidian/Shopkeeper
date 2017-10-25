@@ -81,7 +81,6 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
 
         });
 
-
         presenter.getData("1999-01-01", Tools.formatNowDate("yyyy-MM-dd"), "00:00:00", "23:59:59", 0);
     }
 

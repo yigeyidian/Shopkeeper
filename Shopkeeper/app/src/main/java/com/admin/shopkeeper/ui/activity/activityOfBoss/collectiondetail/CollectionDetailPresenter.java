@@ -1,13 +1,14 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.collectiondetail;
 
 import android.content.Context;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
-import com.admin.shopkeeper.entity.ReturnBussinessBean;
-import com.admin.shopkeeper.entity.ShopCollectionBean;
+import com.admin.shopkeeper.entity.CollectionBean;
+import com.admin.shopkeeper.entity.CouponManageBean;
+import com.admin.shopkeeper.entity.ShopBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.returnbussiness.IReturnBussinessView;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.coupondetail.ICouponDetailView;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
 
@@ -17,28 +18,29 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by Administrator on 2017/8/24.
+ * Created by Administrator on 2017/9/7.
  */
 
-public class ShopCollectionPresenter extends BasePresenter<IShopCollectionView> {
+public class CollectionDetailPresenter extends BasePresenter<ICollectionDetailView> {
 
-    public ShopCollectionPresenter(Context context, IShopCollectionView iView) {
+    public CollectionDetailPresenter(Context context, ICollectionDetailView iView) {
         super(context, iView);
     }
 
-    public void getData(int type, String startDate, String endDate, String startTime, String endTime, int selectType) {
+
+    public void getDetail(String date) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getShopCollection(type + "", "ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), selectType)
+                .getCollectionDetail("16", date, App.INSTANCE().getShopID())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        ShopCollectionBean[] beens = new Gson().fromJson(stringModel.getResult(), ShopCollectionBean[].class);
-                        iView.success(Arrays.asList(beens));
+                        CollectionBean[] beans = new Gson().fromJson(stringModel.getResult(), CollectionBean[].class);
+                        iView.success(Arrays.asList(beans));
                     } else {
                         iView.error("加载失败");
                     }

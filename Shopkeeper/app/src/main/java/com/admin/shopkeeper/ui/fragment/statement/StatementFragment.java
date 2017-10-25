@@ -1,5 +1,7 @@
 package com.admin.shopkeeper.ui.fragment.statement;
 
+import android.content.Intent;
+
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseFragment;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.deskmanager.DeskManagerActivity;
@@ -48,47 +50,51 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
     }
 
     @OnClick(R.id.staff_manage_ll)
-    public void shopCollectionClick(){
-        startActivity(ShopCollectionActivity.class);
+    public void shopCollectionClick() {
+        Intent intent = new Intent(getActivity(), ShopCollectionActivity.class);
+        intent.putExtra("type", 1);
+        startActivity(intent);
     }
 
     @OnClick(R.id.member_manage_ll)
-    public void chainCollectionClick(){
-        startActivity(ShopCollectionActivity.class);
+    public void chainCollectionClick() {
+        Intent intent = new Intent(getActivity(), ShopCollectionActivity.class);
+        intent.putExtra("type", 2);
+        startActivity(intent);
     }
 
     @OnClick(R.id.basic_print)
-    public void thirdCollectionClick(){
+    public void thirdCollectionClick() {
         startActivity(ShopCollectionActivity.class);
     }
 
     @OnClick(R.id.basic_commodity)
-    public void handoverClick(){
+    public void handoverClick() {
         startActivity(ShopCollectionActivity.class);
     }
 
     @OnClick(R.id.basic_weight)
-    public void freeClick(){
+    public void freeClick() {
         startActivity(ShopCollectionActivity.class);
     }
 
     @OnClick(R.id.basic_sale)
-    public void deskRateClick(){
+    public void deskRateClick() {
         startActivity(ShopCollectionActivity.class);
     }
 
     @OnClick(R.id.basic_guazhang)
-    public void saleStatisticsClick(){
+    public void saleStatisticsClick() {
         startActivity(ShopCollectionActivity.class);
     }
 
     @OnClick(R.id.basic_retcause)
-    public void giftStatisticsClick(){
+    public void giftStatisticsClick() {
         startActivity(ShopCollectionActivity.class);
     }
 
     @OnClick(R.id.basic_house)
-    public void returnStatisticsClick(){
+    public void returnStatisticsClick() {
         startActivity(ShopCollectionActivity.class);
     }
 

@@ -4,11 +4,14 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.boss;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
+import com.admin.shopkeeper.entity.BossUserInfo;
 import com.admin.shopkeeper.ui.fragment.basic.BasicFragment;
 import com.admin.shopkeeper.ui.fragment.market.MarketFragment;
 import com.admin.shopkeeper.ui.fragment.setting.SettingFragment;
@@ -19,6 +22,7 @@ import com.admin.shopkeeper.weight.HomeViewPager;
 import com.gyf.barlibrary.ImmersionBar;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -101,6 +105,8 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
             }
         });
         viewPager.setNoScroll(true);
+
+        presenter.queryUserInfo(App.INSTANCE().getShopID());
     }
 
     @OnClick(R.id.tab_home)
@@ -232,5 +238,19 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
             toolbar.setNavigationIcon(null);
         }
         setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public void getInfoSuccess(List<BossUserInfo> bossUserInfos) {
+        BossUserInfo bossUserInfo = bossUserInfos.get(0);
+        if (!TextUtils.isEmpty(bossUserInfos.get(0).getAddress())) {
+            App.INSTANCE().setShopAddress(bossUserInfos.get(0).getAddress());
+        }
+        if (!TextUtils.isEmpty(bossUserInfos.get(0).getShopNames())) {
+            App.INSTANCE().setShopName(bossUserInfos.get(0).getShopNames());
+        }
+        if (!TextUtils.isEmpty(bossUserInfos.get(0).getName())) {
+            App.INSTANCE().setUserNameOfBoss(bossUserInfos.get(0).getName());
+        }
     }
 }
