@@ -28,11 +28,11 @@ public class CollectionDetailPresenter extends BasePresenter<ICollectionDetailVi
     }
 
 
-    public void getDetail(String date) {
+    public void getDetail(String date,String shopId) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getCollectionDetail("16", date, App.INSTANCE().getShopID())
+                .getCollectionDetail("16", date,shopId)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

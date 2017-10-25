@@ -47,4 +47,21 @@ public class ShopCollectionPresenter extends BasePresenter<IShopCollectionView> 
                     iView.error("加载失败");
                 });
     }
+
+    public void getChain() {
+        RetrofitHelper.getInstance()
+                .getApi()
+                .getChain("15", App.INSTANCE().getShopID())
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    if (stringModel.getCode().equals("1")) {
+                    } else {
+                        iView.error("加载失败");
+                    }
+                }, throwable -> {
+                    iView.error("加载失败");
+                });
+    }
 }

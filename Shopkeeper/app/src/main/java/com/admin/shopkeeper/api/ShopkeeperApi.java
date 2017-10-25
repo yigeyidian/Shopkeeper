@@ -1727,4 +1727,10 @@ public interface ShopkeeperApi {
             @Field("Type") String type,
             @Field("Time") String time,
             @Field("Rid") String rid);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> getChain(
+            @Field("Type") String type,
+            @Field("ShangJiaID") String shopId);
 }

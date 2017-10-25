@@ -66,7 +66,7 @@ public class CollectionDetailActivity extends BaseActivity<CollectionDetailPrese
 
         bean = (ShopCollectionBean) getIntent().getSerializableExtra("bean");
 
-        tvName.setText(App.INSTANCE().getShopName());
+        tvName.setText(bean.getNames());
         tvDate.setText(bean.getDinnerDate());
         tvSale.setText(String.valueOf(bean.getTotalMoney()));
         tvCharge.setText(String.valueOf(bean.getChongzhi()));
@@ -81,7 +81,7 @@ public class CollectionDetailActivity extends BaseActivity<CollectionDetailPrese
         adapter = new CollectionDetailAdapter(R.layout.item_collection_detail);
         recyclerView.setAdapter(adapter);
 
-        presenter.getDetail(bean.getDinnerDate());
+        presenter.getDetail(bean.getDinnerDate(), bean.getShopId());
     }
 
     @Override

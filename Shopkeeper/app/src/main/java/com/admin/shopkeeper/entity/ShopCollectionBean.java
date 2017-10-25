@@ -20,6 +20,26 @@ public class ShopCollectionBean implements Serializable {
     double chargeMoney;
     @SerializedName("ChonZhi")
     double chongzhi;
+    @SerializedName("Names")
+    String names;
+    @SerializedName("RESTAURANTID")
+    String shopId;
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
+
+    public String getNames() {
+        return names;
+    }
+
+    public void setNames(String names) {
+        this.names = names;
+    }
 
     public String getDinnerDate() {
         return dinnerDate;

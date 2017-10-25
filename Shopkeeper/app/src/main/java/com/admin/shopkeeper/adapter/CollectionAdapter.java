@@ -20,7 +20,7 @@ public class CollectionAdapter extends BaseQuickAdapter<ShopCollectionBean, Base
 
     @Override
     protected void convert(BaseViewHolder helper, ShopCollectionBean item) {
-        helper.setText(R.id.item_name, App.INSTANCE().getShopName());
+        helper.setText(R.id.item_name, item.getNames());
         helper.setText(R.id.item_date, item.getDinnerDate());
         helper.setText(R.id.item_sale, String.valueOf(item.getTotalMoney()));
         helper.setText(R.id.item_charge, String.valueOf(item.getChongzhi()));

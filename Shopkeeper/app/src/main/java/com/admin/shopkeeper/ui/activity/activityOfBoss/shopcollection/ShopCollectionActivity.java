@@ -118,6 +118,9 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         String endDate = Tools.formatNowDate("yyyy-MM-dd");
 
         presenter.getData(type, startDate, endDate, "00:00:00", "23:59:59", 0);
+        if (type == 2) {
+            presenter.getChain();
+        }
 
         tvDate.setText(startDate + "至" + endDate);
     }
@@ -374,11 +377,16 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         double charge = 0;
         double free = 0;
         double real = 0;
-        for (ShopCollectionBean bean : data) {
+        for (ShopCollectionBean bean : datas) {
             sale += bean.getTotalMoney();
             charge += bean.getChongzhi();
             free += bean.getFreeMoney();
             real += bean.getChargeMoney();
+
+            if (type == 1) {
+                bean.setNames(App.INSTANCE().getShopName());
+                bean.setShopId(App.INSTANCE().getShopID());
+            }
         }
 
         tvSale.setText(String.valueOf(sale));
