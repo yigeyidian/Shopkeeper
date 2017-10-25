@@ -1708,4 +1708,16 @@ public interface ShopkeeperApi {
             @Field("UserID") String userID,
             @Field("RESTAURANTID") String shopId,
             @Field("CardID") String cardID);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> getShopCollection(
+            @Field("Type") String type,
+            @Field("order") String order,
+            @Field("DataBegin") String dataBegin,
+            @Field("DataEdn") String dataEdn,
+            @Field("TimeBegin") String timeBegin,
+            @Field("TimeEdn") String timeEdn,
+            @Field("ShangJiaID") String shangJiaID,
+            @Field("SelectType") int selectType);
 }

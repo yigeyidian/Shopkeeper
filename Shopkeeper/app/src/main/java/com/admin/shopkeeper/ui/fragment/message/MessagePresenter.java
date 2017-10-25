@@ -59,7 +59,6 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
-
                     switch (stringModel.getCode()) {
                         case Config.REQUEST_SUCCESS:
                             OrderDetailFood[] detailFoods = new Gson().fromJson(stringModel.getResult(), OrderDetailFood[].class);

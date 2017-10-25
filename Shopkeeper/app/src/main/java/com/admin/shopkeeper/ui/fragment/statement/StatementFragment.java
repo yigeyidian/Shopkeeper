@@ -11,6 +11,7 @@ import com.admin.shopkeeper.ui.activity.activityOfBoss.memberManager.MemberManag
 import com.admin.shopkeeper.ui.activity.activityOfBoss.print.PrintManagerActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.returncause.ReturnCauseActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.sale.SaleActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.ShopCollectionActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.staffManager.StaffManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.weight.WeightActivity;
 import com.gyf.barlibrary.ImmersionBar;
@@ -22,6 +23,7 @@ import butterknife.OnClick;
  */
 
 public class StatementFragment extends BaseFragment<StatementPresenter> implements IStatementView {
+
     @Override
     public void initView() {
         /*ImmersionBar.with(this)
@@ -44,6 +46,53 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
         presenter = new StatementPresenter(getActivity(), this);
         presenter.init();
     }
+
+    @OnClick(R.id.staff_manage_ll)
+    public void shopCollectionClick(){
+        startActivity(ShopCollectionActivity.class);
+    }
+
+    @OnClick(R.id.member_manage_ll)
+    public void chainCollectionClick(){
+        startActivity(ShopCollectionActivity.class);
+    }
+
+    @OnClick(R.id.basic_print)
+    public void thirdCollectionClick(){
+        startActivity(ShopCollectionActivity.class);
+    }
+
+    @OnClick(R.id.basic_commodity)
+    public void handoverClick(){
+        startActivity(ShopCollectionActivity.class);
+    }
+
+    @OnClick(R.id.basic_weight)
+    public void freeClick(){
+        startActivity(ShopCollectionActivity.class);
+    }
+
+    @OnClick(R.id.basic_sale)
+    public void deskRateClick(){
+        startActivity(ShopCollectionActivity.class);
+    }
+
+    @OnClick(R.id.basic_guazhang)
+    public void saleStatisticsClick(){
+        startActivity(ShopCollectionActivity.class);
+    }
+
+    @OnClick(R.id.basic_retcause)
+    public void giftStatisticsClick(){
+        startActivity(ShopCollectionActivity.class);
+    }
+
+    @OnClick(R.id.basic_house)
+    public void returnStatisticsClick(){
+        startActivity(ShopCollectionActivity.class);
+    }
+
+
    /* //员工管理点击
     @OnClick(R.id.staff_manage_ll)
     public void setStaffManageClick() {

@@ -221,6 +221,7 @@
         </LinearLayout>
 
         <View style="@style/LineHor2Style" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/_81sdp"
@@ -329,6 +330,7 @@
         </LinearLayout>
 
         <View style="@style/LineHor2Style" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/_81sdp"
@@ -403,6 +405,7 @@
         </LinearLayout>
 
         <View style="@style/LineHor2Style" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/_81sdp"
@@ -473,7 +476,9 @@
                 android:layout_marginRight="@dimen/_30sdp"
                 android:src="@mipmap/list_icon_arrow_right" />
         </LinearLayout>
+
         <View style="@style/LineHor2Style" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/_81sdp"

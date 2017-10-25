@@ -49,12 +49,12 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
     RecyclerView recyclerView;
     @BindView(R.id.recyclerView1)
     RecyclerView recyclerView1;
+
     private SaleBussinessAdapter adapter;
     private SaleBussinessAdapter adapter1;
 
     @Override
     public void initView() {
-
         MaterialHeader header = new MaterialHeader(getActivity());
         int c[] = {ContextCompat.getColor(getActivity(), R.color.bosscolorPrimary)};
         header.setColorSchemeColors(c);
