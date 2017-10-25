@@ -2,27 +2,17 @@ package com.admin.shopkeeper.ui.fragment.setting;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
-import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.entity.BossUserInfo;
-import com.admin.shopkeeper.entity.Order;
-import com.admin.shopkeeper.entity.SeasonBean;
-import com.admin.shopkeeper.entity.User;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.model.IntModel;
 import com.admin.shopkeeper.model.StringModel;
-import com.admin.shopkeeper.ui.fragment.statement.IStatementView;
 import com.admin.shopkeeper.utils.DialogUtils;
-import com.admin.shopkeeper.utils.SPUtils;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;

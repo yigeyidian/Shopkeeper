@@ -304,7 +304,10 @@
         <activity android:name=".ui.activity.queueedit.QueueEditActivity" />
         <activity android:name=".ui.activity.recharge.RechargeActivity" />
         <activity android:name=".ui.activity.rechargeedit.RechargeEditActivity" />
-        <activity android:name=".ui.activity.rechargedetail.RechargeDetailActivity"></activity>
+        <activity android:name=".ui.activity.rechargedetail.RechargeDetailActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.shopcollection.ShopCollectionActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.returnstatistics.ReturnStatisticsActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.collectiondetail.CollectionDetailActivity"></activity>
     </application>
 
 </manifest>

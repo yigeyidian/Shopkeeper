@@ -236,7 +236,6 @@ public class ReturnBussinessActivity extends BaseActivity<ReturnBussinessPresent
      * 获取当前的日期和时间
      */
     private void initDateTime() {
-
         Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH) + 1;

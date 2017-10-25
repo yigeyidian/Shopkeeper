@@ -71,11 +71,11 @@ class SplashPresenter extends BasePresenter<ISplashView> {
                             }
                         }
                     } else {
-                        iView.error("获取数据失败，请检查网络");
+                        iView.error("获取数据失败");
                     }
                 }, throwable -> {
                     DialogUtils.hintDialog();
-                    iView.error("获取数据失败，请检查网络");
+                    iView.error("获取数据失败，接口异常或网络异常");
                 });
     }
 }

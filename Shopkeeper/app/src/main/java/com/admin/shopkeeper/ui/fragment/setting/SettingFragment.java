@@ -48,7 +48,6 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements I
     @Override
     public void initView() {
         presenter.queryUserInfo(App.INSTANCE().getShopID());
-
     }
 
     @OnClick(R.id.my_rl_setting)
@@ -120,7 +119,6 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements I
         if (!TextUtils.isEmpty(bossUserInfos.get(0).getName())) {
             App.INSTANCE().setUserNameOfBoss(bossUserInfos.get(0).getName());
         }
-
     }
 
     @Override

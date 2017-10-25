@@ -65,7 +65,7 @@ public class SaleBussinessActivity extends BaseActivity<SaleBussinessPresenter> 
                 .marginResId(R.dimen._30sdp, R.dimen._1sdp)
                 .color(getResources().getColor(R.color.item_line_color))
                 .build());
-        adapter = new SaleBussinessAdapter(R.layout.item_foodbussiness);
+        adapter = new SaleBussinessAdapter(this);
         recyclerView.setAdapter(adapter);
 
         presenter.getData(type, "1999-01-01", Tools.formatNowDate("yyyy-MM-dd"));
@@ -93,6 +93,6 @@ public class SaleBussinessActivity extends BaseActivity<SaleBussinessPresenter> 
 
     @Override
     public void success(List<FoodBussinessBean> data) {
-        adapter.setNewData(data);
+        adapter.setDatas(data);
     }
 }
