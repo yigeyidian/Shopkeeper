@@ -12,6 +12,7 @@ import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.ui.fragment.basic.BasicFragment;
 import com.admin.shopkeeper.ui.fragment.market.MarketFragment;
 import com.admin.shopkeeper.ui.fragment.setting.SettingFragment;
+import com.admin.shopkeeper.ui.fragment.home.HomeFragment;
 import com.admin.shopkeeper.ui.fragment.statement.StatementFragment;
 import com.admin.shopkeeper.utils.UIUtils;
 import com.admin.shopkeeper.weight.HomeViewPager;
@@ -63,7 +64,7 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
                 .titleBar(toolbar, true)
                 .init();
 
-        toolbar.setTitle("营销");
+        toolbar.setTitle("首页");
         toolbar.setNavigationIcon(R.mipmap.person_advar_man);
         setSupportActionBar(toolbar);
 
@@ -81,7 +82,7 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
                 }
                 switch (position) {
                     case 0:
-                        fragment = new StatementFragment();
+                        fragment = new HomeFragment();
                         break;
                     case 1:
                         fragment = new StatementFragment();
@@ -151,7 +152,7 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
                 break;
 
             case 1:
-                setImmersionBar(false, "报表");
+                setImmersionBar(true, "报表");
                 toolbar.setVisibility(View.VISIBLE);
                 tvHome.setTextColor(getResources().getColor(R.color.navbar_normal));
                 tvStatistics.setTextColor(getResources().getColor(R.color.navbar_selected_two));
@@ -167,7 +168,7 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
                 break;
 
             case 2:
-                setImmersionBar(false, "订单");
+                setImmersionBar(true, "订单");
                 toolbar.setVisibility(View.VISIBLE);
                 tvHome.setTextColor(getResources().getColor(R.color.navbar_normal));
                 tvStatistics.setTextColor(getResources().getColor(R.color.navbar_normal));

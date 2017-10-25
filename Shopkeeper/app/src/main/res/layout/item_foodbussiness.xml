@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/_32sdp"
+        android:paddingLeft="@dimen/_35sdp"
         android:text="排行"
         android:textColor="#888888"
         android:textSize="@dimen/_32ssp" />
