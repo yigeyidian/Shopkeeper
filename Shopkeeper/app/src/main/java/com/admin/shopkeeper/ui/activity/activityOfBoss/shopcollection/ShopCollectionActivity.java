@@ -373,5 +373,7 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         tvCharge.setText(String.valueOf(charge));
         tvFree.setText(String.valueOf(free));
         tvReal.setText(String.valueOf(real));
+
+        llTotal.setVisibility(View.VISIBLE);
     }
 }
