@@ -146,12 +146,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements ILogi
         if (App.INSTANCE().getUser().getRoleID().equals("2")) {
             startActivity(BossMainActivity.class);
         }else {
-            if (!SPUtils.getInstance().getBoolean(SPUtils.PREFERENCE_ROOM, false)) {
-//                if (!AppDbHelper.INSTANCE().getRoomCount(App.INSTANCE().getShopID())) {
-
-                Toasty.warning(LoginActivity.this, "请在配置页面获取房间列表", Toast.LENGTH_SHORT, true).show();
-                return;
-            }
+//            if (!SPUtils.getInstance().getBoolean(SPUtils.PREFERENCE_ROOM, false)) {
+////                if (!AppDbHelper.INSTANCE().getRoomCount(App.INSTANCE().getShopID())) {
+//
+//                Toasty.warning(LoginActivity.this, "请在配置页面获取房间列表", Toast.LENGTH_SHORT, true).show();
+//                return;
+//            }
 
             if (!SPUtils.getInstance().getBoolean(SPUtils.PREFERENCE_MENU, false)) {
 //                if (!AppDbHelper.INSTANCE().getMenuFoodCount(App.INSTANCE().getShopID())) {

@@ -163,7 +163,7 @@ public class ConfigRoomActivity extends BaseActivity<ConfigRoomPresenter> implem
 
     @Override
     public void noDataWithDB() {
-
+        SPUtils.getInstance().put(SPUtils.PREFERENCE_ROOM, true);
         ptrLayout.postDelayed(() -> ptrLayout.autoRefresh(), 100);
     }
 }
