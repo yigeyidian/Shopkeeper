@@ -1,10 +1,9 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.jion;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,38 +16,30 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.CollectionAdapter;
-import com.admin.shopkeeper.adapter.ReturnBussinessAdapter;
+import com.admin.shopkeeper.adapter.HandoverAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
-import com.admin.shopkeeper.dialog.ListDialog;
-import com.admin.shopkeeper.dialog.MutiSelectDialog;
-import com.admin.shopkeeper.dialog.ShopSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
-import com.admin.shopkeeper.entity.ChainBean;
-import com.admin.shopkeeper.entity.ReturnBussinessBean;
+import com.admin.shopkeeper.entity.HandoverBean;
 import com.admin.shopkeeper.entity.ShopCollectionBean;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.collectiondetail.CollectionDetailActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.returnbussiness.IReturnBussinessView;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.returnbussiness.ReturnBussinessPresenter;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.jiondetail.JionDetailActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.IShopCollectionView;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.ShopCollectionPresenter;
 import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.utils.UIUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.codbking.widget.DatePickDialog;
-import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +47,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter> implements IShopCollectionView {
+public class JionActivity extends BaseActivity<JionPresenter> implements IJionView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -68,37 +59,22 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
     TextView tvSort3;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.tv_total)
-    TextView tvTotal;
-    @BindView(R.id.ll_total)
-    LinearLayout llTotal;
-    @BindView(R.id.tv_sale)
-    TextView tvSale;
-    @BindView(R.id.tv_charge)
-    TextView tvCharge;
-    @BindView(R.id.tv_free)
-    TextView tvFree;
-    @BindView(R.id.tv_real)
-    TextView tvReal;
-    @BindView(R.id.tv_date)
-    TextView tvDate;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
 
+    int page = 1;
     private PopupWindow popupWindow;
-    private CollectionAdapter adapter;
-    private int type;
-    private String shopId;
-
-    List<ChainBean> chainBeen = new ArrayList<>();
+    private HandoverAdapter adapter;
 
     @Override
     protected void initPresenter() {
-        presenter = new ShopCollectionPresenter(this, this);
+        presenter = new JionPresenter(this, this);
         presenter.init();
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_shop_collection;
+        return R.layout.activity_jion;
     }
 
     @Override
@@ -107,38 +83,45 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-
-        type = getIntent().getIntExtra("type", 1);
-
-        toolbar.setTitle(type == 1 ? "单店收款统计明细" : "连锁收款统计明细");
+        toolbar.setTitle("交接班报表");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CollectionAdapter(R.layout.item_collection);
+        adapter = new HandoverAdapter(R.layout.item_handover);
         recyclerView.setAdapter(adapter);
 
-        if (type == 1) {
-            adapter.setOnItemClickListener((adapter1, view, position) -> {
-                Intent intent = new Intent(ShopCollectionActivity.this, CollectionDetailActivity.class);
-                intent.putExtra("bean", adapter.getItem(position));
-                startActivity(intent);
-            });
-        }
+        adapter.setOnItemClickListener((adapter1, view, position) -> {
+            Intent intent = new Intent(JionActivity.this, JionDetailActivity.class);
+            intent.putExtra("bean", adapter.getItem(position));
+            startActivity(intent);
+        });
+        adapter.setOnLoadMoreListener(() -> {
+            page++;
+            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                    Tools.formatNowDate("yyyy-MM-dd", entDate),
+                    Tools.formatNowDate("HH:mm:ss", startDate),
+                    Tools.formatNowDate("HH:mm:ss", entDate),
+                    0, App.INSTANCE().getShopID());
+        }, recyclerView);
 
+        refreshLayout.setOnRefreshListener(() -> {
+            page = 1;
+            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                    Tools.formatNowDate("yyyy-MM-dd", entDate),
+                    Tools.formatNowDate("HH:mm:ss", startDate),
+                    Tools.formatNowDate("HH:mm:ss", entDate),
+                    0, App.INSTANCE().getShopID());
+        });
 
-        shopId = App.INSTANCE().getShopID();
-        chainBeen.add(new ChainBean(App.INSTANCE().getShopID(), App.INSTANCE().getShopName()));
+        startDate = new Date(System.currentTimeMillis() - 60 * 60 * 24 * 30 * 1000L);
+        entDate = new Date(System.currentTimeMillis());
 
-        if (type == 2) {
-            presenter.getChain();
-        }
-
-        String startDate = Tools.formatLastMonthDate("yyyy-MM-dd");
-        String endDate = Tools.formatNowDate("yyyy-MM-dd");
-        tvDate.setText(startDate + "至" + endDate);
-        presenter.getData(type, startDate, endDate, "00:00:00", "23:59:59", 0, shopId);
+        presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate),
+                0, App.INSTANCE().getShopID());
     }
 
     @Override
@@ -176,27 +159,8 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         TextView tvTimeType = (TextView) laheiView.findViewById(R.id.pop_time_typw);
         TextView tvShop = (TextView) laheiView.findViewById(R.id.tv_shop);
 
-        if (type == 1) {
-            tvShop.setText(App.INSTANCE().getShopName());
-            shopId = App.INSTANCE().getShopID();
-        } else {
-            tvShop.setText(chainBeen.get(0).getNames());
-            shopId = chainBeen.get(0).getMerchantId();
+        tvShop.setText(App.INSTANCE().getShopName());
 
-            tvShop.setOnClickListener(v -> {
-                String selectText = tvShop.getText().toString().trim();
-
-                CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);
-                builder.setTitle("选择门店");
-                builder.setReasons(chainBeen);
-                builder.setSelect(selectText);
-                builder.setButtonClick((text, value) -> {
-                    tvShop.setText(text);
-                    shopId = value;
-                });
-                builder.creater().show();
-            });
-        }
 
         tvTimeType.setOnClickListener(v -> {
             SingleSelectDialog.Builder builder = new SingleSelectDialog.Builder(this, R.style.OrderDialogStyle);
@@ -276,19 +240,15 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
                 showToast("筛选时间不能大于一个月");
                 return;
             }
-            if (TextUtils.isEmpty(shopId)) {
-                showToast("请选择门店");
-                return;
-            }
 
-            Log.i("ttt", "--" + shopId);
-            presenter.getData(type, Tools.formatNowDate("yyyy-MM-dd", startDate),
+
+            page = 1;
+            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", entDate), typestr.equals("营业时间") ? 0 : 1, shopId);
+                    Tools.formatNowDate("HH:mm:ss", entDate),
+                    typestr.equals("营业时间") ? 0 : 1, App.INSTANCE().getShopID());
 
-
-            tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "至" + Tools.formatNowDate("yyyy-MM-dd", entDate));
             popupWindow.dismiss();
         });
 
@@ -301,30 +261,6 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM
                 | Gravity.CENTER_HORIZONTAL, 0, 0);
         backgroundAlpha(0.5f);
-    }
-
-    public void setDate(TextView textView) {
-        DatePickDialog dialog = new DatePickDialog(this);
-        dialog.setYearLimt(10);
-        dialog.setTitle("选择时间");
-        dialog.setType(DateType.TYPE_YMD);
-        dialog.setMessageFormat("yyyy-MM-dd HH:mm:ss");
-        dialog.setOnChangeLisener(null);
-        dialog.setOnSureLisener(date -> {
-            textView.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
-        });
-        dialog.show();
-    }
-
-    @OnClick(R.id.tv_total)
-    public void totalClick() {
-        if (llTotal.getVisibility() != View.VISIBLE) {
-            llTotal.setVisibility(View.VISIBLE);
-            UIUtils.setDrawableRight(tvTotal, R.mipmap.list_arrow_up);
-        } else {
-            llTotal.setVisibility(View.GONE);
-            UIUtils.setDrawableRight(tvTotal, R.mipmap.list_arrow_down);
-        }
     }
 
     @OnClick(R.id.sort_1)
@@ -346,19 +282,19 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         if (sort2 % 3 == 1) {
             UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_a_z);
 
-            List<ShopCollectionBean> newData = new ArrayList<>();
+            List<HandoverBean> newData = new ArrayList<>();
             newData.addAll(datas);
             Collections.sort(newData, (o1, o2) -> {
-                return o1.getTotalMoney() > o2.getTotalMoney() ? 1 : -1;
+                return o1.getPrice() > o2.getPrice() ? 1 : -1;
             });
             adapter.setNewData(newData);
         } else if (sort2 % 3 == 2) {
             UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_z_a);
 
-            List<ShopCollectionBean> newData = new ArrayList<>();
+            List<HandoverBean> newData = new ArrayList<>();
             newData.addAll(datas);
             Collections.sort(newData, (o1, o2) -> {
-                return o1.getTotalMoney() > o2.getTotalMoney() ? -1 : 1;
+                return o1.getPrice() > o2.getPrice() ? -1 : 1;
             });
             adapter.setNewData(newData);
         } else {
@@ -380,19 +316,19 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         if (sort3 % 3 == 1) {
             UIUtils.setDrawableRight(tvSort3, R.mipmap.sort_a_z);
 
-            List<ShopCollectionBean> newData = new ArrayList<>();
+            List<HandoverBean> newData = new ArrayList<>();
             newData.addAll(datas);
             Collections.sort(newData, (o1, o2) -> {
-                return o1.getChargeMoney() > o2.getChargeMoney() ? 1 : -1;
+                return o1.getPrice() > o2.getPrice() ? 1 : -1;
             });
             adapter.setNewData(newData);
         } else if (sort3 % 3 == 2) {
             UIUtils.setDrawableRight(tvSort3, R.mipmap.sort_z_a);
 
-            List<ShopCollectionBean> newData = new ArrayList<>();
+            List<HandoverBean> newData = new ArrayList<>();
             newData.addAll(datas);
             Collections.sort(newData, (o1, o2) -> {
-                return o1.getChargeMoney() > o2.getChargeMoney() ? -1 : 1;
+                return o1.getPrice() > o2.getPrice() ? -1 : 1;
             });
             adapter.setNewData(newData);
         } else {
@@ -403,46 +339,27 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_default);
     }
 
-
     @Override
     public void error(String msg) {
         showToast(msg);
+        adapter.loadMoreEnd();
+        refreshLayout.setRefreshing(false);
     }
 
-    List<ShopCollectionBean> datas;
+    List<HandoverBean> datas = new ArrayList<>();
 
     @Override
-    public void success(List<ShopCollectionBean> data) {
-        this.datas = data;
-        adapter.setNewData(data);
-
-        double sale = 0;
-        double charge = 0;
-        double free = 0;
-        double real = 0;
-        for (ShopCollectionBean bean : datas) {
-            sale += bean.getTotalMoney();
-            charge += bean.getChongzhi();
-            free += bean.getFreeMoney();
-            real += bean.getChargeMoney();
-
-            if (type == 1) {
-                bean.setNames(App.INSTANCE().getShopName());
-                bean.setShopId(App.INSTANCE().getShopID());
-            }
+    public void success(List<HandoverBean> data) {
+        if (page == 1) {
+            this.datas.clear();
         }
-
-        tvSale.setText(String.valueOf(sale));
-        tvCharge.setText(String.valueOf(charge));
-        tvFree.setText(String.valueOf(free));
-        tvReal.setText(String.valueOf(real));
-
-        llTotal.setVisibility(View.VISIBLE);
-    }
-
-
-    @Override
-    public void chainsuccess(List<ChainBean> chainBeen) {
-        this.chainBeen.addAll(chainBeen);
+        this.datas.addAll(data);
+        adapter.setNewData(datas);
+        if (data.size() < 20) {
+            adapter.loadMoreEnd();
+        } else {
+            adapter.loadMoreComplete();
+        }
+        refreshLayout.setRefreshing(false);
     }
 }

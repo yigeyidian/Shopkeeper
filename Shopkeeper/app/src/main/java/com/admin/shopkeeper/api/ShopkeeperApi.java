@@ -1733,4 +1733,40 @@ public interface ShopkeeperApi {
     Observable<StringModel> getChain(
             @Field("Type") String type,
             @Field("ShangJiaID") String shopId);
+
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> getJion(
+            @Field("Type") String type,
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("order") String order,
+            @Field("DataBegin") String dataBegin,
+            @Field("DataEdn") String dataEdn,
+            @Field("TimeBegin") String timeBegin,
+            @Field("TimeEdn") String timeEdn,
+            @Field("ShangJiaID") String shangJiaID,
+            @Field("SelectType") int selectType);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> getJionDetail(
+            @Field("Type") String type,
+            @Field("Rid") String rid);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> getSale(
+            @Field("Type") String type,
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("order") String order,
+            @Field("DataBegin") String dataBegin,
+            @Field("DataEdn") String dataEdn,
+            @Field("TimeBegin") String timeBegin,
+            @Field("TimeEdn") String timeEdn,
+            @Field("ShangJiaID") String shangJiaID,
+            @Field("ProductID") String productID,
+            @Field("SelectType") int selectType);
 }

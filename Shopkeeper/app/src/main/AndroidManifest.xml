@@ -307,7 +307,13 @@
         <activity android:name=".ui.activity.rechargedetail.RechargeDetailActivity" />
         <activity android:name=".ui.activity.activityOfBoss.shopcollection.ShopCollectionActivity" />
         <activity android:name=".ui.activity.activityOfBoss.returnstatistics.ReturnStatisticsActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.collectiondetail.CollectionDetailActivity"></activity>
+        <activity android:name=".ui.activity.activityOfBoss.collectiondetail.CollectionDetailActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.jion.JionActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.jiondetail.JionDetailActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.free.FreeActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.freedetail.FreeDetailActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.deskopen.DeskOpenActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.salestatistics.SaleStatisticsActivity"></activity>
     </application>
 
 </manifest>
