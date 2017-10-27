@@ -1,14 +1,14 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.returnstatistics;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.giftstatistics;
 
 import android.content.Context;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
+import com.admin.shopkeeper.entity.FoodEntity;
 import com.admin.shopkeeper.entity.GiftStatisticsBean;
-import com.admin.shopkeeper.entity.ReturnStatisticsBean;
-import com.admin.shopkeeper.entity.ShopCollectionBean;
+import com.admin.shopkeeper.entity.SaleStatisticsBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.IShopCollectionView;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.salestatistics.ISaleStatisticsView;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
 
@@ -21,9 +21,9 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Administrator on 2017/8/24.
  */
 
-public class ReturnStatistcsPresenter extends BasePresenter<IReturnStatisticsView> {
+public class GiftStatisticsPresenter extends BasePresenter<IGiftStatisticsView> {
 
-    public ReturnStatistcsPresenter(Context context, IReturnStatisticsView iView) {
+    public GiftStatisticsPresenter(Context context, IGiftStatisticsView iView) {
         super(context, iView);
     }
 
@@ -31,14 +31,14 @@ public class ReturnStatistcsPresenter extends BasePresenter<IReturnStatisticsVie
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getReturn("4", 20, page, "ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), selectType)
+                .getJion("7", 20, page, "ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), selectType)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        ReturnStatisticsBean[] beens = new Gson().fromJson(stringModel.getResult(), ReturnStatisticsBean[].class);
+                        GiftStatisticsBean[] beens = new Gson().fromJson(stringModel.getResult(), GiftStatisticsBean[].class);
                         iView.success(Arrays.asList(beens));
                     } else {
                         iView.error("加载失败");

@@ -32,7 +32,7 @@ public class SaleStatisticsPresenter extends BasePresenter<ISaleStatisticsView> 
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getSale("6", 10, page, "ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), productId, selectType)
+                .getSale("6", 20, page, "ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), productId, selectType)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

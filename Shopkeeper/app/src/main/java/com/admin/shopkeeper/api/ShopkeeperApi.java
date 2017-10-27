@@ -1769,4 +1769,18 @@ public interface ShopkeeperApi {
             @Field("ShangJiaID") String shangJiaID,
             @Field("ProductID") String productID,
             @Field("SelectType") int selectType);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerchantsOrderManagerASHX.ashx")
+    Observable<StringModel> getReturn(
+            @Field("Type") String type,
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("order") String order,
+            @Field("DataBegin") String dataBegin,
+            @Field("DataEdn") String dataEdn,
+            @Field("TimeBegin") String timeBegin,
+            @Field("TimeEdn") String timeEdn,
+            @Field("ShangJiaID") String shangJiaID,
+            @Field("SelectType") int selectType);
 }

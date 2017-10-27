@@ -9,12 +9,14 @@ import com.admin.shopkeeper.ui.activity.activityOfBoss.deskopen.DeskOpenActivity
 import com.admin.shopkeeper.ui.activity.activityOfBoss.desktype.DeskTypeActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.foodmanager.FoodManagerActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.free.FreeActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.giftstatistics.GiftStatisticsActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.guazhang.GuaZhangActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.house.HouseActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.jion.JionActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.memberManager.MemberManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.print.PrintManagerActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.returncause.ReturnCauseActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.returnstatistics.ReturnStatisticsActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.sale.SaleActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.salestatistics.SaleStatisticsActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.ShopCollectionActivity;
@@ -94,12 +96,12 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
 
     @OnClick(R.id.basic_retcause)
     public void giftStatisticsClick() {
-        startActivity(ShopCollectionActivity.class);
+        startActivity(GiftStatisticsActivity.class);
     }
 
     @OnClick(R.id.basic_house)
     public void returnStatisticsClick() {
-        startActivity(ShopCollectionActivity.class);
+        startActivity(ReturnStatisticsActivity.class);
     }
 
 }

@@ -1,9 +1,8 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.returnstatistics;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.giftstatistics;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,40 +13,35 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.CollectionAdapter;
 import com.admin.shopkeeper.adapter.GiftStatisticsAdapter;
-import com.admin.shopkeeper.adapter.ReturnStatisticsAdapter;
+import com.admin.shopkeeper.adapter.SaleStatisticsAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
+import com.admin.shopkeeper.dialog.FoodSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
+import com.admin.shopkeeper.entity.FoodEntity;
 import com.admin.shopkeeper.entity.GiftStatisticsBean;
-import com.admin.shopkeeper.entity.ReturnStatisticsBean;
-import com.admin.shopkeeper.entity.ShopCollectionBean;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.IShopCollectionView;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.ShopCollectionPresenter;
+import com.admin.shopkeeper.entity.SaleStatisticsBean;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.salestatistics.ISaleStatisticsView;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.salestatistics.SaleStatisticsPresenter;
 import com.admin.shopkeeper.utils.Tools;
-import com.admin.shopkeeper.utils.UIUtils;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
-public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresenter> implements IReturnStatisticsView {
+public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter> implements IGiftStatisticsView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -55,20 +49,21 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
     RecyclerView recyclerView;
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout refreshLayout;
+
     private PopupWindow popupWindow;
 
     int page = 1;
-    private ReturnStatisticsAdapter adapter;
+    private GiftStatisticsAdapter adapter;
 
     @Override
     protected void initPresenter() {
-        presenter = new ReturnStatistcsPresenter(this, this);
+        presenter = new GiftStatisticsPresenter(this, this);
         presenter.init();
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_return_statistics;
+        return R.layout.activity_gift_statistics;
     }
 
     @Override
@@ -77,12 +72,12 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-        toolbar.setTitle("退菜统计报表");
+        toolbar.setTitle("销售统计报表");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ReturnStatisticsAdapter(R.layout.item_returnstatistics);
+        adapter = new GiftStatisticsAdapter(R.layout.item_giftstatistics);
         recyclerView.setAdapter(adapter);
 
         refreshLayout.setOnRefreshListener(() -> {
@@ -101,6 +96,7 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
                     Tools.formatNowDate("HH:mm:ss", entDate),
                     0);
         }, recyclerView);
+
 
         startDate = new Date(System.currentTimeMillis() - 60 * 60 * 24 * 30 * 1000L);
         entDate = new Date(System.currentTimeMillis());
@@ -260,10 +256,10 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
     }
 
 
-    List<ReturnStatisticsBean> datas = new ArrayList<>();
+    List<GiftStatisticsBean> datas = new ArrayList<>();
 
     @Override
-    public void success(List<ReturnStatisticsBean> list) {
+    public void success(List<GiftStatisticsBean> list) {
         if (page == 1) {
             datas.clear();
         }

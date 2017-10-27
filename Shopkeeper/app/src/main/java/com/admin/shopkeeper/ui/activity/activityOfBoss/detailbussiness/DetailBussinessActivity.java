@@ -149,13 +149,12 @@ public class DetailBussinessActivity extends BaseActivity<DetailBussinessPresent
      * 获取当前的日期和时间
      */
     private void initDateTime() {
-
         Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH) + 1;
         day = calendar.get(Calendar.DAY_OF_MONTH);
-
     }
+
     private StringBuffer date;
     private int year, month, day;
     public void selectDate(TextView tv) {
