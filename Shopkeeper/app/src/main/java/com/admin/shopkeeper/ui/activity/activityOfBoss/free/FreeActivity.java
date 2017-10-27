@@ -94,6 +94,8 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
         adapter.setOnItemClickListener((adapter1, view, position) -> {
             Intent intent = new Intent(FreeActivity.this, FreeDetailActivity.class);
             intent.putExtra("bean", adapter.getItem(position));
+            intent.putExtra("start", Tools.formatNowDate("yyyy-MM-dd", startDate));
+            intent.putExtra("end", Tools.formatNowDate("yyyy-MM-dd", entDate));
             startActivity(intent);
         });
         adapter.setOnLoadMoreListener(() -> {

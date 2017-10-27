@@ -40,8 +40,8 @@ public class JionDetailPresenter extends BasePresenter<IJionDetailView> {
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                            HandoverDetailBean[] beens = new Gson().fromJson(stringModel.getResult(), HandoverDetailBean[].class);
-                            iView.success(Arrays.asList(beens));
+                        HandoverDetailBean[] beens = new Gson().fromJson(stringModel.getResult(), HandoverDetailBean[].class);
+                        iView.success(Arrays.asList(beens));
                     } else {
                         iView.error("加载失败");
                     }

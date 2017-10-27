@@ -15,6 +15,16 @@ public class FreeBean implements Serializable {
     double freeMoney;
     @SerializedName("Operate")
     String oprate;
+    @SerializedName("RESTAURANTID")
+    String shopId;
+
+    public String getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(String shopId) {
+        this.shopId = shopId;
+    }
 
     public String getNames() {
         return names;

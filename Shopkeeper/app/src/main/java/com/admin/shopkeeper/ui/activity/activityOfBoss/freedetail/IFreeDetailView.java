@@ -1,6 +1,7 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.freedetail;
 
 import com.admin.shopkeeper.base.IBaseView;
+import com.admin.shopkeeper.entity.FreeDetailBean;
 import com.admin.shopkeeper.entity.HandoverDetailBean;
 
 import java.util.List;
@@ -11,4 +12,7 @@ import java.util.List;
 
 public interface IFreeDetailView extends IBaseView {
 
+    void error(String msg);
+
+    void success(List<FreeDetailBean> list);
 }
