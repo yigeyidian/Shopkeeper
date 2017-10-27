@@ -1730,6 +1730,14 @@ public interface ShopkeeperApi {
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> getCollectionDetail(
+            @Field("Type") String type,
+            @Field("Time") String time,
+            @Field("Time1") String time1,
+            @Field("Rid") String rid);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
     Observable<StringModel> getChain(
             @Field("Type") String type,
             @Field("ShangJiaID") String shopId);

@@ -107,7 +107,7 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
 
         currentFood = foodEntity;
 
-        startDate = new Date(System.currentTimeMillis() - 60 * 60 * 24 * 30 * 1000L);
+        startDate = new Date(System.currentTimeMillis());
         entDate = new Date(System.currentTimeMillis());
 
         presenter.getGoods();

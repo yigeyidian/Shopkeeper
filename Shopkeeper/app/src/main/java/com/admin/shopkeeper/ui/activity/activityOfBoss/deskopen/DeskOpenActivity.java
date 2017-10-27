@@ -112,7 +112,7 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
                     0, shopId);
         });
 
-        startDate = new Date(System.currentTimeMillis() - 60 * 60 * 24 * 30 * 1000L);
+        startDate = new Date(System.currentTimeMillis());
         entDate = new Date(System.currentTimeMillis());
 
         chainBeen.add(new ChainBean(App.INSTANCE().getShopID(), App.INSTANCE().getShopName()));

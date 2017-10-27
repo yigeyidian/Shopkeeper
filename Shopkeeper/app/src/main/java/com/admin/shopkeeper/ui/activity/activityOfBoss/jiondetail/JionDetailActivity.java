@@ -38,6 +38,7 @@ public class JionDetailActivity extends BaseActivity<JionDetailPresenter> implem
     TextView tvMoney;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+
     private HandoverBean bean;
     private HandoverDetailAdapter adapter;
 

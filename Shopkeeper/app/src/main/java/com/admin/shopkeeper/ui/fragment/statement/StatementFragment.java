@@ -71,7 +71,8 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
 
     @OnClick(R.id.basic_print)
     public void thirdCollectionClick() {
-        startActivity(ShopCollectionActivity.class);
+        //startActivity(ShopCollectionActivity.class);
+        showToast("暂时无法使用");
     }
 
     @OnClick(R.id.basic_commodity)

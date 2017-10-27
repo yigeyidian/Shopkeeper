@@ -119,13 +119,20 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         adapter = new CollectionAdapter(R.layout.item_collection);
         recyclerView.setAdapter(adapter);
 
-        if (type == 1) {
-            adapter.setOnItemClickListener((adapter1, view, position) -> {
+        adapter.setOnItemClickListener((adapter1, view, position) -> {
+            if (type == 1) {
                 Intent intent = new Intent(ShopCollectionActivity.this, CollectionDetailActivity.class);
                 intent.putExtra("bean", adapter.getItem(position));
                 startActivity(intent);
-            });
-        }
+            } else {
+                Intent intent = new Intent(ShopCollectionActivity.this, CollectionDetailActivity.class);
+                ShopCollectionBean item = adapter.getItem(position);
+                item.setStartTime(Tools.formatNowDate("yyyy-MM-dd", startDate));
+                item.setEndTime(Tools.formatNowDate("yyyy-MM-dd", entDate));
+                intent.putExtra("bean", item);
+                startActivity(intent);
+            }
+        });
 
 
         shopId = App.INSTANCE().getShopID();
@@ -135,10 +142,15 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
             presenter.getChain();
         }
 
-        String startDate = Tools.formatLastMonthDate("yyyy-MM-dd");
-        String endDate = Tools.formatNowDate("yyyy-MM-dd");
-        tvDate.setText(startDate + "至" + endDate);
-        presenter.getData(type, startDate, endDate, "00:00:00", "23:59:59", 0, shopId);
+        startDate = new Date(System.currentTimeMillis());
+        entDate = new Date(System.currentTimeMillis());
+
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "至" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(type, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
     }
 
     @Override
@@ -281,7 +293,6 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
                 return;
             }
 
-            Log.i("ttt", "--" + shopId);
             presenter.getData(type, Tools.formatNowDate("yyyy-MM-dd", startDate),
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),

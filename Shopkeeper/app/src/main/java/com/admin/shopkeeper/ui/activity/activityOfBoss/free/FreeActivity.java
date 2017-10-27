@@ -114,7 +114,7 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
                     0, shopId);
         });
 
-        startDate = new Date(System.currentTimeMillis() - 60 * 60 * 24 * 30 * 1000L);
+        startDate = new Date(System.currentTimeMillis());
         entDate = new Date(System.currentTimeMillis());
 
         shopId = App.INSTANCE().getShopID();

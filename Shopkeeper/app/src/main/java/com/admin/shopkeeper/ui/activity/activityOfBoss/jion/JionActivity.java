@@ -114,7 +114,7 @@ public class JionActivity extends BaseActivity<JionPresenter> implements IJionVi
                     0, App.INSTANCE().getShopID());
         });
 
-        startDate = new Date(System.currentTimeMillis() - 60 * 60 * 24 * 30 * 1000L);
+        startDate = new Date(System.currentTimeMillis());
         entDate = new Date(System.currentTimeMillis());
 
         presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),

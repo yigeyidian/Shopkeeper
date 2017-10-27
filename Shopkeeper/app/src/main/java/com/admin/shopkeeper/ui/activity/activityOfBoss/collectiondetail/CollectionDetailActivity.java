@@ -4,6 +4,7 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.collectiondetail;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -81,7 +82,11 @@ public class CollectionDetailActivity extends BaseActivity<CollectionDetailPrese
         adapter = new CollectionDetailAdapter(R.layout.item_collection_detail);
         recyclerView.setAdapter(adapter);
 
-        presenter.getDetail(bean.getDinnerDate(), bean.getShopId());
+        if (TextUtils.isEmpty(bean.getDinnerDate())) {
+            presenter.getDetail(bean.getStartTime(), bean.getEndTime(), bean.getShopId());
+        } else {
+            presenter.getDetail(bean.getDinnerDate(), bean.getShopId());
+        }
     }
 
     @Override
