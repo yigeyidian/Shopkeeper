@@ -1791,4 +1791,29 @@ public interface ShopkeeperApi {
             @Field("TimeEdn") String timeEdn,
             @Field("ShangJiaID") String shangJiaID,
             @Field("SelectType") int selectType);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> getMemberTranscation(
+            @Field("Type") String type,
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("order") String order,
+            @Field("DataBegin") String dataBegin,
+            @Field("DataEdn") String dataEdn,
+            @Field("TimeBegin") String timeBegin,
+            @Field("TimeEdn") String timeEdn,
+            @Field("ShangJiaID") String shangJiaID,
+            @Field("SelectType") int selectType);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> getRechargeDetail(
+            @Field("Type") String type,
+            @Field("order") String order,
+            @Field("DataBegin") String dataBegin,
+            @Field("DataEdn") String dataEdn,
+            @Field("ShangJiaID") String shangJiaID
+            );
+
 }

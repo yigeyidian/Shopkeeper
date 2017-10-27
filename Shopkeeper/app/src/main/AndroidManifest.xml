@@ -315,6 +315,18 @@
         <activity android:name=".ui.activity.activityOfBoss.deskopen.DeskOpenActivity" />
         <activity android:name=".ui.activity.activityOfBoss.salestatistics.SaleStatisticsActivity" />
         <activity android:name=".ui.activity.activityOfBoss.giftstatistics.GiftStatisticsActivity"></activity>
+        <activity
+            android:name=".ui.activity.activityOfBoss.rechargeTranscation.RechargeTranscationActivity"
+            android:theme="@style/BossTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.rechargeDetail.RechargeDetailActivity"
+            android:theme="@style/BossTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name=".ui.activity.activityOfBoss.memberVolumeAnalysis.MemberVolumeAnalysisActivity"/>
+        <activity android:name=".ui.activity.activityOfBoss.memberconsumeDetails.MemberConsumeDetailActivity"/>
+        <activity android:name=".ui.activity.activityOfBoss.integralTransactionDetail.IntegralTransactionDetailActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.couponDetailTable.CouponDetailTableActivity" />
     </application>
 
 </manifest>

@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseFragment;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.couponDetailTable.CouponDetailTableActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.deskmanager.DeskManagerActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.deskopen.DeskOpenActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.desktype.DeskTypeActivity;
@@ -12,9 +13,14 @@ import com.admin.shopkeeper.ui.activity.activityOfBoss.free.FreeActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.giftstatistics.GiftStatisticsActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.guazhang.GuaZhangActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.house.HouseActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.integralTransactionDetail.IntegralTransactionDetailActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.jion.JionActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.memberManager.MemberManageActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.memberVolumeAnalysis.MemberVolumeAnalysisActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.memberconsumeDetails.MemberConsumeDetailActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.print.PrintManagerActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.rechargeDetail.RechargeDetailActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.rechargeTranscation.RechargeTranscationActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.returncause.ReturnCauseActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.returnstatistics.ReturnStatisticsActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.sale.SaleActivity;
@@ -71,8 +77,7 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
 
     @OnClick(R.id.basic_print)
     public void thirdCollectionClick() {
-        //startActivity(ShopCollectionActivity.class);
-        showToast("暂时无法使用");
+        startActivity(ShopCollectionActivity.class);
     }
 
     @OnClick(R.id.basic_commodity)
@@ -104,5 +109,28 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
     public void returnStatisticsClick() {
         startActivity(ReturnStatisticsActivity.class);
     }
-
+    @OnClick(R.id.statement_transaction_ll)
+    public void statementTranscationClick() {
+        startActivity(RechargeTranscationActivity.class);
+    }
+    @OnClick(R.id.statement_member_recharge_ll)
+    public void statementDetailClick() {
+        startActivity(RechargeDetailActivity.class);
+    }
+    @OnClick(R.id.statement_member_volume_ll)
+    public void statementMemberVolumeClick() {
+        startActivity(MemberVolumeAnalysisActivity.class);
+    }
+    @OnClick(R.id.statement_member_consume_detail_ll)
+    public void statementMemberConsumeDetailClick() {
+        startActivity(MemberConsumeDetailActivity.class);
+    }
+    @OnClick(R.id.statement_coupon_ll)
+    public void couponClick() {
+        startActivity(CouponDetailTableActivity.class);
+    }
+    @OnClick(R.id.statement_integral_ll)
+    public void statementIntegralClick() {
+        startActivity(IntegralTransactionDetailActivity.class);
+    }
 }
