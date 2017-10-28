@@ -25,6 +25,7 @@ public class RechargeTranscationAdapter extends BaseQuickAdapter<MemberTranscati
         helper.setText(R.id.item_username, String.valueOf(item.getName()));
         helper.setText(R.id.item_phone, String.valueOf(item.getPhone()));
         helper.setText(R.id.item_cumulative_recharge, String.valueOf(item.getRechargeMoney()));
+        helper.setText(R.id.item_cumulative_consume, String.valueOf(item.getUsedMoney()));
         helper.setText(R.id.item_consume_money, String.valueOf(item.getUsedMoney()));
         helper.setText(R.id.item_recharge_money, String.valueOf(item.getZonAdd()));
         helper.setText(R.id.item_yue, String.valueOf(item.getYue()));

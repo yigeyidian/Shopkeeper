@@ -1815,5 +1815,15 @@ public interface ShopkeeperApi {
             @Field("DataEdn") String dataEdn,
             @Field("ShangJiaID") String shangJiaID
             );
-
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> getDetail(
+            @Field("Type") String type,
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("order") String order,
+            @Field("Time") String dataBegin,
+            @Field("Time1") String dataEdn,
+            @Field("Uid") String uid,
+            @Field("Rid") String shangJiaID);
 }

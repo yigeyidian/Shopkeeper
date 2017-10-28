@@ -1,14 +1,11 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.integralTransactionItemDetail;
 
 import android.content.Context;
 
-import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
-import com.admin.shopkeeper.entity.ChainBean;
-import com.admin.shopkeeper.entity.ReturnBussinessBean;
-import com.admin.shopkeeper.entity.ShopCollectionBean;
+import com.admin.shopkeeper.entity.IntegralTranscationItemDetailBean;
+import com.admin.shopkeeper.entity.RechargeTranscationItemBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.returnbussiness.IReturnBussinessView;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
 
@@ -18,32 +15,29 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by Administrator on 2017/8/24.
+ * Created by Administrator on 2017/9/7.
  */
 
-public class ShopCollectionPresenter extends BasePresenter<IShopCollectionView> {
+public class IntegralTransactionItemDetailPresenter extends BasePresenter<IIntegralTransactionItemDetailView> {
 
-    public ShopCollectionPresenter(Context context, IShopCollectionView iView) {
+    public IntegralTransactionItemDetailPresenter(Context context, IIntegralTransactionItemDetailView iView) {
         super(context, iView);
     }
 
-    public void getData(int type, String startDate, String endDate, String startTime, String endTime, int selectType,String shopId) {
+
+    public void getDetail(String date, String shopId) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getShopCollection(type + "", "ASC", startDate, endDate, startTime, endTime, shopId, selectType)
+                .getCollectionDetail("16", date, shopId)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        if(stringModel.getResult().equals("")){
-                            iView.error("查询数据为空");
-                        }else{
-                            ShopCollectionBean[] beens = new Gson().fromJson(stringModel.getResult(), ShopCollectionBean[].class);
-                            iView.success(Arrays.asList(beens));
-                        }
+//                        CollectionBean[] beans = new Gson().fromJson(stringModel.getResult(), CollectionBean[].class);
+//                        iView.success(Arrays.asList(beans));
                     } else {
                         iView.error("加载失败");
                     }
@@ -53,21 +47,24 @@ public class ShopCollectionPresenter extends BasePresenter<IShopCollectionView> 
                 });
     }
 
-    public void getChain() {
+    public void getDetail(int pageIndex , String startTime, String endTime,String uid ,String shopId) {
+        DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getChain("15", App.INSTANCE().getShopID())
+                .getDetail("20", 20, pageIndex,"ASC" ,startTime,endTime,uid, shopId)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        ChainBean[] beens = new Gson().fromJson(stringModel.getResult(), ChainBean[].class);
-                        iView.chainsuccess(Arrays.asList(beens));
+                        IntegralTranscationItemDetailBean[] beans = new Gson().fromJson(stringModel.getResult(), IntegralTranscationItemDetailBean[].class);
+                        iView.success(Arrays.asList(beans));
                     } else {
                         iView.error("加载失败");
                     }
                 }, throwable -> {
+                    DialogUtils.hintDialog();
                     iView.error("加载失败");
                 });
     }

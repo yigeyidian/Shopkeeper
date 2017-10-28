@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,13 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.RechargeTranscationAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.MemberTranscationBean;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.rechargeTransactionItemDetail.RechargeTranscationItemDetailActivity;
 import com.admin.shopkeeper.utils.Tools;
-import com.admin.shopkeeper.utils.UIUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
@@ -33,7 +36,6 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 public class RechargeTranscationActivity extends BaseActivity<RechargeTranscationPresenter> implements IRechargeTranscationView {
 
@@ -78,13 +80,25 @@ public class RechargeTranscationActivity extends BaseActivity<RechargeTranscatio
                 .build());
         adapter = new RechargeTranscationAdapter(R.layout.item_recharge_transcation_table);
         recyclerView.setAdapter(adapter);
-
+        startDate = new Date(System.currentTimeMillis());
+        endDate = new Date(System.currentTimeMillis());
         adapter.setOnItemClickListener((adapter1, view, position) -> {
-
+            Intent intent = new Intent(this, RechargeTranscationItemDetailActivity.class);
+            Log.d("ttt","startDate:"+startDate);
+            intent.putExtra(Config.PARAM1,Tools.formatNowDate("yyyy-MM-dd",startDate));
+            intent.putExtra(Config.PARAM2,Tools.formatNowDate("yyyy-MM-dd",endDate));
+            intent.putExtra("bean", adapter.getItem(position));
+            startActivity(intent);
         });
         String startDate = Tools.formatLastMonthDate("yyyy-MM-dd");
         String endDate = Tools.formatNowDate("yyyy-MM-dd");
-
+        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                pageIndex++;
+                presenter.getData(pageIndex ,startDate, endDate,"00:00:00", "23:59:59", 0);
+            }
+        }, recyclerView);
         presenter.getData(pageIndex ,startDate, endDate,"00:00:00", "23:59:59", 0);
 
 //        tvDate.setText(startDate + "至" + endDate);
@@ -381,6 +395,12 @@ public class RechargeTranscationActivity extends BaseActivity<RechargeTranscatio
     public void success(List<MemberTranscationBean> memberTranscationBeanList) {
         this.data = memberTranscationBeanList;
         adapter.setNewData(memberTranscationBeanList);
+        if (data.size() < 20) {
+            adapter.loadMoreEnd();
+        } else {
+            adapter.loadMoreComplete();
+            adapter.loadMoreEnd();
+        }
     }
 
 }

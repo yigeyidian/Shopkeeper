@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.IntegralTransactionDetailAdapter;
 import com.admin.shopkeeper.adapter.MemberConsumeDetailAdapter;
@@ -22,7 +23,9 @@ import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.IntegralDetailTableBean;
 import com.admin.shopkeeper.entity.MemberConsumeDetailBean;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.integralTransactionItemDetail.IntegralTransactionItemDetailActivity;
 import com.admin.shopkeeper.utils.Tools;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
@@ -78,13 +81,23 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
                 .build());
         adapter = new IntegralTransactionDetailAdapter(R.layout.item_integral_consume_detail);
         recyclerView.setAdapter(adapter);
-
+        startDate = new Date(System.currentTimeMillis());
+        endDate = new Date(System.currentTimeMillis());
         adapter.setOnItemClickListener((adapter1, view, position) -> {
-
+            Intent intent = new Intent(this , IntegralTransactionItemDetailActivity.class);
+            intent.putExtra("bean" , adapter.getItem(position));
+            intent.putExtra(Config.PARAM1,Tools.formatNowDate("yyyy-MM-dd",startDate));
+            intent.putExtra(Config.PARAM2,Tools.formatNowDate("yyyy-MM-dd",endDate));
         });
         String startDate = Tools.formatLastMonthDate("yyyy-MM-dd");
         String endDate = Tools.formatNowDate("yyyy-MM-dd");
-
+        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                pageIndex++;
+                presenter.getData(pageIndex ,startDate, endDate,"00:00:00", "23:59:59", 0);
+            }
+        },recyclerView);
         presenter.getData(pageIndex ,startDate, endDate,"00:00:00", "23:59:59", 0);
 
 //        tvDate.setText(startDate + "至" + endDate);
@@ -381,6 +394,11 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
     public void success(List<IntegralDetailTableBean> integralDetailTableBeanList) {
         this.data = integralDetailTableBeanList;
         adapter.setNewData(integralDetailTableBeanList);
+        if(data.size()<20){
+            adapter.loadMoreEnd();
+        }else{
+            adapter.loadMoreComplete();
+        }
     }
 
 }
