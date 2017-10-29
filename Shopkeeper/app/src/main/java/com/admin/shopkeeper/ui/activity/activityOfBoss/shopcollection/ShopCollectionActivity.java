@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,8 +27,12 @@ import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.CollectionAdapter;
 import com.admin.shopkeeper.adapter.ReturnBussinessAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
+import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.ListDialog;
+import com.admin.shopkeeper.dialog.MutiSelectDialog;
+import com.admin.shopkeeper.dialog.ShopSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
+import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.ReturnBussinessBean;
 import com.admin.shopkeeper.entity.ShopCollectionBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.collectiondetail.CollectionDetailActivity;
@@ -80,6 +86,9 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
     private PopupWindow popupWindow;
     private CollectionAdapter adapter;
     private int type;
+    private String shopId;
+
+    List<ChainBean> chainBeen = new ArrayList<>();
 
     @Override
     protected void initPresenter() {
@@ -98,31 +107,50 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-        toolbar.setTitle("单店收款统计明细");
+
+        type = getIntent().getIntExtra("type", 1);
+
+        toolbar.setTitle(type == 1 ? "单店收款统计明细" : "连锁收款统计明细");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
-        type = getIntent().getIntExtra("type", 1);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new CollectionAdapter(R.layout.item_collection);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener((adapter1, view, position) -> {
-            Intent intent = new Intent(ShopCollectionActivity.this, CollectionDetailActivity.class);
-            intent.putExtra("bean", adapter.getItem(position));
-            startActivity(intent);
+            if (type == 1) {
+                Intent intent = new Intent(ShopCollectionActivity.this, CollectionDetailActivity.class);
+                intent.putExtra("bean", adapter.getItem(position));
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(ShopCollectionActivity.this, CollectionDetailActivity.class);
+                ShopCollectionBean item = adapter.getItem(position);
+                item.setStartTime(Tools.formatNowDate("yyyy-MM-dd", startDate));
+                item.setEndTime(Tools.formatNowDate("yyyy-MM-dd", entDate));
+                intent.putExtra("bean", item);
+                startActivity(intent);
+            }
         });
 
-        String startDate = Tools.formatLastMonthDate("yyyy-MM-dd");
-        String endDate = Tools.formatNowDate("yyyy-MM-dd");
 
-        presenter.getData(type, startDate, endDate, "00:00:00", "23:59:59", 0);
+        shopId = App.INSTANCE().getShopID();
+        chainBeen.add(new ChainBean(App.INSTANCE().getShopID(), App.INSTANCE().getShopName()));
+
         if (type == 2) {
             presenter.getChain();
         }
 
-        tvDate.setText(startDate + "至" + endDate);
+        startDate = new Date(System.currentTimeMillis());
+        entDate = new Date(System.currentTimeMillis());
+
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "至" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(type, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
     }
 
     @Override
@@ -160,7 +188,27 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         TextView tvTimeType = (TextView) laheiView.findViewById(R.id.pop_time_typw);
         TextView tvShop = (TextView) laheiView.findViewById(R.id.tv_shop);
 
-        tvShop.setText(App.INSTANCE().getShopName());
+        if (type == 1) {
+            tvShop.setText(App.INSTANCE().getShopName());
+            shopId = App.INSTANCE().getShopID();
+        } else {
+            tvShop.setText(chainBeen.get(0).getNames());
+            shopId = chainBeen.get(0).getMerchantId();
+
+            tvShop.setOnClickListener(v -> {
+                String selectText = tvShop.getText().toString().trim();
+
+                CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);
+                builder.setTitle("选择门店");
+                builder.setReasons(chainBeen);
+                builder.setSelect(selectText);
+                builder.setButtonClick((text, value) -> {
+                    tvShop.setText(text);
+                    shopId = value;
+                });
+                builder.creater().show();
+            });
+        }
 
         tvTimeType.setOnClickListener(v -> {
             SingleSelectDialog.Builder builder = new SingleSelectDialog.Builder(this, R.style.OrderDialogStyle);
@@ -180,6 +228,7 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
             });
             builder.creater().show();
         });
+
 
         etStartTime.setOnClickListener(v -> {
             String typestr = tvTimeType.getText().toString();
@@ -207,6 +256,7 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
             dialog.setOnChangeLisener(null);
             dialog.setOnSureLisener(date -> {
                 entDate = date;
+
                 etEndTime.setText(new SimpleDateFormat(typestr.equals("营业时间") ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss").format(date));
             });
             dialog.show();
@@ -238,11 +288,15 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
                 showToast("筛选时间不能大于一个月");
                 return;
             }
+            if (TextUtils.isEmpty(shopId)) {
+                showToast("请选择门店");
+                return;
+            }
 
             presenter.getData(type, Tools.formatNowDate("yyyy-MM-dd", startDate),
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", entDate), typestr.equals("营业时间") ? 0 : 1);
+                    Tools.formatNowDate("HH:mm:ss", entDate), typestr.equals("营业时间") ? 0 : 1, shopId);
 
 
             tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "至" + Tools.formatNowDate("yyyy-MM-dd", entDate));
@@ -395,5 +449,11 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         tvReal.setText(String.valueOf(real));
 
         llTotal.setVisibility(View.VISIBLE);
+    }
+
+
+    @Override
+    public void chainsuccess(List<ChainBean> chainBeen) {
+        this.chainBeen.addAll(chainBeen);
     }
 }

@@ -2,6 +2,7 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.returnstatistics;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,20 +19,29 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.CollectionAdapter;
+import com.admin.shopkeeper.adapter.GiftStatisticsAdapter;
+import com.admin.shopkeeper.adapter.ReturnStatisticsAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
+import com.admin.shopkeeper.entity.GiftStatisticsBean;
+import com.admin.shopkeeper.entity.ReturnStatisticsBean;
 import com.admin.shopkeeper.entity.ShopCollectionBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.IShopCollectionView;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.ShopCollectionPresenter;
 import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.utils.UIUtils;
+import com.codbking.widget.DatePickDialog;
+import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,16 +51,14 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.sort_1)
-    TextView tvSort1;
-    @BindView(R.id.sort_2)
-    TextView tvSort2;
-    @BindView(R.id.sort_3)
-    TextView tvSort3;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
     private PopupWindow popupWindow;
-    private CollectionAdapter adapter;
+
+    int page = 1;
+    private ReturnStatisticsAdapter adapter;
 
     @Override
     protected void initPresenter() {
@@ -74,14 +82,33 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
         setSupportActionBar(toolbar);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CollectionAdapter(R.layout.item_collection);
+        adapter = new ReturnStatisticsAdapter(R.layout.item_returnstatistics);
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((adapter1, view, position) -> {
-
+        refreshLayout.setOnRefreshListener(() -> {
+            page = 1;
+            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                    Tools.formatNowDate("yyyy-MM-dd", entDate),
+                    Tools.formatNowDate("HH:mm:ss", startDate),
+                    Tools.formatNowDate("HH:mm:ss", entDate),
+                    0);
         });
+        adapter.setOnLoadMoreListener(() -> {
+            page++;
+            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                    Tools.formatNowDate("yyyy-MM-dd", entDate),
+                    Tools.formatNowDate("HH:mm:ss", startDate),
+                    Tools.formatNowDate("HH:mm:ss", entDate),
+                    0);
+        }, recyclerView);
 
-        presenter.getData("1999-01-01", Tools.formatNowDate("yyyy-MM-dd"), "00:00:00", "23:59:59", 0);
+        startDate = new Date(System.currentTimeMillis());
+        entDate = new Date(System.currentTimeMillis());
+
+        presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0);
     }
 
     @Override
@@ -103,6 +130,9 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
         return super.onOptionsItemSelected(item);
     }
 
+    Date startDate;
+    Date entDate;
+
     private void showSearch() {
         List<String> types = new ArrayList<>();
         types.add("营业时间");
@@ -114,12 +144,14 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
         TextView etStartTime = (TextView) laheiView.findViewById(R.id.pop_starttime);
         TextView etEndTime = (TextView) laheiView.findViewById(R.id.pop_endtime);
         TextView tvTimeType = (TextView) laheiView.findViewById(R.id.pop_time_typw);
+        TextView tvShop = (TextView) laheiView.findViewById(R.id.tv_shop);
+
+        tvShop.setText(App.INSTANCE().getShopName());
+
 
         tvTimeType.setOnClickListener(v -> {
-
-
             SingleSelectDialog.Builder builder = new SingleSelectDialog.Builder(this, R.style.OrderDialogStyle);
-            builder.setTitle("应付金额");
+            builder.setTitle("选择时间");
             builder.setReasons(types);
             builder.setButtonClick(new SingleSelectDialog.OnButtonClick() {
 
@@ -137,27 +169,77 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
         });
 
         etStartTime.setOnClickListener(v -> {
-            selectDate(etStartTime);
+            String typestr = tvTimeType.getText().toString();
+
+            DatePickDialog dialog = new DatePickDialog(this);
+            dialog.setYearLimt(10);
+            dialog.setTitle("选择时间");
+            dialog.setType(typestr.equals("营业时间") ? DateType.TYPE_YMD : DateType.TYPE_ALL);
+            dialog.setMessageFormat("yyyy-MM-dd HH:mm:ss");
+            dialog.setOnChangeLisener(null);
+            dialog.setOnSureLisener(date -> {
+                startDate = date;
+                etStartTime.setText(new SimpleDateFormat(typestr.equals("营业时间") ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss").format(date));
+            });
+            dialog.show();
         });
 
         etEndTime.setOnClickListener(v -> {
-            selectDate(etEndTime);
+            String typestr = tvTimeType.getText().toString();
+            DatePickDialog dialog = new DatePickDialog(this);
+            dialog.setYearLimt(10);
+            dialog.setTitle("选择时间");
+            dialog.setType(typestr.equals("营业时间") ? DateType.TYPE_YMD : DateType.TYPE_ALL);
+            dialog.setMessageFormat("yyyy-MM-dd HH:mm:ss");
+            dialog.setOnChangeLisener(null);
+            dialog.setOnSureLisener(date -> {
+                entDate = date;
+
+                etEndTime.setText(new SimpleDateFormat(typestr.equals("营业时间") ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss").format(date));
+            });
+            dialog.show();
         });
 
         laheiView.findViewById(R.id.pop_cancel).setOnClickListener(v -> {
+            startDate = new Date(System.currentTimeMillis() - 60 * 60 * 24 * 30 * 1000L);
+            entDate = new Date(System.currentTimeMillis());
             popupWindow.dismiss();
         });
 
-        laheiView.findViewById(R.id.pop_ok).setOnClickListener(v -> {
+        View.OnClickListener onClickListener = v -> {
 
-            String startTime = etStartTime.getText().toString();
-            String entTime = etEndTime.getText().toString();
             String typestr = tvTimeType.getText().toString();
 
-            presenter.getData(startTime, entTime, "00:00:00", "23:59:59", typestr.equals(types.get(0)) ? 0 : 1);
+            if (startDate == null) {
+                showToast("请选择开始时间");
+                return;
+            }
+            if (entDate == null) {
+                showToast("请选择结束时间");
+                return;
+            }
+
+            if (Tools.comparaDate(startDate, entDate)) {
+                showToast("筛选时间出错");
+                return;
+            }
+
+            if (Tools.checkDate(startDate, entDate)) {
+                showToast("筛选时间不能大于一个月");
+                return;
+            }
+
+
+            page = 1;
+            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                    Tools.formatNowDate("yyyy-MM-dd", entDate),
+                    Tools.formatNowDate("HH:mm:ss", startDate),
+                    Tools.formatNowDate("HH:mm:ss", entDate),
+                    typestr.equals("营业时间") ? 0 : 1);
 
             popupWindow.dismiss();
-        });
+        };
+        laheiView.findViewById(R.id.pop_ok).setOnClickListener(onClickListener);
 
         popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);
@@ -170,131 +252,28 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
         backgroundAlpha(0.5f);
     }
 
-    private void initDateTime() {
-        Calendar calendar = Calendar.getInstance();
-        yy = calendar.get(Calendar.YEAR);
-        mm = calendar.get(Calendar.MONTH);
-        dd = calendar.get(Calendar.DAY_OF_MONTH);
-    }
-
-    private int yy, mm, dd;
-
-    public void selectDate(TextView tv) {
-        initDateTime();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setPositiveButton("设置", (dialog, which) -> {
-            tv.setText(yy + "-" + (mm + 1) + "-" + dd);
-            dialog.dismiss();
-        });
-        builder.setNegativeButton("取消", (dialog, which) -> {
-            dialog.dismiss();
-        });
-        final AlertDialog dialog = builder.create();
-        View dialogView = View.inflate(this, R.layout.dialog_date, null);
-        final DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.datePicker);
-
-        dialog.setTitle("设置日期");
-        dialog.setView(dialogView);
-        dialog.show();
-        //初始化日期监听事件
-        datePicker.init(yy, mm, dd, new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                yy = year;
-                mm = monthOfYear;
-                dd = dayOfMonth;
-            }
-        });
-    }
-
-
-    @OnClick(R.id.sort_1)
-    public void sort1Click() {
-        UIUtils.setDrawableRight(tvSort1, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvSort3, R.mipmap.sort_default);
-        adapter.setNewData(datas);
-    }
-
-    int sort2 = 0;
-
-    @OnClick(R.id.sort_2)
-    public void sort2Click() {
-        if (datas == null || datas.size() == 0) {
-            return;
-        }
-        sort2++;
-        if (sort2 % 3 == 1) {
-            UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_a_z);
-
-            List<ShopCollectionBean> newData = new ArrayList<>();
-            newData.addAll(datas);
-            Collections.sort(newData, (o1, o2) -> {
-                return o1.getTotalMoney() > o2.getTotalMoney() ? 1 : -1;
-            });
-            adapter.setNewData(newData);
-        } else if (sort2 % 3 == 2) {
-            UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_z_a);
-
-            List<ShopCollectionBean> newData = new ArrayList<>();
-            newData.addAll(datas);
-            Collections.sort(newData, (o1, o2) -> {
-                return o1.getTotalMoney() > o2.getTotalMoney() ? -1 : 1;
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_default);
-            adapter.setNewData(datas);
-        }
-        UIUtils.setDrawableRight(tvSort1, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvSort3, R.mipmap.sort_default);
-    }
-
-    int sort3 = 0;
-
-    @OnClick(R.id.sort_3)
-    public void sort3Click() {
-        if (datas == null || datas.size() == 0) {
-            return;
-        }
-        sort3++;
-        if (sort3 % 3 == 1) {
-            UIUtils.setDrawableRight(tvSort3, R.mipmap.sort_a_z);
-
-            List<ShopCollectionBean> newData = new ArrayList<>();
-            newData.addAll(datas);
-            Collections.sort(newData, (o1, o2) -> {
-                return o1.getChargeMoney() > o2.getChargeMoney() ? 1 : -1;
-            });
-            adapter.setNewData(newData);
-        } else if (sort3 % 3 == 2) {
-            UIUtils.setDrawableRight(tvSort3, R.mipmap.sort_z_a);
-
-            List<ShopCollectionBean> newData = new ArrayList<>();
-            newData.addAll(datas);
-            Collections.sort(newData, (o1, o2) -> {
-                return o1.getChargeMoney() > o2.getChargeMoney() ? -1 : 1;
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvSort3, R.mipmap.sort_default);
-            adapter.setNewData(datas);
-        }
-        UIUtils.setDrawableRight(tvSort1, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_default);
-    }
-
-
     @Override
     public void error(String msg) {
-        showToast(msg);
+        showFailToast(msg);
+        refreshLayout.setRefreshing(false);
+        adapter.loadMoreEnd();
     }
 
-    List<ShopCollectionBean> datas;
+
+    List<ReturnStatisticsBean> datas = new ArrayList<>();
 
     @Override
-    public void success(List<ShopCollectionBean> data) {
-        this.datas = data;
-        adapter.setNewData(data);
+    public void success(List<ReturnStatisticsBean> list) {
+        if (page == 1) {
+            datas.clear();
+        }
+        datas.addAll(list);
+        adapter.setNewData(datas);
+        refreshLayout.setRefreshing(false);
+        if (list.size() < 20) {
+            adapter.loadMoreEnd();
+        } else {
+            adapter.loadMoreComplete();
+        }
     }
 }

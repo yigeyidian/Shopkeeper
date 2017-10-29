@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
+import com.admin.shopkeeper.entity.GiftStatisticsBean;
+import com.admin.shopkeeper.entity.ReturnStatisticsBean;
 import com.admin.shopkeeper.entity.ShopCollectionBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.IShopCollectionView;
@@ -25,18 +27,18 @@ public class ReturnStatistcsPresenter extends BasePresenter<IReturnStatisticsVie
         super(context, iView);
     }
 
-    public void getData(String startDate, String endDate, String startTime, String endTime, int type) {
+    public void getData(int page, String startDate, String endDate, String startTime, String endTime, int selectType) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getShopCollection("1", "ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), type)
+                .getReturn("4", 20, page, "ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), selectType)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        ShopCollectionBean[] beens = new Gson().fromJson(stringModel.getResult(), ShopCollectionBean[].class);
+                        ReturnStatisticsBean[] beens = new Gson().fromJson(stringModel.getResult(), ReturnStatisticsBean[].class);
                         iView.success(Arrays.asList(beens));
                     } else {
                         iView.error("加载失败");

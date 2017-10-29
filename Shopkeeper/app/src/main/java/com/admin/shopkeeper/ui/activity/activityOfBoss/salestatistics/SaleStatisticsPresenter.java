@@ -1,0 +1,71 @@
+package com.admin.shopkeeper.ui.activity.activityOfBoss.salestatistics;
+
+import android.content.Context;
+
+import com.admin.shopkeeper.App;
+import com.admin.shopkeeper.base.BasePresenter;
+import com.admin.shopkeeper.entity.ChainBean;
+import com.admin.shopkeeper.entity.FoodEntity;
+import com.admin.shopkeeper.entity.SaleStatisticsBean;
+import com.admin.shopkeeper.entity.ShopCollectionBean;
+import com.admin.shopkeeper.helper.RetrofitHelper;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.IShopCollectionView;
+import com.admin.shopkeeper.utils.DialogUtils;
+import com.google.gson.Gson;
+
+import java.util.Arrays;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
+/**
+ * Created by Administrator on 2017/8/24.
+ */
+
+public class SaleStatisticsPresenter extends BasePresenter<ISaleStatisticsView> {
+
+    public SaleStatisticsPresenter(Context context, ISaleStatisticsView iView) {
+        super(context, iView);
+    }
+
+    public void getData(int page, String startDate, String endDate, String startTime, String endTime, int selectType, String productId) {
+        DialogUtils.showDialog(context, "数据加载中");
+        RetrofitHelper.getInstance()
+                .getApi()
+                .getSale("6", 20, page, "ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), productId, selectType)
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if (stringModel.getCode().equals("1")) {
+                        SaleStatisticsBean[] beens = new Gson().fromJson(stringModel.getResult(), SaleStatisticsBean[].class);
+                        iView.success(Arrays.asList(beens));
+                    } else {
+                        iView.error("加载失败");
+                    }
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    iView.error("加载失败");
+                });
+    }
+
+    public void getGoods() {
+        RetrofitHelper.getInstance()
+                .getApi()
+                .getChain("14", App.INSTANCE().getShopID())
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    if (stringModel.getCode().equals("1")) {
+                        FoodEntity[] beens = new Gson().fromJson(stringModel.getResult(), FoodEntity[].class);
+                        iView.foodSuccess(Arrays.asList(beens));
+                    } else {
+                        iView.error("加载失败");
+                    }
+                }, throwable -> {
+                    iView.error("加载失败");
+                });
+    }
+}

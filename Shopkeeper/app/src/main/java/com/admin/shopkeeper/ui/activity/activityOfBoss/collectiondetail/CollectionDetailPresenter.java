@@ -28,11 +28,33 @@ public class CollectionDetailPresenter extends BasePresenter<ICollectionDetailVi
     }
 
 
-    public void getDetail(String date,String shopId) {
+    public void getDetail(String date, String shopId) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getCollectionDetail("16", date,shopId)
+                .getCollectionDetail("16", date, shopId)
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if (stringModel.getCode().equals("1")) {
+                        CollectionBean[] beans = new Gson().fromJson(stringModel.getResult(), CollectionBean[].class);
+                        iView.success(Arrays.asList(beans));
+                    } else {
+                        iView.error("加载失败");
+                    }
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    iView.error("加载失败");
+                });
+    }
+
+    public void getDetail(String date, String endTime, String shopId) {
+        DialogUtils.showDialog(context, "数据加载中");
+        RetrofitHelper.getInstance()
+                .getApi()
+                .getCollectionDetail("21", date, endTime, shopId)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

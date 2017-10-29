@@ -1,6 +1,7 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.returnstatistics;
 
 import com.admin.shopkeeper.base.IBaseView;
+import com.admin.shopkeeper.entity.ReturnStatisticsBean;
 import com.admin.shopkeeper.entity.ShopCollectionBean;
 
 import java.util.List;
@@ -14,5 +15,5 @@ public interface IReturnStatisticsView extends IBaseView {
 
     void error(String msg);
 
-    void success(List<ShopCollectionBean> data);
+    void success(List<ReturnStatisticsBean> data);
 }
