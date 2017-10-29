@@ -13,7 +13,7 @@ android {
         targetSdkVersion 25
         versionCode 16
         versionName "1.15"
-        
+
         vectorDrawables.useSupportLibrary = true
     }
 
