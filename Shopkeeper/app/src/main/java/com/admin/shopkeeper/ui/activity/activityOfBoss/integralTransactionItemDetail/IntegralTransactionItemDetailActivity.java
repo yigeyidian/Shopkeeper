@@ -45,7 +45,7 @@ public class IntegralTransactionItemDetailActivity extends BaseActivity<Integral
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_transaction_recharge_item_detail;
+        return R.layout.activity_integral_transaction_item_detail;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class IntegralTransactionItemDetailActivity extends BaseActivity<Integral
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-        toolbar.setTitle("充值交易表详情");
+        toolbar.setTitle("积分交易表详情");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 

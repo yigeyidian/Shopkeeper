@@ -40,14 +40,7 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
 
     @Override
     public void initView() {
-        /*ImmersionBar.with(this)
-                .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
-                .titleBar(toolbar, true)
-                .init();
 
-        toolbar.setTitle("退菜分析");
-        toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
-        setSupportActionBar(toolbar);*/
     }
 
     @Override

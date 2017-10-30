@@ -3,6 +3,7 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.boss;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.entity.BossUserInfo;
@@ -41,6 +42,27 @@ public class BossMainPresenter extends BasePresenter<IBossMainView> {
                     }
                 }, throwable -> {
                     throwable.printStackTrace();
+                });
+    }
+
+    public void checkData() {
+        DialogUtils.showDialog(context, "数据加载中");
+        RetrofitHelper.getInstance()
+                .getApi()
+                .checkData("6", App.INSTANCE().getShopID())
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if (stringModel.getCode().equals("1")) {
+
+                    } else {
+                        iView.error("校验失败");
+                    }
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    iView.error("校验失败");
                 });
     }
 }

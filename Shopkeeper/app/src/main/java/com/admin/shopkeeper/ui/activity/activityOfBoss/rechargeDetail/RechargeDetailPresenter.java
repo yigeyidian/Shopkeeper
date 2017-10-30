@@ -1,6 +1,7 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.rechargeDetail;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
@@ -58,8 +59,12 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        RechargeDetailTableBean[] beens = new Gson().fromJson(stringModel.getResult(), RechargeDetailTableBean[].class);
-                        iView.success(Arrays.asList(beens));
+                        if(TextUtils.isEmpty(stringModel.getResult())){
+                            iView.success("暂未数据");
+                        }else{
+                            RechargeDetailTableBean[] beens = new Gson().fromJson(stringModel.getResult(), RechargeDetailTableBean[].class);
+                            iView.success(Arrays.asList(beens));
+                        }
                     } else {
                         iView.error("加载失败");
                     }

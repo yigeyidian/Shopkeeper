@@ -12,4 +12,6 @@ import java.util.List;
 public interface IBossMainView extends IBaseView {
 
     void getInfoSuccess(List<BossUserInfo> bossUserInfos);
+
+    void error(String msg);
 }

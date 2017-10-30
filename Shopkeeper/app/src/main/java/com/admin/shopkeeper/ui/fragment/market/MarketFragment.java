@@ -8,6 +8,7 @@ import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseFragment;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.couponManage.CouponManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.memberLevelManage.MemberLevelManageActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.memberManager.MemberManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.rechargeManage.RechargeManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.wechat.WechatActivity;
 
@@ -38,7 +39,11 @@ public class MarketFragment extends BaseFragment<MarketPresenter> implements IMa
     public void setMemberLevelManageClick() {
         startActivity(MemberLevelManageActivity.class);
     }
-
+    //会员交易明细
+    @OnClick(R.id.member_manage_ll)
+    public void setMemberManageClick() {
+        startActivity(MemberManageActivity.class);
+    }
     //充值方案管理
     @OnClick(R.id.market_recharge_manage_ll)
     public void setRechargeManageClick() {

@@ -54,7 +54,7 @@ public class ReturnCauseActivity extends BaseActivity<ReturnCausePresenter> impl
                 .titleBar(toolbar, true)
                 .init();
 
-        toolbar.setTitle("退菜原因管理");
+        toolbar.setTitle("理由设置");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 

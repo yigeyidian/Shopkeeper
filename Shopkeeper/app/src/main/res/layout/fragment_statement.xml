@@ -120,7 +120,7 @@
                 android:src="@mipmap/list_icon_arrow_right" />
         </LinearLayout>
 
-        <View style="@style/LineHorStyle" />
+        <View style="@style/LineHor2Style" />
         <!-- 交接班报表 -->
 
         <LinearLayout
@@ -298,7 +298,7 @@
                 android:src="@mipmap/list_icon_arrow_right" />
         </LinearLayout>
 
-        <View style="@style/LineHorStyle" />
+        <View style="@style/LineHor2Style" />
         <!-- 退菜统计报表-->
 
         <LinearLayout

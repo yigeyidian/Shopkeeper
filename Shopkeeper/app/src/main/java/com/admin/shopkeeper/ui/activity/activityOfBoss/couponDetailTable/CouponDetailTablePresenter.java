@@ -36,8 +36,12 @@ public class CouponDetailTablePresenter extends BasePresenter<ICouponDetailTable
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        CouponDetailTableBean[] beens = new Gson().fromJson(stringModel.getResult(), CouponDetailTableBean[].class);
-                        iView.success(Arrays.asList(beens));
+                        if(stringModel.getResult().equals("")){
+                            iView.success("暂无数据");
+                        }else{
+                            CouponDetailTableBean[] beens = new Gson().fromJson(stringModel.getResult(), CouponDetailTableBean[].class);
+                            iView.success(Arrays.asList(beens));
+                        }
                     } else {
                         iView.error("加载失败");
                     }

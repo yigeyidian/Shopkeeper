@@ -55,7 +55,7 @@ public class WeightActivity extends BaseActivity<WeightPresenter> implements IWe
                 .titleBar(toolbar, true)
                 .init();
 
-        toolbar.setTitle("称斤管理");
+        toolbar.setTitle("对接电子秤管理");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
