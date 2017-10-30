@@ -15,8 +15,18 @@ import com.admin.shopkeeper.base.BaseFragment;
 import com.admin.shopkeeper.entity.BossUserInfo;
 import com.admin.shopkeeper.entity.User;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.basicSets.BasicSetsActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.deskmanager.DeskManagerActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.desktype.DeskTypeActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.foodmanager.FoodManagerActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.guazhang.GuaZhangActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.house.HouseActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.my.MyActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.print.PrintManagerActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.returncause.ReturnCauseActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.sale.SaleActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.shopPermissionManage.ShopPermissionManageActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.staffManager.StaffManageActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.weight.WeightActivity;
 import com.admin.shopkeeper.ui.activity.login.LoginActivity;
 import com.admin.shopkeeper.utils.ToastUtils;
 import com.gyf.barlibrary.ImmersionBar;
@@ -70,6 +80,50 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements I
         Intent intent = new Intent(getActivity(), ShopPermissionManageActivity.class);
         startActivity(intent);
     }
+    @OnClick(R.id.staff_manage_ll)
+    public void staffManageClick() {
+        startActivity(StaffManageActivity.class);
+    }
+    @OnClick(R.id.basic_retcause)
+    public void retcauseClick() {
+        startActivity(ReturnCauseActivity.class);
+    }
+
+    @OnClick(R.id.basic_commodity)
+    public void commodityClick() {
+        startActivity(FoodManagerActivity.class);
+    }
+
+    @OnClick(R.id.basic_print)
+    public void printClick() {
+        startActivity(PrintManagerActivity.class);
+    }
+
+    @OnClick(R.id.basic_sale)
+    public void saleClick() {
+        startActivity(SaleActivity.class);
+    }
+
+    @OnClick(R.id.basic_weight)
+    public void weightClick() {
+        startActivity(WeightActivity.class);
+    }
+
+    @OnClick(R.id.basic_house)
+    public void houseClick() {
+        startActivity(HouseActivity.class);
+    }
+
+    @OnClick(R.id.basic_desk)
+    public void deskClick() {
+        startActivity(DeskManagerActivity.class);
+    }
+
+    @OnClick(R.id.basic_desktype)
+    public void desktypeClick() {
+        startActivity(DeskTypeActivity.class);
+    }
+
 
     @Override
     protected int getLayoutResId() {
