@@ -16,6 +16,7 @@
             android:id="@+id/my_rl_setting"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_176sdp"
+            android:visibility="gone"
             android:layout_marginTop="@dimen/_30sdp"
             android:background="@drawable/selector_item">
 
@@ -482,6 +483,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_90sdp"
             android:background="@drawable/selector_item"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <ImageView
@@ -521,6 +523,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_90sdp"
             android:background="@drawable/selector_item"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <ImageView
