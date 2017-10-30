@@ -174,6 +174,12 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
         }
 
         tvShop.setOnClickListener(v -> {
+
+            if(chainBeen == null){
+                showToast("获取门店列表失败");
+                return;
+            }
+
             String selectText = tvShop.getText().toString().trim();
 
             CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);

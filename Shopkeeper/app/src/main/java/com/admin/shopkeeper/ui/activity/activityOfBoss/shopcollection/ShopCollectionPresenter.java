@@ -27,7 +27,7 @@ public class ShopCollectionPresenter extends BasePresenter<IShopCollectionView> 
         super(context, iView);
     }
 
-    public void getData(int type, String startDate, String endDate, String startTime, String endTime, int selectType,String shopId) {
+    public void getData(int type, String startDate, String endDate, String startTime, String endTime, int selectType, String shopId) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
@@ -38,9 +38,9 @@ public class ShopCollectionPresenter extends BasePresenter<IShopCollectionView> 
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        if(stringModel.getResult().equals("")){
+                        if (stringModel.getResult().equals("")) {
                             iView.error("查询数据为空");
-                        }else{
+                        } else {
                             ShopCollectionBean[] beens = new Gson().fromJson(stringModel.getResult(), ShopCollectionBean[].class);
                             iView.success(Arrays.asList(beens));
                         }
@@ -64,11 +64,8 @@ public class ShopCollectionPresenter extends BasePresenter<IShopCollectionView> 
                     if (stringModel.getCode().equals("1")) {
                         ChainBean[] beens = new Gson().fromJson(stringModel.getResult(), ChainBean[].class);
                         iView.chainsuccess(Arrays.asList(beens));
-                    } else {
-                        iView.error("加载失败");
                     }
                 }, throwable -> {
-                    iView.error("加载失败");
                 });
     }
 }
