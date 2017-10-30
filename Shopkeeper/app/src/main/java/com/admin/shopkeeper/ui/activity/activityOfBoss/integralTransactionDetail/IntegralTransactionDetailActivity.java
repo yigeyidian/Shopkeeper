@@ -3,6 +3,7 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.integralTransactionDetai
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.IntegralTransactionDetailAdapter;
@@ -25,6 +27,7 @@ import com.admin.shopkeeper.entity.IntegralDetailTableBean;
 import com.admin.shopkeeper.entity.MemberConsumeDetailBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.integralTransactionItemDetail.IntegralTransactionItemDetailActivity;
 import com.admin.shopkeeper.utils.Tools;
+import com.admin.shopkeeper.utils.UIUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
@@ -33,10 +36,12 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTransactionDetailPresenter> implements IIntegralTransactionDetailView {
 
@@ -45,6 +50,14 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
     Toolbar toolbar;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.sort_default_integral)
+    TextView tvDefaultIntegral;
+    @BindView(R.id.sort_yue_integral)
+    TextView tvYueIntegral;
+    @BindView(R.id.sort_add_integral)
+    TextView tvAddIntegral;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
     private PopupWindow laheiPop;
     List<IntegralDetailTableBean> data;
     private PopupWindow popupWindow;
@@ -88,17 +101,37 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
             intent.putExtra("bean" , adapter.getItem(position));
             intent.putExtra(Config.PARAM1,Tools.formatNowDate("yyyy-MM-dd",startDate));
             intent.putExtra(Config.PARAM2,Tools.formatNowDate("yyyy-MM-dd",endDate));
+            startActivity(intent);
         });
-        String startDate = Tools.formatLastMonthDate("yyyy-MM-dd");
-        String endDate = Tools.formatNowDate("yyyy-MM-dd");
+        startDate = new Date(System.currentTimeMillis());
+        endDate = new Date(System.currentTimeMillis());
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
                 pageIndex++;
-                presenter.getData(pageIndex ,startDate, endDate,"00:00:00", "23:59:59", 0);
+                presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                        Tools.formatNowDate("yyyy-MM-dd", endDate),
+                        Tools.formatNowDate("HH:mm:ss", startDate),
+                        Tools.formatNowDate("HH:mm:ss", endDate),
+                        0);
             }
         },recyclerView);
-        presenter.getData(pageIndex ,startDate, endDate,"00:00:00", "23:59:59", 0);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pageIndex = 1;
+                presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                        Tools.formatNowDate("yyyy-MM-dd", endDate),
+                        Tools.formatNowDate("HH:mm:ss", startDate),
+                        Tools.formatNowDate("HH:mm:ss", endDate),
+                        0);
+            }
+        });
+        presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", endDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", endDate),
+                0);
 
 //        tvDate.setText(startDate + "至" + endDate);
 
@@ -227,10 +260,10 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
                 return;
             }
 
-            /*presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+            presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate),
                     Tools.formatNowDate("yyyy-MM-dd", endDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", endDate), typestr.equals("营业时间") ? 0 : 1);*/
+                    Tools.formatNowDate("HH:mm:ss", endDate), typestr.equals("营业时间") ? 0 : 1);
 
 
 //            tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "至" + Tools.formatNowDate("yyyy-MM-dd", endDate));
@@ -251,7 +284,7 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
 
     int defaultType = 0;
 
-    /*@OnClick(R.id.coupon_manage_num)
+    @OnClick(R.id.sort_default_integral)
     public void setDefaultClick() {
         defaultType++;
 
@@ -259,126 +292,126 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
             return;
         }
         if (defaultType % 3 == 1) {
-            UIUtils.setDrawableRight(tvNum, R.mipmap.sort_a_z);
-            List<CouponManageBean> newData = new ArrayList<>();
+            UIUtils.setDrawableRight(tvDefaultIntegral, R.mipmap.sort_a_z);
+            List<IntegralDetailTableBean> newData = new ArrayList<>();
             newData.addAll(data);
             Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts())) {
+                if (Integer.parseInt(o1.getRechargeAmount()) > Integer.parseInt(o2.getRechargeAmount())) {
                     return 1;
-                } else if (Integer.parseInt(o1.getCounts()) == Integer.parseInt(o2.getCounts())) {
+                } else if (Integer.parseInt(o1.getRechargeAmount()) == Integer.parseInt(o2.getRechargeAmount())) {
                     return 0;
                 } else {
                     return -1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else if (defaultType % 3 == 2) {
-            UIUtils.setDrawableRight(tvNum, R.mipmap.sort_z_a);
-            List<CouponManageBean> newData = new ArrayList<>();
+            UIUtils.setDrawableRight(tvDefaultIntegral, R.mipmap.sort_z_a);
+            List<IntegralDetailTableBean> newData = new ArrayList<>();
             newData.addAll(data);
             Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts())) {
+                if (Integer.parseInt(o1.getRechargeAmount()) > Integer.parseInt(o2.getRechargeAmount())) {
                     return -1;
-                } else if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts())) {
+                } else if (Integer.parseInt(o1.getRechargeAmount()) == Integer.parseInt(o2.getRechargeAmount())) {
                     return 0;
                 } else {
                     return 1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else {
-            UIUtils.setDrawableRight(tvNum, R.mipmap.sort_default);
-            adapter.setDatas(data);
+            UIUtils.setDrawableRight(tvDefaultIntegral, R.mipmap.sort_default);
+            adapter.setNewData(data);
         }
-        UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_default);
+        UIUtils.setDrawableRight(tvAddIntegral, R.mipmap.sort_default);
+        UIUtils.setDrawableRight(tvYueIntegral, R.mipmap.sort_default);
     }
 
     int nameType = 0;
 
-    @OnClick(R.id.coupon_money)
+    @OnClick(R.id.sort_yue_integral)
     public void setNameClick() {
         nameType++;
         if (data == null) {
             return;
         }
         if (nameType % 3 == 1) {
-            UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_a_z);
-            List<CouponManageBean> newData = new ArrayList<>();
+            UIUtils.setDrawableRight(tvYueIntegral, R.mipmap.sort_a_z);
+            List<IntegralDetailTableBean> newData = new ArrayList<>();
             newData.addAll(data);
             Collections.sort(newData, (o1, o2) -> {
-                if (o1.getPrice() > o2.getPrice()) {
+                if (Integer.parseInt(o1.getYue()) > Integer.parseInt(o2.getYue())) {
                     return 1;
-                } else if (o1.getPrice() == o2.getPrice()) {
+                } else if (Integer.parseInt(o1.getYue()) == Integer.parseInt(o2.getYue())) {
                     return 0;
                 } else {
                     return -1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else if (nameType % 3 == 2) {
-            UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_z_a);
-            List<CouponManageBean> newData = new ArrayList<>();
+            UIUtils.setDrawableRight(tvYueIntegral, R.mipmap.sort_z_a);
+            List<IntegralDetailTableBean> newData = new ArrayList<>();
             newData.addAll(data);
             Collections.sort(newData, (o1, o2) -> {
-                if (o1.getPrice() > o2.getPrice()) {
+                if (Integer.parseInt(o1.getYue()) > Integer.parseInt(o2.getYue())) {
                     return -1;
-                } else if (o1.getPrice() == o2.getPrice()) {
+                } else if (Integer.parseInt(o1.getYue()) == Integer.parseInt(o2.getYue())) {
                     return 0;
                 } else {
                     return 1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else {
-            UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_default);
+            UIUtils.setDrawableRight(tvYueIntegral, R.mipmap.sort_default);
         }
-        UIUtils.setDrawableRight(tvNum, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_default);
+        UIUtils.setDrawableRight(tvDefaultIntegral, R.mipmap.sort_default);
+        UIUtils.setDrawableRight(tvAddIntegral, R.mipmap.sort_default);
     }
 
     int stateType = 0;
 
-    @OnClick(R.id.coupon_manage_need_money)
+    @OnClick(R.id.sort_add_integral)
     public void setStateClick() {
         stateType++;
         if (data == null) {
             return;
         }
         if (stateType % 3 == 1) {
-            UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_a_z);
-            List<CouponManageBean> newData = new ArrayList<>();
+            UIUtils.setDrawableRight(tvAddIntegral, R.mipmap.sort_a_z);
+            List<IntegralDetailTableBean> newData = new ArrayList<>();
             newData.addAll(data);
             Collections.sort(newData, (o1, o2) -> {
-                if (o1.getSumPrice() > o2.getSumPrice()) {
+                if (Integer.parseInt(o1.getAdd()) > Integer.parseInt(o2.getAdd())) {
                     return 1;
-                } else if (o1.getSumPrice() == o2.getSumPrice()) {
+                } else if (Integer.parseInt(o1.getAdd()) == Integer.parseInt(o2.getAdd())) {
                     return 0;
                 } else {
                     return -1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else if (stateType % 3 == 2) {
-            UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_z_a);
-            List<CouponManageBean> newData = new ArrayList<>();
+            UIUtils.setDrawableRight(tvAddIntegral, R.mipmap.sort_z_a);
+            List<IntegralDetailTableBean> newData = new ArrayList<>();
             newData.addAll(data);
             Collections.sort(newData, (o1, o2) -> {
-                if (o1.getSumPrice() > o2.getSumPrice()) {
+                if (Integer.parseInt(o1.getAdd()) > Integer.parseInt(o2.getAdd())) {
                     return -1;
-                } else if (o1.getSumPrice() == o2.getSumPrice()) {
+                } else if (Integer.parseInt(o1.getAdd()) == Integer.parseInt(o2.getAdd())) {
                     return 0;
                 } else {
                     return 1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else {
-            UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_default);
+            UIUtils.setDrawableRight(tvAddIntegral, R.mipmap.sort_default);
         }
-        UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvNum, R.mipmap.sort_default);
-    }*/
+        UIUtils.setDrawableRight(tvDefaultIntegral, R.mipmap.sort_default);
+        UIUtils.setDrawableRight(tvYueIntegral, R.mipmap.sort_default);
+    }
 
     @Override
     public void error(String msg) {
@@ -392,13 +425,18 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
 
     @Override
     public void success(List<IntegralDetailTableBean> integralDetailTableBeanList) {
-        this.data = integralDetailTableBeanList;
-        adapter.setNewData(integralDetailTableBeanList);
-        if(data.size()<20){
+        data = new ArrayList<>();
+        if (pageIndex == 1) {
+            this.data.clear();
+        }
+        this.data.addAll(integralDetailTableBeanList);
+        adapter.setNewData(data);
+        if (data.size() < 20) {
             adapter.loadMoreEnd();
-        }else{
+        } else {
             adapter.loadMoreComplete();
         }
+        refreshLayout.setRefreshing(false);
     }
 
 }

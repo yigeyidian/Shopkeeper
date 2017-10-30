@@ -328,6 +328,7 @@
         <activity android:name=".ui.activity.activityOfBoss.integralTransactionDetail.IntegralTransactionDetailActivity" />
         <activity android:name=".ui.activity.activityOfBoss.couponDetailTable.CouponDetailTableActivity" />
         <activity android:name=".ui.activity.activityOfBoss.rechargeTransactionItemDetail.RechargeTranscationItemDetailActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.integralTransactionItemDetail.IntegralTransactionItemDetailActivity" />
     </application>
 
 </manifest>

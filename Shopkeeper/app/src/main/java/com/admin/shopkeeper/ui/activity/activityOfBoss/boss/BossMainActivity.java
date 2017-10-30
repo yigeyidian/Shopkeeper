@@ -317,14 +317,18 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
             case R.id.nav_datas:
                 presenter.checkData();
                 break;
-            case R.id.nav_cancel:
+            case R.id.nav_exit:
                 builder = new AlertDialog.Builder(this);
                 builder.setTitle("提示");
                 builder.setMessage("是否退出登录？");
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(LoginActivity.class);
+                        SPUtils.getInstance().put(SPUtils.PREFERENCE_LOGIN, false);
+                        SPUtils.getInstance().put(SPUtils.PREFERENCE_USER, "");
+                        Intent intent = new Intent(BossMainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        App.INSTANCE().removeAlias(App.INSTANCE().getShopID(), "PHONE");
                         finish();
                     }
                 });

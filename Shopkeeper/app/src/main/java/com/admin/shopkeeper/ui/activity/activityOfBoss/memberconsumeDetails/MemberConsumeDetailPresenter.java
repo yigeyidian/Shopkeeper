@@ -1,6 +1,7 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.memberconsumeDetails;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
@@ -36,8 +37,16 @@ public class MemberConsumeDetailPresenter extends BasePresenter<IMemberConsumeDe
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        MemberConsumeDetailBean[] beens = new Gson().fromJson(stringModel.getResult(), MemberConsumeDetailBean[].class);
-                        iView.success(Arrays.asList(beens));
+                        if(TextUtils.isEmpty(stringModel.getResult())){
+                            if(pageIndex>1){
+                                iView.success("没有更多数据");
+                            }else{
+                                iView.success("暂无数据");
+                            }
+                        }else{
+                            MemberConsumeDetailBean[] beens = new Gson().fromJson(stringModel.getResult(), MemberConsumeDetailBean[].class);
+                            iView.success(Arrays.asList(beens));
+                        }
                     } else {
                         iView.error("加载失败");
                     }

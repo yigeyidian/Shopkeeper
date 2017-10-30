@@ -37,7 +37,7 @@ public class RechargeTranscationPresenter extends BasePresenter<IRechargeTransca
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
                         if(stringModel.getResult().equals("")){
-                            iView.error("没有更多数据");
+                            iView.success("没有更多数据");
                         }else{
                             MemberTranscationBean[] beens = new Gson().fromJson(stringModel.getResult(), MemberTranscationBean[].class);
                             iView.success(Arrays.asList(beens));
