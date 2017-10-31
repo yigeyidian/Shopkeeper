@@ -100,9 +100,9 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
                 .build());
 
         memberManaAdapter = new MemberManaAdapter(R.layout.item_member_manage);
-        memberManaAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        memberManaAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 showDeletePop(memberManaAdapter.getItem(position));
             }
         });

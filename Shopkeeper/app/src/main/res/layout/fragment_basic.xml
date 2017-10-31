@@ -15,6 +15,7 @@
             android:layout_marginTop="@dimen/_29sdp" />
         <!--订单管理-->
         <LinearLayout
+            android:id="@+id/order_order_manage"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_90sdp"
             android:background="@drawable/selector_item"
@@ -47,7 +48,7 @@
         <View style="@style/LineHor2Style" />
         <!--挂账管理-->
         <LinearLayout
-            android:id="@+id/basic_guazhang"
+            android:id="@+id/order_guazhang"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_90sdp"
             android:background="@drawable/selector_item"
@@ -80,6 +81,7 @@
         <View style="@style/LineHor2Style" />
         <!--订单敏感操作-->
         <LinearLayout
+            android:id="@+id/order_sensitive_opearation"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_90sdp"
             android:background="@drawable/selector_item"
@@ -110,8 +112,9 @@
         </LinearLayout>
 
         <View style="@style/LineHor2Style" />
-        <!--退菜统计详细-->
+        <!-- 退菜统计详细-->
         <LinearLayout
+            android:id="@+id/order_return_foot"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_90sdp"
             android:background="@drawable/selector_item"
@@ -122,7 +125,7 @@
                 android:layout_height="@dimen/_58sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/basics_icon_accountbill" />
+                android:src="@mipmap/statistics_icon_repeat" />
 
             <TextView
                 android:layout_width="0dp"
@@ -140,6 +143,8 @@
                 android:layout_marginRight="@dimen/_30sdp"
                 android:src="@mipmap/list_icon_arrow_right" />
         </LinearLayout>
+
+        <View style="@style/LineHor2Style" />
     </LinearLayout>
 
 </ScrollView>

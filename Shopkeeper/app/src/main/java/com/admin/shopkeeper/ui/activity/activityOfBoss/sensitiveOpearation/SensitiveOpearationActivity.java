@@ -1,11 +1,10 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.returnstatistics;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.sensitiveOpearation;
 
+
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,40 +13,39 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.admin.shopkeeper.App;
+import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.CollectionAdapter;
-import com.admin.shopkeeper.adapter.GiftStatisticsAdapter;
-import com.admin.shopkeeper.adapter.ReturnStatisticsAdapter;
+import com.admin.shopkeeper.adapter.SaleStatisticsAdapter;
+import com.admin.shopkeeper.adapter.SensitiveOpearationAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
+import com.admin.shopkeeper.dialog.FoodSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
-import com.admin.shopkeeper.entity.GiftStatisticsBean;
-import com.admin.shopkeeper.entity.ReturnStatisticsBean;
-import com.admin.shopkeeper.entity.ShopCollectionBean;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.IShopCollectionView;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.ShopCollectionPresenter;
+import com.admin.shopkeeper.entity.FoodEntity;
+import com.admin.shopkeeper.entity.SaleStatisticsBean;
+import com.admin.shopkeeper.entity.SensitiveOpearation;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.orderManage.OrderManageActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.orderManageDetail.OrderManageDetailActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.sensitiveOpearationDetail.SensitiveDetailActivity;
 import com.admin.shopkeeper.utils.Tools;
-import com.admin.shopkeeper.utils.UIUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
-public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresenter> implements IReturnStatisticsView {
+public class SensitiveOpearationActivity extends BaseActivity<SensitiveOpearationPresenter> implements ISensitiveOpearationView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -55,20 +53,21 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
     RecyclerView recyclerView;
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout refreshLayout;
+
     private PopupWindow popupWindow;
 
     int page = 1;
-    private ReturnStatisticsAdapter adapter;
+    private SensitiveOpearationAdapter adapter;
 
     @Override
     protected void initPresenter() {
-        presenter = new ReturnStatistcsPresenter(this, this);
+        presenter = new SensitiveOpearationPresenter(this, this);
         presenter.init();
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_return_statistics;
+        return R.layout.activity_sale_statistics;
     }
 
     @Override
@@ -77,21 +76,24 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-        toolbar.setTitle("退菜统计详细");
+        toolbar.setTitle("订单敏感操作");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ReturnStatisticsAdapter(R.layout.item_returnstatistics);
+        adapter = new SensitiveOpearationAdapter(R.layout.item_sensitive_opearation);
         recyclerView.setAdapter(adapter);
 
-        refreshLayout.setOnRefreshListener(() -> {
-            page = 1;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                    Tools.formatNowDate("yyyy-MM-dd", entDate),
-                    Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", entDate),
-                    0);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                        Tools.formatNowDate("yyyy-MM-dd", entDate),
+                        Tools.formatNowDate("HH:mm:ss", startDate),
+                        Tools.formatNowDate("HH:mm:ss", entDate),
+                        0, 0);
+            }
         });
         adapter.setOnLoadMoreListener(() -> {
             page++;
@@ -99,8 +101,18 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
-                    0);
+                    0, 0);
         }, recyclerView);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(SensitiveOpearationActivity.this , SensitiveDetailActivity.class);
+                intent.putExtra("bean", (Serializable) adapter.getItem(position));
+                intent.putExtra(Config.PARAM1,page);
+                startActivity(intent);
+            }
+        });
+
 
         startDate = new Date(System.currentTimeMillis());
         entDate = new Date(System.currentTimeMillis());
@@ -108,7 +120,8 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
         presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
                 Tools.formatNowDate("yyyy-MM-dd", entDate),
                 Tools.formatNowDate("HH:mm:ss", startDate),
-                Tools.formatNowDate("HH:mm:ss", entDate), 0);
+                Tools.formatNowDate("HH:mm:ss", entDate),
+                0, 0);
     }
 
     @Override
@@ -137,6 +150,9 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
         List<String> types = new ArrayList<>();
         types.add("营业时间");
         types.add("自定义时间");
+        List<String> sensitiveTypes = new ArrayList<>();
+        sensitiveTypes.add("撤销");
+        sensitiveTypes.add("反结账");
 
         View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_select_1, null);
         popupWindow = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -145,7 +161,14 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
         TextView etEndTime = (TextView) laheiView.findViewById(R.id.pop_endtime);
         TextView tvTimeType = (TextView) laheiView.findViewById(R.id.pop_time_typw);
         TextView tvShop = (TextView) laheiView.findViewById(R.id.tv_shop);
+        TextView tvFoodChoice = (TextView) laheiView.findViewById(R.id.tv_food_choice);
+        tvFoodChoice.setText("敏感操作");
+        LinearLayout llFood = (LinearLayout) laheiView.findViewById(R.id.ll_food);
+        TextView tvFood = (TextView) laheiView.findViewById(R.id.tv_food);
 
+        llFood.setVisibility(View.VISIBLE);
+
+        tvFood.setText("撤销");
         tvShop.setText(App.INSTANCE().getShopName());
 
 
@@ -167,6 +190,26 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
             });
             builder.creater().show();
         });
+
+        tvFood.setOnClickListener(v -> {
+            SingleSelectDialog.Builder builder = new SingleSelectDialog.Builder(this, R.style.OrderDialogStyle);
+            builder.setTitle("敏感操作");
+            builder.setReasons(sensitiveTypes);
+            builder.setButtonClick(new SingleSelectDialog.OnButtonClick() {
+
+                @Override
+                public void onOk(String text, int position) {
+                    tvFood.setText(text);
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+            builder.creater().show();
+        });
+
 
         etStartTime.setOnClickListener(v -> {
             String typestr = tvTimeType.getText().toString();
@@ -209,7 +252,7 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
         View.OnClickListener onClickListener = v -> {
 
             String typestr = tvTimeType.getText().toString();
-
+            String sensitiveStr = tvFood.getText().toString();
             if (startDate == null) {
                 showToast("请选择开始时间");
                 return;
@@ -235,7 +278,7 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
-                    typestr.equals("营业时间") ? 0 : 1);
+                    typestr.equals("营业时间") ? 0 : 1, sensitiveStr.equals("撤销") ? 0 : 1);
 
             popupWindow.dismiss();
         };
@@ -252,6 +295,8 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
         backgroundAlpha(0.5f);
     }
 
+    FoodEntity currentFood;
+
     @Override
     public void error(String msg) {
         showFailToast(msg);
@@ -260,10 +305,15 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
     }
 
 
-    List<ReturnStatisticsBean> datas = new ArrayList<>();
+    @Override
+    public void success(String msg) {
+        showSuccessToast(msg);
+    }
+
+    List<SensitiveOpearation> datas = new ArrayList<>();
 
     @Override
-    public void success(List<ReturnStatisticsBean> list) {
+    public void success(List<SensitiveOpearation> list) {
         if (page == 1) {
             datas.clear();
         }
