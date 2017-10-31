@@ -102,6 +102,7 @@
         <View style="@style/LineHor2Style" />
 
         <LinearLayout
+            android:id="@+id/ll_wxsetting"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_90sdp"
             android:background="@drawable/selector_item"
@@ -120,7 +121,41 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_21sdp"
                 android:layout_weight="1"
-                android:text="微信设置"
+                android:text="微信规则设置"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/_30sdp"
+                android:src="@mipmap/list_icon_arrow_right" />
+        </LinearLayout>
+
+        <View style="@style/LineHor2Style" />
+
+        <!--商品券管理-->
+        <LinearLayout
+            android:id="@+id/market_weixin"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_90sdp"
+            android:background="@drawable/selector_item"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_58sdp"
+                android:layout_height="@dimen/_58sdp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/_30sdp"
+                android:src="@mipmap/basics_icon_wechat" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/_21sdp"
+                android:layout_weight="1"
+                android:text="微信管理"
                 android:textColor="@color/black" />
 
             <ImageView

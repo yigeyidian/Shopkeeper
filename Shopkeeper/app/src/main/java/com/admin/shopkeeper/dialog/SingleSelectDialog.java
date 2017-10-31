@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.MutiDialogAdapter;
 import com.admin.shopkeeper.adapter.SingleDialogAdapter;
-import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.weight.MarginDecoration;
 
 import java.util.List;

@@ -300,16 +300,11 @@
             android:name=".ui.activity.activityOfBoss.coupondetail.CouPonDetailActivity"
             android:theme="@style/BossTheme"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity
-            android:name=".ui.activity.queue.QueueActivity" />
-        <activity
-            android:name=".ui.activity.queueedit.QueueEditActivity" />
-        <activity
-            android:name=".ui.activity.recharge.RechargeActivity" />
-        <activity
-            android:name=".ui.activity.rechargeedit.RechargeEditActivity" />
-        <activity
-            android:name=".ui.activity.rechargedetail.RechargeDetailActivity" />
+        <activity android:name=".ui.activity.queue.QueueActivity" />
+        <activity android:name=".ui.activity.queueedit.QueueEditActivity" />
+        <activity android:name=".ui.activity.recharge.RechargeActivity" />
+        <activity android:name=".ui.activity.rechargeedit.RechargeEditActivity" />
+        <activity android:name=".ui.activity.rechargedetail.RechargeDetailActivity" />
         <activity
             android:name=".ui.activity.activityOfBoss.shopcollection.ShopCollectionActivity"
             android:theme="@style/BossTheme" />
@@ -378,6 +373,9 @@
         <activity
             android:name=".ui.activity.activityOfBoss.sensitiveOpearationDetail.SensitiveDetailActivity"
             android:theme="@style/BossTheme" />
+        <activity android:name=".ui.activity.activityOfBoss.mansong.MansongActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.mansongedit.MansongEditActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.wxsetting.WXSettingActivity"></activity>
     </application>
 
 </manifest>
