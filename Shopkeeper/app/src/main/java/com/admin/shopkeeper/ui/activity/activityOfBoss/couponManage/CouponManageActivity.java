@@ -8,15 +8,20 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Spanned;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.admin.shopkeeper.Config;
@@ -38,6 +43,7 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -59,13 +65,12 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
     TextView tvCouponMoney;
     @BindView(R.id.coupon_manage_need_money)
     TextView tvNeedMoney;
-    @BindView(R.id.coupon_manage_select)
-    TextView tvSelect;
     private CouponManagerAdapter adapter;
     private PopupWindow laheiPop;
     List<CouponManageBean> data;
     private PopupWindow popupWindow;
     private String titleStr;
+    private ArrayAdapter<String> arrayAdapter;
 
     @Override
     protected void initPresenter() {
@@ -107,20 +112,21 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
         recyclerView.setAdapter(adapter);
 
         if (titleStr.equals("优惠券管理")) {
-            presenter.getCouponInfo();
+            presenter.getCouponInfo(1,"");
         } else if (titleStr.equals("商品券管理")) {
             presenter.getCommodityCouponInfo();
         } else {
             presenter.getGroupCouponInfo();
             presenter.getRechargeInfo();
         }
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            presenter.getCouponInfo();
+            presenter.getCouponInfo(1 ,"");
         }
         if (laheiPop != null && laheiPop.isShowing()) {
             laheiPop.dismiss();
@@ -282,27 +288,19 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
 
     @OnClick(R.id.coupon_manage_select)
     public void selectClick() {
-        View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_select, null);
+        View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_spinner_select, null);
         popupWindow = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
-        TextView etStartTime = (TextView) laheiView.findViewById(R.id.pop_starttime);
-        etStartTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectDate(etStartTime);
-            }
-        });
-        TextView etEndTime = (TextView) laheiView.findViewById(R.id.pop_endtime);
-        etEndTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectDate(etEndTime);
-            }
-        });
+        Spinner spinnerSelect = (Spinner) laheiView.findViewById(R.id.spinner_coupon_type);
+        String[] couponTypes = getResources().getStringArray(R.array.couponType);
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Arrays.asList(couponTypes));
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSelect.setAdapter(arrayAdapter);
+
         laheiView.findViewById(R.id.pop_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//               presenter.getData("1999-01-01", Tools.formatNowDate("yyyy-MM-dd"));
+                presenter.getCouponInfo(1,"");
                 popupWindow.dismiss();
             }
         });
@@ -310,9 +308,11 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
         laheiView.findViewById(R.id.pop_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String startTime = etStartTime.getText().toString();
-                String entTime = etEndTime.getText().toString();
-//                presenter.getData(startTime, entTime);
+                int position = spinnerSelect.getSelectedItemPosition();
+                if(position>0){
+                    presenter.getCouponInfo(1,position+1+"");
+                }
+                popupWindow.dismiss();
             }
         });
 
@@ -336,7 +336,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
     public void success(String msg) {
         showSuccessToast(msg);
         if (titleStr.equals("优惠券管理")) {
-            presenter.getCouponInfo();
+            presenter.getCouponInfo(1 ,"");
         } else if (titleStr.equals("商品券管理")) {
             presenter.getCommodityCouponInfo();
         } else {

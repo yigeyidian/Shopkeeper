@@ -45,12 +45,25 @@ public class CouponManagerAdapter extends  RecyclerView.Adapter<CouponManagerAda
 
         holder.tvNum.setTextColor(Color.parseColor("#333333"));
         holder.tvCouponMoney.setTextColor(Color.parseColor("#333333"));
-        holder.tvNeedMoney.setText(position + 1+ "");
-        holder.tvNum.setText(couponManageBean.getCounts());
+        switch (couponManageBean.getTypeId()){
+            case"1":
+                holder.tvNum.setText("满送券");
+                break;
+            case"2":
+                holder.tvNum.setText("代金券");
+                break;
+            case"3":
+                holder.tvNum.setText("商品券");
+                break;
+            case"4":
+                holder.tvNum.setText("团购券");
+                break;
+            default:
+                break;
+        }
         holder.tvName.setText(couponManageBean.getName());
-        holder.tvCouponMoney.setText(couponManageBean.getPrice()+"");
-        holder.tvNeedMoney.setText(couponManageBean.getSumPrice()+"");
-
+        holder.tvCouponMoney.setText(couponManageBean.getEndTime());
+        holder.tvNeedMoney.setText(couponManageBean.getOpearationName());
 
         holder.llRoot.setOnClickListener(v -> {
             ((CouponManageActivity) context).showDeletePop(couponManageBean);

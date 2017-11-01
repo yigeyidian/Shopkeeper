@@ -1422,15 +1422,22 @@ public interface ShopkeeperApi {
     /**
      * 获取优惠券
      *
-     * @param type   1
+     * @param type   5
      * @param shopId
+     * @param kName 模糊查询 卡券名称  如果查看全部不需要传值
+     * @param leiBie 如果查看全部不需要传值 1 满送券 2代金券  3商品券 4团购券   查看全部不需要传入值
      * @return
      */
     @FormUrlEncoded
-    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "IntergialCounts.ashx")
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerchantsOrderManagerASHX.ashx")
     Observable<StringModel> getCouponInfo(
             @Field("Type") String type,
-            @Field("RESTAURANTID") String shopId);
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("order") String order,
+            @Field("KName") String kName,
+            @Field("LeiBie") String leiBie,
+            @Field("ShangJiaID") String shopId);
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "IntergialCounts.ashx")
