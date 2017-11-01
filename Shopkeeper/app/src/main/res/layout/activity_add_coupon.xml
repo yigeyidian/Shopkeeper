@@ -43,30 +43,32 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:textSize="@dimen/_24ssp"
-                        android:text="满送券" />
+                        android:text="满送券"
+                        android:textSize="@dimen/_24ssp" />
 
                     <RadioButton
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:textSize="@dimen/_24ssp"
-                        android:text="代金券" />
+                        android:text="代金券"
+                        android:textSize="@dimen/_24ssp" />
+
                     <RadioButton
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:textSize="@dimen/_24ssp"
-                        android:text="商品券" />
+                        android:text="商品券"
+                        android:textSize="@dimen/_24ssp" />
+
                     <RadioButton
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:textSize="@dimen/_24ssp"
-                        android:text="团购券" />
+                        android:text="团购券"
+                        android:textSize="@dimen/_24ssp" />
 
                 </RadioGroup>
 
@@ -215,6 +217,7 @@
                         android:gravity="center_vertical"
                         android:text="首次关注微信赠送"
                         android:textSize="@dimen/_20ssp" />
+
                     <RadioButton
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -341,6 +344,734 @@
                     style="@style/SettingItemEditStyle"
                     android:hint="如50"
                     android:inputType="number" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_other"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View style="@style/LineHor2Style"
+                    android:layout_marginTop="@dimen/_30sdp"/>
+
+                <!--条件-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        style="@style/SettingItemText2Style"
+                        android:text="每次消费金额条件" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_tiaojian1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="大于"
+                            android:textSize="@dimen/_20ssp" />
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="小于"
+                            android:textSize="@dimen/_20ssp" />
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="等于"
+                            android:textSize="@dimen/_20ssp" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <!--金额-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        style="@style/SettingItemText2Style"
+                        android:text="每次消费金额" />
+
+                    <EditText
+                        android:id="@+id/et_money1"
+                        style="@style/SettingItemEditStyle"
+                        android:hint="请输入每次消费金额"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <!--日期-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        android:id="@+id/tv_start_1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择开始日期"
+                        android:paddingLeft="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingRight="@dimen/_30sdp"
+                        android:text="至" />
+
+                    <TextView
+                        android:id="@+id/tv_end_1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择结束日期"
+                        android:paddingRight="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <View style="@style/LineHor2Style"
+                    android:layout_marginTop="@dimen/_30sdp"/>
+
+                <!--条件2-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        style="@style/SettingItemText2Style"
+                        android:text="累计消费金额条件" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_tiaojian2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="大于"
+                            android:textSize="@dimen/_20ssp" />
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="小于"
+                            android:textSize="@dimen/_20ssp" />
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="等于"
+                            android:textSize="@dimen/_20ssp" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <!--金额2-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        style="@style/SettingItemText2Style"
+                        android:text="累计消费金额" />
+
+                    <EditText
+                        android:id="@+id/et_money2"
+                        style="@style/SettingItemEditStyle"
+                        android:hint="请输入累计消费金额"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <!--日期2-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        android:id="@+id/tv_start_2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择开始日期"
+                        android:paddingLeft="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingRight="@dimen/_30sdp"
+                        android:text="至" />
+
+                    <TextView
+                        android:id="@+id/tv_end_2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择结束日期"
+                        android:paddingRight="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <View style="@style/LineHor2Style"
+                    android:layout_marginTop="@dimen/_30sdp"/>
+
+                <!--条件3-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        style="@style/SettingItemText2Style"
+                        android:text="累计消费次数条件" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_tiaojian3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="大于"
+                            android:textSize="@dimen/_20ssp" />
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="小于"
+                            android:textSize="@dimen/_20ssp" />
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="等于"
+                            android:textSize="@dimen/_20ssp" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <!--金额3-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        style="@style/SettingItemText2Style"
+                        android:text="累计消费次数" />
+
+                    <EditText
+                        android:id="@+id/et_money3"
+                        style="@style/SettingItemEditStyle"
+                        android:hint="请输入累计消费次数"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <!--日期3-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        android:id="@+id/tv_start_3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择开始日期"
+                        android:paddingLeft="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingRight="@dimen/_30sdp"
+                        android:text="至" />
+
+                    <TextView
+                        android:id="@+id/tv_end_3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择结束日期"
+                        android:paddingRight="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <View style="@style/LineHor2Style"
+                    android:layout_marginTop="@dimen/_30sdp"/>
+
+                <!--条件4-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        style="@style/SettingItemText2Style"
+                        android:text="累计存值金额条件" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_tiaojian4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="大于"
+                            android:textSize="@dimen/_20ssp" />
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="小于"
+                            android:textSize="@dimen/_20ssp" />
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="等于"
+                            android:textSize="@dimen/_20ssp" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <!--金额4-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        style="@style/SettingItemText2Style"
+                        android:text="累计存值金额" />
+
+                    <EditText
+                        android:id="@+id/et_money4"
+                        style="@style/SettingItemEditStyle"
+                        android:hint="请输入累计存值金额"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <!--日期4-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        android:id="@+id/tv_start_4"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择开始日期"
+                        android:paddingLeft="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingRight="@dimen/_30sdp"
+                        android:text="至" />
+
+                    <TextView
+                        android:id="@+id/tv_end_4"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择结束日期"
+                        android:paddingRight="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <View style="@style/LineHor2Style"
+                    android:layout_marginTop="@dimen/_30sdp"/>
+
+                <!--条件5-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        style="@style/SettingItemText2Style"
+                        android:text="累计积分条件" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_tiaojian5"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="大于"
+                            android:textSize="@dimen/_20ssp" />
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="小于"
+                            android:textSize="@dimen/_20ssp" />
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="等于"
+                            android:textSize="@dimen/_20ssp" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <!--金额5-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        style="@style/SettingItemText2Style"
+                        android:text="累计积分" />
+
+                    <EditText
+                        android:id="@+id/et_money5"
+                        style="@style/SettingItemEditStyle"
+                        android:hint="请输入累计积分"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <!--日期5-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        android:id="@+id/tv_start_5"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择开始日期"
+                        android:paddingLeft="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingRight="@dimen/_30sdp"
+                        android:text="至" />
+
+                    <TextView
+                        android:id="@+id/tv_end_5"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择结束日期"
+                        android:paddingRight="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <View style="@style/LineHor2Style"
+                    android:layout_marginTop="@dimen/_30sdp"/>
+
+                <!--条件6-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        style="@style/SettingItemText2Style"
+                        android:text="排队超时时间" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_tiaojian9"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="大于"
+                            android:textSize="@dimen/_20ssp" />
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="小于"
+                            android:textSize="@dimen/_20ssp" />
+
+                        <RadioButton
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="等于"
+                            android:textSize="@dimen/_20ssp" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <!--金额6-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        style="@style/SettingItemText2Style"
+                        android:text="排队超时时间" />
+
+                    <EditText
+                        android:id="@+id/et_money9"
+                        style="@style/SettingItemEditStyle"
+                        android:hint="请输入排队超过时间"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <!--日期6-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        android:id="@+id/tv_start_9"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择开始日期"
+                        android:paddingLeft="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingRight="@dimen/_30sdp"
+                        android:text="至" />
+
+                    <TextView
+                        android:id="@+id/tv_end_9"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择结束日期"
+                        android:paddingRight="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <View style="@style/LineHor2Style"
+                    android:layout_marginTop="@dimen/_30sdp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/_15sdp"
+                    android:paddingLeft="@dimen/_32sdp"
+                    android:paddingTop="@dimen/_15sdp"
+                    android:text="最后消费时间" />
+
+                <!--日期5-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        android:id="@+id/tv_start_6"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择开始日期"
+                        android:paddingLeft="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingRight="@dimen/_30sdp"
+                        android:text="至" />
+
+                    <TextView
+                        android:id="@+id/tv_end_6"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择结束日期"
+                        android:paddingRight="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/_15sdp"
+                    android:paddingLeft="@dimen/_32sdp"
+                    android:paddingTop="@dimen/_15sdp"
+                    android:text="最后预定时间" />
+
+                <!--日期5-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        android:id="@+id/tv_start_7"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择开始日期"
+                        android:paddingLeft="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingRight="@dimen/_30sdp"
+                        android:text="至" />
+
+                    <TextView
+                        android:id="@+id/tv_end_7"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择结束日期"
+                        android:paddingRight="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                </LinearLayout>
+
+                <View style="@style/LineHor2Style" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/_15sdp"
+                    android:paddingLeft="@dimen/_32sdp"
+                    android:paddingTop="@dimen/_15sdp"
+                    android:text="最后排队时间" />
+
+                <!--日期5-->
+                <LinearLayout style="@style/SettingItemStyle">
+
+                    <TextView
+                        android:id="@+id/tv_start_8"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择开始日期"
+                        android:paddingLeft="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="@dimen/_30sdp"
+                        android:paddingRight="@dimen/_30sdp"
+                        android:text="至" />
+
+                    <TextView
+                        android:id="@+id/tv_end_8"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:hint="请选择结束日期"
+                        android:paddingRight="@dimen/_32sdp"
+                        android:textSize="@dimen/_34ssp" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 

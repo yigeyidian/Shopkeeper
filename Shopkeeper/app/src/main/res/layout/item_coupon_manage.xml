@@ -14,7 +14,6 @@
         android:gravity="center"
         android:paddingLeft="@dimen/_32sdp"
         android:text="数量"
-        android:textColor="#333333"
         android:textSize="@dimen/_26ssp" />
 
     <TextView
@@ -24,7 +23,6 @@
         android:layout_weight="2"
         android:gravity="center"
         android:text="名字"
-        android:textColor="#333333"
         android:textSize="@dimen/_26ssp" />
 
     <TextView
@@ -34,7 +32,6 @@
         android:layout_weight="1.5"
         android:gravity="center"
         android:text="优惠金额"
-        android:textColor="#333333"
         android:textSize="@dimen/_26ssp" />
 
     <TextView
@@ -44,7 +41,6 @@
         android:layout_weight="1.5"
         android:gravity="center"
         android:text="满足金额"
-        android:textColor="#333333"
         android:textSize="@dimen/_26ssp" />
 
 </LinearLayout>

@@ -26,11 +26,15 @@ import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.ListDialog;
 import com.admin.shopkeeper.dialog.MutiSelectDialog;
 import com.admin.shopkeeper.entity.CouponManageBean;
+import com.admin.shopkeeper.entity.GuizeBean;
 import com.admin.shopkeeper.entity.MemberLevelManageBean;
 import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.entity.ProductBean;
+import com.codbking.widget.DatePickDialog;
+import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -83,8 +87,70 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
     @BindView(R.id.ll_type)
     LinearLayout llType;
 
-    private String titleStr;
+    @BindView(R.id.ll_other)
+    LinearLayout llOthet;
+    @BindView(R.id.rg_tiaojian1)
+    RadioGroup rgTiaojian1;
+    @BindView(R.id.rg_tiaojian2)
+    RadioGroup rgTiaojian2;
+    @BindView(R.id.rg_tiaojian3)
+    RadioGroup rgTiaojian3;
+    @BindView(R.id.rg_tiaojian4)
+    RadioGroup rgTiaojian4;
+    @BindView(R.id.rg_tiaojian5)
+    RadioGroup rgTiaojian5;
+    @BindView(R.id.rg_tiaojian9)
+    RadioGroup rgTiaojian6;
+    @BindView(R.id.et_money1)
+    EditText etMoney1;
+    @BindView(R.id.et_money2)
+    EditText etMoney2;
+    @BindView(R.id.et_money3)
+    EditText etMoney3;
+    @BindView(R.id.et_money4)
+    EditText etMoney4;
+    @BindView(R.id.et_money5)
+    EditText etMoney5;
+    @BindView(R.id.et_money9)
+    EditText etMoney9;
+    @BindView(R.id.tv_start_1)
+    TextView tvStart1;
+    @BindView(R.id.tv_start_2)
+    TextView tvStart2;
+    @BindView(R.id.tv_start_3)
+    TextView tvStart3;
+    @BindView(R.id.tv_start_4)
+    TextView tvStart4;
+    @BindView(R.id.tv_start_5)
+    TextView tvStart5;
+    @BindView(R.id.tv_start_6)
+    TextView tvStart6;
+    @BindView(R.id.tv_start_7)
+    TextView tvStart7;
+    @BindView(R.id.tv_start_8)
+    TextView tvStart8;
+    @BindView(R.id.tv_start_9)
+    TextView tvStart9;
+    @BindView(R.id.tv_end_1)
+    TextView tvEnd1;
+    @BindView(R.id.tv_end_2)
+    TextView tvEnd2;
+    @BindView(R.id.tv_end_3)
+    TextView tvEnd3;
+    @BindView(R.id.tv_end_4)
+    TextView tvEnd4;
+    @BindView(R.id.tv_end_5)
+    TextView tvEnd5;
+    @BindView(R.id.tv_end_6)
+    TextView tvEnd6;
+    @BindView(R.id.tv_end_7)
+    TextView tvEnd7;
+    @BindView(R.id.tv_end_8)
+    TextView tvEnd8;
+    @BindView(R.id.tv_end_9)
+    TextView tvEnd9;
 
+    private String titleStr;
     private int year, month, day;
     //在TextView上显示的字符
     private StringBuffer date;
@@ -122,6 +188,8 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
 
             ((RadioButton) rgCouponType.getChildAt(0)).setChecked(true);
             ((RadioButton) rgWaiMai.getChildAt(0)).setChecked(true);
+
+            llOthet.setVisibility(View.GONE);
         } else {
             toolbar.setTitle("编辑券");
 
@@ -132,7 +200,7 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
             tvCouponEndDate.setText(bean.getEndTime());
             etNums.setText(bean.getCounts());
             etDays.setText(bean.getCode());
-            switch (bean.getTypeId()){
+            switch (bean.getTypeId()) {
                 case "1":
                     ((RadioButton) rgCouponType.getChildAt(0)).setChecked(true);
                     break;
@@ -151,66 +219,30 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
         }
         setSupportActionBar(toolbar);
 
+        rgWaiMai.setOnCheckedChangeListener((radioGroup, i) -> {
+            if (((RadioButton) rgWaiMai.getChildAt(3)).isChecked()) {
+                llOthet.setVisibility(View.VISIBLE);
+            } else {
+                llOthet.setVisibility(View.GONE);
+            }
+        });
+        rgCouponType.setOnCheckedChangeListener((radioGroup, id) -> {
+            if (id == ((RadioButton) radioGroup.getChildAt(0)).getId() ||
+                    id == ((RadioButton) radioGroup.getChildAt(1)).getId()) {
+                llProduct.setVisibility(View.GONE);
+            } else {
+                llProduct.setVisibility(View.VISIBLE);
+            }
+        });
+
         useTypes.add(new MutiBean("预定", false, 1));
         useTypes.add(new MutiBean("外卖", false, 3));
         useTypes.add(new MutiBean("快餐", false, 4));
         useTypes.add(new MutiBean("扫码点餐", false, 5));
 
-//        foodTypeAdapter = new EditFoodTypeAdapter(this);
-//        foodSpinner.setAdapter(foodTypeAdapter);
-        updateView();
-        /*if (bean.getTypeId().equals("4")) {
-            llProduct.setVisibility(View.VISIBLE);
-            llType.setVisibility(View.GONE);
-
-            adapter = new ProductAdapter(this);
-            spinner.setAdapter(adapter);
-
-            presenter.getMealData();
-        } else if (bean.getTypeId().equals("3")) {
-            llProduct.setVisibility(View.VISIBLE);
-            llType.setVisibility(View.GONE);
-
-            adapter = new ProductAdapter(this);
-            spinner.setAdapter(adapter);
-
-            presenter.getProductData();
-        } else {
-            llProduct.setVisibility(View.GONE);
-            llType.setVisibility(View.VISIBLE);
-        }*/
-
-
-    }
-
-    private void updateView() {
-        rgCouponType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int id) {
-               if(id == ((RadioButton)radioGroup.getChildAt(0)).getId() ||
-                       id == ((RadioButton)radioGroup.getChildAt(1)).getId()){
-                   llProduct.setVisibility(View.GONE);
-                   llType.setVisibility(View.VISIBLE);
-               }else if(id == ((RadioButton)radioGroup.getChildAt(2)).getId()){
-                   llProduct.setVisibility(View.VISIBLE);
-//                   llType.setVisibility(View.GONE);
-
-                   adapter = new ProductAdapter(AddCouponActivity.this);
-                   spinner.setAdapter(adapter);
-
-                   presenter.getProductData();
-                }else{
-                   llProduct.setVisibility(View.VISIBLE);
-//                   llType.setVisibility(View.GONE);
-
-                   adapter = new ProductAdapter(AddCouponActivity.this);
-                   spinner.setAdapter(adapter);
-
-                   presenter.getMealData();
-               }
-            }
-        });
-
+        adapter = new ProductAdapter(AddCouponActivity.this);
+        spinner.setAdapter(adapter);
+        presenter.getProductData();
     }
 
     @Override
@@ -242,7 +274,7 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
         day = calendar.get(Calendar.DAY_OF_MONTH);
     }
 
-    String useType;
+    String useType = "";
 
     @OnClick(R.id.use_type_text)
     public void sizeClick() {
@@ -364,6 +396,7 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
         } else {
             typeCoupon = 4;
         }
+
         int typeWaimai = 0;
         if (((RadioButton) rgWaiMai.getChildAt(0)).isChecked()) {
             typeWaimai = 1;
@@ -374,6 +407,7 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
         } else {
             typeWaimai = 4;
         }
+
         String limitStr = etLimit.getText().toString().trim();
         if (TextUtils.isEmpty(limitStr)) {
             showToast("请输入金额限制");
@@ -400,30 +434,262 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
             return;
         }
 
-        if (titleStr.equals("优惠券管理")) {
-            presenter.submit(nameStr, needStr, giveMoney, startDate, endDate, detail, typeCoupon, typeWaimai, useType, limitStr, maxStr, dayStr, jiFenStr, numStr);
-        } else if (bean.getTypeId().equals("4")) {
-
-
-            ProductBean productBean = (ProductBean) spinner.getSelectedItem();
-            if (productBean == null) {
-                showFailToast("请绑定商品");
-                return;
-            }
-
-            presenter.submitGroup(nameStr, needStr, giveMoney, startDate, endDate, detail, typeCoupon, typeWaimai, useType,
-                    limitStr, maxStr, dayStr, jiFenStr, numStr, productBean.getName(), productBean.getId());
-        } else {//商品券
-
-            ProductBean productBean = (ProductBean) spinner.getSelectedItem();
-            if (productBean == null) {
-                showFailToast("请绑定商品");
-                return;
-            }
-
-            presenter.submitCoupon(nameStr, needStr, giveMoney, startDate, endDate, detail, typeCoupon, typeWaimai, useType,
-                    limitStr, maxStr, dayStr, jiFenStr, numStr, productBean.getName(), productBean.getId());
+        String productId = "";
+        String productName = "";
+        if (typeCoupon == 3) {
+            ProductBean bean = (ProductBean) spinner.getSelectedItem();
+            productId = bean.getId();
+            productName = bean.getName();
         }
+
+        GuizeBean bean1 = GuizeBean.getVoidBean();
+        GuizeBean bean2 = GuizeBean.getVoidBean();
+        GuizeBean bean3 = GuizeBean.getVoidBean();
+        GuizeBean bean4 = GuizeBean.getVoidBean();
+        GuizeBean bean5 = GuizeBean.getVoidBean();
+        GuizeBean bean6 = GuizeBean.getVoidBean();
+        GuizeBean bean7 = GuizeBean.getVoidBean();
+        GuizeBean bean8 = GuizeBean.getVoidBean();
+        GuizeBean bean9 = GuizeBean.getVoidBean();
+
+        if (typeWaimai == 4) {
+            bean1 = getGuize(rgTiaojian1, etMoney1, tvStart1, tvEnd1);
+            if (bean1 == null) {
+                return;
+            }
+
+            bean2 = getGuize(rgTiaojian2, etMoney2, tvStart2, tvEnd2);
+            if (bean2 == null) {
+                return;
+            }
+
+            bean3 = getGuize(rgTiaojian3, etMoney3, tvStart3, tvEnd3);
+            if (bean3 == null) {
+                return;
+            }
+
+            bean4 = getGuize(rgTiaojian4, etMoney4, tvStart4, tvEnd4);
+            if (bean4 == null) {
+                return;
+            }
+
+            bean5 = getGuize(rgTiaojian5, etMoney5, tvStart5, tvEnd5);
+            if (bean5 == null) {
+                return;
+            }
+
+            bean6 = getGuize(tvStart6, tvEnd6);
+            if (bean6 == null) {
+                return;
+            }
+
+            bean7 = getGuize(tvStart7, tvEnd7);
+            if (bean7 == null) {
+                return;
+            }
+
+            bean8 = getGuize(tvStart8, tvEnd8);
+            if (bean8 == null) {
+                return;
+            }
+
+            bean9 = getGuize(rgTiaojian6, etMoney9, tvStart9, tvEnd9);
+            if (bean9 == null) {
+                return;
+            }
+        }
+
+        presenter.submit(typeCoupon + "", productId, productName, needStr, startDate, maxStr, detail, typeWaimai + "",
+                nameStr, numStr, giveMoney, endDate, dayStr, jiFenStr, useType,
+                bean1, bean2, bean3, bean4, bean5, bean6, bean7, bean8, bean9);
+
+//            if (titleStr.equals("优惠券管理")) {
+//
+//                presenter.submit(nameStr, needStr, giveMoney, startDate, endDate, detail, typeCoupon, typeWaimai, useType, limitStr, maxStr, dayStr, jiFenStr, numStr);
+//            } else if (bean.getTypeId().equals("4")) {
+//                ProductBean productBean = (ProductBean) spinner.getSelectedItem();
+//                if (productBean == null) {
+//                    showFailToast("请绑定商品");
+//                    return;
+//                }
+//                presenter.submitGroup(nameStr, needStr, giveMoney, startDate, endDate, detail, typeCoupon, typeWaimai, useType,
+//                        limitStr, maxStr, dayStr, jiFenStr, numStr, productBean.getName(), productBean.getId());
+//            } else {//商品券
+//
+//                ProductBean productBean = (ProductBean) spinner.getSelectedItem();
+//                if (productBean == null) {
+//                    showFailToast("请绑定商品");
+//                    return;
+//                }
+//
+//                presenter.submitCoupon(nameStr, needStr, giveMoney, startDate, endDate, detail, typeCoupon, typeWaimai, useType,
+//                        limitStr, maxStr, dayStr, jiFenStr, numStr, productBean.getName(), productBean.getId());
+//            }
+    }
+
+    public GuizeBean getGuize(RadioGroup radioGroup, EditText editText, TextView tvSart, TextView tvEnd) {
+        GuizeBean bean = new GuizeBean();
+
+        if (((RadioButton) radioGroup.getChildAt(0)).isChecked()) {
+            bean.setType("1");
+        } else if (((RadioButton) radioGroup.getChildAt(1)).isChecked()) {
+            bean.setType("2");
+        } else if (((RadioButton) radioGroup.getChildAt(2)).isChecked()) {
+            bean.setType("3");
+        } else {
+            showToast("请选择条件类型");
+            return null;
+        }
+
+        String valueStr = editText.getText().toString();
+        if (TextUtils.isEmpty(valueStr)) {
+            showToast("请输入条件");
+            return null;
+        }
+        bean.setValue(valueStr);
+
+        String startStr = tvSart.getText().toString();
+        if (TextUtils.isEmpty(startStr)) {
+            showToast("请选择开始时间");
+            return null;
+        }
+        bean.setStart(startStr);
+
+        String endStr = tvEnd.getText().toString();
+        if (TextUtils.isEmpty(endStr)) {
+            showToast("请选择结束时间");
+            return null;
+        }
+        bean.setEnd(endStr);
+
+        return bean;
+    }
+
+    public GuizeBean getGuize(TextView tvSart, TextView tvEnd) {
+        GuizeBean bean = new GuizeBean();
+
+        bean.setType("");
+        bean.setValue("");
+
+        String startStr = tvSart.getText().toString();
+        if (TextUtils.isEmpty(startStr)) {
+            showToast("请选择开始时间");
+            return null;
+        }
+        bean.setStart(startStr);
+
+        String endStr = tvEnd.getText().toString();
+        if (TextUtils.isEmpty(endStr)) {
+            showToast("请选择结束时间");
+            return null;
+        }
+        bean.setEnd(endStr);
+
+        return bean;
+    }
+
+    @OnClick(R.id.tv_start_1)
+    public void start1Click() {
+        showDatePicker(tvStart1);
+    }
+
+    @OnClick(R.id.tv_start_2)
+    public void start2Click() {
+        showDatePicker(tvStart2);
+    }
+
+    @OnClick(R.id.tv_start_3)
+    public void start3Click() {
+        showDatePicker(tvStart3);
+    }
+
+    @OnClick(R.id.tv_start_4)
+    public void start4Click() {
+        showDatePicker(tvStart4);
+    }
+
+    @OnClick(R.id.tv_start_5)
+    public void start5Click() {
+        showDatePicker(tvStart5);
+    }
+
+    @OnClick(R.id.tv_start_6)
+    public void start6Click() {
+        showDatePicker(tvStart6);
+    }
+
+    @OnClick(R.id.tv_start_7)
+    public void start7Click() {
+        showDatePicker(tvStart7);
+    }
+
+    @OnClick(R.id.tv_start_8)
+    public void start8Click() {
+        showDatePicker(tvStart8);
+    }
+
+    @OnClick(R.id.tv_start_9)
+    public void start9Click() {
+        showDatePicker(tvStart9);
+    }
+
+    @OnClick(R.id.tv_end_1)
+    public void ent1Click() {
+        showDatePicker(tvEnd1);
+    }
+
+    @OnClick(R.id.tv_end_2)
+    public void ent2Click() {
+        showDatePicker(tvEnd2);
+    }
+
+    @OnClick(R.id.tv_end_3)
+    public void ent3Click() {
+        showDatePicker(tvEnd3);
+    }
+
+    @OnClick(R.id.tv_end_4)
+    public void ent4Click() {
+        showDatePicker(tvEnd4);
+    }
+
+    @OnClick(R.id.tv_end_5)
+    public void ent5Click() {
+        showDatePicker(tvEnd5);
+    }
+
+    @OnClick(R.id.tv_end_6)
+    public void ent6Click() {
+        showDatePicker(tvEnd6);
+    }
+
+    @OnClick(R.id.tv_end_7)
+    public void ent7Click() {
+        showDatePicker(tvEnd7);
+    }
+
+    @OnClick(R.id.tv_end_8)
+    public void ent8Click() {
+        showDatePicker(tvEnd8);
+    }
+
+    @OnClick(R.id.tv_end_9)
+    public void ent9Click() {
+        showDatePicker(tvEnd9);
+    }
+
+
+    private void showDatePicker(TextView textView) {
+        DatePickDialog dialog = new DatePickDialog(this);
+        dialog.setYearLimt(10);
+        dialog.setTitle("选择时间");
+        dialog.setType(DateType.TYPE_YMD);
+        dialog.setMessageFormat("yyyy-MM-dd HH:mm:ss");
+        dialog.setOnChangeLisener(null);
+        dialog.setOnSureLisener(date -> {
+            textView.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
+        });
+        dialog.show();
     }
 
     @Override

@@ -13,6 +13,7 @@
         <View
             style="@style/LineHorStyle"
             android:layout_marginTop="@dimen/_29sdp" />
+
         <!--订单管理-->
         <LinearLayout
             android:id="@+id/order_order_manage"
@@ -26,7 +27,7 @@
                 android:layout_height="@dimen/_58sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/basics_icon_accountbill" />
+                android:src="@mipmap/order_icon_manager" />
 
             <TextView
                 android:layout_width="0dp"
@@ -59,7 +60,7 @@
                 android:layout_height="@dimen/_58sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/basics_icon_accountbill" />
+                android:src="@mipmap/order_icon_guazhang" />
 
             <TextView
                 android:layout_width="0dp"
@@ -92,7 +93,7 @@
                 android:layout_height="@dimen/_58sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/basics_icon_accountbill" />
+                android:src="@mipmap/order_icon_oprate" />
 
             <TextView
                 android:layout_width="0dp"

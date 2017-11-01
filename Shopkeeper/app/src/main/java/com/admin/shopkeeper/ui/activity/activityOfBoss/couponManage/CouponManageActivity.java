@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
+import com.admin.shopkeeper.adapter.CouponManager2Adapter;
 import com.admin.shopkeeper.adapter.CouponManagerAdapter;
 import com.admin.shopkeeper.adapter.MemberLevelManagerAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
@@ -54,7 +55,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class CouponManageActivity extends BaseActivity<CouponManagePresenter> implements ICouponManageView,
-        DatePicker.OnDateChangedListener{
+        DatePicker.OnDateChangedListener {
 
 
     @BindView(R.id.toolbar)
@@ -69,13 +70,14 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
     TextView tvNeedMoney;
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout refreshLayout;
-    private CouponManagerAdapter adapter;
+    private CouponManager2Adapter adapter;
     private PopupWindow laheiPop;
     List<CouponManageBean> data;
     private PopupWindow popupWindow;
     private String titleStr;
     private ArrayAdapter<String> arrayAdapter;
     int page = 1;
+
     @Override
     protected void initPresenter() {
         presenter = new CouponManagePresenter(this, this);
@@ -112,18 +114,27 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
                 .marginResId(R.dimen._1sdp, R.dimen._1sdp)
                 .color(getResources().getColor(R.color.item_line_color))
                 .build());
-        adapter = new CouponManagerAdapter(this);
+        adapter = new CouponManager2Adapter(R.layout.item_coupon_manage);
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener((adapter1, view, position) -> {
+            showDeletePop(adapter.getItem(position));
+        });
+
+        adapter.setOnLoadMoreListener(() -> {
+            page++;
+            presenter.getCouponInfo(page, "");
+        }, recyclerView);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 page = 1;
-                presenter.getCouponInfo(1,"");
+                presenter.getCouponInfo(1, "");
             }
         });
         if (titleStr.equals("优惠券管理")) {
-            presenter.getCouponInfo(1,"");
+            presenter.getCouponInfo(1, "");
         } else if (titleStr.equals("商品券管理")) {
             presenter.getCommodityCouponInfo();
         } else {
@@ -137,7 +148,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            presenter.getCouponInfo(1 ,"");
+            presenter.getCouponInfo(1, "");
         }
         if (laheiPop != null && laheiPop.isShowing()) {
             laheiPop.dismiss();
@@ -188,7 +199,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
                     return -1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else if (defaultType % 3 == 2) {
             UIUtils.setDrawableRight(tvNum, R.mipmap.sort_z_a);
             List<CouponManageBean> newData = new ArrayList<>();
@@ -202,10 +213,10 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
                     return 1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else {
             UIUtils.setDrawableRight(tvNum, R.mipmap.sort_default);
-            adapter.setDatas(data);
+            adapter.setNewData(data);
         }
         UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_default);
         UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_default);
@@ -232,7 +243,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
                     return -1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else if (nameType % 3 == 2) {
             UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_z_a);
             List<CouponManageBean> newData = new ArrayList<>();
@@ -246,7 +257,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
                     return 1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else {
             UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_default);
         }
@@ -275,7 +286,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
                     return -1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else if (stateType % 3 == 2) {
             UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_z_a);
             List<CouponManageBean> newData = new ArrayList<>();
@@ -289,7 +300,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
                     return 1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else {
             UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_default);
         }
@@ -311,7 +322,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
         laheiView.findViewById(R.id.pop_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.getCouponInfo(1,"");
+                presenter.getCouponInfo(1, "");
                 popupWindow.dismiss();
             }
         });
@@ -320,8 +331,8 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
             @Override
             public void onClick(View v) {
                 int position = spinnerSelect.getSelectedItemPosition();
-                if(position>0){
-                    presenter.getCouponInfo(1,position+"");
+                if (position > 0) {
+                    presenter.getCouponInfo(1, position + "");
                 }
                 popupWindow.dismiss();
             }
@@ -341,13 +352,15 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
     @Override
     public void error(String msg) {
         showFailToast(msg);
+        refreshLayout.setRefreshing(false);
+        adapter.loadMoreEnd();
     }
 
     @Override
     public void success(String msg) {
         showSuccessToast(msg);
         if (titleStr.equals("优惠券管理")) {
-            presenter.getCouponInfo(1 ,"");
+            presenter.getCouponInfo(1, "");
         } else if (titleStr.equals("商品券管理")) {
             presenter.getCommodityCouponInfo();
         } else {
@@ -359,7 +372,13 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
     @Override
     public void success(List<CouponManageBean> couponManageBeanList) {
         this.data = couponManageBeanList;
-        adapter.setDatas(couponManageBeanList);
+        adapter.setNewData(couponManageBeanList);
+        refreshLayout.setRefreshing(false);
+        if (couponManageBeanList.size() < 20) {
+            adapter.loadMoreEnd();
+        } else {
+            adapter.loadMoreComplete();
+        }
         if (laheiPop != null && laheiPop.isShowing()) {
             laheiPop.dismiss();
         }
@@ -436,6 +455,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
                 | Gravity.CENTER_HORIZONTAL, 0, 0);
         backgroundAlpha(0.5f);
     }
+
     /**
      * 获取当前的日期和时间
      */
@@ -447,8 +467,10 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
     }
+
     private StringBuffer date;
     private int year, month, day;
+
     public void selectDate(TextView tv) {
         initDateTime();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

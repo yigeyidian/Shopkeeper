@@ -27,7 +27,7 @@
                 android:layout_height="@dimen/_58sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/market_icon_vip_level" />
+                android:src="@mipmap/marketing_icon_viplevel" />
 
             <TextView
                 android:layout_width="0dp"
@@ -60,7 +60,7 @@
                 android:layout_height="@dimen/_58sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/basics_icon_vip" />
+                android:src="@mipmap/marketing_icon_vipdetail" />
 
             <TextView
                 android:layout_width="0dp"
@@ -93,7 +93,7 @@
                 android:layout_height="@dimen/_58sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/market_icon_recharge" />
+                android:src="@mipmap/marketing_icon_charge" />
 
             <TextView
                 android:layout_width="0dp"
@@ -233,7 +233,7 @@
                 android:layout_height="@dimen/_58sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/market_icon_commodity_coupon" />
+                android:src="@mipmap/marketing_icon_fullgive" />
 
             <TextView
                 android:layout_width="0dp"

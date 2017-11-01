@@ -1533,6 +1533,60 @@ public interface ShopkeeperApi {
             @Field("LimitPrice") String limitPrice
     );
 
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerchantsOrderManagerASHX.ashx")
+    Observable<StringModel> addCoupon2(
+            @Field("Type") String type,
+            @Field("kaleibie") String kaleibie,
+            @Field("productname") String productname,
+            @Field("product") String product,
+            @Field("manzhu") String manzhu,
+            @Field("btime") String btime,
+            @Field("max") String max,
+            @Field("info") String info,
+            @Field("optionsRadios") String optionsRadios,
+            @Field("name") String name,
+            @Field("xiaoshou") String xiaoshou,
+            @Field("freepice") String freepice,
+            @Field("etime") String etime,
+            @Field("days") String days,
+            @Field("mpice") String mpice,
+            @Field("usetype") String usetype,
+            @Field("TiaoJian5") String TiaoJian5,
+            @Field("mxiaofei") String mxiaofei,
+            @Field("mbtime") String mbtime,
+            @Field("metime") String metime,
+            @Field("TiaoJian1") String TiaoJian1,
+            @Field("lxiaofei") String lxiaofei,
+            @Field("lbtime") String lbtime,
+            @Field("letime") String letime,
+            @Field("TiaoJian2") String TiaoJian2,
+            @Field("cxiaofei") String cxiaofei,
+            @Field("cbtime") String cbtime,
+            @Field("cetime") String cetime,
+            @Field("TiaoJian3") String TiaoJian3,
+            @Field("zxiaofei") String zxiaofei,
+            @Field("zbtime") String zbtime,
+            @Field("zetime") String zetime,
+            @Field("TiaoJian4") String TiaoJian4,
+            @Field("jxiaofei") String jxiaofei,
+            @Field("jbtime") String jbtime,
+            @Field("jetime") String jetime,
+            @Field("zuibtime") String zuibtime,
+            @Field("zuietime") String zuietime,
+            @Field("ybtime") String ybtime,
+            @Field("yetime") String yetime,
+            @Field("pbtime") String pbtime,
+            @Field("petime") String petime,
+            @Field("TiaoJian6") String TiaoJian6,
+            @Field("chaoshu") String chaoshu,
+            @Field("caobtime") String caobtime,
+            @Field("caoetime") String caoetime,
+            @Field("ShangJiaID") String ShangJiaID,
+            @Field("OperationUserID") String OperationUserID,
+            @Field("OperationUserName") String OperationUserName
+    );
+
     /**
      * 新增团购券
      *

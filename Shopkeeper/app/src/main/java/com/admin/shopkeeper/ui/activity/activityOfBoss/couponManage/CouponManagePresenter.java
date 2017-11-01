@@ -50,11 +50,11 @@ public class CouponManagePresenter extends BasePresenter<ICouponManageView> {
 
     }
 
-    public void getCouponInfo(int page,String leiBie) {
+    public void getCouponInfo(int page, String leiBie) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getCouponInfo("9",20 ,page,"ASC","" ,leiBie ,App.INSTANCE().getShopID())
+                .getCouponInfo("9", 20, page, "ASC", "", leiBie, App.INSTANCE().getShopID())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

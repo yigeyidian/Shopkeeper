@@ -113,7 +113,7 @@
                 android:layout_height="@dimen/_58sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/statistics_icon_simple" />
+                android:src="@mipmap/statistics_icon_wechart" />
 
             <TextView
                 android:layout_width="0dp"
