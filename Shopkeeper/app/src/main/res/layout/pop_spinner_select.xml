@@ -47,32 +47,10 @@
 
         </LinearLayout>
 
-        <View style="@style/LineHorStyle" />
-
-        <LinearLayout
-            android:visibility="invisible"
-            android:id="@+id/linearLayout2"
-            style="@style/SettingItemStyle">
-
-            <TextView
-                android:id="@+id/tv2"
-                style="@style/SettingItemTextStyle"
-                android:text="结束时间" />
-
-            <TextView
-                android:id="@+id/pop_endtime"
-                style="@style/SettingItemEditStyle"
-                android:inputType="date"
-                android:gravity="center_vertical"
-                android:hint="请选择结束时间" />
-
-        </LinearLayout>
-
-        <View style="@style/LineHorStyle" />
 
         <View
             style="@style/LineHorStyle"
-            android:layout_marginTop="@dimen/_150sdp" />
+            android:layout_marginTop="@dimen/_200sdp" />
 
         <LinearLayout
             android:layout_width="match_parent"
