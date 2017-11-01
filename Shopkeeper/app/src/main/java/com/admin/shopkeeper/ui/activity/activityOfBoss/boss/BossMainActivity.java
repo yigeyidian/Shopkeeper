@@ -317,7 +317,7 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
             case R.id.nav_datas:
                 presenter.checkData();
                 break;
-            case R.id.nav_cancel:
+            case R.id.nav_exit:
                 builder = new AlertDialog.Builder(this);
                 builder.setTitle("提示");
                 builder.setMessage("是否退出登录？");
