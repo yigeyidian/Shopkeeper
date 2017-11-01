@@ -1,6 +1,7 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.addCoupon;
 
 import android.content.DialogInterface;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -131,11 +132,21 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
             tvCouponEndDate.setText(bean.getEndTime());
             etNums.setText(bean.getCounts());
             etDays.setText(bean.getCode());
-
-            if (bean.getTypeId().equals("1")) {
-                ((RadioButton) rgCouponType.getChildAt(0)).setChecked(true);
-            } else {
-                ((RadioButton) rgCouponType.getChildAt(1)).setChecked(true);
+            switch (bean.getTypeId()){
+                case "1":
+                    ((RadioButton) rgCouponType.getChildAt(0)).setChecked(true);
+                    break;
+                case "2":
+                    ((RadioButton) rgCouponType.getChildAt(1)).setChecked(true);
+                    break;
+                case "3":
+                    ((RadioButton) rgCouponType.getChildAt(2)).setChecked(true);
+                    break;
+                case "4":
+                    ((RadioButton) rgCouponType.getChildAt(3)).setChecked(true);
+                    break;
+                default:
+                    break;
             }
         }
         setSupportActionBar(toolbar);
@@ -147,8 +158,8 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
 
 //        foodTypeAdapter = new EditFoodTypeAdapter(this);
 //        foodSpinner.setAdapter(foodTypeAdapter);
-
-        if (titleStr.equals("团购券管理")) {
+        updateView();
+        /*if (bean.getTypeId().equals("4")) {
             llProduct.setVisibility(View.VISIBLE);
             llType.setVisibility(View.GONE);
 
@@ -156,7 +167,7 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
             spinner.setAdapter(adapter);
 
             presenter.getMealData();
-        } else if (titleStr.equals("商品券管理")) {
+        } else if (bean.getTypeId().equals("3")) {
             llProduct.setVisibility(View.VISIBLE);
             llType.setVisibility(View.GONE);
 
@@ -167,8 +178,38 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
         } else {
             llProduct.setVisibility(View.GONE);
             llType.setVisibility(View.VISIBLE);
-        }
+        }*/
 
+
+    }
+
+    private void updateView() {
+        rgCouponType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int id) {
+               if(id == ((RadioButton)radioGroup.getChildAt(0)).getId() ||
+                       id == ((RadioButton)radioGroup.getChildAt(1)).getId()){
+                   llProduct.setVisibility(View.GONE);
+                   llType.setVisibility(View.VISIBLE);
+               }else if(id == ((RadioButton)radioGroup.getChildAt(2)).getId()){
+                   llProduct.setVisibility(View.VISIBLE);
+//                   llType.setVisibility(View.GONE);
+
+                   adapter = new ProductAdapter(AddCouponActivity.this);
+                   spinner.setAdapter(adapter);
+
+                   presenter.getProductData();
+                }else{
+                   llProduct.setVisibility(View.VISIBLE);
+//                   llType.setVisibility(View.GONE);
+
+                   adapter = new ProductAdapter(AddCouponActivity.this);
+                   spinner.setAdapter(adapter);
+
+                   presenter.getMealData();
+               }
+            }
+        });
 
     }
 
@@ -313,7 +354,16 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
             showToast("请输入详细信息");
             return;
         }
-        int typeCoupon = ((RadioButton) rgCouponType.getChildAt(0)).isChecked() ? 1 : 2;
+        int typeCoupon = 0;
+        if (((RadioButton) rgCouponType.getChildAt(0)).isChecked()) {
+            typeCoupon = 1;
+        } else if (((RadioButton) rgCouponType.getChildAt(1)).isChecked()) {
+            typeCoupon = 2;
+        } else if (((RadioButton) rgCouponType.getChildAt(2)).isChecked()) {
+            typeCoupon = 3;
+        } else {
+            typeCoupon = 4;
+        }
         int typeWaimai = 0;
         if (((RadioButton) rgWaiMai.getChildAt(0)).isChecked()) {
             typeWaimai = 1;
@@ -352,7 +402,7 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
 
         if (titleStr.equals("优惠券管理")) {
             presenter.submit(nameStr, needStr, giveMoney, startDate, endDate, detail, typeCoupon, typeWaimai, useType, limitStr, maxStr, dayStr, jiFenStr, numStr);
-        } else if (titleStr.equals("团购券管理")) {
+        } else if (bean.getTypeId().equals("4")) {
 
 
             ProductBean productBean = (ProductBean) spinner.getSelectedItem();

@@ -62,7 +62,7 @@ public class MarketFragment extends BaseFragment<MarketPresenter> implements IMa
         startActivity(intent);
     }
 
-    //团购券管理
+   /* //团购券管理
     @OnClick(R.id.market_group_manage_ll)
     public void setGroupManageClick() {
         Intent intent = new Intent(getActivity(), CouponManageActivity.class);
@@ -76,7 +76,7 @@ public class MarketFragment extends BaseFragment<MarketPresenter> implements IMa
         Intent intent = new Intent(getActivity(), CouponManageActivity.class);
         intent.putExtra(Config.PARAM1, "商品券管理");
         startActivity(intent);
-    }
+    }*/
 
 //    @OnClick(R.id.market_weixin)
 //    public void wechatClick() {

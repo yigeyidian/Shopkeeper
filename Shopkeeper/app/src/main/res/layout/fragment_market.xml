@@ -139,7 +139,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_21sdp"
                 android:layout_weight="1"
-                android:text="优惠券/代金券管理"
+                android:text="优惠券管理"
                 android:textColor="@color/black" />
 
             <ImageView
@@ -150,9 +150,9 @@
                 android:src="@mipmap/list_icon_arrow_right" />
         </LinearLayout>
 
-        <View style="@style/LineHor2Style" />
+       <!-- <View style="@style/LineHor2Style" />
 
-        <!--团购券管理-->
+        &lt;!&ndash;团购券管理&ndash;&gt;
         <LinearLayout
             android:id="@+id/market_group_manage_ll"
             android:layout_width="match_parent"
@@ -186,7 +186,7 @@
 
         <View style="@style/LineHor2Style" />
 
-        <!--商品券管理-->
+        &lt;!&ndash;商品券管理&ndash;&gt;
         <LinearLayout
             android:id="@+id/market_commodity_coupon_manage_ll"
             android:layout_width="match_parent"
@@ -216,7 +216,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/_30sdp"
                 android:src="@mipmap/list_icon_arrow_right" />
-        </LinearLayout>
+        </LinearLayout>-->
 
         <View style="@style/LineHor2Style" />
 

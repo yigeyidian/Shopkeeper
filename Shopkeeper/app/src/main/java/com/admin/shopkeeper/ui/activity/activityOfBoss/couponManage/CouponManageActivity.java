@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +40,7 @@ import com.admin.shopkeeper.ui.activity.activityOfBoss.addMemberLevel.AddMemberL
 import com.admin.shopkeeper.ui.activity.activityOfBoss.coupondetail.CouPonDetailActivity;
 import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.utils.UIUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -65,13 +67,15 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
     TextView tvCouponMoney;
     @BindView(R.id.coupon_manage_need_money)
     TextView tvNeedMoney;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
     private CouponManagerAdapter adapter;
     private PopupWindow laheiPop;
     List<CouponManageBean> data;
     private PopupWindow popupWindow;
     private String titleStr;
     private ArrayAdapter<String> arrayAdapter;
-
+    int page = 1;
     @Override
     protected void initPresenter() {
         presenter = new CouponManagePresenter(this, this);
@@ -111,6 +115,13 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
         adapter = new CouponManagerAdapter(this);
         recyclerView.setAdapter(adapter);
 
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                presenter.getCouponInfo(1,"");
+            }
+        });
         if (titleStr.equals("优惠券管理")) {
             presenter.getCouponInfo(1,"");
         } else if (titleStr.equals("商品券管理")) {
@@ -310,7 +321,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
             public void onClick(View v) {
                 int position = spinnerSelect.getSelectedItemPosition();
                 if(position>0){
-                    presenter.getCouponInfo(1,position+1+"");
+                    presenter.getCouponInfo(1,position+"");
                 }
                 popupWindow.dismiss();
             }

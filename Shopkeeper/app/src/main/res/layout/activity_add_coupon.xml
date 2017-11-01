@@ -36,22 +36,37 @@
                     android:id="@+id/coupon_type"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/_32sdp"
                     android:orientation="horizontal">
 
                     <RadioButton
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1.2"
+                        android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="优惠券" />
+                        android:textSize="@dimen/_24ssp"
+                        android:text="满送券" />
 
                     <RadioButton
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:gravity="center_vertical"
+                        android:textSize="@dimen/_24ssp"
                         android:text="代金券" />
+                    <RadioButton
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:textSize="@dimen/_24ssp"
+                        android:text="商品券" />
+                    <RadioButton
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:textSize="@dimen/_24ssp"
+                        android:text="团购券" />
 
                 </RadioGroup>
 
@@ -169,7 +184,7 @@
 
                 <TextView
                     style="@style/SettingItemTextStyle"
-                    android:text="规则类型" />
+                    android:text="获取方式" />
 
                 <RadioGroup
                     android:id="@+id/radioGroup_waiMai"
@@ -188,24 +203,24 @@
                     <RadioButton
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1.9"
+                        android:layout_weight="1.2"
                         android:gravity="center_vertical"
-                        android:text="微信第一次\n关注赠送"
+                        android:text="金额购买"
                         android:textSize="@dimen/_20ssp" />
 
                     <RadioButton
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1.2"
+                        android:layout_weight="1.5"
                         android:gravity="center_vertical"
-                        android:text="现金购买"
+                        android:text="首次关注微信赠送"
                         android:textSize="@dimen/_20ssp" />
                     <RadioButton
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1.2"
+                        android:layout_weight="1.5"
                         android:gravity="center_vertical"
-                        android:text="消费增送"
+                        android:text="目标人群（免费赠送）"
                         android:textSize="@dimen/_20ssp" />
 
                 </RadioGroup>
