@@ -42,6 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/_32sdp"
+                android:spinnerMode="dialog"
                 android:layout_marginRight="@dimen/_32sdp" />
 
         </LinearLayout>
