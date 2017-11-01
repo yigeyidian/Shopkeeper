@@ -17,23 +17,24 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.CouponDetailTableAdapter;
-import com.admin.shopkeeper.adapter.MemberConsumeDetailAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.CouponDetailTableBean;
-import com.admin.shopkeeper.entity.MemberConsumeDetailBean;
+import com.admin.shopkeeper.entity.CouponManageBean;
 import com.admin.shopkeeper.utils.Tools;
+import com.admin.shopkeeper.utils.UIUtils;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class CouponDetailTableActivity extends BaseActivity<CouponDetailTablePresenter> implements ICouponDetailTableView {
 
@@ -42,6 +43,12 @@ public class CouponDetailTableActivity extends BaseActivity<CouponDetailTablePre
     Toolbar toolbar;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.coupon_default)
+    TextView tVdefault;
+    @BindView(R.id.coupon_give)
+    TextView tVGiveCoupon;//券发放量
+    @BindView(R.id.coupon_consume)
+    TextView tVConsumeCoupon;//券使用量
     private PopupWindow laheiPop;
     List<CouponDetailTableBean> data;
     private PopupWindow popupWindow;
@@ -209,13 +216,10 @@ public class CouponDetailTableActivity extends BaseActivity<CouponDetailTablePre
                 showToast("筛选时间不能大于一个月");
                 return;
             }
-
-            /*presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+            presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate),
                     Tools.formatNowDate("yyyy-MM-dd", endDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", endDate), typestr.equals("营业时间") ? 0 : 1);*/
-
-
+                    Tools.formatNowDate("HH:mm:ss", endDate), typestr.equals("营业时间") ? 0 : 1);
 //            tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "至" + Tools.formatNowDate("yyyy-MM-dd", endDate));
             popupWindow.dismiss();
         });
@@ -234,7 +238,7 @@ public class CouponDetailTableActivity extends BaseActivity<CouponDetailTablePre
 
     int defaultType = 0;
 
-    /*@OnClick(R.id.coupon_manage_num)
+    @OnClick(R.id.coupon_default)
     public void setDefaultClick() {
         defaultType++;
 
@@ -242,126 +246,126 @@ public class CouponDetailTableActivity extends BaseActivity<CouponDetailTablePre
             return;
         }
         if (defaultType % 3 == 1) {
-            UIUtils.setDrawableRight(tvNum, R.mipmap.sort_a_z);
-            List<CouponManageBean> newData = new ArrayList<>();
+            UIUtils.setDrawableRight(tVdefault, R.mipmap.sort_a_z);
+            List<CouponDetailTableBean> newData = new ArrayList<>();
             newData.addAll(data);
             Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts())) {
+                if (Integer.parseInt(o1.getCouponPerson()) > Integer.parseInt(o2.getCouponPerson())) {
                     return 1;
-                } else if (Integer.parseInt(o1.getCounts()) == Integer.parseInt(o2.getCounts())) {
+                } else if (Integer.parseInt(o1.getCouponPerson()) == Integer.parseInt(o2.getCouponPerson())) {
                     return 0;
                 } else {
                     return -1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else if (defaultType % 3 == 2) {
-            UIUtils.setDrawableRight(tvNum, R.mipmap.sort_z_a);
-            List<CouponManageBean> newData = new ArrayList<>();
+            UIUtils.setDrawableRight(tVdefault, R.mipmap.sort_z_a);
+            List<CouponDetailTableBean> newData = new ArrayList<>();
             newData.addAll(data);
             Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts())) {
+                if (Integer.parseInt(o1.getCouponPerson()) > Integer.parseInt(o2.getCouponPerson())) {
                     return -1;
-                } else if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts())) {
+                } else if (Integer.parseInt(o1.getCouponPerson()) > Integer.parseInt(o2.getCouponPerson())) {
                     return 0;
                 } else {
                     return 1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else {
-            UIUtils.setDrawableRight(tvNum, R.mipmap.sort_default);
-            adapter.setDatas(data);
+            UIUtils.setDrawableRight(tVdefault, R.mipmap.sort_default);
+            adapter.setNewData(data);
         }
-        UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_default);
+        UIUtils.setDrawableRight(tVGiveCoupon, R.mipmap.sort_default);
+        UIUtils.setDrawableRight(tVConsumeCoupon, R.mipmap.sort_default);
     }
 
     int nameType = 0;
 
-    @OnClick(R.id.coupon_money)
+    @OnClick(R.id.coupon_give)
     public void setNameClick() {
         nameType++;
         if (data == null) {
             return;
         }
         if (nameType % 3 == 1) {
-            UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_a_z);
-            List<CouponManageBean> newData = new ArrayList<>();
+            UIUtils.setDrawableRight(tVGiveCoupon, R.mipmap.sort_a_z);
+            List<CouponDetailTableBean> newData = new ArrayList<>();
             newData.addAll(data);
             Collections.sort(newData, (o1, o2) -> {
-                if (o1.getPrice() > o2.getPrice()) {
+                if (Integer.parseInt(o1.getGiveConponVolume()) > Integer.parseInt(o2.getGiveConponVolume())) {
                     return 1;
-                } else if (o1.getPrice() == o2.getPrice()) {
+                } else if (Integer.parseInt(o1.getGiveConponVolume()) == Integer.parseInt(o2.getGiveConponVolume())) {
                     return 0;
                 } else {
                     return -1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else if (nameType % 3 == 2) {
-            UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_z_a);
-            List<CouponManageBean> newData = new ArrayList<>();
+            UIUtils.setDrawableRight(tVGiveCoupon, R.mipmap.sort_z_a);
+            List<CouponDetailTableBean> newData = new ArrayList<>();
             newData.addAll(data);
             Collections.sort(newData, (o1, o2) -> {
-                if (o1.getPrice() > o2.getPrice()) {
+                if (Integer.parseInt(o1.getGiveConponVolume()) > Integer.parseInt(o2.getGiveConponVolume())) {
                     return -1;
-                } else if (o1.getPrice() == o2.getPrice()) {
+                } else if (Integer.parseInt(o1.getGiveConponVolume()) == Integer.parseInt(o2.getGiveConponVolume())) {
                     return 0;
                 } else {
                     return 1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else {
-            UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_default);
+            UIUtils.setDrawableRight(tVGiveCoupon, R.mipmap.sort_default);
         }
-        UIUtils.setDrawableRight(tvNum, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_default);
+        UIUtils.setDrawableRight(tVdefault, R.mipmap.sort_default);
+        UIUtils.setDrawableRight(tVConsumeCoupon, R.mipmap.sort_default);
     }
 
     int stateType = 0;
 
-    @OnClick(R.id.coupon_manage_need_money)
+    @OnClick(R.id.coupon_consume)
     public void setStateClick() {
         stateType++;
         if (data == null) {
             return;
         }
         if (stateType % 3 == 1) {
-            UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_a_z);
-            List<CouponManageBean> newData = new ArrayList<>();
+            UIUtils.setDrawableRight(tVConsumeCoupon, R.mipmap.sort_a_z);
+            List<CouponDetailTableBean> newData = new ArrayList<>();
             newData.addAll(data);
             Collections.sort(newData, (o1, o2) -> {
-                if (o1.getSumPrice() > o2.getSumPrice()) {
+                if (Integer.parseInt(o1.getUseCoupon()) > Integer.parseInt(o2.getUseCoupon())) {
                     return 1;
-                } else if (o1.getSumPrice() == o2.getSumPrice()) {
+                } else if (Integer.parseInt(o1.getUseCoupon()) == Integer.parseInt(o2.getUseCoupon())) {
                     return 0;
                 } else {
                     return -1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else if (stateType % 3 == 2) {
-            UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_z_a);
-            List<CouponManageBean> newData = new ArrayList<>();
+            UIUtils.setDrawableRight(tVConsumeCoupon, R.mipmap.sort_z_a);
+            List<CouponDetailTableBean> newData = new ArrayList<>();
             newData.addAll(data);
             Collections.sort(newData, (o1, o2) -> {
-                if (o1.getSumPrice() > o2.getSumPrice()) {
+                if (Integer.parseInt(o1.getUseCoupon()) > Integer.parseInt(o2.getUseCoupon())) {
                     return -1;
-                } else if (o1.getSumPrice() == o2.getSumPrice()) {
+                } else if (Integer.parseInt(o1.getUseCoupon()) == Integer.parseInt(o2.getUseCoupon())) {
                     return 0;
                 } else {
                     return 1;
                 }
             });
-            adapter.setDatas(newData);
+            adapter.setNewData(newData);
         } else {
-            UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_default);
+            UIUtils.setDrawableRight(tVConsumeCoupon, R.mipmap.sort_default);
         }
-        UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvNum, R.mipmap.sort_default);
-    }*/
+        UIUtils.setDrawableRight(tVdefault, R.mipmap.sort_default);
+        UIUtils.setDrawableRight(tVGiveCoupon, R.mipmap.sort_default);
+    }
 
     @Override
     public void error(String msg) {

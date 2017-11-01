@@ -98,10 +98,7 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
         startActivity(GiftStatisticsActivity.class);
     }
 
-    @OnClick(R.id.basic_house)
-    public void returnStatisticsClick() {
-        startActivity(ReturnStatisticsActivity.class);
-    }
+
     @OnClick(R.id.statement_transaction_ll)
     public void statementTranscationClick() {
         startActivity(RechargeTranscationActivity.class);

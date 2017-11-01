@@ -14,9 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.MutiDialogAdapter;
 import com.admin.shopkeeper.adapter.ShopDialogAdapter;
-import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.entity.ShopBean;
 import com.admin.shopkeeper.weight.MarginDecoration;
 

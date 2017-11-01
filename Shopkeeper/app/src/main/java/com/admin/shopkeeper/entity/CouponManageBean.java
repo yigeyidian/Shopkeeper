@@ -6,6 +6,14 @@ import java.io.Serializable;
 
 /**
  * 优惠券bean
+ * 之后的数据
+ * {\"Name\":\"10元代金券\"
+ * ,\"PiCi\":\"171023014514745133\",
+ * \"IntergialTypeID\":\"2\",
+ * \"OperationUserName\":\"超级管理员\",
+ * \"BeginTime\":\"2017-10-23 00:00:00\",
+ * \"EndTime\":\"2017-11-23 23:59:59\"}
+ * 之前的数据
  * {\"PiCi\":\"17021516464280295\",
  * \"Name\":\"节日优惠券\",
  * \"Price\":5.00,
@@ -45,6 +53,16 @@ public class CouponManageBean implements Serializable {
     private String counts;
     @SerializedName("MerchantID")
     private String merchantID;
+    @SerializedName("OperationUserName")
+    private String opearationName;
+
+    public String getOpearationName() {
+        return opearationName;
+    }
+
+    public void setOpearationName(String opearationName) {
+        this.opearationName = opearationName;
+    }
 
     private int position;
 

@@ -28,27 +28,18 @@ import com.admin.shopkeeper.adapter.CollectionAdapter;
 import com.admin.shopkeeper.adapter.ReturnBussinessAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
-import com.admin.shopkeeper.dialog.ListDialog;
-import com.admin.shopkeeper.dialog.MutiSelectDialog;
-import com.admin.shopkeeper.dialog.ShopSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.ChainBean;
-import com.admin.shopkeeper.entity.ReturnBussinessBean;
 import com.admin.shopkeeper.entity.ShopCollectionBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.collectiondetail.CollectionDetailActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.returnbussiness.IReturnBussinessView;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.returnbussiness.ReturnBussinessPresenter;
 import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.utils.UIUtils;
 import com.codbking.widget.DatePickDialog;
-import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -196,6 +187,11 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
             shopId = chainBeen.get(0).getMerchantId();
 
             tvShop.setOnClickListener(v -> {
+                if(chainBeen == null){
+                    showToast("获取门店列表失败");
+                    return;
+                }
+
                 String selectText = tvShop.getText().toString().trim();
 
                 CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);

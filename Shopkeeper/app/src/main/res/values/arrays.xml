@@ -93,4 +93,11 @@
         <item>安卓网口打印机</item>
         <item>苹果网口打印机</item>
     </string-array>
+    <string-array name="couponType">
+        <item>全部</item>
+        <item>满送券</item>
+        <item>代金券</item>
+        <item>商品券</item>
+        <item>团购券</item>
+    </string-array>
 </resources>

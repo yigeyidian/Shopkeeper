@@ -18,6 +18,27 @@ public class WechatBean implements Serializable {
 // \"WeiXinKuaiCan\":\"1\",
 // \"TanDian\":\"1\"}"\"EnableCenter\":\"1\",\"EnableOrder\":\"1\"
 
+    //{\"RESTAURANTID\":\"4b176f0e-0553-4094-8181-5048641b20ef\",
+    // \"Days\":7,
+    // \"Prepaid\":20.00,
+    // \"QrCodePay\":\"0\",
+    // \"Functions\":\"2,1,3,5\",
+    // \"FoodOrDes\":\"1,2\",
+    // \"WeiXinKuaiCan\":\"1,2,4\",
+    // \"WeiXinWaiMai\":\"1,2,4\",\
+    // "WeiXinYuDin\":\"1,2,4\",
+    // \"TanDian\":\"1,2,4\"
+
+    @SerializedName("Days")
+    int days;
+    @SerializedName("Prepaid")
+    double prepaid;
+    @SerializedName("QrCodePay")
+    String qrcodePay;
+    @SerializedName("Functions")
+    String functions;
+    @SerializedName("FoodOrDes")
+    String foodOrDes;
     @SerializedName("GUID")
     private String guid;
     @SerializedName("RESTAURANTID")
@@ -38,6 +59,46 @@ public class WechatBean implements Serializable {
     private String jifenAdding;
     @SerializedName("EnableOrder")
     private String jifenExchange;
+
+    public int getDays() {
+        return days;
+    }
+
+    public void setDays(int days) {
+        this.days = days;
+    }
+
+    public double getPrepaid() {
+        return prepaid;
+    }
+
+    public void setPrepaid(double prepaid) {
+        this.prepaid = prepaid;
+    }
+
+    public String getQrcodePay() {
+        return qrcodePay;
+    }
+
+    public void setQrcodePay(String qrcodePay) {
+        this.qrcodePay = qrcodePay;
+    }
+
+    public String getFunctions() {
+        return functions;
+    }
+
+    public void setFunctions(String functions) {
+        this.functions = functions;
+    }
+
+    public String getFoodOrDes() {
+        return foodOrDes;
+    }
+
+    public void setFoodOrDes(String foodOrDes) {
+        this.foodOrDes = foodOrDes;
+    }
 
     public String getGuid() {
         return guid;

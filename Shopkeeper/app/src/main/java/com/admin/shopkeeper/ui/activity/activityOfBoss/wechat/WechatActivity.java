@@ -13,6 +13,7 @@ import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.ListDialog;
 import com.admin.shopkeeper.dialog.MutiSelectDialog;
+import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.entity.WechatBean;
 import com.gyf.barlibrary.ImmersionBar;
@@ -27,10 +28,7 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.edit_center)
-    EditText etCenter;
-    @BindView(R.id.edit_order)
-    EditText etOrder;
+
     @BindView(R.id.text_yuding)
     TextView tvYuding;
     @BindView(R.id.text_kuaican)
@@ -39,17 +37,29 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
     TextView tvWaimai;
     @BindView(R.id.text_saoma)
     TextView tvTandian;
-    @BindView(R.id.jifen_adding)
-    RadioGroup rgJifenAdding;
-    @BindView(R.id.jifen_exchange)
-    RadioGroup rgJifenExchange;
+    @BindView(R.id.item_qrcode)
+    RadioGroup rgQrCode;
+    @BindView(R.id.item_rate)
+    EditText etRate;
+    @BindView(R.id.text_weixin)
+    TextView tvFunctions;
+    @BindView(R.id.text_day)
+    TextView tvDays;
+    @BindView(R.id.text_type)
+    TextView tvType;
+
 
     String yuding = "";
     String kuaican = "";
     String waimai = "";
     String tandian = "";
+    String function = "";
+    int days = 0;
+    String foods = "";
 
     List<MutiBean> selectTypeStr = new ArrayList<>();
+    List<MutiBean> selectFunctionsStr = new ArrayList<>();
+    List<MutiBean> selectFoodsStr = new ArrayList<>();
 
     @Override
     protected void initPresenter() {
@@ -78,25 +88,98 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
         selectTypeStr.add(new MutiBean("团购(商品)券", false, 4));
         selectTypeStr.add(new MutiBean("无", false, 5));
 
+
+        selectFunctionsStr.add(new MutiBean("预定", false, 1));
+        selectFunctionsStr.add(new MutiBean("扫码点餐", false, 2));
+        selectFunctionsStr.add(new MutiBean("自助点餐", false, 3));
+        selectFunctionsStr.add(new MutiBean("远程排队", false, 5));
+
+        selectFoodsStr.add(new MutiBean("只预定桌位", false, 1));
+        selectFoodsStr.add(new MutiBean("预定点餐", false, 2));
+
         presenter.getData();
     }
 
 
     @OnClick(R.id.btn_save)
     public void saveClick() {
-        String centerStr = etCenter.getText().toString().trim();
-        if (TextUtils.isEmpty(centerStr)) {
-            showToast("请输入个人中心");
+        String rateStr = etRate.getText().toString();
+        if (TextUtils.isEmpty(rateStr)) {
+            showToast("请输入微信预定预付比例");
+            return;
+        }
+        if(days < 3){
+            showToast("请选择微信提前预定天数");
             return;
         }
 
-        String orderStr = etOrder.getText().toString().trim();
-        if (TextUtils.isEmpty(centerStr)) {
-            showToast("请输入微信下单");
-            return;
-        }
+        int qeCodePay = ((RadioButton) rgQrCode.getChildAt(0)).isChecked() ? 1 : 0;
 
-        presenter.save(centerStr, orderStr, ((RadioButton) rgJifenAdding.getChildAt(0)).isChecked() ? 1 : 0, ((RadioButton) rgJifenExchange.getChildAt(0)).isChecked() ? 1 : 0, yuding, waimai, kuaican, tandian);
+        presenter.save(days, rateStr, qeCodePay, function, foods, yuding, waimai, kuaican, tandian);
+    }
+
+    @OnClick(R.id.text_day)
+    public void daysClick() {
+        List<String> types = new ArrayList<>();
+        types.add("3天");
+        types.add("4天");
+        types.add("5天");
+        types.add("6天");
+        types.add("7天");
+        types.add("8天");
+
+        SingleSelectDialog.Builder builder = new SingleSelectDialog.Builder(this, R.style.OrderDialogStyle);
+        builder.setTitle("微信提前预定天数");
+        builder.setReasons(types);
+        builder.setButtonClick(new SingleSelectDialog.OnButtonClick() {
+
+            @Override
+            public void onOk(String text, int position) {
+                tvDays.setText(text);
+                days = position + 3;
+            }
+
+            @Override
+            public void onCancel() {
+                days = 0;
+                tvType.setText("");
+            }
+        });
+        builder.creater().show();
+    }
+
+    @OnClick(R.id.text_weixin)
+    public void functionClick() {
+        MutiSelectDialog.Builder builder = new MutiSelectDialog.Builder(this, R.style.OrderDialogStyle);
+        builder.setTitle("微信功能");
+        builder.setReasons(selectFunctionsStr);
+        builder.setSelect(function);
+        builder.setButtonClick(new MutiSelectDialog.OnButtonClick() {
+
+            @Override
+            public void onOk(String text, String value) {
+                tvFunctions.setText(text);
+                function = value;
+            }
+        });
+        builder.creater().show();
+    }
+
+    @OnClick(R.id.text_type)
+    public void foodClick() {
+        MutiSelectDialog.Builder builder = new MutiSelectDialog.Builder(this, R.style.OrderDialogStyle);
+        builder.setTitle("预定类型");
+        builder.setReasons(selectFoodsStr);
+        builder.setSelect(foods);
+        builder.setButtonClick(new MutiSelectDialog.OnButtonClick() {
+
+            @Override
+            public void onOk(String text, String value) {
+                tvType.setText(text);
+                foods = value;
+            }
+        });
+        builder.creater().show();
     }
 
     @OnClick(R.id.ll_yuding)
@@ -118,8 +201,6 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
     public void tandianClick() {
         showSelectDialog("扫码点餐", tandian);
     }
-
-
 
     private void showSelectDialog(String title, String selectText) {
         MutiSelectDialog.Builder builder = new MutiSelectDialog.Builder(this, R.style.OrderDialogStyle);
@@ -175,16 +256,41 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
 
     @Override
     public void success(WechatBean bean) {
-        etCenter.setText(bean.getPersonCenter() + "");
-        etOrder.setText(bean.getWeixinOrder() + "");
+        etRate.setText(String.valueOf(bean.getPrepaid()));
+        if (bean.getQrcodePay().equals("0")) {
+            ((RadioButton) rgQrCode.getChildAt(0)).setChecked(true);
+        } else {
+            ((RadioButton) rgQrCode.getChildAt(1)).setChecked(true);
+        }
 
-        etCenter.setSelection(etCenter.length());
-        etOrder.setSelection(etOrder.length());
+        tvDays.setText(bean.getDays() + "天");
 
         yuding = bean.getWeixinYuding();
         kuaican = bean.getWeixinKuaican();
         waimai = bean.getWeixinWaimai();
         tandian = bean.getTandian();
+        function = bean.getFunctions();
+        foods = bean.getFoodOrDes();
+
+        String functionStr = "";
+        for (MutiBean mutiBean : selectFunctionsStr) {
+            if (function.contains(mutiBean.getValue() + "")) {
+                functionStr += mutiBean.getText() + ",";
+            }
+        }
+        if (!TextUtils.isEmpty(functionStr)) {
+            tvFunctions.setText(functionStr.substring(0, functionStr.length() - 1));
+        }
+
+        String foodStr = "";
+        for (MutiBean mutiBean : selectFoodsStr) {
+            if (foods.contains(mutiBean.getValue() + "")) {
+                foodStr += mutiBean.getText() + ",";
+            }
+        }
+        if (!TextUtils.isEmpty(foodStr)) {
+            tvType.setText(foodStr.substring(0, foodStr.length() - 1));
+        }
 
         String yudingStr = "";
         String kuaicanStr = "";
@@ -215,17 +321,6 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
         }
         if (!TextUtils.isEmpty(tandianStr)) {
             tvTandian.setText(tandianStr.substring(0, tandianStr.length() - 1));
-        }
-
-        if (bean.getJifenAdding().equals("1")) {
-            ((RadioButton) rgJifenAdding.getChildAt(0)).setChecked(true);
-        } else {
-            ((RadioButton) rgJifenAdding.getChildAt(1)).setChecked(true);
-        }
-        if (bean.getJifenExchange().equals("1")) {
-            ((RadioButton) rgJifenExchange.getChildAt(0)).setChecked(true);
-        } else {
-            ((RadioButton) rgJifenExchange.getChildAt(1)).setChecked(true);
         }
     }
 }

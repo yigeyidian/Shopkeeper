@@ -60,11 +60,8 @@ public class DeskopenPresenter extends BasePresenter<IDeskopenView> {
                     if (stringModel.getCode().equals("1")) {
                         ChainBean[] beens = new Gson().fromJson(stringModel.getResult(), ChainBean[].class);
                         iView.chainsuccess(Arrays.asList(beens));
-                    } else {
-                        iView.error("加载失败");
                     }
                 }, throwable -> {
-                    iView.error("加载失败");
                 });
     }
 }

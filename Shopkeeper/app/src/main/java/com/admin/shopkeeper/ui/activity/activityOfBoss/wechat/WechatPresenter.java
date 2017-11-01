@@ -27,11 +27,11 @@ public class WechatPresenter extends BasePresenter<IWechatView> {
     }
 
 
-    public void save(String personCenter, String weixinOrder, int jifenAdding, int jifenExchange, String yuding, String waimai, String kuaican, String tandian) {
+    public void save(int days, String prepaid, int qrCodePay, String functions, String foodOrDes, String yuding, String waimai, String kuaican, String tandian) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .saveWechat("2", personCenter, weixinOrder, jifenAdding, jifenExchange, yuding, waimai, kuaican, tandian, App.INSTANCE().getShopID())
+                .saveWechat2("7", days, prepaid, qrCodePay, functions, foodOrDes, yuding, waimai, kuaican, tandian, App.INSTANCE().getShopID())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -52,7 +52,7 @@ public class WechatPresenter extends BasePresenter<IWechatView> {
         DialogUtils.showDialog(context, "数据获取中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getWechat("1", App.INSTANCE().getShopID())
+                .getWechat("6", App.INSTANCE().getShopID())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -62,11 +62,11 @@ public class WechatPresenter extends BasePresenter<IWechatView> {
                         WechatBean bean = new Gson().fromJson(stringModel.getResult(), WechatBean.class);
                         iView.success(bean);
                     } else {
-                        iView.error("保存失败");
+                        iView.error("加载失败");
                     }
                 }, throwable -> {
                     DialogUtils.hintDialog();
-                    iView.error("保存失败");
+                    iView.error("加载失败");
                 });
     }
 }

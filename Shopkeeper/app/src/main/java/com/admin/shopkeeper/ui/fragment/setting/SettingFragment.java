@@ -26,7 +26,9 @@ import com.admin.shopkeeper.ui.activity.activityOfBoss.returncause.ReturnCauseAc
 import com.admin.shopkeeper.ui.activity.activityOfBoss.sale.SaleActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.shopPermissionManage.ShopPermissionManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.staffManager.StaffManageActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.wechat.WechatActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.weight.WeightActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.wxsetting.WXSettingActivity;
 import com.admin.shopkeeper.ui.activity.login.LoginActivity;
 import com.admin.shopkeeper.utils.ToastUtils;
 import com.gyf.barlibrary.ImmersionBar;
@@ -122,6 +124,18 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements I
     @OnClick(R.id.basic_desktype)
     public void desktypeClick() {
         startActivity(DeskTypeActivity.class);
+    }
+
+    @OnClick(R.id.market_weixin)
+    public void wechatClick() {
+        Intent intent = new Intent(getActivity(), WechatActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.ll_wxsetting)
+    public void wechat2Click() {
+        Intent intent = new Intent(getActivity(), WXSettingActivity.class);
+        startActivity(intent);
     }
 
 

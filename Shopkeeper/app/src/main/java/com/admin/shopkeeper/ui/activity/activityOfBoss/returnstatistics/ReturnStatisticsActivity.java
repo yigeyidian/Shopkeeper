@@ -77,7 +77,7 @@ public class ReturnStatisticsActivity extends BaseActivity<ReturnStatistcsPresen
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-        toolbar.setTitle("退菜统计报表");
+        toolbar.setTitle("退菜统计详细");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 

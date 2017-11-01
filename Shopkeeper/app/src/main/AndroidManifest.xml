@@ -305,16 +305,36 @@
         <activity android:name=".ui.activity.recharge.RechargeActivity" />
         <activity android:name=".ui.activity.rechargeedit.RechargeEditActivity" />
         <activity android:name=".ui.activity.rechargedetail.RechargeDetailActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.shopcollection.ShopCollectionActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.returnstatistics.ReturnStatisticsActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.collectiondetail.CollectionDetailActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.jion.JionActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.jiondetail.JionDetailActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.free.FreeActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.freedetail.FreeDetailActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.deskopen.DeskOpenActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.salestatistics.SaleStatisticsActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.giftstatistics.GiftStatisticsActivity"></activity>
+        <activity
+            android:name=".ui.activity.activityOfBoss.shopcollection.ShopCollectionActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.returnstatistics.ReturnStatisticsActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.collectiondetail.CollectionDetailActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.jion.JionActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.jiondetail.JionDetailActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.free.FreeActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.freedetail.FreeDetailActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.deskopen.DeskOpenActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.salestatistics.SaleStatisticsActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.giftstatistics.GiftStatisticsActivity"
+            android:theme="@style/BossTheme" />
         <activity
             android:name=".ui.activity.activityOfBoss.rechargeTranscation.RechargeTranscationActivity"
             android:theme="@style/BossTheme"
@@ -323,11 +343,39 @@
             android:name=".ui.activity.activityOfBoss.rechargeDetail.RechargeDetailActivity"
             android:theme="@style/BossTheme"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".ui.activity.activityOfBoss.memberVolumeAnalysis.MemberVolumeAnalysisActivity"/>
-        <activity android:name=".ui.activity.activityOfBoss.memberconsumeDetails.MemberConsumeDetailActivity"/>
-        <activity android:name=".ui.activity.activityOfBoss.integralTransactionDetail.IntegralTransactionDetailActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.couponDetailTable.CouponDetailTableActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.rechargeTransactionItemDetail.RechargeTranscationItemDetailActivity" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.memberVolumeAnalysis.MemberVolumeAnalysisActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.memberconsumeDetails.MemberConsumeDetailActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.integralTransactionDetail.IntegralTransactionDetailActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.couponDetailTable.CouponDetailTableActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.rechargeTransactionItemDetail.RechargeTranscationItemDetailActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.integralTransactionItemDetail.IntegralTransactionItemDetailActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.orderManage.OrderManageActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.orderManageDetail.OrderManageDetailActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.sensitiveOpearation.SensitiveOpearationActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.sensitiveOpearationDetail.SensitiveDetailActivity"
+            android:theme="@style/BossTheme" />
+        <activity android:name=".ui.activity.activityOfBoss.mansong.MansongActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.mansongedit.MansongEditActivity" />
+        <activity android:name=".ui.activity.activityOfBoss.wxsetting.WXSettingActivity"></activity>
     </application>
 
 </manifest>

@@ -627,6 +627,7 @@ public interface ShopkeeperApi {
             @Field("type") String type,
             @Field("BILLID") String billId,
             @Field("IPADDRESS") String ipAddress);
+
     //修改打印状态
    /* @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortPrinterManager.ashx")
@@ -1421,15 +1422,22 @@ public interface ShopkeeperApi {
     /**
      * 获取优惠券
      *
-     * @param type   1
+     * @param type   5
      * @param shopId
+     * @param kName 模糊查询 卡券名称  如果查看全部不需要传值
+     * @param leiBie 如果查看全部不需要传值 1 满送券 2代金券  3商品券 4团购券   查看全部不需要传入值
      * @return
      */
     @FormUrlEncoded
-    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "IntergialCounts.ashx")
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerchantsOrderManagerASHX.ashx")
     Observable<StringModel> getCouponInfo(
             @Field("Type") String type,
-            @Field("RESTAURANTID") String shopId);
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("order") String order,
+            @Field("KName") String kName,
+            @Field("LeiBie") String leiBie,
+            @Field("ShangJiaID") String shopId);
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "IntergialCounts.ashx")
@@ -1591,6 +1599,21 @@ public interface ShopkeeperApi {
             @Field("WeiXinOrder") String weiXinOrder,
             @Field("EnableCenter") int jifenAdding,
             @Field("EnableOrder") int jifenExchange,
+            @Field("WeiXinYuDin") String weiXinYuDin,
+            @Field("WeiXinWaiMai") String weiXinWaiMai,
+            @Field("WeiXinKuaiCan") String weiXinKuaiCan,
+            @Field("TanDian") String tanDian,
+            @Field("RESTAURANTID") String shopId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "WeiXinJiFen.ashx")
+    Observable<StringModel> saveWechat2(
+            @Field("type") String type,
+            @Field("Days") int days,
+            @Field("Prepaid") String prepaid,
+            @Field("QrCodePay") int qrCodePay,
+            @Field("Functions") String functions,
+            @Field("FoodOrDes") String foodOrDes,
             @Field("WeiXinYuDin") String weiXinYuDin,
             @Field("WeiXinWaiMai") String weiXinWaiMai,
             @Field("WeiXinKuaiCan") String weiXinKuaiCan,
@@ -1814,7 +1837,8 @@ public interface ShopkeeperApi {
             @Field("DataBegin") String dataBegin,
             @Field("DataEdn") String dataEdn,
             @Field("ShangJiaID") String shangJiaID
-            );
+    );
+
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
     Observable<StringModel> getDetail(
@@ -1826,4 +1850,79 @@ public interface ShopkeeperApi {
             @Field("Time1") String dataEdn,
             @Field("Uid") String uid,
             @Field("Rid") String shangJiaID);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerchantsOrderManagerASHX.ashx")
+    Observable<StringModel> getOrderManage(
+            @Field("Type") String type,
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("order") String order,
+            @Field("DataBegin") String dataBegin,
+            @Field("DataEdn") String dataEdn,
+            @Field("TimeBegin") String timeBegin,
+            @Field("TimeEdn") String timeEdn,
+            @Field("ShangJiaID") String shangJiaID,
+            @Field("SelectType") int selectType);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerchantsOrderManagerASHX.ashx")
+    Observable<StringModel> getOrderManageDetail(
+            @Field("Type") String type,
+            @Field("order") String order,
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("BILLID") String billId
+    );
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerchantsOrderManagerASHX.ashx")
+    Observable<StringModel> getSensitiveopearation(
+            @Field("Type") String type,
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("order") String order,
+            @Field("DataBegin") String dataBegin,
+            @Field("DataEdn") String dataEdn,
+            @Field("TimeBegin") String timeBegin,
+            @Field("TimeEdn") String timeEdn,
+            @Field("ShangJiaID") String shangJiaID,
+            @Field("MingGan") int sensitiveType,
+            @Field("SelectType") int selectType);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerchantsOrderManagerASHX.ashx")
+    Observable<StringModel> getSensitiveopearationDetail(
+            @Field("Type") String type,
+            @Field("BILLID") String billId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "WeiXinJiFen.ashx")
+    Observable<StringModel> getMansong(
+            @Field("Type") String type,
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("Product") String Product,
+            @Field("RESTAURANTID") String shopId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "WeiXinJiFen.ashx")
+    Observable<StringModel> editMansong(
+            @Field("Type") String type,
+            @Field("Guid") String guid,
+            @Field("Name") String name,
+            @Field("TiaoJian") String tiaoJian,
+            @Field("JinEr") String jinEr,
+            @Field("Btime") String btime,
+            @Field("Etime") String etime,
+            @Field("Apply") int apply,
+            @Field("IsBegin") int isBegin,
+            @Field("RESTAURANTID") String shopId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "WeiXinJiFen.ashx")
+    Observable<StringModel> deleteMansong(
+            @Field("Type") String type,
+            @Field("Guid") String guid,
+            @Field("RESTAURANTID") String shopId);
 }

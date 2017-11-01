@@ -7,10 +7,12 @@ import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseFragment;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.couponManage.CouponManageActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.mansong.MansongActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.memberLevelManage.MemberLevelManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.memberManager.MemberManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.rechargeManage.RechargeManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.wechat.WechatActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.wxsetting.WXSettingActivity;
 
 import butterknife.OnClick;
 
@@ -39,11 +41,13 @@ public class MarketFragment extends BaseFragment<MarketPresenter> implements IMa
     public void setMemberLevelManageClick() {
         startActivity(MemberLevelManageActivity.class);
     }
+
     //会员交易明细
     @OnClick(R.id.member_manage_ll)
     public void setMemberManageClick() {
         startActivity(MemberManageActivity.class);
     }
+
     //充值方案管理
     @OnClick(R.id.market_recharge_manage_ll)
     public void setRechargeManageClick() {
@@ -74,10 +78,21 @@ public class MarketFragment extends BaseFragment<MarketPresenter> implements IMa
         startActivity(intent);
     }
 
-    @OnClick(R.id.market_weixin)
-    public void wechatClick(){
-        Intent intent = new Intent(getActivity(), WechatActivity.class);
-        startActivity(intent);
+//    @OnClick(R.id.market_weixin)
+//    public void wechatClick() {
+//        Intent intent = new Intent(getActivity(), WechatActivity.class);
+//        startActivity(intent);
+//    }
+//
+//    @OnClick(R.id.market_weixin_setting)
+//    public void wechat2Click() {
+//        Intent intent = new Intent(getActivity(), WXSettingActivity.class);
+//        startActivity(intent);
+//    }
+
+    @OnClick(R.id.market_ll_mansong)
+    public void mansongClick() {
+        startActivity(MansongActivity.class);
     }
 
 

@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -21,12 +20,10 @@ import android.widget.TextView;
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
-import com.admin.shopkeeper.db.AppDbHelper;
 import com.admin.shopkeeper.entity.BossUserInfo;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.my.MyActivity;
-import com.admin.shopkeeper.ui.activity.home.HomeActivity;
 import com.admin.shopkeeper.ui.activity.login.LoginActivity;
-import com.admin.shopkeeper.ui.fragment.basic.BasicFragment;
+import com.admin.shopkeeper.ui.fragment.bossOrder.BossOrderFragment;
 import com.admin.shopkeeper.ui.fragment.market.MarketFragment;
 import com.admin.shopkeeper.ui.fragment.setting.SettingFragment;
 import com.admin.shopkeeper.ui.fragment.home.HomeFragment;
@@ -131,7 +128,7 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
                         fragment = new StatementFragment();
                         break;
                     case 2:
-                        fragment = new BasicFragment();
+                        fragment = new BossOrderFragment();
                         break;
                     case 3:
                         fragment = new MarketFragment();
@@ -324,7 +321,11 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(LoginActivity.class);
+                        SPUtils.getInstance().put(SPUtils.PREFERENCE_LOGIN, false);
+                        SPUtils.getInstance().put(SPUtils.PREFERENCE_USER, "");
+                        Intent intent = new Intent(BossMainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        App.INSTANCE().removeAlias(App.INSTANCE().getShopID(), "PHONE");
                         finish();
                     }
                 });

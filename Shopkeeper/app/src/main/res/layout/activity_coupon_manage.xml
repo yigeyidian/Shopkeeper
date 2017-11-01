@@ -48,7 +48,15 @@
             android:gravity="center"
             android:paddingRight="@dimen/_32sdp"
             android:text="满足金额" />
-
+        <!--<Spinner
+            android:id="@+id/coupon_manage_select"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_item"
+            android:layout_marginRight="@dimen/_32sdp"
+            android:text="全部"
+             />-->
         <TextView
             android:id="@+id/coupon_manage_select"
             android:layout_width="0dp"
@@ -72,37 +80,37 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/_32sdp"
-            android:text="数量"
+            android:gravity="center"
+            android:paddingLeft="@dimen/_30sdp"
+            android:text="券类别"
             android:textColor="#888888"
-            android:textSize="@dimen/_32ssp" />
+            android:textSize="@dimen/_30ssp" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:text="名字"
+            android:gravity="center"
+            android:text="券名称"
             android:textColor="#888888"
-            android:textSize="@dimen/_32ssp" />
+            android:textSize="@dimen/_30ssp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="优惠金额"
+            android:layout_weight="1.5"
+            android:gravity="center"
+            android:text="结束时间"
             android:textColor="#888888"
-            android:textSize="@dimen/_32ssp" />
+            android:textSize="@dimen/_30ssp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="满足金额"
+            android:layout_weight="1.5"
+            android:gravity="center"
+            android:text="操作人"
             android:textColor="#888888"
-            android:textSize="@dimen/_32ssp" />
+            android:textSize="@dimen/_30ssp" />
 
 
     </LinearLayout>
