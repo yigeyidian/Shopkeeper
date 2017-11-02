@@ -230,8 +230,16 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
             if (id == ((RadioButton) radioGroup.getChildAt(0)).getId() ||
                     id == ((RadioButton) radioGroup.getChildAt(1)).getId()) {
                 llProduct.setVisibility(View.GONE);
+            } else if (id == ((RadioButton) radioGroup.getChildAt(2)).getId()) {
+                llProduct.setVisibility(View.VISIBLE);
+                adapter = new ProductAdapter(AddCouponActivity.this);
+                spinner.setAdapter(adapter);
+                presenter.getProductData();
             } else {
                 llProduct.setVisibility(View.VISIBLE);
+                adapter = new ProductAdapter(AddCouponActivity.this);
+                spinner.setAdapter(adapter);
+                presenter.getMealData();
             }
         });
 
@@ -240,9 +248,6 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
         useTypes.add(new MutiBean("快餐", false, 4));
         useTypes.add(new MutiBean("扫码点餐", false, 5));
 
-        adapter = new ProductAdapter(AddCouponActivity.this);
-        spinner.setAdapter(adapter);
-        presenter.getProductData();
     }
 
     @Override
@@ -529,35 +534,35 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
 
     public GuizeBean getGuize(RadioGroup radioGroup, EditText editText, TextView tvSart, TextView tvEnd) {
         GuizeBean bean = new GuizeBean();
-
+        String valueStr = editText.getText().toString();
+        String startStr = tvSart.getText().toString();
+        String endStr = tvEnd.getText().toString();
         if (((RadioButton) radioGroup.getChildAt(0)).isChecked()) {
             bean.setType("1");
         } else if (((RadioButton) radioGroup.getChildAt(1)).isChecked()) {
             bean.setType("2");
         } else if (((RadioButton) radioGroup.getChildAt(2)).isChecked()) {
             bean.setType("3");
-        } else {
-            showToast("请选择条件类型");
+        } else if (!TextUtils.isEmpty(valueStr) || !TextUtils.isEmpty(startStr) || !TextUtils.isEmpty(endStr)) {
+            showToast("请选择对应条件类型");
             return null;
         }
 
-        String valueStr = editText.getText().toString();
-        if (TextUtils.isEmpty(valueStr)) {
-            showToast("请输入条件");
+
+        if (TextUtils.isEmpty(valueStr) && (!TextUtils.isEmpty(startStr) || !TextUtils.isEmpty(endStr)|| !TextUtils.isEmpty(bean.getType()))) {
+            showToast("请输入对应条件");
             return null;
         }
         bean.setValue(valueStr);
 
-        String startStr = tvSart.getText().toString();
-        if (TextUtils.isEmpty(startStr)) {
-            showToast("请选择开始时间");
+        if (TextUtils.isEmpty(startStr) && (!TextUtils.isEmpty(valueStr) || !TextUtils.isEmpty(endStr)|| !TextUtils.isEmpty(bean.getType()))) {
+            showToast("请选择对应开始时间");
             return null;
         }
         bean.setStart(startStr);
 
-        String endStr = tvEnd.getText().toString();
-        if (TextUtils.isEmpty(endStr)) {
-            showToast("请选择结束时间");
+        if (TextUtils.isEmpty(endStr) && (!TextUtils.isEmpty(valueStr) || !TextUtils.isEmpty(startStr)|| !TextUtils.isEmpty(bean.getType()))) {
+            showToast("请选择对应结束时间");
             return null;
         }
         bean.setEnd(endStr);
@@ -572,15 +577,16 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
         bean.setValue("");
 
         String startStr = tvSart.getText().toString();
-        if (TextUtils.isEmpty(startStr)) {
-            showToast("请选择开始时间");
+        String endStr = tvEnd.getText().toString();
+        if (!TextUtils.isEmpty(endStr) && TextUtils.isEmpty(startStr)) {
+            showToast("请选择对应开始时间");
             return null;
         }
         bean.setStart(startStr);
 
-        String endStr = tvEnd.getText().toString();
-        if (TextUtils.isEmpty(endStr)) {
-            showToast("请选择结束时间");
+
+        if (!TextUtils.isEmpty(startStr) && TextUtils.isEmpty(endStr)) {
+            showToast("请选择对应结束时间");
             return null;
         }
         bean.setEnd(endStr);

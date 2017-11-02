@@ -57,7 +57,7 @@ public class FreeDetailActivity extends BaseActivity<FreeDetailPresenter> implem
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-        toolbar.setTitle("交接班报表详情");
+        toolbar.setTitle("优惠明细详情");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 

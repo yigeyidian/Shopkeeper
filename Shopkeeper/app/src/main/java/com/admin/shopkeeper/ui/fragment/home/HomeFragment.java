@@ -73,17 +73,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements IHomeVi
                 presenter.getData("9", "1999-01-01", Tools.formatNowDate("yyyy-MM-dd"));
             }
         });
-        CustomLinearLayoutManager  linearLayoutManager = new CustomLinearLayoutManager (getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity())
                 .marginResId(R.dimen._30sdp, R.dimen._1sdp)
                 .color(getResources().getColor(R.color.item_line_color))
                 .build());
         adapter = new SaleBussinessAdapter(getActivity());
         recyclerView.setAdapter(adapter);
-        CustomLinearLayoutManager  linearLayoutManager1 = new CustomLinearLayoutManager (getActivity());
-        recyclerView1.setLayoutManager(linearLayoutManager1);
-        linearLayoutManager1.setScrollEnabled(false);
+        recyclerView1.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView1.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity())
                 .marginResId(R.dimen._30sdp, R.dimen._1sdp)
                 .color(getResources().getColor(R.color.item_line_color))

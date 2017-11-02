@@ -55,4 +55,24 @@ public class GuaZhangDetailPresenter extends BasePresenter<IGuaZhangDetailView> 
                     iView.error("加载失败");
                 });
     }
+    public void jieZhang(GuazhangDetailBean bean) {
+        DialogUtils.showDialog(context, "加载中...");
+        RetrofitHelper.getInstance()
+                .getApi()
+                .guazhangDetailOfBill("6", bean.getBillId())
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if (stringModel.getCode().equals("1")) {
+                        iView.success("结账成功");
+                    } else {
+                        iView.error("加载失败");
+                    }
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    iView.error("加载失败");
+                });
+    }
 }

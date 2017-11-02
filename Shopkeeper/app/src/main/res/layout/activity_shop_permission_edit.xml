@@ -6,7 +6,7 @@
 
     <include layout="@layout/boss_common_toolbar" />
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none">
@@ -599,5 +599,5 @@
                      android:layout_marginRight="@dimen/_30sdp" />
              </LinearLayout>
          </LinearLayout>-->
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

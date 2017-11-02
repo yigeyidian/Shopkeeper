@@ -79,13 +79,14 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
                 .titleBar(toolbar, true)
                 .init();
 
-        toolbar.setTitle("微信规则设置");
+        toolbar.setTitle("微信管理");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
         selectTypeStr.add(new MutiBean("积分兑换", false, 1));
         selectTypeStr.add(new MutiBean("优惠券", false, 2));
         selectTypeStr.add(new MutiBean("团购(商品)券", false, 4));
+
         selectTypeStr.add(new MutiBean("无", false, 5));
 
 
@@ -258,11 +259,11 @@ public class WechatActivity extends BaseActivity<WechatPresenter> implements IWe
     public void success(WechatBean bean) {
         etRate.setText(String.valueOf(bean.getPrepaid()));
         if (bean.getQrcodePay().equals("0")) {
-            ((RadioButton) rgQrCode.getChildAt(0)).setChecked(true);
-        } else {
             ((RadioButton) rgQrCode.getChildAt(1)).setChecked(true);
+        } else {
+            ((RadioButton) rgQrCode.getChildAt(0)).setChecked(true);
         }
-
+        days = bean.getDays();
         tvDays.setText(bean.getDays() + "天");
 
         yuding = bean.getWeixinYuding();

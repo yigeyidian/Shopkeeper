@@ -22,6 +22,11 @@ public class GuazhangDetailAdapter extends BaseQuickAdapter<GuazhangDetailBean, 
     protected void convert(BaseViewHolder helper, GuazhangDetailBean item) {
         helper.setText(R.id.item_table, item.getTableName());
         helper.setText(R.id.item_money, item.getChargeMoney()+"");
+        if(item.getUserIdGuaType().equals("0")){
+            helper.setText(R.id.item_guazhang_type,"未结账");
+        }else{
+            helper.setText(R.id.item_guazhang_type, "已结账");
+        }
         helper.setText(R.id.item_date, item.getInputTime());
     }
 }

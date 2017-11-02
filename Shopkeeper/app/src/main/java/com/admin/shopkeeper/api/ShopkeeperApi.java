@@ -932,6 +932,11 @@ public interface ShopkeeperApi {
             @Field("type") String type,
             @Field("GUID") String guid,
             @Field("RESTAURANTID") String restaurantId);
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "GuaBillManager.ashx")
+    Observable<StringModel> guazhangDetailOfBill(
+            @Field("type") String type,
+            @Field("pid") String guid);
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "GuaBillManager.ashx")

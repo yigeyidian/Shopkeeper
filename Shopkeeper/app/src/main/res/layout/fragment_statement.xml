@@ -93,6 +93,7 @@
             android:id="@+id/basic_print"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_90sdp"
+            android:visibility="gone"
             android:background="@drawable/selector_item"
             android:orientation="horizontal">
 
@@ -120,7 +121,6 @@
                 android:src="@mipmap/list_icon_arrow_right" />
         </LinearLayout>
 
-        <View style="@style/LineHor2Style" />
         <!-- 交接班报表 -->
 
         <LinearLayout

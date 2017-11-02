@@ -34,13 +34,13 @@
 
         <TextView
             style="@style/SettingItemText2Style"
-            android:text="满送条件" />
+            android:text="满送条件金额" />
 
         <EditText
             android:id="@+id/item_tiaojian"
             android:inputType="number"
             style="@style/SettingItemEditStyle"
-            android:hint="请输入满送条件" />
+            android:hint="请输入满送条件金额" />
 
     </LinearLayout>
 
