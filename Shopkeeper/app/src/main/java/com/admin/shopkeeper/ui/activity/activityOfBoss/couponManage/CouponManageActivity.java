@@ -72,7 +72,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
     SwipeRefreshLayout refreshLayout;
     private CouponManager2Adapter adapter;
     private PopupWindow laheiPop;
-    List<CouponManageBean> data;
+    List<CouponManageBean> data = new ArrayList<>();
     private PopupWindow popupWindow;
     private String titleStr;
     private ArrayAdapter<String> arrayAdapter;
@@ -371,7 +371,10 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
 
     @Override
     public void success(List<CouponManageBean> couponManageBeanList) {
-        this.data = couponManageBeanList;
+        if(page == 1){
+            this.data.clear();
+        }
+        this.data.addAll(couponManageBeanList);
         adapter.setNewData(couponManageBeanList);
         refreshLayout.setRefreshing(false);
         if (couponManageBeanList.size() < 20) {
