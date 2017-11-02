@@ -1956,6 +1956,13 @@ public interface ShopkeeperApi {
             @Field("BILLID") String billId);
 
     @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerchantsOrderManagerASHX.ashx")
+    Observable<StringModel> getCouponDetail(
+            @Field("Type") String type,
+            @Field("pid") String pid,
+            @Field("ShangJiaID") String shopId);
+
+    @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "WeiXinJiFen.ashx")
     Observable<StringModel> getMansong(
             @Field("Type") String type,

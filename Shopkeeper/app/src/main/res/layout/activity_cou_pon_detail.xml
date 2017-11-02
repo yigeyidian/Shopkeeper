@@ -14,231 +14,243 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <View
-                style="@style/LineHorStyle"
-                android:layout_marginTop="@dimen/_32sdp" />
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:orientation="vertical"
-                android:padding="@dimen/_32sdp">
+                android:paddingBottom="@dimen/_50sdp">
+
+                <View
+                    style="@style/LineHorStyle"
+                    android:layout_marginTop="@dimen/_32sdp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_32sdp">
 
-                    <TextView
-                        android:layout_width="@dimen/_130sdp"
-                        android:layout_height="wrap_content"
-                        android:text="卡号"
-                        android:textColor="#888888"
-                        android:textSize="@dimen/_32ssp" />
-
-                    <TextView
-                        android:id="@+id/tv_pici"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_65sdp"
-                        android:text="75代100"
-                        android:textColor="#333333"
-                        android:textSize="@dimen/_32sdp" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="@dimen/_130sdp"
+                            android:layout_height="wrap_content"
+                            android:text="卡号"
+                            android:textColor="#888888"
+                            android:textSize="@dimen/_32ssp" />
+
+                        <TextView
+                            android:id="@+id/tv_pici"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_65sdp"
+                            android:text="75代100"
+                            android:textColor="#333333"
+                            android:textSize="@dimen/_32sdp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_24sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="@dimen/_130sdp"
+                            android:layout_height="wrap_content"
+                            android:text="名称"
+                            android:textColor="#888888"
+                            android:textSize="@dimen/_32ssp" />
+
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_65sdp"
+                            android:text="75代100"
+                            android:textColor="#333333"
+                            android:textSize="@dimen/_32sdp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_24sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="@dimen/_130sdp"
+                            android:layout_height="wrap_content"
+                            android:text="满足金额"
+                            android:textColor="#888888"
+                            android:textSize="@dimen/_32ssp" />
+
+                        <TextView
+                            android:id="@+id/tv_man"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_65sdp"
+                            android:text="75代100"
+                            android:textColor="#333333"
+                            android:textSize="@dimen/_32sdp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_24sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="@dimen/_130sdp"
+                            android:layout_height="wrap_content"
+                            android:text="赠送金额"
+                            android:textColor="#888888"
+                            android:textSize="@dimen/_32ssp" />
+
+                        <TextView
+                            android:id="@+id/tv_give"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_65sdp"
+                            android:text="75代100"
+                            android:textColor="#333333"
+                            android:textSize="@dimen/_32sdp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_24sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="@dimen/_130sdp"
+                            android:layout_height="wrap_content"
+                            android:text="兑换积分"
+                            android:textColor="#888888"
+                            android:textSize="@dimen/_32ssp" />
+
+                        <TextView
+                            android:id="@+id/tv_jifen"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_65sdp"
+                            android:text="75代100"
+                            android:textColor="#333333"
+                            android:textSize="@dimen/_32sdp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_24sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="@dimen/_130sdp"
+                            android:layout_height="wrap_content"
+                            android:text="数量"
+                            android:textColor="#888888"
+                            android:textSize="@dimen/_32ssp" />
+
+                        <TextView
+                            android:id="@+id/tv_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_65sdp"
+                            android:text="75代100"
+                            android:textColor="#333333"
+                            android:textSize="@dimen/_32sdp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_24sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="@dimen/_130sdp"
+                            android:layout_height="wrap_content"
+                            android:text="开始时间"
+                            android:textColor="#888888"
+                            android:textSize="@dimen/_32ssp" />
+
+                        <TextView
+                            android:id="@+id/tv_starttime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_65sdp"
+                            android:text="75代100"
+                            android:textColor="#333333"
+                            android:textSize="@dimen/_32sdp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_24sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="@dimen/_130sdp"
+                            android:layout_height="wrap_content"
+                            android:text="结束时间"
+                            android:textColor="#888888"
+                            android:textSize="@dimen/_32ssp" />
+
+                        <TextView
+                            android:id="@+id/tv_enttime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_65sdp"
+                            android:text="75代100"
+                            android:textColor="#333333"
+                            android:textSize="@dimen/_32sdp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <LinearLayout
+                <View style="@style/LineHorStyle" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/listview"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_24sdp"
-                    android:orientation="horizontal">
+                    android:layout_marginBottom="@dimen/_22sdp"
+                    android:layout_marginLeft="@dimen/_32sdp"
+                    android:layout_marginTop="@dimen/_32sdp"
+                    android:text="使用商家"
+                    android:textSize="@dimen/_32ssp" />
 
-                    <TextView
-                        android:layout_width="@dimen/_130sdp"
-                        android:layout_height="wrap_content"
-                        android:text="名称"
-                        android:textColor="#888888"
-                        android:textSize="@dimen/_32ssp" />
-
-                    <TextView
-                        android:id="@+id/tv_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_65sdp"
-                        android:text="75代100"
-                        android:textColor="#333333"
-                        android:textSize="@dimen/_32sdp" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_24sdp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="@dimen/_130sdp"
-                        android:layout_height="wrap_content"
-                        android:text="满足金额"
-                        android:textColor="#888888"
-                        android:textSize="@dimen/_32ssp" />
-
-                    <TextView
-                        android:id="@+id/tv_man"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_65sdp"
-                        android:text="75代100"
-                        android:textColor="#333333"
-                        android:textSize="@dimen/_32sdp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_24sdp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="@dimen/_130sdp"
-                        android:layout_height="wrap_content"
-                        android:text="赠送金额"
-                        android:textColor="#888888"
-                        android:textSize="@dimen/_32ssp" />
-
-                    <TextView
-                        android:id="@+id/tv_give"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_65sdp"
-                        android:text="75代100"
-                        android:textColor="#333333"
-                        android:textSize="@dimen/_32sdp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_24sdp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="@dimen/_130sdp"
-                        android:layout_height="wrap_content"
-                        android:text="兑换积分"
-                        android:textColor="#888888"
-                        android:textSize="@dimen/_32ssp" />
-
-                    <TextView
-                        android:id="@+id/tv_jifen"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_65sdp"
-                        android:text="75代100"
-                        android:textColor="#333333"
-                        android:textSize="@dimen/_32sdp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_24sdp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="@dimen/_130sdp"
-                        android:layout_height="wrap_content"
-                        android:text="数量"
-                        android:textColor="#888888"
-                        android:textSize="@dimen/_32ssp" />
-
-                    <TextView
-                        android:id="@+id/tv_amount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_65sdp"
-                        android:text="75代100"
-                        android:textColor="#333333"
-                        android:textSize="@dimen/_32sdp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_24sdp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="@dimen/_130sdp"
-                        android:layout_height="wrap_content"
-                        android:text="开始时间"
-                        android:textColor="#888888"
-                        android:textSize="@dimen/_32ssp" />
-
-                    <TextView
-                        android:id="@+id/tv_starttime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_65sdp"
-                        android:text="75代100"
-                        android:textColor="#333333"
-                        android:textSize="@dimen/_32sdp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_24sdp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="@dimen/_130sdp"
-                        android:layout_height="wrap_content"
-                        android:text="结束时间"
-                        android:textColor="#888888"
-                        android:textSize="@dimen/_32ssp" />
-
-                    <TextView
-                        android:id="@+id/tv_enttime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_65sdp"
-                        android:text="75代100"
-                        android:textColor="#333333"
-                        android:textSize="@dimen/_32sdp" />
-
-                </LinearLayout>
-
+                    android:layout_height="wrap_content" />
             </LinearLayout>
-
-            <View style="@style/LineHorStyle" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_22sdp"
-                android:layout_marginLeft="@dimen/_32sdp"
-                android:layout_marginTop="@dimen/_32sdp"
-                android:text="使用商家"
-                android:textSize="@dimen/_32ssp" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
 
         <LinearLayout
             android:layout_width="@dimen/_300sdp"

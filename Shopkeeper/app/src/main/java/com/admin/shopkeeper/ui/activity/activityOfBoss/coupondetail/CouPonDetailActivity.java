@@ -12,12 +12,15 @@ import android.widget.TextView;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.CouponManagerAdapter;
+import com.admin.shopkeeper.adapter.GuizeAdapter;
 import com.admin.shopkeeper.adapter.ShopAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.ShopSelectDialog;
 import com.admin.shopkeeper.entity.CouponManageBean;
+import com.admin.shopkeeper.entity.GuizeBean;
 import com.admin.shopkeeper.entity.ShopBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.addCoupon.AddCouponActivity;
+import com.admin.shopkeeper.weight.FullyLinearLayoutManager;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -48,10 +51,13 @@ public class CouPonDetailActivity extends BaseActivity<CouponDetailPresenter> im
     TextView tvPici;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.listview)
+    RecyclerView listView;
 
     private String titleStr;
     private CouponManageBean bean;
     private ShopAdapter adapter;
+    private GuizeAdapter guizeAdapter;
 
     @Override
     protected void initPresenter() {
@@ -77,12 +83,20 @@ public class CouPonDetailActivity extends BaseActivity<CouponDetailPresenter> im
 
         tvPici.setText(bean.getPiCi());
         tvName.setText(bean.getName());
-        tvMan.setText(bean.getSumPrice() + "");
-        tvGive.setText(bean.getPrice() + "");
-        tvJifen.setText(bean.getCode() + "");
+        tvMan.setText(String.valueOf(bean.getSumPrice()));
+        tvGive.setText(String.valueOf(bean.getPrice()));
+        tvJifen.setText(String.valueOf(bean.getCode()));
         tvStart.setText(bean.getBeginTime());
         tvEnd.setText(bean.getEndTime());
         tvAmount.setText(bean.getCounts());
+
+        listView.setLayoutManager(new LinearLayoutManager(this));
+        listView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
+                .marginResId(R.dimen._1sdp, R.dimen._1sdp)
+                .color(getResources().getColor(R.color.item_line_color))
+                .build());
+        guizeAdapter = new GuizeAdapter(R.layout.item_guize);
+        listView.setAdapter(guizeAdapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
@@ -93,6 +107,7 @@ public class CouPonDetailActivity extends BaseActivity<CouponDetailPresenter> im
         recyclerView.setAdapter(adapter);
 
         presenter.getShopDetail(bean);
+        presenter.getDetail(bean);
     }
 
     @OnClick(R.id.btn_edit)
@@ -111,11 +126,6 @@ public class CouPonDetailActivity extends BaseActivity<CouponDetailPresenter> im
     @OnClick(R.id.btn_delete)
     public void deleteClick() {
         presenter.deleteCoupon(bean.getPiCi());
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -177,5 +187,10 @@ public class CouPonDetailActivity extends BaseActivity<CouponDetailPresenter> im
     @Override
     public void shopdetail(List<ShopBean> shopBeen) {
         adapter.setNewData(shopBeen);
+    }
+
+    @Override
+    public void showDetail(List<GuizeBean> list) {
+        guizeAdapter.setNewData(list);
     }
 }
