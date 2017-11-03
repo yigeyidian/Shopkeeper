@@ -416,6 +416,8 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
     @Override
     public void error(String msg) {
         showFailToast(msg);
+        refreshLayout.setRefreshing(false);
+        adapter.loadMoreEnd();
     }
 
     @Override

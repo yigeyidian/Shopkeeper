@@ -36,6 +36,8 @@ public class SensitiveDetailActivity extends BaseActivity<SensitiveDetailPresent
     private String titleStr;
     @BindView(R.id.item_sensitive_id)
     TextView tvID;
+    @BindView(R.id.item_order_state)
+    TextView tvState;
     @BindView(R.id.item_sensitive_num)
     TextView tvNum;
     @BindView(R.id.item_sensitive_money)
@@ -72,6 +74,11 @@ public class SensitiveDetailActivity extends BaseActivity<SensitiveDetailPresent
         toolbar.setTitle("订单敏感操作详情");
 
         tvID.setText("订单号："+bean.getOrderNumber());
+        if(bean.getSensitiveState().equals("0")){
+            tvState.setText("撤销");
+        }else{
+            tvState.setText("反结账");
+        }
         tvNum.setText(bean.getTableNmae());
         tvTotal.setText(bean.getPice()+"");
         tvPerson.setText(bean.getUserName()+"");

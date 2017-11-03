@@ -412,6 +412,8 @@ public class RechargeTranscationActivity extends BaseActivity<RechargeTranscatio
     @Override
     public void error(String msg) {
         showFailToast(msg);
+        refreshLayout.setRefreshing(false);
+        adapter.loadMoreEnd();
     }
 
     @Override
