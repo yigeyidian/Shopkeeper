@@ -568,6 +568,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             String pStr = new Gson().toJson(pays);
 
             double result = getYinfuMoney();
+            double free = getYouhuiMoney() + weixinOrderBean.getYufupice() + weixinOrderBean.getYouhui();
 
             Log.i("ttt", "totleMoney:" + result);
 
@@ -575,17 +576,17 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             if (type == P3) {
                 presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                         memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "",
-                        getYouhuiMoney(), "4", guiId);
+                        free, "4", guiId);
             } else if (type == P4) {
                 presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                         memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
-                        , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", getYouhuiMoney(), "3", guiId);
+                        , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId);
             } else if (type == P6) {
                 presenter.rebill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
-                        , tStr, pStr, order.getType().equals("7") ? "7" : "4", getYouhuiMoney(), order.getBillid(), result);
+                        , tStr, pStr, order.getType().equals("7") ? "7" : "4", free, order.getBillid(), result);
             } else {
                 presenter.bill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
-                        , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), getYouhuiMoney(), "7", guiId);
+                        , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId);
             }
         }
     }
@@ -1305,16 +1306,20 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
 
         memberId = memberBean == null ? "" : memberBean.getId();
+
+        double free = getYouhuiMoney() + weixinOrderBean.getYufupice() + weixinOrderBean.getYouhui();
+
+
         if (type == P3) {
             presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                     memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", getYouhuiMoney(), "4", guiId);
+                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId);
         } else if (type == P4) {
             presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "", memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", getYouhuiMoney(), "3", guiId);
+                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId);
         } else {
             presenter.bill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), getYouhuiMoney(), "7", guiId);
+                    , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId);
         }
     }
 
