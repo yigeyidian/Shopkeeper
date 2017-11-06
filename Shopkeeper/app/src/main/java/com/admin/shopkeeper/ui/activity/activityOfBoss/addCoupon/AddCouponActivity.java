@@ -413,11 +413,11 @@ public class AddCouponActivity extends BaseActivity<AddCouponPresenter> implemen
             typeWaimai = 4;
         }
 
-        String limitStr = etLimit.getText().toString().trim();
+        /*String limitStr = etLimit.getText().toString().trim();
         if (TextUtils.isEmpty(limitStr)) {
             showToast("请输入金额限制");
             return;
-        }
+        }*/
         String maxStr = etMax.getText().toString().trim();
         if (TextUtils.isEmpty(maxStr)) {
             showToast("请输入最大购买数量");
