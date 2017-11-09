@@ -1,15 +1,13 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.salestatistics;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.saleStatisticsProduct;
 
 import android.content.Context;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
-import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.FoodEntity;
 import com.admin.shopkeeper.entity.SaleStatisticsBean;
-import com.admin.shopkeeper.entity.ShopCollectionBean;
+import com.admin.shopkeeper.entity.SaleStatisticsProductBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.IShopCollectionView;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
 
@@ -22,28 +20,25 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Administrator on 2017/8/24.
  */
 
-public class SaleStatisticsPresenter extends BasePresenter<ISaleStatisticsView> {
+public class SaleStatisticsProductPresenter extends BasePresenter<ISaleStatisticsProductView> {
 
-    public SaleStatisticsPresenter(Context context, ISaleStatisticsView iView) {
+    public SaleStatisticsProductPresenter(Context context, ISaleStatisticsProductView iView) {
         super(context, iView);
     }
 
-    public void getData(int page, String startDate, String endDate, String startTime, String endTime, int selectType, String productId,String productTypeId) {
+    public void getData(String startDate, String endDate, String startTime, String endTime, int selectType) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getSale("6", 20, page, "ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), productId,productTypeId, selectType)
+                .getProduct("23", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), selectType)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        String[] split = stringModel.getResult().split("\\^");
-                        SaleStatisticsBean[] beens = new Gson().fromJson(split[0], SaleStatisticsBean[].class);
-                        SaleStatisticsBean[] totle = new Gson().fromJson(split[1], SaleStatisticsBean[].class);
+                        SaleStatisticsProductBean[] beens = new Gson().fromJson(stringModel.getResult(), SaleStatisticsProductBean[].class);
                         iView.success(Arrays.asList(beens));
-                        iView.totle(Arrays.asList(totle));
                     } else {
                         iView.error("加载失败");
                     }

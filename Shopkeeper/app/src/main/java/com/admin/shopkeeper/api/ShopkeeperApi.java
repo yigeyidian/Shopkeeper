@@ -1847,6 +1847,16 @@ public interface ShopkeeperApi {
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> getProduct(
+            @Field("Type") String type,
+            @Field("DataBegin") String dataBegin,
+            @Field("DataEdn") String dataEdn,
+            @Field("TimeBegin") String timeBegin,
+            @Field("TimeEdn") String timeEdn,
+            @Field("ShangJiaID") String shangJiaID,
+            @Field("SelectType") int selectType);
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
     Observable<StringModel> getSale(
             @Field("Type") String type,
             @Field("pageSize") int pageSize,
@@ -1858,6 +1868,7 @@ public interface ShopkeeperApi {
             @Field("TimeEdn") String timeEdn,
             @Field("ShangJiaID") String shangJiaID,
             @Field("ProductID") String productID,
+            @Field("PRODUCTTYPEID") String productTypeID,
             @Field("SelectType") int selectType);
 
     @FormUrlEncoded

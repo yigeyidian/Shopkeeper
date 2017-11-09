@@ -1,5 +1,6 @@
 package com.admin.shopkeeper.adapter;
 
+import android.graphics.Color;
 import android.support.annotation.LayoutRes;
 
 import com.admin.shopkeeper.App;
@@ -20,13 +21,15 @@ public class SaleStatisticsAdapter extends BaseQuickAdapter<SaleStatisticsBean, 
 
     @Override
     protected void convert(BaseViewHolder helper, SaleStatisticsBean item) {
-        helper.setText(R.id.item_shop, App.INSTANCE().getShopName());
-        helper.setText(R.id.item_type, item.getProductTypeName());
-        helper.setText(R.id.item_id, item.getId());
-        helper.setText(R.id.item_name, item.getProductName());
-        helper.setText(R.id.item_count, String.valueOf(item.getCounts()));
-        helper.setText(R.id.item_money, "￥" + String.valueOf(item.getTotalPrice()));
-        helper.setText(R.id.item_free, "￥" + String.valueOf(item.getFreePrice()));
-        helper.setText(R.id.item_free_l, "￥" + String.valueOf(item.getChargeMoney()));
+
+            helper.setText(R.id.item_shop, App.INSTANCE().getShopName());
+            helper.setText(R.id.item_type, item.getProductTypeName());
+            helper.setText(R.id.item_id, item.getId());
+            helper.setText(R.id.item_name, item.getProductName());
+            helper.setText(R.id.item_count, String.valueOf(item.getCounts()));
+            helper.setText(R.id.item_money, "￥" + String.valueOf(item.getTotalPrice()));
+            helper.setText(R.id.item_free, "￥" + String.valueOf(item.getFreePrice()));
+            helper.setText(R.id.item_free_l, "￥" + String.valueOf(item.getChargeMoney()));
+
     }
 }
