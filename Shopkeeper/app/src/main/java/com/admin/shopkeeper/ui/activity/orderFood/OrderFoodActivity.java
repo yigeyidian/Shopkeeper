@@ -588,8 +588,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 entity.setPackageName(foodEntity.getPackageName());
                 entity.setFoodID(foodEntity.getProductID());//设置id；
                 entity.setNumber(1);//设置份数
-                entity.setPrice(foodEntity.getMemberPice());
-                entity.setOriginalPrice(foodEntity.getMemberPice());
+                entity.setPrice(Double.parseDouble(foodEntity.getPrice()));
+                entity.setOriginalPrice(Double.parseDouble(foodEntity.getPrice()));
                 if (!TextUtils.isEmpty(foodEntity.getProductShuXing()) && foodEntity.getProductShuXing().equals("1")) {
                     entity.setShowWeight(true);
                 }
@@ -687,7 +687,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     entity.setPackageName(foodEntity.getPackageName());
                     entity.setFoodID(foodEntity.getProductID());//设置id；
                     entity.setNumber(foodEntity.getNumber());//设置份数
-                    entity.setPrice(foodEntity.getMemberPice());
+                    entity.setPrice(Double.parseDouble(foodEntity.getPrice()));
                     entity.setUnit(foodEntity.getUnit());
 //                    if (foodEntity.getProductShuXing().equals("0")) {
 //                        entity.setKouWeis(AppDbHelper.INSTANCE().getKouWeis(App.INSTANCE().getShopID(), foodEntity.getProductID()));
@@ -695,7 +695,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
 //                    if (foodEntity.getProductShuXing().equals("1")) {
 //                        entity.setShowWeight(true);
 //                    }
-                    entity.setOriginalPrice(foodEntity.getMemberPice());
+                    entity.setOriginalPrice(Double.parseDouble(foodEntity.getPrice()));
 
                     if (!carts.contains(entity)) {
                         entity.setNumLayout(true);
@@ -755,9 +755,9 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     entity.setPackageName(foodEntity.getPackageName());
                     entity.setFoodID(foodEntity.getProductID());//设置id；
                     entity.setNumber(foodEntity.getNumber());//设置份数
-                    entity.setPrice(foodEntity.getMemberPice());
+                    entity.setPrice(Double.parseDouble(foodEntity.getPrice()));
                     entity.setUnit(foodEntity.getUnit());
-                    entity.setOriginalPrice(foodEntity.getMemberPice());
+                    entity.setOriginalPrice(Double.parseDouble(foodEntity.getPrice()));
                     if (foodEntity.getProductShuXing().equals("1")) {
                         entity.setShowWeight(true);
                     }
@@ -829,8 +829,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             dialog.setUnit(item.getUnit());
         }
         dialog.setTitle(item.getProductName());
-        dialog.setPrice(item.getMemberPice());
-        dialog.setOriginalPrice(item.getMemberPice());
+        dialog.setPrice(Double.parseDouble(item.getPrice()));
+        dialog.setOriginalPrice(Double.parseDouble(item.getPrice()));
 
         //        item.getTasteType();//口味 1。弹出口味   0.不弹出口
 //        item.getProductShuXing();//1是称斤 2是规格菜品 0是默认菜品
@@ -1193,8 +1193,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             entity.setNumber((int) detailFood.getAmmount());//设置份数
             foodEntity.setNumber(foodEntity.getNumber() + entity.getNumber());
         }
-        entity.setPrice(foodEntity.getMemberPice());
-        entity.setOriginalPrice(foodEntity.getMemberPice());
+        entity.setPrice(Double.parseDouble(foodEntity.getPrice()));
+        entity.setOriginalPrice(Double.parseDouble(foodEntity.getPrice()));
         entity.setGivingnum(detailFood.getGiving());
         entity.setNumLayout(true);
         if (foodEntity.getProductShuXing().equals("0")) {

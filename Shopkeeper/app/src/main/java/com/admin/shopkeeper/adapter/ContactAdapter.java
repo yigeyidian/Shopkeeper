@@ -130,7 +130,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             holder.tvUnit.setText(String.format(mContext.getString(R.string.string_unit), item.getUnit()));
         }
 
-        holder.tvPrice.setText(String.format(mContext.getString(R.string.string_money), item.getMemberPice()));
+        holder.tvPrice.setText(String.format(mContext.getString(R.string.string_money), Double.parseDouble(item.getPrice())));
 
         if (!item.getProductShuXing().equals("0")) { //1是称斤 2是规格菜品 0是默认菜品
             holder.clLayout.setVisibility(View.GONE);

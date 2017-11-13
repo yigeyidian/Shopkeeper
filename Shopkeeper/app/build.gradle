@@ -11,8 +11,8 @@ android {
         applicationId "com.admin.shopkeeper"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 17
-        versionName "1.16"
+        versionCode 19
+        versionName "1.18"
 
         vectorDrawables.useSupportLibrary = true
     }
