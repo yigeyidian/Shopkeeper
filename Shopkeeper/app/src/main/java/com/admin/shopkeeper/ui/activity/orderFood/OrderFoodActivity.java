@@ -62,6 +62,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.google.gson.Gson;
 import com.gyf.barlibrary.ImmersionBar;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
@@ -81,6 +83,7 @@ import timber.log.Timber;
 
 public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implements IOrderFoodView {
 
+    public static final int REQUEST_CODE = 5;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -107,6 +110,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
     AppCompatButton button;
     @BindView(R.id.quickBill)
     AppCompatButton btQuickBill;
+    @BindView(R.id.scanBill)
+    AppCompatButton btScanBill;
     @BindView(R.id.totalMoney)
     AppCompatTextView totalMoney;
     @BindView(R.id.bottomsheet)
@@ -139,7 +144,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         Intent intent;
         switch (type) {
             case P1:
-                Log.i("ttt","---"+tableEntity);
+                Log.i("ttt", "---" + tableEntity);
                 presenter.orderFood(App.INSTANCE().getShopID(),
                         tableEntity.getRoomTableID(), tableEntity.getBillID(), getInfo(), App.INSTANCE().getUser().getId(),
                         App.INSTANCE().getUser().getName(), tableEntity.getTableName(), tableEntity.getTableWareCount(), getTotal());
@@ -183,7 +188,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                         bottomSheet.dismissSheet();
                     }
                 } else if (App.INSTANCE().getUser().getOperaType().contains("2")) {
-                    presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", false);
+                    presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", false, false);
                 }
 
                 break;
@@ -273,7 +278,13 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 }
             }
         }
-        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", true);
+        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", true, false);
+    }
+
+    @OnClick(R.id.scanBill)
+    public void scanClick() {
+        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", getTotal(), "", "", "4", false, true);
+
     }
 
     private String getInfo() {
@@ -446,6 +457,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             case P5:
                 toolbar.setTitle("快餐");
                 btQuickBill.setVisibility(View.VISIBLE);
+                btScanBill.setVisibility(View.VISIBLE);
                 break;
             case P6:
                 toolbar.setTitle("预定点餐");
@@ -1009,6 +1021,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         badgeView.setBadgeGravity(Gravity.TOP | Gravity.END);
         button.setEnabled(carts.size() > 0);
         btQuickBill.setEnabled(carts.size() > 0);
+        btScanBill.setEnabled(carts.size() > 0);
         double total = 0;
         Map<Integer, Integer> map = new HashMap<>();
         int count = 0;
@@ -1324,16 +1337,20 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         presenter.bill(result, App.INSTANCE().getShopID(), "", money, 0, qStr
                 , tStr, pStr, payType, 1, money, "", 0, "4");
     }
-
+    String billId ;
     @Override
-    public void kuaisuSuccess(String result, double money, boolean isquick) {
-        if (!isquick) {
+    public void kuaisuSuccess(String result, double money, boolean isquick, boolean isScan) {
+        if (!isquick && !isScan) {
             Toasty.success(this, "下单成功", Toast.LENGTH_SHORT, true).show();
         }
         Intent intent;
         if (type == P5) {
             if (isquick) {
                 presenter.payWay(App.INSTANCE().getShopID(), result, money);
+            } else if (isScan) {
+                billId = result;
+                intent = new Intent(OrderFoodActivity.this, CaptureActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
             } else {
                 intent = new Intent(OrderFoodActivity.this, BillActivity.class);
                 intent.putExtra(Config.PARAM2, money);//总价
@@ -1744,5 +1761,23 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             }
         }
         return total;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {
+            return;
+        }
+        Bundle bundle = data.getExtras();
+        if (bundle == null) {
+            return;
+        }
+
+        if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+            String result = bundle.getString(CodeUtils.RESULT_STRING);
+            presenter.scanBill(result, getTotal(), billId);
+        } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+            warning("解析二维码失败");
+        }
     }
 }

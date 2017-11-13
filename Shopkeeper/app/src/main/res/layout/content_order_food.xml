@@ -114,10 +114,10 @@
             android:id="@+id/totalMoney"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_24sdp"
-            android:layout_marginStart="@dimen/_24sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_34ssp"
+            android:textSize="@dimen/_32ssp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/cart"
             app:layout_constraintTop_toTopOf="parent"
@@ -125,7 +125,7 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/button"
-            android:layout_width="105dp"
+            android:layout_width="80dp"
             android:layout_height="0dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
@@ -133,7 +133,7 @@
             android:enabled="false"
             android:text="其他结账"
             android:textColor="@color/white"
-            android:textSize="@dimen/_34ssp"
+            android:textSize="@dimen/_32ssp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -141,7 +141,7 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/quickBill"
-            android:layout_width="105dp"
+            android:layout_width="75dp"
             android:layout_height="0dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
@@ -149,10 +149,25 @@
             android:enabled="false"
             android:text="快速结账"
             android:textColor="@color/white"
-            android:textSize="@dimen/_34ssp"
+            android:textSize="@dimen/_32ssp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/button"
+            app:layout_constraintTop_toTopOf="parent" />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/scanBill"
+            android:layout_width="75dp"
+            android:layout_height="0dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/selector_food_btn"
+            android:enabled="false"
+            android:text="扫码结账"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_32ssp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/quickBill"
             app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>

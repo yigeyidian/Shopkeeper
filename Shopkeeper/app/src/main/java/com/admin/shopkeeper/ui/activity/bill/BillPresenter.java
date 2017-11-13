@@ -104,7 +104,7 @@ class BillPresenter extends BasePresenter<IBillView> {
     public void bill(String id, String Rid, String tableId,
                      String memberId, double zon, double can, String jsonObjquanxian,
                      String jsonObj, String jsonPay, int peoplecount, double price, String tablename, double free,
-                     String types, String guiId) {
+                     String types, String guiId ) {
         DialogUtils.showDialog(context, "结账中...");
         RetrofitHelper.getInstance().getApi()
                 .bill("3", id, Rid, memberId, tableId, zon, can, 0, 0, types, jsonObjquanxian, jsonObj, "4", jsonPay,
@@ -557,6 +557,47 @@ class BillPresenter extends BasePresenter<IBillView> {
                     }
                 }, throwable -> {
                     iView.error("修改状态失败");
+                });
+    }
+    public void scanBill(String code, double price, String billId) {
+        DialogUtils.showDialog(context, "数据提交中...");
+        RetrofitHelper.getInstance()
+                .getApi()
+                .scanBill("21", code, price, App.INSTANCE().getShopID(), billId)
+                .compose(getFragmentLifecycleProvider().<StringModel>bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if(stringModel.getCode().equals("1")){
+                        if (stringModel.getResult().contains("SUCCESS")) {
+                            String parType[] = stringModel.getResult().split("&");
+                            iView.scanBillSuccess(parType[1] ,billId , price );
+                        }else if(stringModel.getResult().contains("FAILED")){
+                            iView.warning("支付失败");
+                        }else if(stringModel.getResult().contains("UNKNOWN")){
+                            iView.warning("支付错误");
+                        }else if(stringModel.getResult().contains("USERPAYING")){
+                            iView.warning("用户正在支付中");
+                        }else if(stringModel.getResult().contains("ORDERPAID")){
+                            iView.warning("订单已支付");
+                        }else if(stringModel.getResult().contains("AUTHCODEEXPIRE")){
+                            iView.warning("二维码已过期");
+                        }else if(stringModel.getResult().contains("NOTENOUGH")){
+                            iView.warning("余额不足");
+                        }else if(stringModel.getResult().contains("OUT_TRADE_NO_USED")){
+                            iView.warning("订单号重复");
+                        }else if(stringModel.getResult().contains("QITA")){
+                            iView.warning("其他错误");
+                        }else if(stringModel.getResult().contains("CODEUNKNOWN")){
+                            iView.warning("二维码错误");
+                        }else{
+                            iView.warning("未知错误 ");
+                        }
+                    }
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    iView.warning("支付失败");
                 });
     }
 }

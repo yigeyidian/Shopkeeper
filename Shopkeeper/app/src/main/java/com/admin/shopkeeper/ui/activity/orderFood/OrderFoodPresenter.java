@@ -160,7 +160,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
     }
 
     public void KuaiSu(String foodinfo, String pdata, String ptime, String names, String address, String phone, String remark,
-                       double monery, String tablid, String tablename, String types, boolean isquick) {
+                       double monery, String tablid, String tablename, String types, boolean isquick, boolean isScan) {
         DialogUtils.showDialog(context, "数据提交中...");
         RetrofitHelper.getInstance()
                 .getApi()
@@ -178,7 +178,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                                 iView.warning("下单失败");
                             } else {
                                 print(stringModel.getResult());
-                                iView.kuaisuSuccess(stringModel.getResult(), monery, isquick);
+                                iView.kuaisuSuccess(stringModel.getResult(), monery, isquick, isScan);
                             }
                             break;
                         case Config.REQUEST_FAILED:
@@ -209,7 +209,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                     DialogUtils.hintDialog();
                     switch (stringModel.getCode()) {
                         case Config.REQUEST_SUCCESS:
-                            iView.kuaisuSuccess(stringModel.getResult(), monery, false);
+                            iView.kuaisuSuccess(stringModel.getResult(), monery, false, false);
                             break;
                         case Config.REQUEST_FAILED:
                             iView.warning("下单失败");
@@ -401,7 +401,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                 .subscribe(stringModel -> {
                     switch (stringModel.getCode()) {
                         case Config.REQUEST_SUCCESS:
-                            iView.kuaisuSuccess(stringModel.getResult(), price, false);
+                            iView.kuaisuSuccess(stringModel.getResult(), price, false ,false);
                             break;
                         case Config.REQUEST_FAILED:
                             iView.warning("下单失败");
@@ -413,6 +413,48 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                 }, throwable -> {
                     DialogUtils.hintDialog();
                     iView.warning("下单失败");
+                });
+    }
+
+    public void scanBill(String code, double price, String billId) {
+        DialogUtils.showDialog(context, "数据提交中...");
+        RetrofitHelper.getInstance()
+                .getApi()
+                .scanBill("21", code, price, App.INSTANCE().getShopID(), billId)
+                .compose(getFragmentLifecycleProvider().<StringModel>bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if(stringModel.getCode().equals("1")){
+                        if (stringModel.getResult().contains("SUCCESS")) {
+                            String parType[] = stringModel.getResult().split("&");
+                            iView.bill(parType[1] ,billId , price );
+                        }else if(stringModel.getResult().contains("FAILED")){
+                            iView.warning("支付失败");
+                        }else if(stringModel.getResult().contains("UNKNOWN")){
+                            iView.warning("支付错误");
+                        }else if(stringModel.getResult().contains("USERPAYING")){
+                            iView.warning("用户正在支付中");
+                        }else if(stringModel.getResult().contains("ORDERPAID")){
+                            iView.warning("订单已支付");
+                        }else if(stringModel.getResult().contains("AUTHCODEEXPIRE")){
+                            iView.warning("二维码已过期");
+                        }else if(stringModel.getResult().contains("NOTENOUGH")){
+                            iView.warning("余额不足");
+                        }else if(stringModel.getResult().contains("OUT_TRADE_NO_USED")){
+                            iView.warning("订单号重复");
+                        }else if(stringModel.getResult().contains("QITA")){
+                            iView.warning("其他错误");
+                        }else if(stringModel.getResult().contains("CODEUNKNOWN")){
+                            iView.warning("二维码错误");
+                        }else{
+                            iView.warning("未知错误 ");
+                        }
+                    }
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    iView.warning("支付失败");
                 });
     }
 }

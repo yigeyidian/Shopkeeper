@@ -322,8 +322,43 @@
                 android:paddingLeft="@dimen/_30sdp"
                 android:paddingRight="@dimen/_30sdp"
                 android:paddingTop="@dimen/_30sdp" />
-
-            <android.support.v7.widget.AppCompatButton
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_60sdp"
+                android:layout_marginRight="@dimen/_60sdp"
+                android:orientation="horizontal">
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="@dimen/_80sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_40sdp"
+                    android:background="@drawable/selector_dialog_btn"
+                    android:text="结算"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_34ssp" />
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/button_scan"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="48dp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="@dimen/_80sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_40sdp"
+                    android:background="@drawable/selector_dialog_btn"
+                    android:text="扫码支付"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_34ssp" />
+            </LinearLayout>
+           <!-- <android.support.v7.widget.AppCompatButton
                 android:id="@+id/button"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
@@ -336,6 +371,19 @@
                 android:text="结算"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/_34ssp" />
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/button_scan"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="@dimen/_80sdp"
+                android:layout_marginLeft="@dimen/_80sdp"
+                android:layout_marginRight="@dimen/_80sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/selector_dialog_btn"
+                android:text="扫码支付"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/_34ssp" />-->
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

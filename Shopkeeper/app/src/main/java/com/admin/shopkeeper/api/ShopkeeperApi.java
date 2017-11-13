@@ -776,6 +776,15 @@ public interface ShopkeeperApi {
             @Field("APrice") double price,
             @Field("FoodType") String foodType,
             @Field("FanBill") String fanbill);
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortBillManagerNweASHX.ashx")
+    Observable<StringModel> scanBill(
+            @Field("type") String type,
+            @Field("Code") String code,
+            @Field("Pice") double pice,
+            @Field("id") String shopId,
+            @Field("PayID") String payId
+            );
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortBillManagerNweASHX.ashx")
