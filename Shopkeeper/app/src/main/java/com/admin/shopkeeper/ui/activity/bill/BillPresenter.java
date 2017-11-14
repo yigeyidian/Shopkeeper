@@ -89,7 +89,7 @@ class BillPresenter extends BasePresenter<IBillView> {
 //    can	餐具费
 //    pei	配送费	0
 //    dabao	打包费	0
-//    types	类别	7
+//    types	类别	7 1.预定菜品2预定桌位3外卖4快餐5扫码点餐6排队点餐7店内点餐
 //    jsonObjquanxian	权限促销
 //    jsonObj	积分或优惠券促销
 //    PayType	支付类型	1
@@ -104,10 +104,10 @@ class BillPresenter extends BasePresenter<IBillView> {
     public void bill(String id, String Rid, String tableId,
                      String memberId, double zon, double can, String jsonObjquanxian,
                      String jsonObj, String jsonPay, int peoplecount, double price, String tablename, double free,
-                     String types, String guiId ) {
+                     String types, String guiId ,String payType) {
         DialogUtils.showDialog(context, "结账中...");
         RetrofitHelper.getInstance().getApi()
-                .bill("3", id, Rid, memberId, tableId, zon, can, 0, 0, types, jsonObjquanxian, jsonObj, "4", jsonPay,
+                .bill("3", id, Rid, memberId, tableId, zon, can, 0, 0, types, jsonObjquanxian, jsonObj, payType, jsonPay,
                         guiId, "", App.INSTANCE().getUser().getId(), App.INSTANCE().getUser().getName(), "", "", "",
                         peoplecount, price, tablename, free)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())

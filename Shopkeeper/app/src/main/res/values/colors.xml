@@ -13,6 +13,7 @@
     <color name="colorGray">#F3F3F3</color>
     <color name="colorDialogBtn">#ff2d4b</color>
     <color name="colorDialogBtnStroke">#f8082b</color>
+    <color name="colorDialogScanBtn">#95a5a6</color>
     <color name="colorFood">#ff6c81</color>
 
     <color name="white">#ffffff</color>
