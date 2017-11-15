@@ -1299,7 +1299,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
     }
 
     @Override
-    public void bill(String payType, String result, double money) {
+    public void bill(String payType, String result, double money ,String memberId) {
         List<BillJson.BillJsonBase> t = new ArrayList<>();
 
         BillJson.BillJsonBase base2 = new BillJson.BillJsonBase();
@@ -1335,7 +1335,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         Log.i("ttt", "---pStr:" + pStr);
 
         presenter.bill(result, App.INSTANCE().getShopID(), "", money, 0, qStr
-                , tStr, pStr, payType, 1, money, "", 0, "4");
+                , tStr, pStr, payType, 1, money, "", 0, "4" , memberId);
     }
     String billId ;
     @Override

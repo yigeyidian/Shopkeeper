@@ -121,11 +121,11 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
     }
 
     public void bill(String id, String Rid, String TableId, double zon, double can, String jsonObjquanxian,
-                     String jsonObj, String jsonPay, String payType, int peoplecount, double price, String tablename, double free, String types) {
+                     String jsonObj, String jsonPay, String payType, int peoplecount, double price, String tablename, double free, String types , String memberID) {
         DialogUtils.showDialog(context, "结账中...");
         RetrofitHelper.getInstance()
                 .getApi()
-                .bill("3", id, Rid, "", TableId, zon, can, 0, 0, types, jsonObjquanxian, jsonObj, payType, jsonPay,
+                .bill("3", id, Rid, memberID, TableId, zon, can, 0, 0, types, jsonObjquanxian, jsonObj, payType, jsonPay,
                         "", "", App.INSTANCE().getUser().getId(), App.INSTANCE().getUser().getName(), "", "", "", peoplecount,
                         price, tablename, free)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
@@ -371,7 +371,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                         case Config.REQUEST_SUCCESS:
                             PayType[] payTypes = new Gson().fromJson(stringModel.getResult(), PayType[].class);
                             if (payTypes != null && payTypes.length > 0) {
-                                iView.bill(payTypes[0].getPayType(), result, money);
+                                iView.bill(payTypes[0].getPayType(), result, money,"");
                             } else {
                                 iView.error("支付失败");
                             }
@@ -429,7 +429,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                     if(stringModel.getCode().equals("1")){
                         if (stringModel.getResult().contains("SUCCESS")) {
                             String parType[] = stringModel.getResult().split("&");
-                            iView.bill(parType[1] ,billId , price );
+                            iView.bill(parType[1] ,billId , price ,"");
                         }else if(stringModel.getResult().contains("FAILED")){
                             iView.warning("支付失败");
                         }else if(stringModel.getResult().contains("UNKNOWN")){
@@ -449,7 +449,8 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                         }else if(stringModel.getResult().contains("CODEUNKNOWN")){
                             iView.warning("二维码错误");
                         }else{
-                            iView.warning("未知错误 ");
+                            String parType[] = stringModel.getResult().split("&");
+                            iView.bill(parType[1] ,billId , price ,parType[0]);
                         }
                     }
                 }, throwable -> {

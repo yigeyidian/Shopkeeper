@@ -1267,7 +1267,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         }
     }
     @Override
-    public  void scanBillSuccess(String payType,String result,double money){
+    public  void scanBillSuccess(String payType,String result,double money ,String memberId ){
 
         List<BillJson.BillJsonBase> t = new ArrayList<>();
         BillJson.BillJsonBase base = new BillJson.BillJsonBase();
@@ -1317,9 +1317,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         p.add(pe);
         pays.setQuanxian(p);
         String pStr = new Gson().toJson(pays);
-
-
-        memberId = memberBean == null ? "" : memberBean.getId();
+        if(TextUtils.isEmpty(memberId)){
+            memberId = memberBean == null ? "" : memberBean.getId();
+        }
 
         double free = getYouhuiMoney() + weixinOrderBean.getYufupice() + weixinOrderBean.getYouhui();
 

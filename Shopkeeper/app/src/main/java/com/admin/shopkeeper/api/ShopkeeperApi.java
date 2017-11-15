@@ -1330,6 +1330,7 @@ public interface ShopkeeperApi {
             @Field("JieZhangPay") String jieZhangPay,
             @Field("GuestShow") String guestShow,
             @Field("PayPassWord") String password,
+            @Field("CashPayType") String cashPayType,
             @Field("RESTAURANTID") String restaurantId);
 
     @FormUrlEncoded

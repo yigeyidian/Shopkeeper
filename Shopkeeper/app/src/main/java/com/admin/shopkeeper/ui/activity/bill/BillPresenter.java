@@ -572,7 +572,7 @@ class BillPresenter extends BasePresenter<IBillView> {
                     if(stringModel.getCode().equals("1")){
                         if (stringModel.getResult().contains("SUCCESS")) {
                             String parType[] = stringModel.getResult().split("&");
-                            iView.scanBillSuccess(parType[1] ,billId , price );
+                            iView.scanBillSuccess(parType[1] ,billId , price ,"" );
                         }else if(stringModel.getResult().contains("FAILED")){
                             iView.warning("支付失败");
                         }else if(stringModel.getResult().contains("UNKNOWN")){
@@ -592,7 +592,8 @@ class BillPresenter extends BasePresenter<IBillView> {
                         }else if(stringModel.getResult().contains("CODEUNKNOWN")){
                             iView.warning("二维码错误");
                         }else{
-                            iView.warning("未知错误 ");
+                            String parType[] = stringModel.getResult().split("&");
+                            iView.scanBillSuccess(parType[1] ,billId , price ,parType[0] );
                         }
                     }
                 }, throwable -> {
