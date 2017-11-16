@@ -25,11 +25,12 @@ public class CouponDetailTablePresenter extends BasePresenter<ICouponDetailTable
         super(context, iView);
     }
 
-    public void getData(int pageIndex, String startDate, String endDate, String startTime, String endTime, int type) {
+    public void getData(int pageIndex, String startDate, String endDate, String startTime, String endTime, int type,String shopId) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getMemberTranscation("8", 20, pageIndex ,"ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), type)
+                .getMemberTranscation("8", 20, pageIndex ,"ASC", startDate, endDate,
+                        startTime, endTime, shopId, type)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
