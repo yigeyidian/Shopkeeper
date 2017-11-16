@@ -103,7 +103,7 @@ public class FoodEntity implements Serializable {
     @SerializedName("PRODUCTTYPENAME")
     private String productTypeName;
 
-    @SerializedName("PRICE")
+    @SerializedName(value = "PRICE", alternate = {"Price"})
     private Double price;
 
     @SerializedName("PRODUCTFile")
@@ -239,11 +239,11 @@ public class FoodEntity implements Serializable {
 
     @Generated(hash = 1458814952)
     public FoodEntity(String productID, String restaurantID, String id, String productName, String pinYin, String unit,
-            String minUnit, String productTypeID, String productTypeName, Double price, String productFile, String productImage,
-            int state, String remark, String tasteID, String daZheIs, String daZhe, String warCount, String closeIs,
-            String closeNameIs, int productCount, String chuCaiType, int canDiscount, double memberPice, int salesType,
-            String accordIng, String productShuXing, String productGive, int tasteType, boolean type, String guid, String packageName,
-            String counts) {
+                      String minUnit, String productTypeID, String productTypeName, Double price, String productFile, String productImage,
+                      int state, String remark, String tasteID, String daZheIs, String daZhe, String warCount, String closeIs,
+                      String closeNameIs, int productCount, String chuCaiType, int canDiscount, double memberPice, int salesType,
+                      String accordIng, String productShuXing, String productGive, int tasteType, boolean type, String guid, String packageName,
+                      String counts) {
         this.productID = productID;
         this.restaurantID = restaurantID;
         this.id = id;
