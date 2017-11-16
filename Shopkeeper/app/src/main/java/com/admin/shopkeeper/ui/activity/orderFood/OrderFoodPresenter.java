@@ -371,7 +371,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                         case Config.REQUEST_SUCCESS:
                             PayType[] payTypes = new Gson().fromJson(stringModel.getResult(), PayType[].class);
                             if (payTypes != null && payTypes.length > 0) {
-                                iView.bill(payTypes[0].getPayType(), result, money,"");
+                                iView.bill(payTypes[0].getPayType(), result, money,"","");
                             } else {
                                 iView.error("支付失败");
                             }
@@ -429,13 +429,13 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                     if(stringModel.getCode().equals("1")){
                         if (stringModel.getResult().contains("SUCCESS")) {
                             String parType[] = stringModel.getResult().split("&");
-                            iView.bill(parType[1] ,billId , price ,"");
+                            iView.bill(parType[1] ,billId , price ,"" ,"支付中");
                         }else if(stringModel.getResult().contains("FAILED")){
                             iView.warning("支付失败");
                         }else if(stringModel.getResult().contains("UNKNOWN")){
                             iView.warning("支付错误");
                         }else if(stringModel.getResult().contains("USERPAYING")){
-                            iView.warning("用户正在支付中");
+                            iView.bill("3" ,billId , price ,"" ,"支付中");
                         }else if(stringModel.getResult().contains("ORDERPAID")){
                             iView.warning("订单已支付");
                         }else if(stringModel.getResult().contains("AUTHCODEEXPIRE")){
@@ -450,7 +450,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                             iView.warning("二维码错误");
                         }else{
                             String parType[] = stringModel.getResult().split("&");
-                            iView.bill(parType[1] ,billId , price ,parType[0]);
+                            iView.bill(parType[1] ,billId , price ,parType[0],"");
                         }
                     }
                 }, throwable -> {

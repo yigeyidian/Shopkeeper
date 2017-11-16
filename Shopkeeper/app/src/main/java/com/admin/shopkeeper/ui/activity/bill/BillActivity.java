@@ -414,11 +414,13 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             });
         }
     }
+
     @OnClick(R.id.button_scan)
-    public  void scanClick(){
+    public void scanClick() {
         Intent intent = new Intent(BillActivity.this, CaptureActivity.class);
         startActivityForResult(intent, REQUEST_CODE_3MaHE1);
     }
+
     @OnClick(R.id.button)
     public void billClick() {
         if (!App.INSTANCE().getUser().getPermissionValue().contains("queren")) {
@@ -585,17 +587,17 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             if (type == P3) {
                 presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                         memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "",
-                        free, "4", guiId , "");
+                        free, "4", guiId, "");
             } else if (type == P4) {
                 presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                         memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
-                        , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId , "");
+                        , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId, "");
             } else if (type == P6) {
                 presenter.rebill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
                         , tStr, pStr, order.getType().equals("7") ? "7" : "4", free, order.getBillid(), result);
             } else {
                 presenter.bill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
-                        , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId , "");
+                        , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId, "");
             }
         }
     }
@@ -677,7 +679,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     jianMian.setText("");
                     llDazhe.setEnabled(false);
                     jianMian.setEnabled(false);
-                    youhuiMoney =  weixinOrderBean.getYinfu();
+                    youhuiMoney = weixinOrderBean.getYinfu();
                     idazhe = 0;
                     ijianmian = 0;
                 } else {
@@ -1266,9 +1268,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             intText();
         }
     }
-    @Override
-    public  void scanBillSuccess(String payType,String result,double money ,String memberId ){
 
+    private void scanBill(String payType, String result, double money, String memberId) {
         List<BillJson.BillJsonBase> t = new ArrayList<>();
         BillJson.BillJsonBase base = new BillJson.BillJsonBase();
         t.add(base);
@@ -1317,7 +1318,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         p.add(pe);
         pays.setQuanxian(p);
         String pStr = new Gson().toJson(pays);
-        if(TextUtils.isEmpty(memberId)){
+        if (TextUtils.isEmpty(memberId)) {
             memberId = memberBean == null ? "" : memberBean.getId();
         }
 
@@ -1327,12 +1328,31 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         if (type == P3) {
             presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                     memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, getYinfuMoney(), tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId , payType);
+                    , tStr, pStr, 1, getYinfuMoney(), tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId, payType);
         } else if (type == P1) {
             presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "", memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, getYinfuMoney(), tableEntity != null ? tableEntity.getTableName() : "", free, "7", guiId , payType );
+                    , tStr, pStr, 1, getYinfuMoney(), tableEntity != null ? tableEntity.getTableName() : "", free, "7", guiId, payType);
         }
     }
+
+    @Override
+    public void scanBillSuccess(String payType, String result, double money, final String memberId, String str) {
+        if (str.contains("支付中")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("提示");
+            builder.setMessage("用户正在支付中，是否确认已支付");
+            AlertDialog.Builder 确定 = builder.setPositiveButton("确定", (dialog, which) -> {
+                scanBill(payType, result, money, memberId);
+            });
+            builder.setCancelable(false);
+            builder.setNegativeButton("取消", null);
+            builder.show();
+        } else {
+            scanBill(payType, result, money, memberId);
+        }
+
+    }
+
     @Override
     public void weixinSuccess() {
 
@@ -1396,13 +1416,13 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         if (type == P3) {
             presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                     memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId , "");
+                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId, "");
         } else if (type == P4) {
             presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "", memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId , "");
+                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId, "");
         } else {
             presenter.bill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId , "");
+                    , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId, "");
         }
     }
 
@@ -1603,7 +1623,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                 warning("解析二维码失败");
             }
-        }else if(requestCode == REQUEST_CODE_3MaHE1 ){
+        } else if (requestCode == REQUEST_CODE_3MaHE1) {
             Bundle bundle = data.getExtras();
             if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                 String result = bundle.getString(CodeUtils.RESULT_STRING);

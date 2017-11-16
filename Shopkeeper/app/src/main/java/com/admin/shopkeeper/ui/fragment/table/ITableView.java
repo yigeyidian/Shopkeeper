@@ -40,7 +40,7 @@ public interface ITableView extends IBaseView {
 
     void orderListSuccess(Order order, List<OrderDetailFood> orderDetailFoods);
 
-    void inBillSuccess(Order order, List<OrderDetailFood> orderDetailFoods, int position);
+    void inBillSuccess(Order order, List<OrderDetailFood> orderDetailFoods, int position , boolean isScanBill);
 
     void cancelSuccess();
 

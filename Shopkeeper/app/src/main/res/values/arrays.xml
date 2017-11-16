@@ -36,6 +36,7 @@
         <item>结账</item>
         <item>加菜</item>
         <item>详情</item>
+        <item>扫码结账</item>
         <!--<item>撤单</item>-->
     </string-array>
 

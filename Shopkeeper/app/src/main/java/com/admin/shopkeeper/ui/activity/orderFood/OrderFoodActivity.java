@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageButton;
@@ -600,8 +601,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 entity.setPackageName(foodEntity.getPackageName());
                 entity.setFoodID(foodEntity.getProductID());//设置id；
                 entity.setNumber(1);//设置份数
-                entity.setPrice(Double.parseDouble(foodEntity.getPrice()));
-                entity.setOriginalPrice(Double.parseDouble(foodEntity.getPrice()));
+                entity.setPrice(foodEntity.getPrice());
+                entity.setOriginalPrice(foodEntity.getPrice());
                 if (!TextUtils.isEmpty(foodEntity.getProductShuXing()) && foodEntity.getProductShuXing().equals("1")) {
                     entity.setShowWeight(true);
                 }
@@ -699,7 +700,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     entity.setPackageName(foodEntity.getPackageName());
                     entity.setFoodID(foodEntity.getProductID());//设置id；
                     entity.setNumber(foodEntity.getNumber());//设置份数
-                    entity.setPrice(Double.parseDouble(foodEntity.getPrice()));
+                    entity.setPrice(foodEntity.getPrice());
                     entity.setUnit(foodEntity.getUnit());
 //                    if (foodEntity.getProductShuXing().equals("0")) {
 //                        entity.setKouWeis(AppDbHelper.INSTANCE().getKouWeis(App.INSTANCE().getShopID(), foodEntity.getProductID()));
@@ -707,7 +708,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
 //                    if (foodEntity.getProductShuXing().equals("1")) {
 //                        entity.setShowWeight(true);
 //                    }
-                    entity.setOriginalPrice(Double.parseDouble(foodEntity.getPrice()));
+                    entity.setOriginalPrice(foodEntity.getPrice());
 
                     if (!carts.contains(entity)) {
                         entity.setNumLayout(true);
@@ -767,9 +768,9 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     entity.setPackageName(foodEntity.getPackageName());
                     entity.setFoodID(foodEntity.getProductID());//设置id；
                     entity.setNumber(foodEntity.getNumber());//设置份数
-                    entity.setPrice(Double.parseDouble(foodEntity.getPrice()));
+                    entity.setPrice(foodEntity.getPrice());
                     entity.setUnit(foodEntity.getUnit());
-                    entity.setOriginalPrice(Double.parseDouble(foodEntity.getPrice()));
+                    entity.setOriginalPrice(foodEntity.getPrice());
                     if (foodEntity.getProductShuXing().equals("1")) {
                         entity.setShowWeight(true);
                     }
@@ -841,8 +842,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             dialog.setUnit(item.getUnit());
         }
         dialog.setTitle(item.getProductName());
-        dialog.setPrice(Double.parseDouble(item.getPrice()));
-        dialog.setOriginalPrice(Double.parseDouble(item.getPrice()));
+        dialog.setPrice(item.getPrice());
+        dialog.setOriginalPrice(item.getPrice());
 
         //        item.getTasteType();//口味 1。弹出口味   0.不弹出口
 //        item.getProductShuXing();//1是称斤 2是规格菜品 0是默认菜品
@@ -1206,8 +1207,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             entity.setNumber((int) detailFood.getAmmount());//设置份数
             foodEntity.setNumber(foodEntity.getNumber() + entity.getNumber());
         }
-        entity.setPrice(Double.parseDouble(foodEntity.getPrice()));
-        entity.setOriginalPrice(Double.parseDouble(foodEntity.getPrice()));
+        entity.setPrice(foodEntity.getPrice());
+        entity.setOriginalPrice(foodEntity.getPrice());
         entity.setGivingnum(detailFood.getGiving());
         entity.setNumLayout(true);
         if (foodEntity.getProductShuXing().equals("0")) {
@@ -1298,10 +1299,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         showCart();
     }
 
-    @Override
-    public void bill(String payType, String result, double money ,String memberId) {
+    private void scanOrQuickbill(String payType, String result, double money, String memberId) {
         List<BillJson.BillJsonBase> t = new ArrayList<>();
-
         BillJson.BillJsonBase base2 = new BillJson.BillJsonBase();
         t.add(base2);
 
@@ -1335,9 +1334,28 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         Log.i("ttt", "---pStr:" + pStr);
 
         presenter.bill(result, App.INSTANCE().getShopID(), "", money, 0, qStr
-                , tStr, pStr, payType, 1, money, "", 0, "4" , memberId);
+                , tStr, pStr, payType, 1, money, "", 0, "4", memberId);
     }
-    String billId ;
+
+    @Override
+    public void bill(String payType, String result, double money, String memberId, String str) {
+        if (str.contains("支付中")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("提示");
+            builder.setMessage("用户正在支付中，是否确认已支付");
+            builder.setPositiveButton("确定", (dialog, which) -> {
+                scanOrQuickbill(payType, result, money, memberId);
+            });
+            builder.setCancelable(false);
+            builder.setNegativeButton("取消", null);
+            builder.show();
+        } else {
+            scanOrQuickbill(payType, result, money, memberId);
+        }
+    }
+
+    String billId;
+
     @Override
     public void kuaisuSuccess(String result, double money, boolean isquick, boolean isScan) {
         if (!isquick && !isScan) {
@@ -1772,7 +1790,6 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         if (bundle == null) {
             return;
         }
-
         if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
             String result = bundle.getString(CodeUtils.RESULT_STRING);
             presenter.scanBill(result, getTotal(), billId);

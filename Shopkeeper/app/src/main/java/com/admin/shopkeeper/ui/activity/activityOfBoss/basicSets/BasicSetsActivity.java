@@ -359,9 +359,8 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
         }
 
         payTypeValues = bean.getCashPayType();
-      /* if(payTypeValues.contains("1")){
-           pa
-       }*/
+        String payTypeStr;
+        
 
         if (!TextUtils.isEmpty(bean.getPayImage())) {
             Glide.with(this).load(Config.BASE_IMG + App.INSTANCE().getShopID() + "/pay/" + bean.getPayImage()).into(imageView);

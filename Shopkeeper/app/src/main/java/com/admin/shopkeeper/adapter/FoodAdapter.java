@@ -33,9 +33,8 @@ public class FoodAdapter extends BaseQuickAdapter<FoodEntity, BaseViewHolder> {
             helper.setText(R.id.foodName, item.getProductName());
             helper.setText(R.id.unit, String.format(mContext.getString(R.string.string_unit), item.getUnit()));
         }
-        if(!TextUtils.isEmpty(item.getPrice())){
-            helper.setText(R.id.price, String.format(mContext.getString(R.string.string_money), Double.parseDouble(item.getPrice())));
-        }
+
+        helper.setText(R.id.price, String.format(mContext.getString(R.string.string_money), item.getPrice()));
 
 
         Glide.with(mContext)

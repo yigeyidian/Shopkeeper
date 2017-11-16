@@ -67,7 +67,7 @@ public class SensitiveOpearationActivity extends BaseActivity<SensitiveOpearatio
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_sale_statistics;
+        return R.layout.activity_gift_statistics;
     }
 
     @Override

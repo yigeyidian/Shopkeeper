@@ -104,7 +104,7 @@ public class FoodEntity implements Serializable {
     private String productTypeName;
 
     @SerializedName("PRICE")
-    private String price;
+    private Double price;
 
     @SerializedName("PRODUCTFile")
     private String productFile;
@@ -237,13 +237,13 @@ public class FoodEntity implements Serializable {
     @Generated(hash = 587034604)
     private transient FoodEntityDao myDao;
 
-    @Generated(hash = 141092835)
+    @Generated(hash = 1458814952)
     public FoodEntity(String productID, String restaurantID, String id, String productName, String pinYin, String unit,
-                      String minUnit, String productTypeID, String productTypeName, String price, String productFile,
-                      String productImage, int state, String remark, String tasteID, String daZheIs, String daZhe, String warCount,
-                      String closeIs, String closeNameIs, int productCount, String chuCaiType, int canDiscount, double memberPice,
-                      int salesType, String accordIng, String productShuXing, String productGive, int tasteType, boolean type,
-                      String guid, String packageName, String counts) {
+            String minUnit, String productTypeID, String productTypeName, Double price, String productFile, String productImage,
+            int state, String remark, String tasteID, String daZheIs, String daZhe, String warCount, String closeIs,
+            String closeNameIs, int productCount, String chuCaiType, int canDiscount, double memberPice, int salesType,
+            String accordIng, String productShuXing, String productGive, int tasteType, boolean type, String guid, String packageName,
+            String counts) {
         this.productID = productID;
         this.restaurantID = restaurantID;
         this.id = id;
@@ -361,11 +361,11 @@ public class FoodEntity implements Serializable {
         this.productTypeName = productTypeName;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

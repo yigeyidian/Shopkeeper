@@ -572,13 +572,13 @@ class BillPresenter extends BasePresenter<IBillView> {
                     if(stringModel.getCode().equals("1")){
                         if (stringModel.getResult().contains("SUCCESS")) {
                             String parType[] = stringModel.getResult().split("&");
-                            iView.scanBillSuccess(parType[1] ,billId , price ,"" );
+                            iView.scanBillSuccess(parType[1] ,billId , price ,"" ,"");
                         }else if(stringModel.getResult().contains("FAILED")){
                             iView.warning("支付失败");
                         }else if(stringModel.getResult().contains("UNKNOWN")){
                             iView.warning("支付错误");
                         }else if(stringModel.getResult().contains("USERPAYING")){
-                            iView.warning("用户正在支付中");
+                            iView.scanBillSuccess("3" ,billId , price ,"","用户正在支付中" );
                         }else if(stringModel.getResult().contains("ORDERPAID")){
                             iView.warning("订单已支付");
                         }else if(stringModel.getResult().contains("AUTHCODEEXPIRE")){
@@ -593,7 +593,7 @@ class BillPresenter extends BasePresenter<IBillView> {
                             iView.warning("二维码错误");
                         }else{
                             String parType[] = stringModel.getResult().split("&");
-                            iView.scanBillSuccess(parType[1] ,billId , price ,parType[0] );
+                            iView.scanBillSuccess(parType[1] ,billId , price ,parType[0] ,"" );
                         }
                     }
                 }, throwable -> {

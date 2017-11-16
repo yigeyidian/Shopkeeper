@@ -29,7 +29,7 @@ public interface IBillView extends IBaseView {
 
     void weixinSuccess();
 
-    void scanBillSuccess(String payType,String result,double money , String memberId);
+    void scanBillSuccess(String payType,String result,double money , String memberId ,String str);
 
     void getImageSuccess(int p, String result, PayMeEntity e);
 

@@ -27,5 +27,5 @@ public interface IOrderFoodView extends IBaseView {
 
     void billSuccess(String msg,String result);
 
-    void bill(String payType,String result,double money,String memberId);
+    void bill(String payType,String result,double money,String memberId ,String str);
 }
