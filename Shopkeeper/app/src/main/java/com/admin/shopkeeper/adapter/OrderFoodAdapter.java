@@ -39,7 +39,7 @@ public class OrderFoodAdapter extends BaseQuickAdapter<FoodEntity, OrderFoodAdap
             helper.setText(R.id.unit, String.format(mContext.getString(R.string.string_unit), item.getUnit()));
         }
 
-        helper.setText(R.id.price, String.format(mContext.getString(R.string.string_money), item.getMemberPice()));
+        helper.setText(R.id.price, String.format(mContext.getString(R.string.string_money), item.getPrice()));
 
         if (!item.getProductShuXing().equals("0")) { //1是称斤 2是规格菜品 0是默认菜品
             helper.setVisible(R.id.layout, false);

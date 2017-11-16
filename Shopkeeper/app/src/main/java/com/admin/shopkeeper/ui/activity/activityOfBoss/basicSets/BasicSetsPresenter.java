@@ -60,11 +60,11 @@ public class BasicSetsPresenter extends BasePresenter<IBasicSetsView> {
 
     }
 
-    public void commit(String payImage, String printSet, String productSize, String payType, String chengjindazhe, String jiezhangPay, String guestShow, String password) {
+    public void commit(String payImage, String printSet, String productSize, String payType, String chengjindazhe, String jiezhangPay, String guestShow, String password, String payTypeValue) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .editBasicSet("1", payImage, printSet, productSize, payType, chengjindazhe, jiezhangPay, guestShow, password, App.INSTANCE().getShopID())
+                .editBasicSet("1", payImage, printSet, productSize, payType, chengjindazhe, jiezhangPay, guestShow, password,payTypeValue , App.INSTANCE().getShopID())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

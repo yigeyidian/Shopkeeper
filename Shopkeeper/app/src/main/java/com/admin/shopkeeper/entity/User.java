@@ -19,6 +19,7 @@ import org.greenrobot.greendao.annotation.Generated;
  * "ROLEID":"2",
  * "CREATETIME":"2017-02-12 18:07:10",
  * "STATE":1
+ * \"CashPayType\":\"1,2\"
  * }
  */
 
@@ -52,6 +53,17 @@ public class User implements Serializable {
 
     @SerializedName("PrintSet")
     private String printSet;
+
+    @SerializedName("CashPayType")
+    private String cashPayType;
+
+    public String getCashPayType() {
+        return cashPayType;
+    }
+
+    public void setCashPayType(String cashPayType) {
+        this.cashPayType = cashPayType;
+    }
 
     public String getPrintSet() {
         return printSet;
@@ -89,10 +101,10 @@ public class User implements Serializable {
     public User() {
     }
 
-    @Generated(hash = 596951030)
+    @Generated(hash = 494803592)
     public User(String id, String name, String roleID, String restaurantID,
             int state, String operaType, String permissionName,
-            String permissionValue, String printSet) {
+            String permissionValue, String printSet, String cashPayType) {
         this.id = id;
         this.name = name;
         this.roleID = roleID;
@@ -102,6 +114,7 @@ public class User implements Serializable {
         this.permissionName = permissionName;
         this.permissionValue = permissionValue;
         this.printSet = printSet;
+        this.cashPayType = cashPayType;
     }
 
     public String getId() {

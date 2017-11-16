@@ -20,6 +20,7 @@ public class BasicSetBean implements Serializable {
     // \"GuestShow\":\"1\",
     // \"ChenJinDaZhe\":\"1\",
     // \"JieZhangPay\":\"2\" PayPassWord:null
+//    "CashPayType\":\"1,2,5,3,7,4,8,9,10\"
 
 
     @SerializedName("GUID")
@@ -42,6 +43,16 @@ public class BasicSetBean implements Serializable {
     private String jiezhangPay;
     @SerializedName("PayPassWord")
     private String payPassord;
+    @SerializedName("CashPayType")
+    private String cashPayType;
+
+    public String getCashPayType() {
+        return cashPayType;
+    }
+
+    public void setCashPayType(String cashPayType) {
+        this.cashPayType = cashPayType;
+    }
 
     public String getPayPassord() {
         return payPassord;

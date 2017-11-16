@@ -371,6 +371,9 @@
             android:name=".ui.activity.activityOfBoss.sensitiveOpearation.SensitiveOpearationActivity"
             android:theme="@style/BossTheme" />
         <activity
+            android:name=".ui.activity.activityOfBoss.saleStatisticsProduct.SaleStatisticsProductActivity"
+            android:theme="@style/BossTheme" />
+        <activity
             android:name=".ui.activity.activityOfBoss.sensitiveOpearationDetail.SensitiveDetailActivity"
             android:theme="@style/BossTheme" />
         <activity android:name=".ui.activity.activityOfBoss.mansong.MansongActivity" />

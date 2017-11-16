@@ -1,6 +1,7 @@
 package com.admin.shopkeeper.adapter;
 
 import android.support.v7.widget.AppCompatImageView;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.admin.shopkeeper.App;
@@ -33,7 +34,8 @@ public class FoodAdapter extends BaseQuickAdapter<FoodEntity, BaseViewHolder> {
             helper.setText(R.id.unit, String.format(mContext.getString(R.string.string_unit), item.getUnit()));
         }
 
-        helper.setText(R.id.price, String.format(mContext.getString(R.string.string_money), item.getMemberPice()));
+        helper.setText(R.id.price, String.format(mContext.getString(R.string.string_money), item.getPrice()));
+
 
         Glide.with(mContext)
                 .load(Config.BASE_IMG + App.INSTANCE().getShopID() + "/" + item.getProductFile())

@@ -1,19 +1,18 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.salestatistics;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.saleStatisticsProduct;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -21,20 +20,21 @@ import android.widget.TextView;
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.HandoverAdapter;
 import com.admin.shopkeeper.adapter.SaleStatisticsAdapter;
+import com.admin.shopkeeper.adapter.SaleStatisticsProductAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.FoodSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.FoodEntity;
 import com.admin.shopkeeper.entity.SaleStatisticsBean;
 import com.admin.shopkeeper.entity.SaleStatisticsProductBean;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.salestatistics.SaleStatisticsActivity;
 import com.admin.shopkeeper.utils.Tools;
-import com.admin.shopkeeper.utils.UIUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,46 +42,28 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
-public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter> implements ISaleStatisticsView {
+public class SaleStatisticsProductActivity extends BaseActivity<SaleStatisticsProductPresenter> implements ISaleStatisticsProductView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.tv_total)
-    TextView tvTotle;
-    @BindView(R.id.ll_total)
-    LinearLayout llTotle;
-    @BindView(R.id.item_type)
-    TextView tvType;
-    @BindView(R.id.item_count)
-    TextView tvCount;
-    @BindView(R.id.item_money)
-    TextView tvMoney;
-    @BindView(R.id.item_free)
-    TextView tvFree;
-    @BindView(R.id.item_free_l)
-    TextView tvFree2;
 
     private PopupWindow popupWindow;
 
     int page = 1;
-    private SaleStatisticsAdapter adapter;
-    private SaleStatisticsProductBean bean;
+    private SaleStatisticsProductAdapter adapter;
 
     @Override
     protected void initPresenter() {
-        presenter = new SaleStatisticsPresenter(this, this);
+        presenter = new SaleStatisticsProductPresenter(this, this);
         presenter.init();
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_sale_statistics2;
+        return R.layout.activity_sale_statistics;
     }
 
     @Override
@@ -90,17 +72,28 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-        bean = (SaleStatisticsProductBean) getIntent().getSerializableExtra(Config.PARAM1);
-        toolbar.setTitle(bean.getProductName());
+        toolbar.setTitle("销售统计报表");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SaleStatisticsAdapter(R.layout.item_salestatistics);
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
+                .marginResId(R.dimen._1sdp, R.dimen._1sdp)
+                .color(getResources().getColor(R.color.item_line_color))
+                .build());
+        adapter = new SaleStatisticsProductAdapter(R.layout.item_salestatistics_product);
         recyclerView.setAdapter(adapter);
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(SaleStatisticsProductActivity.this, SaleStatisticsActivity.class);
+                SaleStatisticsProductBean bean = (SaleStatisticsProductBean)adapter.getItem(position);
+                intent.putExtra(Config.PARAM1,bean);
+                startActivity(intent);
+            }
+        });
+        /*refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 page = 1;
@@ -108,7 +101,7 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
                         Tools.formatNowDate("yyyy-MM-dd", entDate),
                         Tools.formatNowDate("HH:mm:ss", startDate),
                         Tools.formatNowDate("HH:mm:ss", entDate),
-                        0, currentFood.getProductID(), bean.getProductId());
+                        0, currentFood.getProductID());
             }
         });
         adapter.setOnLoadMoreListener(() -> {
@@ -117,12 +110,12 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
-                    0, currentFood.getProductID(), bean.getProductId());
-        }, recyclerView);
+                    0, currentFood.getProductID());
+        }, recyclerView);*/
 
         FoodEntity foodEntity = new FoodEntity();
         foodEntity.setProductName("全部");
-        foodEntity.setProductID("");
+        foodEntity.setProductID("all");
         foodEntities.add(foodEntity);
 
         currentFood = foodEntity;
@@ -131,11 +124,11 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
         entDate = new Date(System.currentTimeMillis());
 
         presenter.getGoods();
-        presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
                 Tools.formatNowDate("yyyy-MM-dd", entDate),
                 Tools.formatNowDate("HH:mm:ss", startDate),
                 Tools.formatNowDate("HH:mm:ss", entDate),
-                0, currentFood.getProductID(), bean.getProductId());
+                0);
     }
 
     @Override
@@ -155,17 +148,6 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @OnClick(R.id.tv_total)
-    public void totleClick() {
-        if (llTotle.getVisibility() != View.VISIBLE) {
-            llTotle.setVisibility(View.VISIBLE);
-            UIUtils.setDrawableRight(tvTotle, R.mipmap.list_arrow_up);
-        } else {
-            llTotle.setVisibility(View.GONE);
-            UIUtils.setDrawableRight(tvTotle, R.mipmap.list_arrow_down);
-        }
     }
 
     Date startDate;
@@ -188,7 +170,7 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
 
         llFood.setVisibility(View.VISIBLE);
 
-        tvFood.setText(currentFood.getProductName());
+        tvFood.setText("全部");
         tvShop.setText(App.INSTANCE().getShopName());
 
 
@@ -300,11 +282,11 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
 
 
             page = 1;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+            presenter.getData( Tools.formatNowDate("yyyy-MM-dd", startDate),
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
-                    typestr.equals("营业时间") ? 0 : 1, currentFood.getProductID(), bean.getProductId());
+                    typestr.equals("营业时间") ? 0 : 1);
 
             popupWindow.dismiss();
         };
@@ -326,7 +308,6 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
     @Override
     public void error(String msg) {
         showFailToast(msg);
-        refreshLayout.setRefreshing(false);
         adapter.loadMoreEnd();
     }
 
@@ -337,33 +318,19 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
         this.foodEntities.addAll(foodEntities);
     }
 
-    List<SaleStatisticsBean> datas = new ArrayList<>();
+    List<SaleStatisticsProductBean> datas = new ArrayList<>();
 
     @Override
-    public void success(List<SaleStatisticsBean> list) {
+    public void success(List<SaleStatisticsProductBean> list) {
         if (page == 1) {
             datas.clear();
         }
         datas.addAll(list);
         adapter.setNewData(datas);
-        refreshLayout.setRefreshing(false);
         if (list.size() < 20) {
             adapter.loadMoreEnd();
         } else {
             adapter.loadMoreComplete();
         }
-    }
-
-    @Override
-    public void totle(List<SaleStatisticsBean> saleStatisticsBeen) {
-        if (saleStatisticsBeen == null || saleStatisticsBeen.size() == 0) {
-            return;
-        }
-        SaleStatisticsBean item = saleStatisticsBeen.get(0);
-        tvType.setText(bean.getProductName());
-        tvCount.setText(String.valueOf(item.getCounts()));
-        tvMoney.setText("￥" + String.valueOf(item.getTotalPrice()));
-        tvFree.setText("￥" + String.valueOf(item.getFreePrice()));
-        tvFree2.setText("￥" + String.valueOf(item.getChargeMoney()));
     }
 }

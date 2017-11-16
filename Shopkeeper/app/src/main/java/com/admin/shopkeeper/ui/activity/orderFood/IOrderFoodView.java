@@ -21,11 +21,11 @@ public interface IOrderFoodView extends IBaseView {
 
     void orderSuccess(String s);
 
-    void kuaisuSuccess(String result, double monery,boolean isquick);
+    void kuaisuSuccess(String result, double monery,boolean isquick , boolean isScan);
 
     void querySuccess(List<FoodEntity> foodEntities);
 
     void billSuccess(String msg,String result);
 
-    void bill(String payType,String result,double money);
+    void bill(String payType,String result,double money,String memberId ,String str);
 }

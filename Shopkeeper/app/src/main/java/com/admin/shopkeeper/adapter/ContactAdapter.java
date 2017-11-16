@@ -36,6 +36,7 @@ import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -130,7 +131,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             holder.tvUnit.setText(String.format(mContext.getString(R.string.string_unit), item.getUnit()));
         }
 
-        holder.tvPrice.setText(String.format(mContext.getString(R.string.string_money), item.getMemberPice()));
+        holder.tvPrice.setText(String.format(mContext.getString(R.string.string_money), item.getPrice()));
+
 
         if (!item.getProductShuXing().equals("0")) { //1是称斤 2是规格菜品 0是默认菜品
             holder.clLayout.setVisibility(View.GONE);

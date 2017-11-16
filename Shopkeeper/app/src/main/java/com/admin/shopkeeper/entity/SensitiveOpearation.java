@@ -12,6 +12,17 @@ import java.io.Serializable;
  */
 
 public class SensitiveOpearation implements Serializable {
+    @SerializedName("MingGan")
+    private String sensitiveState;
+
+    public String getSensitiveState() {
+        return sensitiveState;
+    }
+
+    public void setSensitiveState(String sensitiveState) {
+        this.sensitiveState = sensitiveState;
+    }
+
     @SerializedName("STATE")
     private String state;
     @SerializedName("BILLID")

@@ -776,6 +776,15 @@ public interface ShopkeeperApi {
             @Field("APrice") double price,
             @Field("FoodType") String foodType,
             @Field("FanBill") String fanbill);
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortBillManagerNweASHX.ashx")
+    Observable<StringModel> scanBill(
+            @Field("type") String type,
+            @Field("Code") String code,
+            @Field("Pice") double pice,
+            @Field("id") String shopId,
+            @Field("PayID") String payId
+            );
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortBillManagerNweASHX.ashx")
@@ -1321,6 +1330,7 @@ public interface ShopkeeperApi {
             @Field("JieZhangPay") String jieZhangPay,
             @Field("GuestShow") String guestShow,
             @Field("PayPassWord") String password,
+            @Field("CashPayType") String cashPayType,
             @Field("RESTAURANTID") String restaurantId);
 
     @FormUrlEncoded
@@ -1847,6 +1857,16 @@ public interface ShopkeeperApi {
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> getProduct(
+            @Field("Type") String type,
+            @Field("DataBegin") String dataBegin,
+            @Field("DataEdn") String dataEdn,
+            @Field("TimeBegin") String timeBegin,
+            @Field("TimeEdn") String timeEdn,
+            @Field("ShangJiaID") String shangJiaID,
+            @Field("SelectType") int selectType);
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
     Observable<StringModel> getSale(
             @Field("Type") String type,
             @Field("pageSize") int pageSize,
@@ -1858,6 +1878,7 @@ public interface ShopkeeperApi {
             @Field("TimeEdn") String timeEdn,
             @Field("ShangJiaID") String shangJiaID,
             @Field("ProductID") String productID,
+            @Field("PRODUCTTYPEID") String productTypeID,
             @Field("SelectType") int selectType);
 
     @FormUrlEncoded

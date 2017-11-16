@@ -72,7 +72,7 @@ public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-        toolbar.setTitle("销售统计报表");
+        toolbar.setTitle("赠品统计报表");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 

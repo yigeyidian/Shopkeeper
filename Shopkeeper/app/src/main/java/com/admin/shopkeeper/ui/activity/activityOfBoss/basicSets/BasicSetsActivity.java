@@ -21,7 +21,9 @@ import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.DaZheDialog;
 import com.admin.shopkeeper.dialog.ListDialog;
+import com.admin.shopkeeper.dialog.MutiSelectDialog;
 import com.admin.shopkeeper.entity.BasicSetBean;
+import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.ui.activity.bill.BillActivity;
 import com.bumptech.glide.Glide;
 import com.fastaccess.permission.base.PermissionHelper;
@@ -42,6 +44,7 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
     private final String[] priceStrs = {"四舍五入", "原价", "抹零"};
     private final String[] sizeStrs = {"小", "中", "大"};
     private final String[] payStrs = {"现金", "银行卡", "微信支付", "会员卡", "线下支付宝", "线下微信"};
+    private final String[] payTypeStrs = {"现金", "银行卡", "微信支付", "挂账", "会员卡", "被扫支付宝", "被扫微信", "美团券", "大众点评券", "主扫支付宝"};
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -57,12 +60,15 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
     TextView tvPrice;
     @BindView(R.id.tv_pay_text)
     TextView tvPay;
+    @BindView(R.id.tv_pay_type_text)
+    TextView tvPayTypeOfShop;
     @BindView(R.id.imageview)
     ImageView imageView;
     @BindView(R.id.password)
     EditText password;
     private PermissionHelper permissionHelper;
     private String imagePath;
+    private List<MutiBean> payTypes = new ArrayList<>();
 
     @Override
     protected void initPresenter() {
@@ -89,6 +95,16 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
         permissionHelper = PermissionHelper.getInstance(this);
         presenter.getBasicSets();
 
+        payTypes.add(new MutiBean("现金", false, 1));
+        payTypes.add(new MutiBean("银行卡", false, 2));
+        payTypes.add(new MutiBean("主扫微信", false, 3));
+        payTypes.add(new MutiBean("挂账", false, 4));
+        payTypes.add(new MutiBean("会员卡", false, 5));
+        payTypes.add(new MutiBean("被扫支付宝", false, 6));
+        payTypes.add(new MutiBean("被扫微信", false, 7));
+        payTypes.add(new MutiBean("美团券", false, 8));
+        payTypes.add(new MutiBean("大众点评券", false, 9));
+        payTypes.add(new MutiBean("主扫支付宝", false, 10));
     }
 
     @Override
@@ -123,26 +139,45 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
 
     @OnClick(R.id.ll_money)
     public void priceClick() {
-        showDialog(Arrays.asList(priceStrs));
+        showDialog("应付金额", Arrays.asList(priceStrs));
     }
 
     @OnClick(R.id.ll_size)
     public void sizeClick() {
-        showDialog(Arrays.asList(sizeStrs));
+        showDialog("菜品大小", Arrays.asList(sizeStrs));
     }
 
     @OnClick(R.id.ll_pay)
     public void payClick() {
-        showDialog(Arrays.asList(payStrs));
+        showDialog("快速支付", Arrays.asList(payStrs));
+    }
+
+    String payTypeValues = "";
+
+    @OnClick(R.id.ll_pay_type)
+    public void payTypeClick() {
+        MutiSelectDialog.Builder builder = new MutiSelectDialog.Builder(this, R.style.OrderDialogStyle);
+        builder.setTitle("券适用类型");
+        builder.setReasons(payTypes);
+        builder.setButtonClick(new MutiSelectDialog.OnButtonClick() {
+
+
+            @Override
+            public void onOk(String text, String value) {
+                payTypeValues = value;
+                tvPayTypeOfShop.setText(text);
+            }
+        });
+        builder.creater().show();
     }
 
     int priceType;
     int payType;
     int sizeType;
 
-    private void showDialog(List<String> list) {
+    private void showDialog(String title, List<String> list) {
         ListDialog.Builder builder = new ListDialog.Builder(this, R.style.OrderDialogStyle);
-        builder.setTitle("应付金额");
+        builder.setTitle(title);
         builder.setReasons(list);
         builder.setButtonClick(new ListDialog.OnButtonClick() {
 
@@ -206,7 +241,7 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
 
     private void submit(String imageName) {
         presenter.commit(imageName, cbPrint.isChecked() ? "1" : "2", sizeType + "", payType + "", cbSale.isChecked() ? "1" : "0",
-                priceType + "", cdShowOfGuest.isChecked() ? "1" : "0" , password.getText().toString());
+                priceType + "", cdShowOfGuest.isChecked() ? "1" : "0", password.getText().toString(), payTypeValues);
     }
 
     @Override
@@ -322,6 +357,10 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
                 sizeType = 2;
                 break;
         }
+
+        payTypeValues = bean.getCashPayType();
+        String payTypeStr;
+        
 
         if (!TextUtils.isEmpty(bean.getPayImage())) {
             Glide.with(this).load(Config.BASE_IMG + App.INSTANCE().getShopID() + "/pay/" + bean.getPayImage()).into(imageView);

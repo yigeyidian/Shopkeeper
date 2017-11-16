@@ -223,6 +223,42 @@
             android:layout_marginRight="@dimen/_30sdp"
             android:drawablePadding="@dimen/_21sdp"
             android:drawableRight="@mipmap/list_icon_arrow_right"
+            android:text=""
+            android:textColor="@color/text_grey" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_pay_type"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:background="@drawable/selector_item"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/_30sdp"
+            android:text="商家支付类型"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_32ssp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_weight="1"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_pay_type_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/_30sdp"
+            android:drawablePadding="@dimen/_21sdp"
+            android:drawableRight="@mipmap/list_icon_arrow_right"
             android:text="支付宝"
             android:textColor="@color/text_grey" />
     </LinearLayout>

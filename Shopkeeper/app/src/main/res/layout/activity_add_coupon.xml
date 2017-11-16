@@ -270,7 +270,9 @@
 
             <View style="@style/LineHor2Style" />
 
-            <LinearLayout style="@style/SettingItemStyle">
+            <LinearLayout style="@style/SettingItemStyle"
+                android:visibility="gone"
+                >
 
                 <TextView
                     style="@style/SettingItemTextStyle"
@@ -284,7 +286,6 @@
 
             </LinearLayout>
 
-            <View style="@style/LineHor2Style" />
 
             <LinearLayout style="@style/SettingItemStyle">
 

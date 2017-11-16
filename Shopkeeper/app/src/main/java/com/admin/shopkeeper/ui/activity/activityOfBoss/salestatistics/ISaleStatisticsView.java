@@ -20,4 +20,6 @@ public interface ISaleStatisticsView extends IBaseView {
     void foodSuccess(List<FoodEntity> foodEntities);
 
     void success(List<SaleStatisticsBean> list);
+
+    void totle(List<SaleStatisticsBean> saleStatisticsBeen);
 }

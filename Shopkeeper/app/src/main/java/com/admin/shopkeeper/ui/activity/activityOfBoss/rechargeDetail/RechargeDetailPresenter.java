@@ -60,7 +60,7 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
                         if(TextUtils.isEmpty(stringModel.getResult())){
-                            iView.success("暂未数据");
+                            iView.success("暂无数据");
                         }else{
                             RechargeDetailTableBean[] beens = new Gson().fromJson(stringModel.getResult(), RechargeDetailTableBean[].class);
                             iView.success(Arrays.asList(beens));

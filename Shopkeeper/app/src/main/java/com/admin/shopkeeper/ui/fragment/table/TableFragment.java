@@ -24,13 +24,17 @@ import com.admin.shopkeeper.dialog.RadioDialog;
 import com.admin.shopkeeper.entity.CommonDialogEntity;
 import com.admin.shopkeeper.entity.Order;
 import com.admin.shopkeeper.entity.OrderDetailFood;
+import com.admin.shopkeeper.entity.OrderfoodEntity;
 import com.admin.shopkeeper.entity.RadioEntity;
+import com.admin.shopkeeper.entity.Season;
 import com.admin.shopkeeper.entity.TableEntity;
 
 import com.admin.shopkeeper.ui.activity.bill.BillActivity;
 import com.admin.shopkeeper.ui.activity.orderDetail.OrderDetailActivity;
 import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,6 +54,8 @@ import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.MaterialHeader;
 import in.srain.cube.views.ptr.util.PtrLocalDisplay;
 import timber.log.Timber;
+
+import static com.admin.shopkeeper.ui.activity.bill.BillActivity.REQUEST_CODE;
 
 
 public class TableFragment extends DelayFragment<TablePresenter> implements ITableView {
@@ -430,12 +436,14 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
 //        <item>加菜</item>
 //        <item>详情</item>
 //        <item>撤单</item>
+//        <item>扫码结账</item>
+
         radio.setButtonClick(p -> {
             Intent intent;
             switch (p) {
                 case 0:
                     if (App.INSTANCE().getUser().getPermissionValue().contains("jiesuan")) {
-                        presenter.inBill(order, orderDetailFoods, position);
+                        presenter.inBill(order, orderDetailFoods, position,false);
 //                        intent = new Intent(getActivity(), BillActivity.class);
 //                        double detailFood = 0;
 ////                        for (int i = 0; i < orderDetailFoods.size(); i++) {
@@ -475,7 +483,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
                     startActivityForResult(intent, 998);
                     break;
 
-                case 3:
+               /* case 3:
                     if (App.INSTANCE().getUser().getPermissionValue().contains("chedan")) {
                         AlertDialog.Builder undoBuilder = new AlertDialog.Builder(getActivity());
                         undoBuilder.setTitle("提醒！");
@@ -484,6 +492,13 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
                         undoBuilder.show();
                     } else {
                         warning("没有撤单权限");
+                    }
+                    break;*/
+                case 4:
+                    if (App.INSTANCE().getUser().getPermissionValue().contains("jiesuan")) {
+                        presenter.inBill(order, orderDetailFoods, position,false);
+                    } else {
+                        warning("没有结算权限");
                     }
 
 
@@ -547,21 +562,48 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
 
         getActivity().finish();
     }
+    double total;
+  /*  public double getTotal(List<OrderDetailFood> orderDetailFoods) {
+        double total = 0;
+        for (OrderfoodEntity entity : orderDetailFoods) {
+            if (entity.isShowWeight()) {
+                if (entity.getGivingnum() == 0) {
+                    total += entity.getWeight() * entity.getPrice();
+                }
+            } else {
+                total += (entity.getNumber() - entity.getGivingnum()) * entity.getPrice();
 
-    @Override
-    public void inBillSuccess(Order order, List<OrderDetailFood> orderDetailFoods, int position) {
-        Intent intent = new Intent(getActivity(), BillActivity.class);
-        double detailFood = 0;
-        for (int i = 0; i < orderDetailFoods.size(); i++) {
-            detailFood += orderDetailFoods.get(i).getPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
-            detailFood += orderDetailFoods.get(i).getSeasonPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
+            }
+            if (entity.getSeasons() != null && entity.getSeasons().size() > 0) {
+                for (Season season : entity.getSeasons()) {
+                    if (season.isSelected()) {
+                        total += (entity.getNumber() - entity.getGivingnum()) * season.getPrice();
+                    }
+                }
+            }
         }
-        intent.putExtra(Config.PARAM2, detailFood);//总价
-        intent.putExtra(Config.PARAM3, order);
-        intent.putExtra(Config.PARAM4, (Serializable) orderDetailFoods);
-        intent.putExtra(Config.PARAM1, position);
-        intent.putExtra(Config.PARAM5, BillActivity.P1);
-        startActivityForResult(intent, 998);
+        return total;
+    }*/
+    @Override
+    public void inBillSuccess(Order order, List<OrderDetailFood> orderDetailFoods, int position , boolean isScanBill) {
+        Intent intent;
+        if(isScanBill){
+            intent = new Intent(getActivity(), CaptureActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
+        }else{
+             intent = new Intent(getActivity(), BillActivity.class);
+            double detailFood = 0;
+            for (int i = 0; i < orderDetailFoods.size(); i++) {
+                detailFood += orderDetailFoods.get(i).getPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
+                detailFood += orderDetailFoods.get(i).getSeasonPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
+            }
+            intent.putExtra(Config.PARAM2, detailFood);//总价
+            intent.putExtra(Config.PARAM3, order);
+            intent.putExtra(Config.PARAM4, (Serializable) orderDetailFoods);
+            intent.putExtra(Config.PARAM1, position);
+            intent.putExtra(Config.PARAM5, BillActivity.P1);
+            startActivityForResult(intent, 998);
+        }
     }
 
     @Override
@@ -690,6 +732,13 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 998) {
             presenter.getTables(mParam1);
+        }
+        Bundle bundle = data.getExtras();
+        if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+            String result = bundle.getString(CodeUtils.RESULT_STRING);
+            presenter.scanBill(result, 0.01, order.getBillid());
+        } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+            warning("解析二维码失败");
         }
     }
 

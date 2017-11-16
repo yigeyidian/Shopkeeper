@@ -21,6 +21,11 @@ public class SensitiveOpearationAdapter extends BaseQuickAdapter<SensitiveOpeara
     @Override
     protected void convert(BaseViewHolder helper, SensitiveOpearation item) {
         helper.setText(R.id.item_sensitive_id, "订单号："+item.getOrderNumber());
+        if(item.getSensitiveState().equals("0")){
+            helper.setText(R.id.item_order_state ,"撤销");
+        }else{
+            helper.setText(R.id.item_order_state ,"反结账");
+        }
         helper.setText(R.id.item_sensitive_num, item.getTableNmae());
         helper.setText(R.id.item_sensitive_money, item.getPice()+"");
         helper.setText(R.id.item_sensitive_person, item.getUserName());
