@@ -1,5 +1,7 @@
 package com.admin.shopkeeper.entity;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -89,7 +91,7 @@ public class MenuTypeEntity implements Serializable {
 
     @Generated(hash = 1902743163)
     public MenuTypeEntity(String productTypeID, String productTypeName, String restaurantID,
-            int orderNO, boolean isType) {
+                          int orderNO, boolean isType) {
         this.productTypeID = productTypeID;
         this.productTypeName = productTypeName;
         this.restaurantID = restaurantID;
@@ -211,6 +213,7 @@ public class MenuTypeEntity implements Serializable {
                 }
             }
         }
+
         return foods;
     }
 

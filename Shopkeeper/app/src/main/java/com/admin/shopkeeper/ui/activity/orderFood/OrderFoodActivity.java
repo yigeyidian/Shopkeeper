@@ -139,7 +139,6 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
     private List<OrderDetailFood> detailFoods;
     private Object total;
 
-
     @OnClick(R.id.button)
     void onClick(View view) {
         Intent intent;
@@ -562,6 +561,9 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     }
                 }
                 contactAdapter.setDatas(type.getFoods());
+                if (type.getProductTypeName().equals("套餐")) {
+                    Log.i("ttt", "---" + type.getFoods());
+                }
                 menuAdapter.notifyDataSetChanged();
             }
 

@@ -106,8 +106,10 @@ public class HomePresenter extends BasePresenter<IHomeView> {
                 .subscribe(foodsModel -> {
                     if (foodsModel.getCode().equals(Config.REQUEST_SUCCESS)) {
                         Timber.d("--->"+foodsModel.toString());
+
                         FoodEntity[] foodEntities = new Gson().fromJson(foodsModel.getFood(), FoodEntity[].class);
                         List<FoodEntity> foodEntityList = Arrays.asList(foodEntities);
+
                         MenuTypeEntity[] menuTypeEntities = new Gson().fromJson(foodsModel.getFoodType(), MenuTypeEntity[].class);
                         List<MenuTypeEntity> menuTypeEntityList = Arrays.asList(menuTypeEntities);
                         saveDB(foodEntityList, menuTypeEntityList);

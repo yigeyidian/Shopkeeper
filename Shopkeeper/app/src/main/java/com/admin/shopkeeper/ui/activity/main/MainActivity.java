@@ -66,17 +66,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IMainVi
 
     @Override
     public void initView() {
-
-
         ImmersionBar.with(this)
                 .statusBarColor(R.color.colorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
         toolbar.setTitle("消息");
         setSupportActionBar(toolbar);
-
-
-
 
         initBottom();
         initFragment();

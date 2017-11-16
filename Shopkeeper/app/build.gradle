@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
+//apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'org.greenrobot.greendao'
-apply plugin: 'me.tatarka.retrolambda'
+//apply plugin: 'me.tatarka.retrolambda'
 
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.admin.shopkeeper"
         minSdkVersion 16
@@ -15,6 +15,8 @@ android {
         versionName "1.19"
 
         vectorDrawables.useSupportLibrary = true
+
+        flavorDimensions "color"
     }
 
     productFlavors {
@@ -54,16 +56,16 @@ android {
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    if (output.outputFile != null && output.outputFile.name.endsWith('.apk') && 'release'.equals(variant.buildType.name)) {
-                        def apkFile = new File(
-                                output.outputFile.getParent(),
-                                "app-${variant.flavorName}-${variant.versionName}.apk".replace("-t", "-test").replace("-p", ""))
-                        output.outputFile = apkFile
-                    }
-                }
-            }
+//            applicationVariants.all { variant ->
+//                variant.outputs.each { output ->
+//                    if (output.outputFile != null && output.outputFile.name.endsWith('.apk') && 'release'.equals(variant.buildType.name)) {
+//                        def apkFile = new File(
+//                                output.outputFile.getParent(),
+//                                "app-${variant.flavorName}-${variant.versionName}.apk".replace("-t", "-test").replace("-p", ""))
+//                        output.outputFile = apkFile
+//                    }
+//                }
+//            }
         }
     }
 
@@ -81,7 +83,7 @@ android {
 }
 
 greendao {
-    schemaVersion 7
+    schemaVersion 8
     daoPackage 'com.admin.greendao.gen'
     targetGenDir 'src/main/java'
 }
@@ -91,11 +93,14 @@ dependencies {
     compile project(':sdpSsplibrary')
     compile project(':PushSDK')
 
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.android.support:support-vector-drawable:25.3.1'
-    compile 'com.jakewharton:butterknife:8.2.1'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:cardview-v7:26.1.0'
+    compile 'com.android.support:support-vector-drawable:26.1.0'
+    compile 'com.android.support:support-v4:26.1.0'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
@@ -110,13 +115,11 @@ dependencies {
     compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'
     compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'org.greenrobot:greendao:3.2.2'
-    compile 'com.android.support:multidex:1.0.1'
     compile 'com.yqritc:recyclerview-flexibledivider:1.4.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.20'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'com.ashokvarma.android:bottom-navigation-bar:1.4.1'
-    compile 'com.android.support:support-v4:25.3.1'
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.0@aar'
     compile 'com.gyf.barlibrary:barlibrary:2.2.2'
@@ -131,5 +134,7 @@ dependencies {
     compile 'com.tencent.bugly:crashreport:latest.release'
     compile 'com.github.codbking:PickTime:v1.0.1'
     testCompile 'junit:junit:4.12'
-    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
 }
