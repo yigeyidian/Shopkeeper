@@ -12,6 +12,7 @@ import com.admin.shopkeeper.ui.activity.activityOfBoss.returnbussiness.IReturnBu
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -40,6 +41,7 @@ public class ShopCollectionPresenter extends BasePresenter<IShopCollectionView> 
                     if (stringModel.getCode().equals("1")) {
                         if (stringModel.getResult().equals("")) {
                             iView.error("查询数据为空");
+                            iView.success(new ArrayList<>());
                         } else {
                             ShopCollectionBean[] beens = new Gson().fromJson(stringModel.getResult(), ShopCollectionBean[].class);
                             iView.success(Arrays.asList(beens));
@@ -50,22 +52,6 @@ public class ShopCollectionPresenter extends BasePresenter<IShopCollectionView> 
                 }, throwable -> {
                     DialogUtils.hintDialog();
                     iView.error("加载失败");
-                });
-    }
-
-    public void getChain() {
-        RetrofitHelper.getInstance()
-                .getApi()
-                .getChain("15", App.INSTANCE().getShopID())
-                .compose(getActivityLifecycleProvider().bindToLifecycle())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(stringModel -> {
-                    if (stringModel.getCode().equals("1")) {
-                        ChainBean[] beens = new Gson().fromJson(stringModel.getResult(), ChainBean[].class);
-                        iView.chainsuccess(Arrays.asList(beens));
-                    }
-                }, throwable -> {
                 });
     }
 }

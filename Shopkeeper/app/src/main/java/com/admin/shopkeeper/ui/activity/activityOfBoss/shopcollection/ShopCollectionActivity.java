@@ -79,7 +79,7 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
     private int type;
     private String shopId;
 
-    List<ChainBean> chainBeen = new ArrayList<>();
+    List<ChainBean> chainBeens = new ArrayList<>();
 
     @Override
     protected void initPresenter() {
@@ -127,11 +127,7 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
 
 
         shopId = App.INSTANCE().getShopID();
-        chainBeen.add(new ChainBean(App.INSTANCE().getShopID(), App.INSTANCE().getShopName()));
-
-        if (type == 2) {
-            presenter.getChain();
-        }
+        chainBeens = App.INSTANCE().getChainBeans();
 
         startDate = new Date(System.currentTimeMillis());
         entDate = new Date(System.currentTimeMillis());
@@ -179,32 +175,31 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         TextView tvTimeType = (TextView) laheiView.findViewById(R.id.pop_time_typw);
         TextView tvShop = (TextView) laheiView.findViewById(R.id.tv_shop);
 
-        if (type == 1) {
-            tvShop.setText(App.INSTANCE().getShopName());
-            shopId = App.INSTANCE().getShopID();
-        } else {
-            tvShop.setText(chainBeen.get(0).getNames());
-            shopId = chainBeen.get(0).getMerchantId();
-
-            tvShop.setOnClickListener(v -> {
-                if(chainBeen == null){
-                    showToast("获取门店列表失败");
-                    return;
-                }
-
-                String selectText = tvShop.getText().toString().trim();
-
-                CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);
-                builder.setTitle("选择门店");
-                builder.setReasons(chainBeen);
-                builder.setSelect(selectText);
-                builder.setButtonClick((text, value) -> {
-                    tvShop.setText(text);
-                    shopId = value;
-                });
-                builder.creater().show();
-            });
+        for (ChainBean chainBean : chainBeens) {
+            if (shopId.toLowerCase().equals(chainBean.getMerchantId())) {
+                tvShop.setText(chainBean.getNames());
+            }
         }
+
+        tvShop.setOnClickListener(v -> {
+            if(chainBeens.size() == 0){
+                showToast("获取门店失败");
+                return;
+            }
+
+            String selectText = tvShop.getText().toString().trim();
+
+            CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);
+            builder.setTitle("选择门店");
+            builder.setReasons(chainBeens);
+            builder.setSelect(selectText);
+            builder.setSingleSelect(type == 1);
+            builder.setButtonClick((text, value) -> {
+                tvShop.setText(text);
+                shopId = value;
+            });
+            builder.creater().show();
+        });
 
         tvTimeType.setOnClickListener(v -> {
             SingleSelectDialog.Builder builder = new SingleSelectDialog.Builder(this, R.style.OrderDialogStyle);
@@ -447,9 +442,4 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         llTotal.setVisibility(View.VISIBLE);
     }
 
-
-    @Override
-    public void chainsuccess(List<ChainBean> chainBeen) {
-        this.chainBeen.addAll(chainBeen);
-    }
 }

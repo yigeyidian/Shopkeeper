@@ -9,6 +9,7 @@ public class PayMeEntity {
     private String name;
     private boolean selected;
     private double money;
+    private int guid;
 
     public PayMeEntity(String name, boolean selected, double money) {
         this.name = name;
@@ -16,10 +17,32 @@ public class PayMeEntity {
         this.money = money;
     }
 
+    public PayMeEntity(String name, boolean selected, double money, int guid) {
+        this.name = name;
+        this.selected = selected;
+        this.money = money;
+        this.guid = guid;
+    }
+
+    public PayMeEntity(String name, boolean selected, int guid) {
+        this.name = name;
+        this.selected = selected;
+        this.guid = guid;
+
+    }
+
     public PayMeEntity(String name, boolean selected) {
         this.name = name;
         this.selected = selected;
 
+    }
+
+    public int getGuid() {
+        return guid;
+    }
+
+    public void setGuid(int guid) {
+        this.guid = guid;
     }
 
     public String getName() {

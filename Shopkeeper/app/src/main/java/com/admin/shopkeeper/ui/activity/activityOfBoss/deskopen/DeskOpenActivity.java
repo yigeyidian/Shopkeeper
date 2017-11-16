@@ -66,6 +66,8 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
     int page = 1;
     private PopupWindow popupWindow;
     private DeskOpenAdapter adapter;
+
+    List<ChainBean> chainBeens = new ArrayList<>();
     String shopId;
 
     @Override
@@ -115,17 +117,15 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
         startDate = new Date(System.currentTimeMillis());
         entDate = new Date(System.currentTimeMillis());
 
-        chainBeen.add(new ChainBean(App.INSTANCE().getShopID(), App.INSTANCE().getShopName()));
 
         shopId = App.INSTANCE().getShopID();
+        chainBeens = App.INSTANCE().getChainBeans();
 
         presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
                 Tools.formatNowDate("yyyy-MM-dd", entDate),
                 Tools.formatNowDate("HH:mm:ss", startDate),
                 Tools.formatNowDate("HH:mm:ss", entDate),
                 0, shopId);
-
-        presenter.getChain();
     }
 
     @Override
@@ -163,12 +163,14 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
         TextView tvTimeType = (TextView) laheiView.findViewById(R.id.pop_time_typw);
         TextView tvShop = (TextView) laheiView.findViewById(R.id.tv_shop);
 
-        tvShop.setText(chainBeen.get(0).getNames());
-        shopId = chainBeen.get(0).getMerchantId();
+        for (ChainBean chainBean : chainBeens) {
+            if (shopId.toLowerCase().equals(chainBean.getMerchantId())) {
+                tvShop.setText(chainBean.getNames());
+            }
+        }
 
         tvShop.setOnClickListener(v -> {
-
-            if(chainBeen == null){
+            if(chainBeens == null){
                 showToast("获取门店列表失败");
                 return;
             }
@@ -176,8 +178,9 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
 
             CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);
             builder.setTitle("选择门店");
-            builder.setReasons(chainBeen);
+            builder.setReasons(chainBeens);
             builder.setSelect(selectText);
+            builder.setSingleSelect(true);
             builder.setButtonClick((text, value) -> {
                 tvShop.setText(text);
                 shopId = value;
@@ -385,12 +388,5 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
             adapter.loadMoreComplete();
         }
         refreshLayout.setRefreshing(false);
-    }
-
-    List<ChainBean> chainBeen = new ArrayList<>();
-
-    @Override
-    public void chainsuccess(List<ChainBean> chainBeen) {
-        this.chainBeen.addAll(chainBeen);
     }
 }

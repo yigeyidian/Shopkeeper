@@ -22,8 +22,10 @@ import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.GiftStatisticsAdapter;
 import com.admin.shopkeeper.adapter.SaleStatisticsAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
+import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.FoodSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
+import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.FoodEntity;
 import com.admin.shopkeeper.entity.GiftStatisticsBean;
 import com.admin.shopkeeper.entity.SaleStatisticsBean;
@@ -54,6 +56,9 @@ public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter
 
     int page = 1;
     private GiftStatisticsAdapter adapter;
+
+    List<ChainBean> chainBeens = new ArrayList<>();
+    String shopId;
 
     @Override
     protected void initPresenter() {
@@ -86,7 +91,7 @@ public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
-                    0);
+                    0, shopId);
         });
         adapter.setOnLoadMoreListener(() -> {
             page++;
@@ -94,17 +99,20 @@ public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
-                    0);
+                    0, shopId);
         }, recyclerView);
 
 
         startDate = new Date(System.currentTimeMillis());
         entDate = new Date(System.currentTimeMillis());
 
+        shopId = App.INSTANCE().getShopID();
+        chainBeens = App.INSTANCE().getChainBeans();
+
         presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
                 Tools.formatNowDate("yyyy-MM-dd", entDate),
                 Tools.formatNowDate("HH:mm:ss", startDate),
-                Tools.formatNowDate("HH:mm:ss", entDate), 0);
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
     }
 
     @Override
@@ -142,7 +150,31 @@ public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter
         TextView tvTimeType = (TextView) laheiView.findViewById(R.id.pop_time_typw);
         TextView tvShop = (TextView) laheiView.findViewById(R.id.tv_shop);
 
-        tvShop.setText(App.INSTANCE().getShopName());
+        for (ChainBean chainBean : chainBeens) {
+            if (shopId.toLowerCase().equals(chainBean.getMerchantId())) {
+                tvShop.setText(chainBean.getNames());
+            }
+        }
+
+        tvShop.setOnClickListener(v -> {
+            if (chainBeens.size() == 0) {
+                showToast("获取门店失败");
+                return;
+            }
+
+            String selectText = tvShop.getText().toString().trim();
+
+            CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);
+            builder.setTitle("选择门店");
+            builder.setReasons(chainBeens);
+            builder.setSelect(selectText);
+            builder.setSingleSelect(true);
+            builder.setButtonClick((text, value) -> {
+                tvShop.setText(text);
+                shopId = value;
+            });
+            builder.creater().show();
+        });
 
 
         tvTimeType.setOnClickListener(v -> {
@@ -231,7 +263,7 @@ public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
-                    typestr.equals("营业时间") ? 0 : 1);
+                    typestr.equals("营业时间") ? 0 : 1, shopId);
 
             popupWindow.dismiss();
         };

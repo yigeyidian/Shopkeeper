@@ -18,5 +18,4 @@ public interface IDeskopenView extends IBaseView {
 
     void success(List<DeskOpenBean> data);
 
-    void chainsuccess(List<ChainBean> chainBeen);
 }

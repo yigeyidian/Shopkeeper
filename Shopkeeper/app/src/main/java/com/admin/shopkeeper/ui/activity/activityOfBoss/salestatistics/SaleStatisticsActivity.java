@@ -24,8 +24,10 @@ import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.HandoverAdapter;
 import com.admin.shopkeeper.adapter.SaleStatisticsAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
+import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.FoodSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
+import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.FoodEntity;
 import com.admin.shopkeeper.entity.SaleStatisticsBean;
 import com.admin.shopkeeper.entity.SaleStatisticsProductBean;
@@ -73,6 +75,9 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
     private SaleStatisticsAdapter adapter;
     private SaleStatisticsProductBean bean;
 
+    List<ChainBean> chainBeens = new ArrayList<>();
+    String shopId;
+
     @Override
     protected void initPresenter() {
         presenter = new SaleStatisticsPresenter(this, this);
@@ -108,7 +113,7 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
                         Tools.formatNowDate("yyyy-MM-dd", entDate),
                         Tools.formatNowDate("HH:mm:ss", startDate),
                         Tools.formatNowDate("HH:mm:ss", entDate),
-                        0, currentFood.getProductID(), bean.getProductId());
+                        0, currentFood.getProductID(), bean.getProductId(),shopId);
             }
         });
         adapter.setOnLoadMoreListener(() -> {
@@ -117,7 +122,7 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
-                    0, currentFood.getProductID(), bean.getProductId());
+                    0, currentFood.getProductID(), bean.getProductId(),shopId);
         }, recyclerView);
 
         FoodEntity foodEntity = new FoodEntity();
@@ -130,12 +135,15 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
         startDate = new Date(System.currentTimeMillis());
         entDate = new Date(System.currentTimeMillis());
 
+        shopId = App.INSTANCE().getShopID();
+        chainBeens = App.INSTANCE().getChainBeans();
+
         presenter.getGoods();
         presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
                 Tools.formatNowDate("yyyy-MM-dd", entDate),
                 Tools.formatNowDate("HH:mm:ss", startDate),
                 Tools.formatNowDate("HH:mm:ss", entDate),
-                0, currentFood.getProductID(), bean.getProductId());
+                0, currentFood.getProductID(), bean.getProductId(),shopId);
     }
 
     @Override
@@ -189,7 +197,32 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
         llFood.setVisibility(View.VISIBLE);
 
         tvFood.setText(currentFood.getProductName());
-        tvShop.setText(App.INSTANCE().getShopName());
+
+        for (ChainBean chainBean : chainBeens) {
+            if (shopId.toLowerCase().equals(chainBean.getMerchantId())) {
+                tvShop.setText(chainBean.getNames());
+            }
+        }
+
+        tvShop.setOnClickListener(v -> {
+            if(chainBeens.size() == 0){
+                showToast("获取门店失败");
+                return;
+            }
+
+            String selectText = tvShop.getText().toString().trim();
+
+            CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);
+            builder.setTitle("选择门店");
+            builder.setReasons(chainBeens);
+            builder.setSelect(selectText);
+            builder.setSingleSelect(true);
+            builder.setButtonClick((text, value) -> {
+                tvShop.setText(text);
+                shopId = value;
+            });
+            builder.creater().show();
+        });
 
 
         tvTimeType.setOnClickListener(v -> {
@@ -304,7 +337,7 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
-                    typestr.equals("营业时间") ? 0 : 1, currentFood.getProductID(), bean.getProductId());
+                    typestr.equals("营业时间") ? 0 : 1, currentFood.getProductID(), bean.getProductId(),shopId);
 
             popupWindow.dismiss();
         };

@@ -26,11 +26,12 @@ public class MemberVolumeAnalysisPresenter extends BasePresenter<IMemberVolumeAn
         super(context, iView);
     }
 
-    public void getData(int pageIndex, String startDate, String endDate, String startTime, String endTime, int type) {
+    public void getData(int pageIndex, String startDate, String endDate, String startTime, String endTime, int type,String shopId) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getMemberTranscation("12",  20, pageIndex ,"ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), type)
+                .getMemberTranscation("12",  20, pageIndex ,"ASC", startDate, endDate,
+                        startTime, endTime, shopId, type)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,11 +49,11 @@ public class MemberVolumeAnalysisPresenter extends BasePresenter<IMemberVolumeAn
                 });
     }
 
-    public void getData( String startDate, String endDate) {
+    public void getData( String startDate, String endDate,String shopId) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getRechargeDetail("13", "ASC", startDate, endDate, App.INSTANCE().getShopID())
+                .getRechargeDetail("13", "ASC", startDate, endDate,shopId)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -68,6 +68,19 @@
         <item>大众点评</item>
     </string-array>
 
+    <string-array name="payType">
+        <item>现金</item>
+        <item>银行卡</item>
+        <item>主扫微信</item>
+        <item>挂账</item>
+        <item>会员卡</item>
+        <item>被扫支付宝</item>
+        <item>被扫微信</item>
+        <item>美团</item>
+        <item>大众点评券</item>
+        <item>主扫支付宝</item>
+    </string-array>
+
     <string-array name="saleType">
         <item>店长推荐</item>
         <item>厨师推荐</item>

@@ -26,11 +26,11 @@ public class SaleStatisticsProductPresenter extends BasePresenter<ISaleStatistic
         super(context, iView);
     }
 
-    public void getData(String startDate, String endDate, String startTime, String endTime, int selectType) {
+    public void getData(String startDate, String endDate, String startTime, String endTime, int selectType,String shopId) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getProduct("23", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), selectType)
+                .getProduct("23", startDate, endDate, startTime, endTime, shopId, selectType)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

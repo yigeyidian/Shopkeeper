@@ -49,19 +49,4 @@ public class DeskopenPresenter extends BasePresenter<IDeskopenView> {
                 });
     }
 
-    public void getChain() {
-        RetrofitHelper.getInstance()
-                .getApi()
-                .getChain("15", App.INSTANCE().getShopID())
-                .compose(getActivityLifecycleProvider().bindToLifecycle())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(stringModel -> {
-                    if (stringModel.getCode().equals("1")) {
-                        ChainBean[] beens = new Gson().fromJson(stringModel.getResult(), ChainBean[].class);
-                        iView.chainsuccess(Arrays.asList(beens));
-                    }
-                }, throwable -> {
-                });
-    }
 }

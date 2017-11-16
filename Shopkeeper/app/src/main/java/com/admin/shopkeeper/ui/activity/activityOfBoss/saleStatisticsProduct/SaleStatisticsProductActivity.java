@@ -23,8 +23,10 @@ import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.SaleStatisticsAdapter;
 import com.admin.shopkeeper.adapter.SaleStatisticsProductAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
+import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.FoodSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
+import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.FoodEntity;
 import com.admin.shopkeeper.entity.SaleStatisticsBean;
 import com.admin.shopkeeper.entity.SaleStatisticsProductBean;
@@ -54,6 +56,9 @@ public class SaleStatisticsProductActivity extends BaseActivity<SaleStatisticsPr
 
     int page = 1;
     private SaleStatisticsProductAdapter adapter;
+
+    List<ChainBean> chainBeens = new ArrayList<>();
+    String shopId;
 
     @Override
     protected void initPresenter() {
@@ -88,30 +93,11 @@ public class SaleStatisticsProductActivity extends BaseActivity<SaleStatisticsPr
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(SaleStatisticsProductActivity.this, SaleStatisticsActivity.class);
-                SaleStatisticsProductBean bean = (SaleStatisticsProductBean)adapter.getItem(position);
-                intent.putExtra(Config.PARAM1,bean);
+                SaleStatisticsProductBean bean = (SaleStatisticsProductBean) adapter.getItem(position);
+                intent.putExtra(Config.PARAM1, bean);
                 startActivity(intent);
             }
         });
-        /*refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                page = 1;
-                presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                        Tools.formatNowDate("yyyy-MM-dd", entDate),
-                        Tools.formatNowDate("HH:mm:ss", startDate),
-                        Tools.formatNowDate("HH:mm:ss", entDate),
-                        0, currentFood.getProductID());
-            }
-        });
-        adapter.setOnLoadMoreListener(() -> {
-            page++;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                    Tools.formatNowDate("yyyy-MM-dd", entDate),
-                    Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", entDate),
-                    0, currentFood.getProductID());
-        }, recyclerView);*/
 
         FoodEntity foodEntity = new FoodEntity();
         foodEntity.setProductName("全部");
@@ -123,12 +109,15 @@ public class SaleStatisticsProductActivity extends BaseActivity<SaleStatisticsPr
         startDate = new Date(System.currentTimeMillis());
         entDate = new Date(System.currentTimeMillis());
 
+        shopId = App.INSTANCE().getShopID();
+        chainBeens = App.INSTANCE().getChainBeans();
+
         presenter.getGoods();
         presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
                 Tools.formatNowDate("yyyy-MM-dd", entDate),
                 Tools.formatNowDate("HH:mm:ss", startDate),
                 Tools.formatNowDate("HH:mm:ss", entDate),
-                0);
+                0, shopId);
     }
 
     @Override
@@ -157,6 +146,7 @@ public class SaleStatisticsProductActivity extends BaseActivity<SaleStatisticsPr
         List<String> types = new ArrayList<>();
         types.add("营业时间");
         types.add("自定义时间");
+        //4B176F0E-0553-4094-8181-5048641B20EF
 
         View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_select_1, null);
         popupWindow = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -171,7 +161,32 @@ public class SaleStatisticsProductActivity extends BaseActivity<SaleStatisticsPr
         llFood.setVisibility(View.VISIBLE);
 
         tvFood.setText("全部");
-        tvShop.setText(App.INSTANCE().getShopName());
+
+        for (ChainBean chainBean : chainBeens) {
+            if (shopId.toLowerCase().equals(chainBean.getMerchantId())) {
+                tvShop.setText(chainBean.getNames());
+            }
+        }
+
+        tvShop.setOnClickListener(v -> {
+            if (chainBeens.size() == 0) {
+                showToast("获取门店失败");
+                return;
+            }
+
+            String selectText = tvShop.getText().toString().trim();
+
+            CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);
+            builder.setTitle("选择门店");
+            builder.setReasons(chainBeens);
+            builder.setSelect(selectText);
+            builder.setSingleSelect(true);
+            builder.setButtonClick((text, value) -> {
+                tvShop.setText(text);
+                shopId = value;
+            });
+            builder.creater().show();
+        });
 
 
         tvTimeType.setOnClickListener(v -> {
@@ -282,11 +297,11 @@ public class SaleStatisticsProductActivity extends BaseActivity<SaleStatisticsPr
 
 
             page = 1;
-            presenter.getData( Tools.formatNowDate("yyyy-MM-dd", startDate),
+            presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
-                    typestr.equals("营业时间") ? 0 : 1);
+                    typestr.equals("营业时间") ? 0 : 1, shopId);
 
             popupWindow.dismiss();
         };

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +34,7 @@ import com.admin.shopkeeper.ui.activity.activityOfBoss.jion.IJionView;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.jion.JionActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.jion.JionPresenter;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.jiondetail.JionDetailActivity;
+import com.admin.shopkeeper.utils.ToastUtils;
 import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.utils.UIUtils;
 import com.codbking.widget.DatePickDialog;
@@ -64,6 +66,8 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
     int page = 1;
     private PopupWindow popupWindow;
     private FreeAdapter adapter;
+
+    List<ChainBean> chainBeens = new ArrayList<>();
     String shopId;
 
     @Override
@@ -120,13 +124,13 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
         entDate = new Date(System.currentTimeMillis());
 
         shopId = App.INSTANCE().getShopID();
+        chainBeens = App.INSTANCE().getChainBeans();
 
         presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
                 Tools.formatNowDate("yyyy-MM-dd", entDate),
                 Tools.formatNowDate("HH:mm:ss", startDate),
                 Tools.formatNowDate("HH:mm:ss", entDate),
                 0, shopId);
-        presenter.getChain();
     }
 
     @Override
@@ -164,19 +168,15 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
         TextView tvTimeType = (TextView) laheiView.findViewById(R.id.pop_time_typw);
         TextView tvShop = (TextView) laheiView.findViewById(R.id.tv_shop);
 
-        tvShop.setText(App.INSTANCE().getShopName());
-        if (chainBeen != null && chainBeen.size() > 0) {
-            tvShop.setText(chainBeen.get(0).getNames());
-            shopId = chainBeen.get(0).getMerchantId();
-        } else {
-            tvShop.setText(App.INSTANCE().getShopName());
-            shopId = App.INSTANCE().getShopID();
+        for (ChainBean chainBean : chainBeens) {
+            if (shopId.toLowerCase().equals(chainBean.getMerchantId())) {
+                tvShop.setText(chainBean.getNames());
+            }
         }
 
         tvShop.setOnClickListener(v -> {
-
-            if(chainBeen == null){
-                showToast("获取门店列表失败");
+            if(chainBeens.size() == 0){
+                showToast("获取门店失败");
                 return;
             }
 
@@ -184,7 +184,7 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
 
             CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);
             builder.setTitle("选择门店");
-            builder.setReasons(chainBeen);
+            builder.setReasons(chainBeens);
             builder.setSelect(selectText);
             builder.setButtonClick((text, value) -> {
                 tvShop.setText(text);
@@ -357,12 +357,5 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
             adapter.loadMoreComplete();
         }
         refreshLayout.setRefreshing(false);
-    }
-
-    List<ChainBean> chainBeen;
-
-    @Override
-    public void chainsuccess(List<ChainBean> chainBeen) {
-        this.chainBeen = chainBeen;
     }
 }

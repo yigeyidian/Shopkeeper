@@ -42,9 +42,19 @@ public class CollectionSelectDialog extends AppCompatDialog {
         private int theme;
         ChainDialogAdapter adapter;
 
+        boolean isSingleSelect = false;
+
         private String title;
         private List<ChainBean> reasons;
         private String select;
+
+        public boolean isSingleSelect() {
+            return isSingleSelect;
+        }
+
+        public void setSingleSelect(boolean singleSelect) {
+            isSingleSelect = singleSelect;
+        }
 
         public String getSelect() {
             return select;
@@ -93,7 +103,6 @@ public class CollectionSelectDialog extends AppCompatDialog {
 
             titletv.setText(title);
 
-
             oneBtn.setOnClickListener(v -> {
                 dismiss();
             });
@@ -134,12 +143,18 @@ public class CollectionSelectDialog extends AppCompatDialog {
             recyclerView.addItemDecoration(new MarginDecoration(context, R.dimen._10sdp));
             recyclerView.setAdapter(adapter);
 
-
             adapter.setOnItemClickListener((adapter, view1, position) -> {
-                if (getReasons().get(position).isSelect()) {
-                    getReasons().get(position).setSelect(false);
-                } else {
+                if (isSingleSelect) {
+                    for (ChainBean chainBean : getReasons()) {
+                        chainBean.setSelect(false);
+                    }
                     getReasons().get(position).setSelect(true);
+                } else {
+                    if (getReasons().get(position).isSelect()) {
+                        getReasons().get(position).setSelect(false);
+                    } else {
+                        getReasons().get(position).setSelect(true);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             });

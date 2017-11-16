@@ -30,7 +30,7 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getMemberTranscation("12",  20, pageIndex ,"ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), type)
+                .getMemberTranscation("12", 20, pageIndex, "ASC", startDate, endDate, startTime, endTime, App.INSTANCE().getShopID(), type)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,20 +48,20 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
                 });
     }
 
-    public void getData( String startDate, String endDate) {
+    public void getData(String startDate, String endDate, String shopId) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getRechargeDetail("10", "ASC", startDate, endDate, App.INSTANCE().getShopID())
+                .getRechargeDetail("10", "ASC", startDate, endDate, shopId)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        if(TextUtils.isEmpty(stringModel.getResult())){
+                        if (TextUtils.isEmpty(stringModel.getResult())) {
                             iView.success("暂无数据");
-                        }else{
+                        } else {
                             RechargeDetailTableBean[] beens = new Gson().fromJson(stringModel.getResult(), RechargeDetailTableBean[].class);
                             iView.success(Arrays.asList(beens));
                         }

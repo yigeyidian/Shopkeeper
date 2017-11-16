@@ -18,5 +18,4 @@ public interface IFreeView extends IBaseView {
 
     void success(List<FreeBean> data);
 
-    void chainsuccess(List<ChainBean> chainBeen);
 }

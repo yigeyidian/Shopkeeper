@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.admin.shopkeeper.db.AppDbHelper;
 import com.admin.shopkeeper.db.DaoManager;
+import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.User;
 import com.admin.shopkeeper.push.MyPushIntentService;
 import com.admin.shopkeeper.utils.SPUtils;
@@ -18,6 +19,9 @@ import com.umeng.message.IUmengCallback;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -182,5 +186,19 @@ public class App extends Application {
 
             }
         });
+    }
+
+    List<ChainBean> chainBeans = new ArrayList<>();
+
+    public List<ChainBean> getChainBeans() {
+        for (ChainBean chainBean : chainBeans) {
+            chainBean.setSelect(false);
+        }
+        return chainBeans;
+    }
+
+    public void setChainBeans(List<ChainBean> chainBeans) {
+        this.chainBeans.clear();
+        this.chainBeans.addAll(chainBeans);
     }
 }

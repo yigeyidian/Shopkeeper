@@ -38,7 +38,6 @@ import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.MsgEvent;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.BillAdapter;
-import com.admin.shopkeeper.adapter.CardAdapter;
 import com.admin.shopkeeper.adapter.MenuListAdapter;
 import com.admin.shopkeeper.adapter.PopSaleAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
@@ -54,7 +53,6 @@ import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.PayMeEntity;
 import com.admin.shopkeeper.entity.TableEntity;
 import com.admin.shopkeeper.entity.WeixinOrderBean;
-import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
@@ -110,8 +108,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     SwitchCompat switchCompat;
     @BindView(R.id.layout_6)
     RecyclerView recyclerView;
-    @BindView(R.id.layout_7)
-    RecyclerView recyclerView1;
     @BindView(R.id.tv7)
     AppCompatTextView tv7;
     @BindView(R.id.bill_dazhe)
@@ -139,7 +135,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     private double foodMoney = 0;
 
     private BillAdapter adapter;
-    private BillAdapter billAdapter;
 
     private Order order;
     private List<OrderDetailFood> list;
@@ -246,7 +241,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     showToast("会员余额不足");
                     memberPayEntity.setMoney(memberBean.getMoney());
                     adapter.notifyDataSetChanged();
-                    billAdapter.notifyDataSetChanged();
                     getNeed();
                     intText();
                 }
@@ -338,6 +332,14 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             saleWindow.dismiss();
         });
         tvCancel.setOnClickListener(v -> {
+            if(memberPayEntity != null){
+                memberPayEntity.setMoney(0);
+                memberPayEntity.setSelected(false);
+                //initPay();
+                getNeed();
+                intText();
+                adapter.notifyDataSetChanged();
+            }
             saleWindow.dismiss();
         });
 
@@ -500,81 +502,41 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     BillJson.BillJsonBase pe = new BillJson.BillJsonBase();
                     pe.setGuid(System.currentTimeMillis() + "");
                     pe.setPice(entity.getMoney() + "");
-                    switch (entity.getName()) {
-                        case "银行卡":
-                            pe.setPiceGuid("2");
-                            break;
-                        case "会员卡":
-                            pe.setPiceGuid("5");
-                            break;
-                        case "现金":
-                            pe.setPiceGuid("1");
-                            break;
-                        case "主扫微信":
-                            pe.setPiceGuid("3");
-                            break;
-                        case "被扫微信":
-                            pe.setPiceGuid("7");
-                            break;
-                        case "被扫支付宝":
-                            pe.setPiceGuid("6");
-                            break;
-                        case "美团":
-                            pe.setPiceGuid("8");
-                            break;
-                        case "大众点评":
-                            pe.setPiceGuid("9");
-                            break;
-                        case "主扫支付宝":
-                            pe.setPiceGuid("10");
-                            break;
-
-                    }
+                    pe.setPiceGuid(entity.getGuid() + "");
+//                    switch (entity.getName()) {
+//                        case "银行卡":
+//                            pe.setPiceGuid("2");
+//                            break;
+//                        case "会员卡":
+//                            pe.setPiceGuid("5");
+//                            break;
+//                        case "现金":
+//                            pe.setPiceGuid("1");
+//                            break;
+//                        case "主扫微信":
+//                            pe.setPiceGuid("3");
+//                            break;
+//                        case "被扫微信":
+//                            pe.setPiceGuid("7");
+//                            break;
+//                        case "被扫支付宝":
+//                            pe.setPiceGuid("6");
+//                            break;
+//                        case "美团":
+//                            pe.setPiceGuid("8");
+//                            break;
+//                        case "大众点评":
+//                            pe.setPiceGuid("9");
+//                            break;
+//                        case "主扫支付宝":
+//                            pe.setPiceGuid("10");
+//                            break;
+//
+//                    }
                     p.add(pe);
                 }
             }
 
-            for (int k = 0; k < billAdapter.getItemCount(); k++) {
-                PayMeEntity entity = billAdapter.getItem(k);
-                if (entity != null && entity.isSelected()) {
-                    BillJson.BillJsonBase pe = new BillJson.BillJsonBase();
-                    pe.setGuid(System.currentTimeMillis() + "");
-                    pe.setPice(entity.getMoney() + "");
-                    switch (entity.getName()) {
-                        case "银行卡":
-                            pe.setPiceGuid("2");
-                            break;
-                        case "会员卡":
-                            pe.setPiceGuid("5");
-                            break;
-                        case "现金":
-                            pe.setPiceGuid("1");
-                            break;
-                        case "主扫微信":
-                            pe.setPiceGuid("3");
-                            break;
-                        case "被扫微信":
-                            pe.setPiceGuid("7");
-                            break;
-                        case "被扫支付宝":
-                            pe.setPiceGuid("6");
-                            break;
-                        case "美团":
-                            pe.setPiceGuid("8");
-                            break;
-                        case "大众点评":
-                            pe.setPiceGuid("9");
-                            break;
-                        case "主扫支付宝":
-                            pe.setPiceGuid("10");
-                            break;
-                        case "挂账":
-                            pe.setPiceGuid("4");
-                            break;
-                    }
-                    p.add(pe);
-                }
-            }
             pays.setQuanxian(p);
             String pStr = new Gson().toJson(pays);
 
@@ -706,7 +668,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            presenter.cancelBill(billId);
+            if (type == P1) {
+                presenter.cancelBill(billId);
+            } else {
+                finish();
+            }
             return true;
         } else {
             return super.onKeyDown(keyCode, event);
@@ -719,238 +685,108 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 .colorResId(R.color.white).build());
         recyclerView.setLayoutManager(new LinearLayoutManager(BillActivity.this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int p) {
-                PayMeEntity e = adapter.getItem(p);
-                switch (e.getName()) {
-                    case "主扫微信":
-                        Intent intent = new Intent(BillActivity.this, CaptureActivity.class);
-                        startActivityForResult(intent, REQUEST_CODE);
-                        break;
-                    case "主扫支付宝":
-                        //startActivityForResult(new Intent(BillActivity.this, CaptureActivity.class), REQUEST_CODE_ZFB);
-                        break;
-                    case "被扫微信":
-                        if (!switchCompat.isChecked()) {
-                            if (needMoney == 0 && e.isSelected()) {
-                                presenter.getimage(p, e);
-                            } else if (needMoney > 0) {
-                                presenter.getimage(p, e);
-                            }
+        adapter.setOnItemClickListener((baseQuickAdapter, view, p) -> {
+            PayMeEntity e = adapter.getItem(p);
+            switch (e.getName()) {
+                case "主扫微信":
+                    Intent intent = new Intent(BillActivity.this, CaptureActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE);
+                    break;
+                case "主扫支付宝":
+                    //startActivityForResult(new Intent(BillActivity.this, CaptureActivity.class), REQUEST_CODE_ZFB);
+                    break;
+                case "被扫微信":
+                    if (!switchCompat.isChecked()) {
+                        if (needMoney == 0 && e.isSelected()) {
+                            presenter.getimage(p, e);
+                        } else if (needMoney > 0) {
+                            presenter.getimage(p, e);
                         }
-                        break;
-                    default:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(BillActivity.this);
-                        builder.setTitle("设置金额");
-                        AppCompatEditText editText = new AppCompatEditText(BillActivity.this);
-                        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                        editText.setHint("最多输入" + (needMoney + e.getMoney()));
-                        editText.setText((needMoney + e.getMoney() + ""));
-                        editText.setSelection(editText.length());
-                        builder.setView(editText);
-                        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                e.setMoney(0);
-                                e.setSelected(false);
-                                getNeed();
-                                intText();
-                                adapter.notifyItemChanged(p, e);
+                    }
+                    break;
+                case "挂账":
+                    presenter.guazhang(e);
+                    break;
+                case "会员卡":
+                    List<PayMeEntity> data = adapter.getData();
+                    for (PayMeEntity payMeEntity : data) {
+                        payMeEntity.setMoney(0);
+                        payMeEntity.setSelected(false);
+                    }
+                    e.setMoney(getYinfuMoney());
+                    e.setSelected(true);
+                    getNeed();
+                    intText();
+                    adapter.notifyDataSetChanged();
+                    memberPayEntity = e;
+                    poptype = 2;
+                    cardClick();
+                    break;
+                default:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(BillActivity.this);
+                    builder.setTitle("设置金额");
+                    AppCompatEditText editText = new AppCompatEditText(BillActivity.this);
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.setHint("最多输入" + (needMoney + e.getMoney()));
+                    editText.setText((needMoney + e.getMoney() + ""));
+                    editText.setSelection(editText.length());
+                    builder.setView(editText);
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            e.setMoney(0);
+                            e.setSelected(false);
+                            getNeed();
+                            intText();
+                            //adapter.notifyItemChanged(p, e);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                    builder.setPositiveButton("确定", null);
+                    AlertDialog dialog = builder.create();
+                    if (!switchCompat.isChecked()) {
+                        if (needMoney == 0 && e.isSelected()) {
+                            dialog.show();
+                        } else if (needMoney > 0) {
+                            dialog.show();
+                        }
+                    }
+                    if (dialog.getButton(AlertDialog.BUTTON_POSITIVE) != null) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+                            if (TextUtils.isEmpty(editText.getText().toString().trim())) {
+                                error("请输入正确的价格");
+                            } else if (Double.parseDouble(editText.getText().toString().trim()) > needMoney + e.getMoney()) {
+                                error("最多输入" + (needMoney + e.getMoney()));
+                            } else {
+                                double d = Double.parseDouble(editText.getText().toString());
+                                if (d <= e.getMoney() && d >= 0) {
+                                    if (d == 0) {
+                                        e.setSelected(false);
+                                    } else {
+                                        e.setSelected(true);
+                                    }
+                                    e.setMoney(d);
+                                    getNeed();
+                                    intText();
+                                    //adapter.notifyItemChanged(p, e);
+                                    adapter.notifyDataSetChanged();
+                                } else if (d <= (needMoney + e.getMoney()) && d >= 0) {
+                                    if (d == 0) {
+                                        e.setSelected(false);
+                                    } else {
+                                        e.setSelected(true);
+                                    }
+                                    e.setMoney(d);
+                                    getNeed();
+                                    intText();
+                                    //adapter.notifyItemChanged(p, e);
+                                    adapter.notifyDataSetChanged();
+                                }
+                                dialog.dismiss();
                             }
                         });
-                        builder.setPositiveButton("确定", null);
-                        AlertDialog dialog = builder.create();
-                        if (!switchCompat.isChecked()) {
-                            if (needMoney == 0 && e.isSelected()) {
-                                dialog.show();
-                            } else if (needMoney > 0) {
-                                dialog.show();
-                            }
-                        }
-                        if (dialog.getButton(AlertDialog.BUTTON_POSITIVE) != null) {
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-                                if (TextUtils.isEmpty(editText.getText().toString().trim())) {
-                                    error("请输入正确的价格");
-                                } else if (Double.parseDouble(editText.getText().toString().trim()) > needMoney + e.getMoney()) {
-                                    error("最多输入" + (needMoney + e.getMoney()));
-                                } else {
-                                    double d = Double.parseDouble(editText.getText().toString());
-                                    if (d <= e.getMoney() && d >= 0) {
-                                        if (d == 0) {
-                                            e.setSelected(false);
-                                        } else {
-                                            e.setSelected(true);
-                                        }
-                                        e.setMoney(d);
-                                        getNeed();
-                                        intText();
-                                        adapter.notifyItemChanged(p, e);
-                                    } else if (d <= (needMoney + e.getMoney()) && d >= 0) {
-                                        if (d == 0) {
-                                            e.setSelected(false);
-                                        } else {
-                                            e.setSelected(true);
-                                        }
-                                        e.setMoney(d);
-                                        getNeed();
-                                        intText();
-                                        adapter.notifyItemChanged(p, e);
-                                    }
-
-//                                    if (e.getName().equals("会员卡")) {
-//                                        //if (memberBean == null) {
-//                                        memberPayEntity = e;
-//                                        cardClick();
-////                                        } else {
-////                                            if (memberBean.getMoney() < e.getMoney()) {
-////                                                e.setMoney((int) memberBean.getMoney());
-////                                            }
-////                                            billAdapter.notifyDataSetChanged();
-////                                            adapter.notifyDataSetChanged();
-////                                            getNeed();
-////                                            intText();
-////                                        }
-//                                    }
-
-                                    dialog.dismiss();
-                                }
-                            });
-                        }
-                        break;
-                }
-            }
-        });
-
-        billAdapter = new BillAdapter(R.layout.item_bill);
-        recyclerView1.addItemDecoration(new VerticalDividerItemDecoration.Builder(BillActivity.this).sizeResId(R.dimen._20sdp)
-                .colorResId(R.color.white).build());
-        recyclerView1.setLayoutManager(new LinearLayoutManager(BillActivity.this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView1.setAdapter(billAdapter);
-        billAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int p) {
-                PayMeEntity entity = billAdapter.getItem(p);
-                switch (entity.getName()) {
-                    case "主扫微信":
-                        Intent intent = new Intent(BillActivity.this, CaptureActivity.class);
-                        startActivityForResult(intent, REQUEST_CODE);
-                        break;
-                    case "被扫微信":
-                        if (!switchCompat.isChecked()) {
-                            if (needMoney == 0 && entity.isSelected()) {
-                                presenter.getimage(p, entity);
-                            } else if (needMoney > 0) {
-                                presenter.getimage(p, entity);
-                            }
-                        }
-                        break;
-                    case "挂账":
-                        presenter.guazhang(entity);
-                        break;
-                    case "会员卡":
-                        List<PayMeEntity> data = adapter.getData();
-                        for (PayMeEntity payMeEntity : data) {
-                            payMeEntity.setMoney(0);
-                            payMeEntity.setSelected(false);
-                        }
-                        List<PayMeEntity> data1 = billAdapter.getData();
-                        for (PayMeEntity payMeEntity : data1) {
-                            payMeEntity.setMoney(0);
-                            payMeEntity.setSelected(false);
-                        }
-                        entity.setMoney(getYinfuMoney());
-                        entity.setSelected(true);
-                        getNeed();
-                        intText();
-                        adapter.notifyDataSetChanged();
-                        billAdapter.notifyDataSetChanged();
-                        memberPayEntity = entity;
-                        poptype = 2;
-                        cardClick();
-                        break;
-                    default:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(BillActivity.this);
-                        builder.setTitle("设置金额");
-                        AppCompatEditText editText = new AppCompatEditText(BillActivity.this);
-                        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                        editText.setHint("最多输入" + (needMoney + entity.getMoney()));
-                        editText.setText((needMoney + entity.getMoney() + ""));
-                        editText.setSelection(editText.length());
-                        builder.setView(editText);
-                        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                entity.setMoney(0);
-                                entity.setSelected(false);
-                                getNeed();
-                                intText();
-                                billAdapter.notifyItemChanged(p, entity);
-                            }
-                        });
-                        builder.setPositiveButton("确定", null);
-                        AlertDialog dialog = builder.create();
-                        if (!switchCompat.isChecked()) {
-                            if (needMoney == 0 && entity.isSelected()) {
-                                dialog.show();
-                            } else if (needMoney > 0) {
-                                dialog.show();
-                            }
-                        }
-
-                        if (dialog.getButton(AlertDialog.BUTTON_POSITIVE) != null) {
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-                                if (TextUtils.isEmpty(editText.getText().toString().trim())) {
-                                    error("请输入正确的价格");
-                                } else if (Double.parseDouble(editText.getText().toString()) > needMoney + entity.getMoney()) {
-                                    error("最多输入" + (needMoney + entity.getMoney()));
-                                } else {
-                                    double d = Double.parseDouble(editText.getText().toString());
-                                    if (d <= entity.getMoney() && d >= 0) {
-                                        if (d == 0) {
-                                            entity.setSelected(false);
-                                        } else {
-                                            entity.setSelected(true);
-                                        }
-                                        entity.setMoney(d);
-                                        getNeed();
-                                        intText();
-                                        billAdapter.notifyItemChanged(p, entity);
-                                    } else if (d <= (needMoney + entity.getMoney()) && d >= 0) {
-                                        if (d == 0) {
-                                            entity.setSelected(false);
-                                        } else {
-                                            entity.setSelected(true);
-                                        }
-                                        entity.setMoney(d);
-                                        getNeed();
-                                        intText();
-                                        billAdapter.notifyItemChanged(p, entity);
-                                    }
-
-                                    if (entity.getName().equals("会员卡")) {
-                                        //if (memberBean == null) {
-                                        memberPayEntity = entity;
-                                        poptype = 2;
-                                        cardClick();
-//                                        } else {
-//                                            if (memberBean.getMoney() < entity.getMoney()) {
-//                                                entity.setMoney((int) memberBean.getMoney());
-//                                            }
-//                                            billAdapter.notifyDataSetChanged();
-//                                            adapter.notifyDataSetChanged();
-//                                            getNeed();
-//                                            intText();
-//                                        }
-                                    }
-
-                                    dialog.dismiss();
-                                }
-                            });
-                        }
-
-                        break;
-                }
+                    }
+                    break;
             }
         });
     }
@@ -1011,9 +847,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         for (PayMeEntity entity : adapter.getData()) {
             count += entity.getMoney();
         }
-        for (PayMeEntity entity : billAdapter.getData()) {
-            count += entity.getMoney();
-        }
         needMoney = result - count;
     }
 
@@ -1044,47 +877,21 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         }
         double result = weixinOrderBean.getYuanjia() - weixinOrderBean.getYufupice() - weixinOrderBean.getYouhui() - getYouhuiMoney();
 
-        String[] a = getResources().getStringArray(R.array.payArr);
-        List<PayMeEntity> list = new ArrayList<>();
-        for (String anA : a) {
-            if (anA.equals("现金")) {
-                list.add(new PayMeEntity(anA, true, result));
-            } else {
-                list.add(new PayMeEntity(anA, false));
+
+        String[] payTypes = getResources().getStringArray(R.array.payType);
+        List<PayMeEntity> datas = new ArrayList<>();
+        for (int i = 0; i < payTypes.length; i++) {
+            if (App.INSTANCE().getUser().getCashPayType().contains(i + 1 + "")) {
+                String anA = payTypes[i];
+                if (anA.equals("现金")) {
+                    datas.add(new PayMeEntity(anA, true, result, i + 1));
+                } else {
+                    datas.add(new PayMeEntity(anA, false, i + 1));
+                }
             }
-        }
-        adapter.setNewData(list);
 
-        String[] payArr2 = getResources().getStringArray(R.array.payArr2);
-        List<PayMeEntity> entities = new ArrayList<>();
-        for (String anA : payArr2) {
-            entities.add(new PayMeEntity(anA, false));
         }
-        billAdapter.setNewData(entities);
-    }
-
-    private void initPay2() {
-        if (weixinOrderBean == null) {
-            return;
-        }
-
-        String[] a = getResources().getStringArray(R.array.payArr);
-        List<PayMeEntity> list = new ArrayList<>();
-        for (String anA : a) {
-            list.add(new PayMeEntity(anA, false));
-        }
-        adapter.setNewData(list);
-
-        String[] payArr2 = getResources().getStringArray(R.array.payArr2);
-        List<PayMeEntity> entities = new ArrayList<>();
-        for (String anA : payArr2) {
-            if (anA.equals("会员卡")) {
-                list.add(new PayMeEntity(anA, true, getYinfuMoney()));
-            } else {
-                list.add(new PayMeEntity(anA, false));
-            }
-        }
-        billAdapter.setNewData(entities);
+        adapter.setNewData(datas);
     }
 
     String guiId = "";
@@ -1112,14 +919,14 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     entity.setMoney(money);
                     getNeed();
                     intText();
-                    billAdapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
                 } else {
                     guiId = "";
                     entity.setMoney(0);
                     entity.setSelected(false);
                     getNeed();
                     intText();
-                    billAdapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
                 }
                 guaZhangDialog.dismiss();
             }
@@ -1131,7 +938,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 entity.setSelected(false);
                 getNeed();
                 intText();
-                billAdapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
         });
         guaZhangDialog.show();
@@ -1151,7 +958,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 showToast("会员余额不足");
                 memberPayEntity.setMoney(memberBean.getMoney());
                 adapter.notifyDataSetChanged();
-                billAdapter.notifyDataSetChanged();
                 getNeed();
                 intText();
             }
@@ -1446,7 +1252,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 e.setSelected(false);
                 getNeed();
                 intText();
-                billAdapter.notifyItemChanged(p, e);
+                //adapter.notifyItemChanged(p, e);
+                adapter.notifyDataSetChanged();
             }
         });
         builder.setPositiveButton("确定", null);
@@ -1477,7 +1284,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
                         getNeed();
                         intText();
-                        billAdapter.notifyItemChanged(p, e);
+                        //adapter.notifyItemChanged(p, e);
+                        adapter.notifyDataSetChanged();
                     } else if (d <= (needMoney + e.getMoney()) && d >= 0) {
                         if (d == 0) {
                             e.setSelected(false);
@@ -1488,7 +1296,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                         getNeed();
 
                         intText();
-                        billAdapter.notifyItemChanged(p, e);
+                        //adapter.notifyItemChanged(p, e);
+                        adapter.notifyDataSetChanged();
                     }
 
                     dialog.dismiss();

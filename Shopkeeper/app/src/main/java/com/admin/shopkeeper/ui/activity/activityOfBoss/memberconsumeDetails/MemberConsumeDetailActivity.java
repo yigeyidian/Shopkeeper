@@ -15,10 +15,13 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.MemberConsumeDetailAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
+import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
+import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.MemberConsumeDetailBean;
 import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.utils.UIUtils;
@@ -55,6 +58,9 @@ public class MemberConsumeDetailActivity extends BaseActivity<MemberConsumeDetai
     private String titleStr;
     MemberConsumeDetailAdapter adapter;
     int pageIndex = 1;
+
+    List<ChainBean> chainBeens = new ArrayList<>();
+    String shopId;
     @Override
     protected void initPresenter() {
         presenter = new MemberConsumeDetailPresenter(this, this);
@@ -92,7 +98,10 @@ public class MemberConsumeDetailActivity extends BaseActivity<MemberConsumeDetai
         String startDate = Tools.formatLastMonthDate("yyyy-MM-dd");
         String endDate = Tools.formatNowDate("yyyy-MM-dd");
 
-        presenter.getData(pageIndex ,startDate, endDate,"00:00:00", "23:59:59", 0);
+        shopId = App.INSTANCE().getShopID();
+        chainBeens = App.INSTANCE().getChainBeans();
+
+        presenter.getData(pageIndex ,startDate, endDate,"00:00:00", "23:59:59", 0,shopId);
 
 //        tvDate.setText(startDate + "至" + endDate);
 
@@ -143,6 +152,33 @@ public class MemberConsumeDetailActivity extends BaseActivity<MemberConsumeDetai
         TextView etStartTime = (TextView) laheiView.findViewById(R.id.pop_starttime);
         TextView etEndTime = (TextView) laheiView.findViewById(R.id.pop_endtime);
         TextView tvTimeType = (TextView) laheiView.findViewById(R.id.pop_time_typw);
+        TextView tvShop = (TextView) laheiView.findViewById(R.id.tv_shop);
+
+        for (ChainBean chainBean : chainBeens) {
+            if (shopId.toLowerCase().equals(chainBean.getMerchantId())) {
+                tvShop.setText(chainBean.getNames());
+            }
+        }
+
+        tvShop.setOnClickListener(v -> {
+            if(chainBeens.size() == 0){
+                showToast("获取门店失败");
+                return;
+            }
+
+            String selectText = tvShop.getText().toString().trim();
+
+            CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);
+            builder.setTitle("选择门店");
+            builder.setReasons(chainBeens);
+            builder.setSelect(selectText);
+            builder.setSingleSelect(true);
+            builder.setButtonClick((text, value) -> {
+                tvShop.setText(text);
+                shopId = value;
+            });
+            builder.creater().show();
+        });
 
         tvTimeType.setOnClickListener(v -> {
             SingleSelectDialog.Builder builder = new SingleSelectDialog.Builder(this, R.style.OrderDialogStyle);
@@ -224,7 +260,7 @@ public class MemberConsumeDetailActivity extends BaseActivity<MemberConsumeDetai
             presenter.getData(pageIndex,Tools.formatNowDate("yyyy-MM-dd", startDate),
                     Tools.formatNowDate("yyyy-MM-dd", endDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", endDate), typestr.equals("营业时间") ? 0 : 1);
+                    Tools.formatNowDate("HH:mm:ss", endDate), typestr.equals("营业时间") ? 0 : 1,shopId);
 
 
 //            tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "至" + Tools.formatNowDate("yyyy-MM-dd", endDate));

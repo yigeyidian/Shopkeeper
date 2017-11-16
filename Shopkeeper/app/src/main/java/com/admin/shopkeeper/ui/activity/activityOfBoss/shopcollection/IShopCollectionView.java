@@ -17,6 +17,4 @@ public interface IShopCollectionView extends IBaseView {
     void error(String msg);
 
     void success(List<ShopCollectionBean> data);
-
-    void chainsuccess(List<ChainBean> chainBeen);
 }
