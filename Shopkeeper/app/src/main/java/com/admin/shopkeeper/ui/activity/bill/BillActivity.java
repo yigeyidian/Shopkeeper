@@ -332,7 +332,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             saleWindow.dismiss();
         });
         tvCancel.setOnClickListener(v -> {
-            if(memberPayEntity != null){
+            if (memberPayEntity != null) {
                 memberPayEntity.setMoney(0);
                 memberPayEntity.setSelected(false);
                 //initPay();
@@ -678,7 +678,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             return super.onKeyDown(keyCode, event);
         }
     }
-
+    private Double zhifubaoScanMoney;
     private void initRVIew() {
         adapter = new BillAdapter(R.layout.item_bill);
         recyclerView.addItemDecoration(new VerticalDividerItemDecoration.Builder(BillActivity.this).sizeResId(R.dimen._20sdp)
@@ -689,11 +689,80 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             PayMeEntity e = adapter.getItem(p);
             switch (e.getName()) {
                 case "主扫微信":
-                    Intent intent = new Intent(BillActivity.this, CaptureActivity.class);
-                    startActivityForResult(intent, REQUEST_CODE);
+                    final Intent[] intent = {new Intent(BillActivity.this, CaptureActivity.class)};
+                    startActivityForResult(intent[0], REQUEST_CODE);
                     break;
                 case "主扫支付宝":
-                    //startActivityForResult(new Intent(BillActivity.this, CaptureActivity.class), REQUEST_CODE_ZFB);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(BillActivity.this);
+                    builder.setTitle("设置金额");
+                    AppCompatEditText editText = new AppCompatEditText(BillActivity.this);
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.setHint("最多输入" + (needMoney + e.getMoney()));
+                    editText.setText((needMoney + e.getMoney() + ""));
+                    editText.setSelection(editText.length());
+                    builder.setView(editText);
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            e.setMoney(0);
+                            e.setSelected(false);
+                            getNeed();
+                            intText();
+                            //adapter.notifyItemChanged(p, e);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                    builder.setPositiveButton("确定", null);
+                    AlertDialog dialog = builder.create();
+                    if (!switchCompat.isChecked()) {
+                        if (needMoney == 0 && e.isSelected()) {
+                            dialog.show();
+                        } else if (needMoney > 0) {
+                            dialog.show();
+                        }
+                    }
+                    if (dialog.getButton(AlertDialog.BUTTON_POSITIVE) != null) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+                            if (TextUtils.isEmpty(editText.getText().toString().trim())) {
+                                error("请输入正确的价格");
+                            } else if (Double.parseDouble(editText.getText().toString().trim()) > needMoney + e.getMoney()) {
+                                error("最多输入" + (needMoney + e.getMoney()));
+                            } else {
+                                double d = Double.parseDouble(editText.getText().toString());
+                                if (d <= e.getMoney() && d >= 0) {
+                                    if (d == 0) {
+                                        e.setSelected(false);
+                                    } else {
+                                        e.setSelected(true);
+                                        zhifubaoScanMoney = d;
+                                        Intent intent1 = new Intent(BillActivity.this, CaptureActivity.class);
+                                        startActivityForResult(intent1, REQUEST_CODE_ZFB);
+                                    }
+                                    e.setMoney(d);
+                                    getNeed();
+                                    intText();
+                                    //adapter.notifyItemChanged(p, e);
+                                    adapter.notifyDataSetChanged();
+                                } else if (d <= (needMoney + e.getMoney()) && d >= 0) {
+                                    if (d == 0) {
+                                        e.setSelected(false);
+                                    } else {
+                                        e.setSelected(true);
+                                        zhifubaoScanMoney = d;
+                                        Intent intent1 = new Intent(BillActivity.this, CaptureActivity.class);
+                                        startActivityForResult(intent1, REQUEST_CODE_ZFB);
+                                    }
+                                    e.setMoney(d);
+                                    getNeed();
+                                    intText();
+                                    //adapter.notifyItemChanged(p, e);
+                                    adapter.notifyDataSetChanged();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+//                    startActivityForResult(new Intent(BillActivity.this, CaptureActivity.class), REQUEST_CODE_ZFB);
                     break;
                 case "被扫微信":
                     if (!switchCompat.isChecked()) {
@@ -723,9 +792,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     cardClick();
                     break;
                 default:
-                    AlertDialog.Builder builder = new AlertDialog.Builder(BillActivity.this);
+                    builder = new AlertDialog.Builder(BillActivity.this);
                     builder.setTitle("设置金额");
-                    AppCompatEditText editText = new AppCompatEditText(BillActivity.this);
+                    editText = new AppCompatEditText(BillActivity.this);
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                     editText.setHint("最多输入" + (needMoney + e.getMoney()));
                     editText.setText((needMoney + e.getMoney() + ""));
@@ -743,7 +812,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                         }
                     });
                     builder.setPositiveButton("确定", null);
-                    AlertDialog dialog = builder.create();
+                    dialog = builder.create();
                     if (!switchCompat.isChecked()) {
                         if (needMoney == 0 && e.isSelected()) {
                             dialog.show();
@@ -1418,6 +1487,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             }
             if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                 String result = bundle.getString(CodeUtils.RESULT_STRING);
+                presenter.scanBill(result, zhifubaoScanMoney, billId);
             } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                 warning("解析二维码失败");
             }
