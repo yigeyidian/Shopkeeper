@@ -66,7 +66,7 @@ public class OrderManageActivity extends BaseActivity<OrderManagePresenter> impl
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_sale_statistics;
+        return R.layout.activity_order_manage;
     }
 
     @Override

@@ -587,13 +587,14 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
         return total;
     }*/
     @Override
-    public void inBillSuccess(Order order, List<OrderDetailFood> orderDetailFoods, int position , boolean isScanBill) {
+    public void inBillSuccess(Order order1, List<OrderDetailFood> orderDetailFoods, int position , boolean isScanBill) {
         Intent intent;
         if(isScanBill){
             for (int i = 0; i < orderDetailFoods.size(); i++) {
                 total += orderDetailFoods.get(i).getPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
                 total += orderDetailFoods.get(i).getSeasonPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
             }
+            order = order1;
             intent = new Intent(getActivity(), CaptureActivity.class);
             startActivityForResult(intent, REQUEST_CODE);
         }else{
@@ -604,7 +605,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
                 detailFood += orderDetailFoods.get(i).getSeasonPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
             }
             intent.putExtra(Config.PARAM2, detailFood);//总价
-            intent.putExtra(Config.PARAM3, order);
+            intent.putExtra(Config.PARAM3, order1);
             intent.putExtra(Config.PARAM4, (Serializable) orderDetailFoods);
             intent.putExtra(Config.PARAM1, position);
             intent.putExtra(Config.PARAM5, BillActivity.P1);
@@ -787,12 +788,16 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
     @Override
     public void billSuccess(String msg,String result){
         Toasty.success(getActivity(), msg, Toast.LENGTH_SHORT, true).show();
+        presenter.getTables(mParam1);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 998) {
             presenter.getTables(mParam1);
+        }
+        if(requestCode == 5){
+            presenter.cancelBill(order.getBillid());
         }
         if (data == null) {
             return;
