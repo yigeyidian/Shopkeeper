@@ -21,6 +21,7 @@ import com.admin.shopkeeper.adapter.TableAdapter;
 import com.admin.shopkeeper.base.DelayFragment;
 import com.admin.shopkeeper.dialog.CommonDialog;
 import com.admin.shopkeeper.dialog.RadioDialog;
+import com.admin.shopkeeper.entity.BillJson;
 import com.admin.shopkeeper.entity.CommonDialogEntity;
 import com.admin.shopkeeper.entity.Order;
 import com.admin.shopkeeper.entity.OrderDetailFood;
@@ -33,6 +34,7 @@ import com.admin.shopkeeper.ui.activity.bill.BillActivity;
 import com.admin.shopkeeper.ui.activity.orderDetail.OrderDetailActivity;
 import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
@@ -494,9 +496,9 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
                         warning("没有撤单权限");
                     }
                     break;*/
-                case 4:
+                case 3:
                     if (App.INSTANCE().getUser().getPermissionValue().contains("jiesuan")) {
-                        presenter.inBill(order, orderDetailFoods, position,false);
+                        presenter.inBill(order, orderDetailFoods, position,true);
                     } else {
                         warning("没有结算权限");
                     }
@@ -588,6 +590,10 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
     public void inBillSuccess(Order order, List<OrderDetailFood> orderDetailFoods, int position , boolean isScanBill) {
         Intent intent;
         if(isScanBill){
+            for (int i = 0; i < orderDetailFoods.size(); i++) {
+                total += orderDetailFoods.get(i).getPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
+                total += orderDetailFoods.get(i).getSeasonPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
+            }
             intent = new Intent(getActivity(), CaptureActivity.class);
             startActivityForResult(intent, REQUEST_CODE);
         }else{
@@ -725,18 +731,79 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
 
         }
     }
+    private void scanbill(String payType, String result, double money, String memberId) {
+        List<BillJson.BillJsonBase> t = new ArrayList<>();
+        BillJson.BillJsonBase base2 = new BillJson.BillJsonBase();
+        t.add(base2);
 
+        BillJson.BillJsonBase base = new BillJson.BillJsonBase();
+        base.setGuid(String.valueOf(System.currentTimeMillis()) + result);
+        base.setPice(String.valueOf(money));
+        base.setPiceGuid(payType);
+        base.setSate("0");
+        base.setType("1");
+        base.setIsSql("1");
+        t.add(base);
 
+        BillJson.TeacherJson teacherJson = new BillJson.TeacherJson();
+        List<BillJson.BillJsonBase> youHui = new ArrayList<>();
+        youHui.add(base2);
+        teacherJson.setTeacher(youHui);
+        String tStr = new Gson().toJson(teacherJson);
+        Log.i("ttt", "---tStr:" + tStr);
+
+        BillJson.Quanxian quanxian = new BillJson.Quanxian();
+        List<BillJson.BillJsonBase> q = new ArrayList<>();
+        q.add(base2);
+        quanxian.setQuanxian(q);
+        String qStr = new Gson().toJson(quanxian);
+        Log.i("ttt", "---qStr:" + qStr);
+        BillJson.Pays pays = new BillJson.Pays();
+        List<BillJson.BillJsonBase> p = new ArrayList<>();
+        p.add(base);
+        pays.setQuanxian(p);
+        String pStr = new Gson().toJson(pays);
+        Log.i("ttt", "---pStr:" + pStr);
+
+        presenter.bill(result, App.INSTANCE().getShopID(), "", money, 0, qStr
+                , tStr, pStr, payType, 1, money, "", 0, "7", memberId);
+    }
+    @Override
+    public void scanBillSuccess(String payType, String result, double money, String memberId, String str) {
+        if (str.contains("支付中")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("提示");
+            builder.setMessage("用户正在支付中，是否确认已支付");
+            builder.setPositiveButton("确定", (dialog, which) -> {
+                scanbill(payType, result, money, memberId);
+            });
+            builder.setCancelable(false);
+            builder.setNegativeButton("取消", null);
+            builder.show();
+        } else {
+            scanbill(payType, result, money, memberId);
+        }
+    }
+    @Override
+    public void billSuccess(String msg,String result){
+        Toasty.success(getActivity(), msg, Toast.LENGTH_SHORT, true).show();
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 998) {
             presenter.getTables(mParam1);
         }
+        if (data == null) {
+            return;
+        }
         Bundle bundle = data.getExtras();
+        if (bundle == null) {
+            return;
+        }
         if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
             String result = bundle.getString(CodeUtils.RESULT_STRING);
-            presenter.scanBill(result, 0.01, order.getBillid());
+            presenter.scanBill(result, total, order.getBillid());
         } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
             warning("解析二维码失败");
         }

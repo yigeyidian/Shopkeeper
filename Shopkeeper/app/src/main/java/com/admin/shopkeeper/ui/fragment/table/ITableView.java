@@ -45,5 +45,9 @@ public interface ITableView extends IBaseView {
     void cancelSuccess();
 
     void showCancelDialog(Order order);
+
+    void scanBillSuccess(String payType,String result,double money , String memberId ,String str);
+
+    void billSuccess(String msg,String result);
 }
 

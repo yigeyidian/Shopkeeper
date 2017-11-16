@@ -429,7 +429,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                     if(stringModel.getCode().equals("1")){
                         if (stringModel.getResult().contains("SUCCESS")) {
                             String parType[] = stringModel.getResult().split("&");
-                            iView.bill(parType[1] ,billId , price ,"" ,"支付中");
+                            iView.bill(parType[1] ,billId , price ,"" ,"");
                         }else if(stringModel.getResult().contains("FAILED")){
                             iView.warning("支付失败");
                         }else if(stringModel.getResult().contains("UNKNOWN")){
