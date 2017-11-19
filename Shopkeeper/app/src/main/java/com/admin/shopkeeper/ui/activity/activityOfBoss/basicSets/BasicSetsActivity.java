@@ -157,7 +157,7 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
     @OnClick(R.id.ll_pay_type)
     public void payTypeClick() {
         MutiSelectDialog.Builder builder = new MutiSelectDialog.Builder(this, R.style.OrderDialogStyle);
-        builder.setTitle("券适用类型");
+        builder.setTitle("商家支付类型");
         builder.setReasons(payTypes);
         builder.setButtonClick(new MutiSelectDialog.OnButtonClick() {
 

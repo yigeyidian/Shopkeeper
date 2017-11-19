@@ -11,9 +11,9 @@ android {
         applicationId "com.admin.shopkeeper"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 20
-        versionName "1.19"
-
+        versionCode 22
+        versionName "1.21"
+        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
         flavorDimensions "color"
@@ -83,7 +83,7 @@ android {
 }
 
 greendao {
-    schemaVersion 8
+    schemaVersion 9
     daoPackage 'com.admin.greendao.gen'
     targetGenDir 'src/main/java'
 }
@@ -136,5 +136,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.android.support:multidex:1.0.2'
 
 }

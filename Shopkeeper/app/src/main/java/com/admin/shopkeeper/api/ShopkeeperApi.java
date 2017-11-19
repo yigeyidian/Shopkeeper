@@ -776,6 +776,7 @@ public interface ShopkeeperApi {
             @Field("APrice") double price,
             @Field("FoodType") String foodType,
             @Field("FanBill") String fanbill);
+
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortBillManagerNweASHX.ashx")
     Observable<StringModel> scanBill(
@@ -784,7 +785,7 @@ public interface ShopkeeperApi {
             @Field("Pice") double pice,
             @Field("id") String shopId,
             @Field("PayID") String payId
-            );
+    );
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortBillManagerNweASHX.ashx")
@@ -941,6 +942,7 @@ public interface ShopkeeperApi {
             @Field("type") String type,
             @Field("GUID") String guid,
             @Field("RESTAURANTID") String restaurantId);
+
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "GuaBillManager.ashx")
     Observable<StringModel> guazhangDetailOfBill(
@@ -1439,7 +1441,7 @@ public interface ShopkeeperApi {
      *
      * @param type   5
      * @param shopId
-     * @param kName 模糊查询 卡券名称  如果查看全部不需要传值
+     * @param kName  模糊查询 卡券名称  如果查看全部不需要传值
      * @param leiBie 如果查看全部不需要传值 1 满送券 2代金券  3商品券 4团购券   查看全部不需要传入值
      * @return
      */
@@ -1765,7 +1767,10 @@ public interface ShopkeeperApi {
             @Field("Type") String type,
             @Field("RESTAURANTID") String shopId,
             @Field("StaffTel") String staffTel,
-            @Field("StaffDepart") String staffDepart);
+            @Field("StaffDepart") String staffDepart,
+            @Field("StaffLanguage") String staffLanguage,
+            @Field("StaffCatalogue") String staffCatalogue
+    );
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "Merchants.ashx")
@@ -1865,6 +1870,7 @@ public interface ShopkeeperApi {
             @Field("TimeEdn") String timeEdn,
             @Field("ShangJiaID") String shangJiaID,
             @Field("SelectType") int selectType);
+
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
     Observable<StringModel> getSale(

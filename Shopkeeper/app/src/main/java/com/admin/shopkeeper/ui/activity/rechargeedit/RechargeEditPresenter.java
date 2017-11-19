@@ -26,7 +26,7 @@ public class RechargeEditPresenter extends BasePresenter<IRechargeEditView> {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .addRechage("8", App.INSTANCE().getShopID(), phone, name)
+                .addRechage("8", App.INSTANCE().getShopID(), phone, name ,App.INSTANCE().getUser().getName() ,App.INSTANCE().getUser().getId())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

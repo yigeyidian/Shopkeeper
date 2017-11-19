@@ -456,6 +456,23 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 break;
             case P5:
                 toolbar.setTitle("快餐");
+//                "现金", "银行卡", "微信支付", "会员卡", "线下支付宝", "线下微信"
+                if (App.INSTANCE().getUser().getPayType().equals("1")) {
+                    btQuickBill.setText("现金支付");
+                } else if (App.INSTANCE().getUser().getPayType().equals("2")) {
+                    btQuickBill.setText("银行卡支付");
+                } else if (App.INSTANCE().getUser().getPayType().equals("3")) {
+                    btQuickBill.setText("微信支付");
+                } else if (App.INSTANCE().getUser().getPayType().equals("5")) {
+                    btQuickBill.setText("会员卡支付");
+                } else if (App.INSTANCE().getUser().getPayType().equals("6")) {
+                    btQuickBill.setText("线下支付宝支付");
+                } else if (App.INSTANCE().getUser().getPayType().equals("7")) {
+                    btQuickBill.setText("线下微信支付");
+                } else {
+                    btQuickBill.setText("快速支付");
+                }
+
                 btQuickBill.setVisibility(View.VISIBLE);
                 btScanBill.setVisibility(View.VISIBLE);
                 break;

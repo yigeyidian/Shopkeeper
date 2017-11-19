@@ -590,6 +590,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
     public void inBillSuccess(Order order1, List<OrderDetailFood> orderDetailFoods, int position , boolean isScanBill) {
         Intent intent;
         if(isScanBill){
+            total = 0;
             for (int i = 0; i < orderDetailFoods.size(); i++) {
                 total += orderDetailFoods.get(i).getPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
                 total += orderDetailFoods.get(i).getSeasonPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
@@ -615,7 +616,9 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
 
     @Override
     public void cancelSuccess() {
-        Toasty.success(getContext(), "取消成功", Toast.LENGTH_SHORT, true).show();
+        if(isShowToast){
+            Toasty.success(getContext(), "取消成功", Toast.LENGTH_SHORT, true).show();
+        }
         presenter.getTables(mParam1);
     }
 
@@ -766,8 +769,8 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
         String pStr = new Gson().toJson(pays);
         Log.i("ttt", "---pStr:" + pStr);
 
-        presenter.bill(result, App.INSTANCE().getShopID(), "", money, 0, qStr
-                , tStr, pStr, payType, 1, money, "", 0, "7", memberId);
+        presenter.bill(result, App.INSTANCE().getShopID(), order.getTableId(), money, 0, qStr
+                , tStr, pStr, payType, 1, money, order.getTableName(), 0, "7", memberId);
     }
     @Override
     public void scanBillSuccess(String payType, String result, double money, String memberId, String str) {
@@ -790,6 +793,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
         Toasty.success(getActivity(), msg, Toast.LENGTH_SHORT, true).show();
         presenter.getTables(mParam1);
     }
+    boolean isShowToast = true;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -797,6 +801,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
             presenter.getTables(mParam1);
         }
         if(requestCode == 5){
+            isShowToast = false;
             presenter.cancelBill(order.getBillid());
         }
         if (data == null) {
@@ -809,6 +814,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
         if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
             String result = bundle.getString(CodeUtils.RESULT_STRING);
             presenter.scanBill(result, total, order.getBillid());
+            total=0;
         } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
             warning("解析二维码失败");
         }

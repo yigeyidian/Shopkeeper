@@ -1189,7 +1189,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         BillJson.BillJsonBase pe = new BillJson.BillJsonBase();
         pe.setGuid(System.currentTimeMillis() + "");
         pe.setPice(getYinfuMoney() + "");
-        pe.setPiceGuid("7");
+        pe.setPiceGuid(payType);
         p.add(pe);
         pays.setQuanxian(p);
         String pStr = new Gson().toJson(pays);
@@ -1205,8 +1205,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     memberId, foodMoney, weixinOrderBean.getCanju(), qStr
                     , tStr, pStr, 1, getYinfuMoney(), tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId, payType);
         } else if (type == P1) {
-            presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "", memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, getYinfuMoney(), tableEntity != null ? tableEntity.getTableName() : "", free, "7", guiId, payType);
+            presenter.bill(billId, App.INSTANCE().getShopID(), order != null ? order.getTableId() : "", memberId, foodMoney, weixinOrderBean.getCanju(), qStr
+                    , tStr, pStr, 1, getYinfuMoney(), order != null ? order.getTableName() : "", free, "7", guiId, payType);
         }
     }
 

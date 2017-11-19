@@ -259,7 +259,6 @@
             android:layout_marginRight="@dimen/_30sdp"
             android:drawablePadding="@dimen/_21sdp"
             android:drawableRight="@mipmap/list_icon_arrow_right"
-            android:text="支付宝"
             android:textColor="@color/text_grey" />
     </LinearLayout>
     <LinearLayout
