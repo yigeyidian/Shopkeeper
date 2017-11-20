@@ -1,5 +1,6 @@
 package com.admin.shopkeeper.ui.activity.orderFood;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,12 +10,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -55,10 +58,12 @@ import com.admin.shopkeeper.ui.activity.BigImageActivity;
 import com.admin.shopkeeper.ui.activity.bill.BillActivity;
 import com.admin.shopkeeper.ui.activity.info.waimai.WaiMaiActivity;
 import com.admin.shopkeeper.ui.activity.info.yuding.YuDingActivity;
+import com.admin.shopkeeper.ui.activity.login.LoginActivity;
 import com.admin.shopkeeper.ui.activity.messageList.MessageListActivity;
 import com.admin.shopkeeper.ui.activity.table.TableOperationActivity;
 import com.admin.shopkeeper.weight.QuickIndexBar;
 import com.admin.shopkeeper.weight.TouchableRecyclerView;
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.google.gson.Gson;
@@ -138,6 +143,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
     private ContactAdapter contactAdapter;
     private List<OrderDetailFood> detailFoods;
     private Object total;
+    double total1 = 0;
 
     @OnClick(R.id.button)
     void onClick(View view) {
@@ -178,15 +184,42 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                         }
                     }
                 }
+                total1 = total;
                 if (App.INSTANCE().getUser().getOperaType().contains("3")) {
-                    intent = new Intent(OrderFoodActivity.this, TableOperationActivity.class);
-                    intent.putExtra(Config.PARAM1, TableOperationActivity.P5);
-                    startActivity(intent);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(OrderFoodActivity.this);
+                    builder.setTitle("设置桌号");
+                    View view1 = LayoutInflater.from(OrderFoodActivity.this).inflate(R.layout.dialog_order_other_bill, null);
+                    AppCompatImageView imageView = (AppCompatImageView) view1.findViewById(R.id.imageView);
+                    AppCompatEditText editText = (AppCompatEditText) view1.findViewById(R.id.editText);
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    builder.setView(view1);
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(   OrderFoodActivity.this, TableOperationActivity.class);
+                            intent.putExtra(Config.PARAM1, TableOperationActivity.P5);
+                            startActivity(intent);
+                        }
+                    });
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String tableName = editText.getText().toString();
+                            if (!TextUtils.isEmpty(tableName)) {
+                                presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total1, "", tableName, "4", false, false);
+                            } else {
+                                Toasty.warning(OrderFoodActivity.this, "请输入桌号", Toast.LENGTH_SHORT, true).show();
+                            }
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                     MsgEvent event = new MsgEvent(MsgEvent.kuaican, getInfo(), total);
                     EventBus.getDefault().postSticky(event);
                     if (bottomSheet != null && bottomSheet.isSheetShowing()) {
                         bottomSheet.dismissSheet();
                     }
+
                 } else if (App.INSTANCE().getUser().getOperaType().contains("2")) {
                     presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", false, false);
                 }
