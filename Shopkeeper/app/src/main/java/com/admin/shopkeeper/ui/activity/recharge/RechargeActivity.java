@@ -95,6 +95,7 @@ public class RechargeActivity extends BaseActivity<RechargePresenter> implements
 
 
         presenter.getData(page);
+
     }
 
     public void showPop(RechargeBean bean) {

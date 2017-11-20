@@ -178,6 +178,37 @@
             android:textSize="@dimen/_34ssp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_pay_type"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:background="@drawable/selector_item"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/_32sdp"
+            android:text="支付类型"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_34ssp" />
+
+        <TextView
+            android:id="@+id/tv_pay_type"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_50sdp"
+            android:layout_marginRight="@dimen/_32sdp"
+            android:drawablePadding="@dimen/_21sdp"
+            android:drawableRight="@mipmap/list_icon_arrow_right"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/_34ssp" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/button"
         style="@style/Widget.AppCompat.Button.Borderless"

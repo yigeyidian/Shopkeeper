@@ -54,6 +54,10 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
     AppCompatCheckBox cbSale;
     @BindView(R.id.isShowOfGuest)
     AppCompatCheckBox cdShowOfGuest;
+    @BindView(R.id.isMemberCommonUse)
+    AppCompatCheckBox cbIsMemberComUse;//会员通用
+    @BindView(R.id.isUnitePay)
+    AppCompatCheckBox cbIsUnitePay;//统一支付
     @BindView(R.id.productSize)
     TextView productSize;
     @BindView(R.id.tv_price_text)
@@ -241,7 +245,8 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
 
     private void submit(String imageName) {
         presenter.commit(imageName, cbPrint.isChecked() ? "1" : "2", sizeType + "", payType + "", cbSale.isChecked() ? "1" : "0",
-                priceType + "", cdShowOfGuest.isChecked() ? "1" : "0", password.getText().toString(), payTypeValues);
+                priceType + "", cdShowOfGuest.isChecked() ? "1" : "0", password.getText().toString(), payTypeValues,
+                cbIsMemberComUse.isClickable()?"1":"0",cbIsUnitePay.isClickable()?"1":"0");
     }
 
     @Override
@@ -299,6 +304,12 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
 
         if (bean.getGuestShow().equals("1")) {
             cdShowOfGuest.setChecked(true);
+        }
+        if (bean.getIsChan().equals("1")) {
+            cbIsMemberComUse.setChecked(true);
+        }
+        if (bean.getUniFiedPice().equals("1")) {
+            cbIsUnitePay.setChecked(true);
         }
 
         switch (bean.getPayType()) {

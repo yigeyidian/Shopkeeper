@@ -14,15 +14,19 @@ import android.widget.TextView;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CheckDialog;
+import com.admin.shopkeeper.dialog.ListDialog;
+import com.admin.shopkeeper.dialog.MutiSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.DeskTypeBean;
 import com.admin.shopkeeper.entity.MemberBean;
+import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.entity.QueueBean;
 import com.admin.shopkeeper.entity.RechargeBean;
 import com.admin.shopkeeper.entity.RechargeItemBean;
 import com.gyf.barlibrary.ImmersionBar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,9 +54,11 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
     EditText editText;
     @BindView(R.id.tv_product)
     TextView tvProduct;
-
+    @BindView(R.id.tv_pay_type)
+    TextView tvPayType;
     private RechargeBean bean;
     private int type;
+    private final String[] payStrs = {"现金", "银行卡", "主扫微信", "会员卡", "被扫支付宝", "被扫微信","美团券","主扫支付宝"};
 
     @Override
     protected void initPresenter() {
@@ -90,20 +96,35 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
         }
 
         presenter.searchMember(bean.getStaffTel());
+//        payTypes.add(new MutiBean("现金", false, 1));
+//        payTypes.add(new MutiBean("银行卡", false, 2));
+//        payTypes.add(new MutiBean("主扫微信", false, 3));
+//        payTypes.add(new MutiBean("会员卡", false, 5));
+//        payTypes.add(new MutiBean("被扫支付宝", false, 6));
+//        payTypes.add(new MutiBean("被扫微信", false, 7));
+//        payTypes.add(new MutiBean("美团券", false, 9));
+//        payTypes.add(new MutiBean("主扫支付宝", false, 10));
     }
 
     @OnClick(R.id.button)
     public void sumitClick() {
+        String payTypeStr = tvPayType.getText().toString();
         if (type == 0) {
             String moneyStr = editText.getText().toString();
             if (TextUtils.isEmpty(moneyStr)) {
                 showToast("请输入充值金额");
+                return;
+            }else if(TextUtils.isEmpty(payTypeStr)){
+                showToast("请选择支付类型");
                 return;
             }
             showCheckDialog(type, bean);
         } else {
             if (selectItem == null) {
                 showToast("请选择充值产品");
+                return;
+            }else if(TextUtils.isEmpty(payTypeStr)){
+                showToast("请选择支付类型");
                 return;
             }
             showCheckDialog(type, bean);
@@ -162,7 +183,57 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
         });
         builder.creater().show();
     }
-
+    @OnClick(R.id.ll_pay_type)
+    public void payTypeClick() {
+        showDialog("快速支付", Arrays.asList(payStrs));
+    }
+    int payType;
+    private void showDialog(String title, List<String> list) {
+        ListDialog.Builder builder = new ListDialog.Builder(this, R.style.OrderDialogStyle);
+        builder.setTitle(title);
+        builder.setReasons(list);
+        builder.setButtonClick(new ListDialog.OnButtonClick() {
+//"现金", "银行卡", "主扫微信", "会员卡", "被扫支付宝", "被扫微信","美团券","主扫支付宝"
+            @Override
+            public void onItemClick(int i, String str) {
+                switch (str) {
+                    case "现金":
+                        payType = 1;
+                        tvPayType.setText(str);
+                        break;
+                    case "银行卡":
+                        payType = 2;
+                        tvPayType.setText(str);
+                        break;
+                    case "主扫微信":
+                        payType = 3;
+                        tvPayType.setText(str);
+                        break;
+                    case "会员卡":
+                        payType = 5;
+                        tvPayType.setText(str);
+                        break;
+                    case "被扫支付宝":
+                        payType = 6;
+                        tvPayType.setText(str);
+                        break;
+                    case "被扫微信":
+                        payType = 7;
+                        tvPayType.setText(str);
+                        break;
+                    case "美团券":
+                        payType = 9;
+                        tvPayType.setText(str);
+                        break;
+                    case "主扫支付宝":
+                        payType = 10;
+                        tvPayType.setText(str);
+                        break;
+                }
+            }
+        });
+        builder.creater().show();
+    }
     @Override
     public void error(String msg) {
         showFailToast(msg);
@@ -199,9 +270,9 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
     public void checkSuccess(int type, RechargeBean bean) {
         if (type == 0) {
             String moneyStr = editText.getText().toString();
-            presenter.moneyCommit(memberBean.getId(), moneyStr);
+            presenter.moneyCommit(memberBean.getId(), moneyStr , payType);
         } else {
-            presenter.productCommit(memberBean.getId(), selectItem.getGuid());
+            presenter.productCommit(memberBean.getId(), selectItem.getGuid() , payType);
         }
     }
 

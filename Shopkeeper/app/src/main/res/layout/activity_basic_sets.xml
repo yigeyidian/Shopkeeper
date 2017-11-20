@@ -189,6 +189,75 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="@dimen/_30sdp" />
     </LinearLayout>
+    <View
+        android:layout_width="@dimen/_31sdp"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:background="@drawable/selector_item"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/_30sdp"
+            android:text="会员通用"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_32ssp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_weight="1"
+            android:textColor="@color/black" />
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/isMemberCommonUse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/_30sdp" />
+    </LinearLayout>
+    <View
+        android:layout_width="@dimen/_31sdp"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:background="@drawable/selector_item"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/_30sdp"
+            android:text="统一支付"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_32ssp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_weight="1"
+            android:textColor="@color/black" />
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/isUnitePay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/_30sdp" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/ll_pay"

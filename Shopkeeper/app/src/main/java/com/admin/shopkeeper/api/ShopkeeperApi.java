@@ -1333,7 +1333,9 @@ public interface ShopkeeperApi {
             @Field("GuestShow") String guestShow,
             @Field("PayPassWord") String password,
             @Field("CashPayType") String cashPayType,
-            @Field("RESTAURANTID") String restaurantId);
+            @Field("RESTAURANTID") String restaurantId,
+            @Field("IsChan") String memberComUse,
+            @Field("UniFiedPice") String UnitePay);
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerChantPermission.ashx")
@@ -1796,7 +1798,10 @@ public interface ShopkeeperApi {
             @Field("Type") String type,
             @Field("UserID") String userID,
             @Field("RESTAURANTID") String shopId,
-            @Field("Price") String price);
+            @Field("Price") String price,
+            @Field("PayType") int payType,
+            @Field("OperaName ") String operaName,
+            @Field("OperaID") String operaId);
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "Merchants.ashx")
@@ -1804,7 +1809,10 @@ public interface ShopkeeperApi {
             @Field("Type") String type,
             @Field("UserID") String userID,
             @Field("RESTAURANTID") String shopId,
-            @Field("CardID") String cardID);
+            @Field("CardID") String cardID,
+            @Field("PayType") int payType,
+            @Field("OperaName ") String operaName,
+            @Field("OperaID") String operaId);
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")

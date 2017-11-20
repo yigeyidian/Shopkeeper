@@ -104,11 +104,11 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
                 });
     }
 
-    public void moneyCommit(String userId, String price) {
+    public void moneyCommit(String userId, String price , int payType) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .moneyCharge("9", userId, App.INSTANCE().getShopID(), price)
+                .moneyCharge("9", userId, App.INSTANCE().getShopID(), price , payType ,App.INSTANCE().getUser().getName(),App.INSTANCE().getUser().getId())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -125,11 +125,11 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
                 });
     }
 
-    public void productCommit(String userId, String cardId) {
+    public void productCommit(String userId, String cardId ,int payType) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .productCharge("7", userId, App.INSTANCE().getShopID(), cardId)
+                .productCharge("7", userId, App.INSTANCE().getShopID(), cardId , payType , App.INSTANCE().getUser().getName(),App.INSTANCE().getUser().getId())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

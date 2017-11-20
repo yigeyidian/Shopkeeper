@@ -21,6 +21,7 @@ public class BasicSetBean implements Serializable {
     // \"ChenJinDaZhe\":\"1\",
     // \"JieZhangPay\":\"2\" PayPassWord:null
 //    "CashPayType\":\"1,2,5,3,7,4,8,9,10\"
+//    "UniFiedPice\":\"0\",\"IsChan\":\"1\"
 
 
     @SerializedName("GUID")
@@ -45,6 +46,26 @@ public class BasicSetBean implements Serializable {
     private String payPassord;
     @SerializedName("CashPayType")
     private String cashPayType;
+    @SerializedName("UniFiedPice")
+    private String uniFiedPice;//统一支付
+    @SerializedName("IsChan")
+    private String isChan;//会员通用
+
+    public String getUniFiedPice() {
+        return uniFiedPice;
+    }
+
+    public void setUniFiedPice(String uniFiedPice) {
+        this.uniFiedPice = uniFiedPice;
+    }
+
+    public String getIsChan() {
+        return isChan;
+    }
+
+    public void setIsChan(String isChan) {
+        this.isChan = isChan;
+    }
 
     public String getCashPayType() {
         return cashPayType;
