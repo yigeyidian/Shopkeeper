@@ -118,6 +118,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     TextView tvScoreText;
 
     private int type;
+    private String tabName;
     private int position;
 
     private String billId;
@@ -547,9 +548,15 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             memberId = memberBean == null ? "" : memberBean.getId();
             if (type == P3) {
-                presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
-                        memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "",
-                        free, "4", guiId, "");
+                if(!TextUtils.isEmpty(tabName)){
+                    presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
+                            memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tabName,
+                            free, "4", guiId, "");
+                }else{
+                    presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
+                            memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "",
+                            free, "4", guiId, "");
+                }
             } else if (type == P4) {
                 presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                         memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
@@ -614,6 +621,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 foodMoney = (int) getIntent().getDoubleExtra(Config.PARAM2, 0);
                 tableEntity = (TableEntity) getIntent().getSerializableExtra(Config.PARAM3);
                 billId = getIntent().getStringExtra(Config.PARAM1);
+                tabName = getIntent().getStringExtra("TabName");
                 break;
             case P6:
                 foodMoney = getIntent().getDoubleExtra(Config.PARAM2, 0);

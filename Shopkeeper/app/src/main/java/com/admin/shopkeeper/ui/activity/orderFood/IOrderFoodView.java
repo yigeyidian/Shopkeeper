@@ -21,7 +21,7 @@ public interface IOrderFoodView extends IBaseView {
 
     void orderSuccess(String s);
 
-    void kuaisuSuccess(String result, double monery,boolean isquick , boolean isScan);
+    void kuaisuSuccess(String result, double monery,boolean isquick , boolean isScan , boolean isEditTabName);
 
     void querySuccess(List<FoodEntity> foodEntities);
 

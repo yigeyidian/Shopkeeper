@@ -102,7 +102,7 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
 //        payTypes.add(new MutiBean("会员卡", false, 5));
 //        payTypes.add(new MutiBean("被扫支付宝", false, 6));
 //        payTypes.add(new MutiBean("被扫微信", false, 7));
-//        payTypes.add(new MutiBean("美团券", false, 9));
+//        payTypes.add(new MutiBean("美团券", false, 8));
 //        payTypes.add(new MutiBean("主扫支付宝", false, 10));
     }
 
@@ -222,7 +222,7 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
                         tvPayType.setText(str);
                         break;
                     case "美团券":
-                        payType = 9;
+                        payType = 8;
                         tvPayType.setText(str);
                         break;
                     case "主扫支付宝":

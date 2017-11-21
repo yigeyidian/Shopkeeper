@@ -144,6 +144,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
     private List<OrderDetailFood> detailFoods;
     private Object total;
     double total1 = 0;
+    private String tableName;
 
     @OnClick(R.id.button)
     void onClick(View view) {
@@ -191,7 +192,6 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     View view1 = LayoutInflater.from(OrderFoodActivity.this).inflate(R.layout.dialog_order_other_bill, null);
                     AppCompatImageView imageView = (AppCompatImageView) view1.findViewById(R.id.imageView);
                     AppCompatEditText editText = (AppCompatEditText) view1.findViewById(R.id.editText);
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                     builder.setView(view1);
                     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
@@ -204,9 +204,9 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            String tableName = editText.getText().toString();
+                            tableName = editText.getText().toString();
                             if (!TextUtils.isEmpty(tableName)) {
-                                presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total1, "", tableName, "4", false, false);
+                                presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total1, "", tableName, "4", false, false,true);
                             } else {
                                 Toasty.warning(OrderFoodActivity.this, "请输入桌号", Toast.LENGTH_SHORT, true).show();
                             }
@@ -221,7 +221,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     }
 
                 } else if (App.INSTANCE().getUser().getOperaType().contains("2")) {
-                    presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", false, false);
+                    presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", false, false,false);
                 }
 
                 break;
@@ -311,12 +311,12 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 }
             }
         }
-        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", true, false);
+        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", true, false,false);
     }
 
     @OnClick(R.id.scanBill)
     public void scanClick() {
-        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", getTotal(), "", "", "4", false, true);
+        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", getTotal(), "", "", "4", false, true,false);
 
     }
 
@@ -1409,7 +1409,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
     String billId;
 
     @Override
-    public void kuaisuSuccess(String result, double money, boolean isquick, boolean isScan) {
+    public void kuaisuSuccess(String result, double money, boolean isquick, boolean isScan ,boolean isEditTabName) {
         if (!isquick && !isScan) {
             Toasty.success(this, "下单成功", Toast.LENGTH_SHORT, true).show();
         }
@@ -1421,7 +1421,14 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 billId = result;
                 intent = new Intent(OrderFoodActivity.this, CaptureActivity.class);
                 startActivityForResult(intent, REQUEST_CODE);
-            } else {
+            } else if(isEditTabName){
+                intent = new Intent(OrderFoodActivity.this, BillActivity.class);
+                intent.putExtra(Config.PARAM2, money);//总价
+                intent.putExtra(Config.PARAM1, result);
+                intent.putExtra(Config.PARAM5, BillActivity.P3);
+                intent.putExtra("TabName",tableName);
+                startActivity(intent);
+            }else{
                 intent = new Intent(OrderFoodActivity.this, BillActivity.class);
                 intent.putExtra(Config.PARAM2, money);//总价
                 intent.putExtra(Config.PARAM1, result);

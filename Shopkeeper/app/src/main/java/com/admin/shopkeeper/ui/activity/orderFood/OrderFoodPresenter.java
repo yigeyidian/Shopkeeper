@@ -160,7 +160,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
     }
 
     public void KuaiSu(String foodinfo, String pdata, String ptime, String names, String address, String phone, String remark,
-                       double monery, String tablid, String tablename, String types, boolean isquick, boolean isScan) {
+                       double monery, String tablid, String tablename, String types, boolean isquick, boolean isScan , boolean isEditTabName) {
         DialogUtils.showDialog(context, "数据提交中...");
         RetrofitHelper.getInstance()
                 .getApi()
@@ -178,7 +178,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                                 iView.warning("下单失败");
                             } else {
                                 print(stringModel.getResult());
-                                iView.kuaisuSuccess(stringModel.getResult(), monery, isquick, isScan);
+                                iView.kuaisuSuccess(stringModel.getResult(), monery, isquick, isScan ,isEditTabName);
                             }
                             break;
                         case Config.REQUEST_FAILED:
@@ -209,7 +209,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                     DialogUtils.hintDialog();
                     switch (stringModel.getCode()) {
                         case Config.REQUEST_SUCCESS:
-                            iView.kuaisuSuccess(stringModel.getResult(), monery, false, false);
+                            iView.kuaisuSuccess(stringModel.getResult(), monery, false, false , false);
                             break;
                         case Config.REQUEST_FAILED:
                             iView.warning("下单失败");
@@ -401,7 +401,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                 .subscribe(stringModel -> {
                     switch (stringModel.getCode()) {
                         case Config.REQUEST_SUCCESS:
-                            iView.kuaisuSuccess(stringModel.getResult(), price, false ,false);
+                            iView.kuaisuSuccess(stringModel.getResult(), price, false ,false,false);
                             break;
                         case Config.REQUEST_FAILED:
                             iView.warning("下单失败");
