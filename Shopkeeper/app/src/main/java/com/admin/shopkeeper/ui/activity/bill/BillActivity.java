@@ -53,6 +53,7 @@ import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.PayMeEntity;
 import com.admin.shopkeeper.entity.TableEntity;
 import com.admin.shopkeeper.entity.WeixinOrderBean;
+import com.admin.shopkeeper.utils.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
@@ -889,6 +890,12 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(menuListAdapter);
             menuListAdapter.setNewData(list);
+            menuListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    Toasty.info(BillActivity.this ,"position"+position).show();
+                }
+            });
             laheiPop.setOutsideTouchable(true);
             laheiPop.setFocusable(true);
             laheiPop.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33000000")));
