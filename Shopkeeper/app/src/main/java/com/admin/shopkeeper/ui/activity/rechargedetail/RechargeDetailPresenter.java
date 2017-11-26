@@ -12,6 +12,7 @@ import com.admin.shopkeeper.entity.RechargeItemBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.ui.activity.rechargeedit.IRechargeEditView;
 import com.admin.shopkeeper.utils.DialogUtils;
+import com.admin.shopkeeper.utils.Print;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -137,6 +138,7 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
                         iView.success("充值成功");
+                        printResult(stringModel.getResult());
                     } else {
                         iView.error("充值失败");
                     }
@@ -144,6 +146,10 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
                     DialogUtils.hintDialog();
                     iView.error("充值失败");
                 });
+    }
+
+    private void printResult(String result) {
+        new Thread(() -> Print.socketDataArrivalHandler(result)).start();
     }
 
     public void check(String checkCode, int type, RechargeBean bean) {

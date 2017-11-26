@@ -66,6 +66,7 @@ import com.yqritc.recyclerviewflexibledivider.VerticalDividerItemDecoration;
 import org.greenrobot.eventbus.EventBus;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,8 +132,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     private int cardMoney = 0;
     private double needMoney = 0;
 
-    private int idazhe = 0;
-    private int ijianmian = 0;
+    private double idazhe = 0;
+    private double ijianmian = 0;
 
     private double foodMoney = 0;
 
@@ -939,7 +940,10 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     }
 
     private double getYinfuMoney() {
-        return weixinOrderBean.getYuanjia() - weixinOrderBean.getYufupice() - weixinOrderBean.getYouhui() - getYouhuiMoney();
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(2);
+        double yinFu = weixinOrderBean.getYuanjia() - weixinOrderBean.getYufupice() - weixinOrderBean.getYouhui() - getYouhuiMoney();
+        return Double.parseDouble(nf.format(yinFu));
     }
 
     private void intText() {
@@ -1144,10 +1148,10 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
     @Override
     public void dazheSucccess(double aDouble) {
-        BigDecimal b = new BigDecimal(aDouble).setScale(0, BigDecimal.ROUND_HALF_UP);
+        BigDecimal b = new BigDecimal(aDouble).setScale(2, BigDecimal.ROUND_DOWN);
         Toasty.success(this, "打折优惠价格为" + b, Toast.LENGTH_SHORT, true).show();
-        idazhe = b.intValue();
-
+        idazhe = aDouble;
+        Log.d("dj", "dazhe:"+aDouble+"b:"+b);
         if (aDouble > 0) {
             ijianmian = 0;
             jianMian.setText("");
