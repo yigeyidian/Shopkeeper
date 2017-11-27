@@ -53,6 +53,8 @@ import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.PayMeEntity;
 import com.admin.shopkeeper.entity.TableEntity;
 import com.admin.shopkeeper.entity.WeixinOrderBean;
+import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
+import com.admin.shopkeeper.ui.activity.table.TableOperationActivity;
 import com.admin.shopkeeper.utils.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -894,6 +896,26 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             menuListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(BillActivity.this);
+                    builder.setTitle("设置桌号");
+                    View view1 = LayoutInflater.from(BillActivity.this).inflate(R.layout.dialog_order_other_bill, null);
+                    AppCompatImageView imageView = (AppCompatImageView) view1.findViewById(R.id.imageView);
+                    AppCompatEditText editText = (AppCompatEditText) view1.findViewById(R.id.editText);
+                    builder.setView(view1);
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                     Toasty.info(BillActivity.this ,"position"+position).show();
                 }
             });

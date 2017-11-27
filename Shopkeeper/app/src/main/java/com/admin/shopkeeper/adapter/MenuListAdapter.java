@@ -2,6 +2,7 @@ package com.admin.shopkeeper.adapter;
 
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.entity.OrderDetailFood;
@@ -29,6 +30,13 @@ public class MenuListAdapter extends BaseQuickAdapter<OrderDetailFood, BaseViewH
         }
         helper.setText(R.id.price, item.getPrice() + "");
         helper.setText(R.id.vipPrice, item.getChargeMoney());
+        helper.setText(R.id.etSale , 90+"");
+        helper.getView(R.id.etSale).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+
+            }
+        });
 
         AppCompatTextView textView = helper.getView(R.id.describe);
         textView.setText("");
