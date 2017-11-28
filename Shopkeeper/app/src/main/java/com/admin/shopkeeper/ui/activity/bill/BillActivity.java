@@ -913,7 +913,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                         return;
                     }
                     OrderDetailFood item = menuListAdapter.getData().get(position1);
-                    TextView textView = (TextView) view;
                     AlertDialog.Builder builder = new AlertDialog.Builder(BillActivity.this);
                     builder.setTitle("设置折扣");
                     View view1 = LayoutInflater.from(BillActivity.this).inflate(R.layout.dialog_bill_da_zhe, null);
@@ -924,7 +923,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Tools.hideSoftKeyboard(BillActivity.this, editText);
-                            textView.setText("");
+                            item.setSale(0);
                             dialog.dismiss();
                             menuListAdapter.notifyDataSetChanged();
 
@@ -933,17 +932,17 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
+                            Tools.hideSoftKeyboard(BillActivity.this, editText);
                             int saleNum = 0;
                             if (!TextUtils.isEmpty(editText.getText().toString())) {
                                 saleNum = Integer.parseInt(editText.getText().toString());
                             }
                             if (saleNum > 0 && saleNum < 100) {
-                                textView.setText(saleNum + "");
                                 item.setSale(saleNum);
 
                                 for (OrderDetailFood orderDetailFood : list) {
                                     if (orderDetailFood.getSale() > 0) {
-                                        idazhe += orderDetailFood.getPrice() * ((100.00 - orderDetailFood.getSale()) / 100.00);
+                                        idazhe += orderDetailFood.getPrice() * ((100.0 - orderDetailFood.getSale()) / 100.0);
                                     }
                                 }
                                 if (idazhe > 0) {
@@ -958,9 +957,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                                 }
                             } else {
                                 warning("请输入正确的打折数");
+                                item.setSale(0);
                             }
                             dialog.dismiss();
-                            Tools.hideSoftKeyboard(BillActivity.this, editText);
                             menuListAdapter.notifyDataSetChanged();
                         }
                     });
