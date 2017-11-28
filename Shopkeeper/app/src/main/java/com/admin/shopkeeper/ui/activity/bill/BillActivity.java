@@ -56,6 +56,7 @@ import com.admin.shopkeeper.entity.WeixinOrderBean;
 import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
 import com.admin.shopkeeper.ui.activity.table.TableOperationActivity;
 import com.admin.shopkeeper.utils.ToastUtils;
+import com.admin.shopkeeper.utils.Tools;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
@@ -66,6 +67,8 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 import com.yqritc.recyclerviewflexibledivider.VerticalDividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -161,6 +164,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     private EditText editText;
 
     private int poptype = 1;
+    private boolean haveQXDaZhe;//是否进行权限打折或单个菜品打折
+    private boolean haveOneDaZhe;//是否进行单个菜品打折
+
 
     @OnClick(R.id.bill_print)
     public void printClick() {
@@ -363,7 +369,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     @OnClick(R.id.bill_dazhe)
     public void dazheClick() {
         if (App.INSTANCE().getUser().getPermissionValue().contains("quanxiandazhe")) {
-            presenter.getDazheList();
+            if(haveOneDaZhe){
+                warning("您已进行单个菜品打折");
+            }else{
+                presenter.getDazheList();
+            }
         } else {
             warning("没有打折权限");
         }
@@ -588,6 +598,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
     @Override
     public void initView() {
+        EventBus.getDefault().register(this);
         ImmersionBar.with(this)
                 .statusBarColor(R.color.colorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
@@ -885,9 +896,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             PopupWindow laheiPop = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
             RecyclerView recyclerView = (RecyclerView) laheiView.findViewById(R.id.pop_recycler);
-            MenuListAdapter menuListAdapter = new MenuListAdapter(R.layout.item_menu_list);
-            View header = LayoutInflater.from(this).inflate(R.layout.item_menu_list, (ViewGroup) recyclerView.getParent(), false);
-            menuListAdapter.addHeaderView(header);
+            MenuListAdapter menuListAdapter = new MenuListAdapter(R.layout.item_menu_list , BillActivity.this ,true);
+            /*View header = LayoutInflater.from(this).inflate(R.layout.item_menu_list, (ViewGroup) recyclerView.getParent(), false);
+            menuListAdapter.addHeaderView(header);*/
 
             recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
                     .marginResId(R.dimen._30sdp, R.dimen._1sdp)
@@ -921,6 +932,52 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     Toasty.info(BillActivity.this, "position" + position).show();
                 }
             });
+            menuListAdapter.setOnItemChildClickListener((adapter1, view, position1) -> {
+                if(view.getId() == R.id.etSale){
+                    if (!App.INSTANCE().getUser().getPermissionValue().contains("quanxiandazhe")) {
+                        warning("没有打折权限");
+                        return;
+                    }
+                    OrderDetailFood item = menuListAdapter.getData().get(position1);
+                    TextView textView = (TextView) view;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(BillActivity.this);
+                    builder.setTitle("设置折扣");
+                    View view1 = LayoutInflater.from(BillActivity.this).inflate(R.layout.dialog_bill_da_zhe, null);
+                    AppCompatImageView imageView = (AppCompatImageView) view1.findViewById(R.id.imageView);
+                    AppCompatEditText editText = (AppCompatEditText) view1.findViewById(R.id.editText);
+                    builder.setView(view1);
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            textView.setText("");
+                            dialog.dismiss();
+                            menuListAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            int saleNum = 0;
+                            if(!TextUtils.isEmpty(editText.getText().toString())){
+                                saleNum = Integer.parseInt(editText.getText().toString());
+                            }
+                            if (saleNum>0 && saleNum < 100) {
+                                textView.setText(saleNum+"");
+                                item.setSale(saleNum);
+                                MsgEvent event = new MsgEvent(MsgEvent.oneSale);
+                                EventBus.getDefault().post(event);
+                            }else{
+                                warning("请输入正确的打折数");
+                            }
+                            dialog.dismiss();
+                            menuListAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+
             laheiPop.setOutsideTouchable(true);
             laheiPop.setFocusable(true);
             laheiPop.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33000000")));
@@ -1170,6 +1227,27 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     public void canJuFei(double i) {
     }
 
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onMsgEvent(MsgEvent event) {
+        idazhe = 0;
+        if (event.getType() == MsgEvent.oneSale) {
+            for(OrderDetailFood orderDetailFood : list){
+                if(orderDetailFood.getSale()>0){
+                    idazhe += orderDetailFood.getPrice()*((100-orderDetailFood.getSale())/100);
+                }
+            }
+            if (idazhe > 0) {
+                haveOneDaZhe = true;
+                ijianmian = 0;
+                jianMian.setText("");
+                youhuiMoney = (ijianmian + idazhe);
+
+                initPay();
+                getNeed();
+                intText();
+            }
+        }
+    }
     @Override
     public void dazheSucccess(double aDouble) {
         BigDecimal b = new BigDecimal(aDouble).setScale(2, BigDecimal.ROUND_DOWN);
@@ -1177,6 +1255,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         idazhe = aDouble;
         Log.d("dj", "dazhe:" + aDouble + "b:" + b);
         if (aDouble > 0) {
+            haveQXDaZhe = true;
             ijianmian = 0;
             jianMian.setText("");
             youhuiMoney = (ijianmian + idazhe);
@@ -1503,6 +1582,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     protected void onDestroy() {
         super.onDestroy();
         presenter.doDestroy();
+        EventBus.getDefault().removeAllStickyEvents();
+        EventBus.getDefault().unregister(this);
         ImmersionBar.with(this).destroy();
     }
 

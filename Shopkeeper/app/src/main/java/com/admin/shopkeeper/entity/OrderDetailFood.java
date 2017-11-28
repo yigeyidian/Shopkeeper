@@ -56,6 +56,15 @@ public class OrderDetailFood implements Serializable {
     private double weight;
     @SerializedName("COUNT")
     private int count;
+    private int sale;
+
+    public int getSale() {
+        return sale;
+    }
+
+    public void setSale(int sale) {
+        this.sale = sale;
+    }
 
     public int getCount() {
         return count;
