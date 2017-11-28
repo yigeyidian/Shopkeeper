@@ -277,7 +277,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
 
         initButton();
 
-        menuListAdapter = new MenuListAdapter(R.layout.item_menu_list);
+        menuListAdapter = new MenuListAdapter(R.layout.item_menu_list , OrderDetailActivity.this ,false);
         View header = LayoutInflater.from(this).inflate(R.layout.item_menu_list, (ViewGroup) mMenuRecyclerView.getParent(), false);
         menuListAdapter.addHeaderView(header);
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this) {

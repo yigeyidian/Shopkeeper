@@ -32,6 +32,8 @@ public class MsgEvent {
 
     public static final int reBillSuccess = 23;
 
+    public static final int oneSale = 24;//单个菜品打折
+
     public MsgEvent(int type, Object data) {
         this.type = type;
         this.data = data;
