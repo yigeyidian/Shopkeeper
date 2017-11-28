@@ -61,49 +61,6 @@ public class MenuListAdapter extends BaseQuickAdapter<OrderDetailFood, BaseViewH
         }
         helper.addOnClickListener(R.id.etSale);
 
-//        tvSale.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (!App.INSTANCE().getUser().getPermissionValue().contains("quanxiandazhe")) {
-//                    Toasty.warning(mContext, "没有打折权限", Toast.LENGTH_SHORT, true).show();
-//                    return;
-//                }
-//                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-//                builder.setTitle("设置折扣");
-//                View view1 = LayoutInflater.from(mContext).inflate(R.layout.dialog_bill_da_zhe, null);
-//                AppCompatImageView imageView = (AppCompatImageView) view1.findViewById(R.id.imageView);
-//                AppCompatEditText editText = (AppCompatEditText) view1.findViewById(R.id.editText);
-//                builder.setView(view1);
-//                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        tvSale.setText("");
-//                        dialog.dismiss();
-//                    }
-//                });
-//                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int i) {
-//                        int saleNum = 0;
-//                        if(!TextUtils.isEmpty(editText.getText().toString())){
-//                            saleNum = Integer.parseInt(editText.getText().toString());
-//                        }
-//                        if (saleNum>0 && saleNum < 100) {
-//                            tvSale.setText(saleNum+"");
-//                            item.setSale(saleNum);
-//                            MsgEvent event = new MsgEvent(MsgEvent.oneSale);
-//                            EventBus.getDefault().post(event);
-//                        }else{
-//                            Toasty.warning(mContext, "请输入正确的打折数", Toast.LENGTH_SHORT, true).show();
-//                        }
-//                        dialog.dismiss();
-//                    }
-//                });
-//                AlertDialog dialog = builder.create();
-//                dialog.show();
-//            }
-//        });
-
         AppCompatTextView textView = helper.getView(R.id.describe);
         textView.setText("");
         if (!TextUtils.isEmpty(item.getSeasonName())) {

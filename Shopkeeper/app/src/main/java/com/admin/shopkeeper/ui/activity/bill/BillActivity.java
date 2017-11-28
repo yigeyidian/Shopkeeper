@@ -906,32 +906,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(menuListAdapter);
             menuListAdapter.setNewData(list);
-            menuListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(BillActivity.this);
-                    builder.setTitle("设置桌号");
-                    View view1 = LayoutInflater.from(BillActivity.this).inflate(R.layout.dialog_order_other_bill, null);
-                    AppCompatImageView imageView = (AppCompatImageView) view1.findViewById(R.id.imageView);
-                    AppCompatEditText editText = (AppCompatEditText) view1.findViewById(R.id.editText);
-                    builder.setView(view1);
-                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                    Toasty.info(BillActivity.this, "position" + position).show();
-                }
-            });
             menuListAdapter.setOnItemChildClickListener((adapter1, view, position1) -> {
                 if (view.getId() == R.id.etSale) {
                     if (!App.INSTANCE().getUser().getPermissionValue().contains("quanxiandazhe")) {
@@ -959,7 +933,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
-                            Tools.hideSoftKeyboard(BillActivity.this, editText);
                             int saleNum = 0;
                             if (!TextUtils.isEmpty(editText.getText().toString())) {
                                 saleNum = Integer.parseInt(editText.getText().toString());
@@ -970,7 +943,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
                                 for (OrderDetailFood orderDetailFood : list) {
                                     if (orderDetailFood.getSale() > 0) {
-                                        idazhe += orderDetailFood.getPrice() * ((100.0 - orderDetailFood.getSale()) / 100.0);
+                                        idazhe += orderDetailFood.getPrice() * ((100.00 - orderDetailFood.getSale()) / 100.00);
                                     }
                                 }
                                 if (idazhe > 0) {
@@ -987,6 +960,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                                 warning("请输入正确的打折数");
                             }
                             dialog.dismiss();
+                            Tools.hideSoftKeyboard(BillActivity.this, editText);
                             menuListAdapter.notifyDataSetChanged();
                         }
                     });
@@ -1048,13 +1022,21 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         if (weixinOrderBean == null) {
             return;
         }
-        tv1.setText("原价：￥" + weixinOrderBean.getYuanjia());
-        tv2.setText("餐具：￥" + weixinOrderBean.getCanju());
-        tv3.setText("优惠：￥" + (getYouhuiMoney() + weixinOrderBean.getYufupice() + weixinOrderBean.getYouhui()));
-        tv5.setText("应退：￥" + weixinOrderBean.getYintui());
-        tv4.setText("应付：￥" + getYinfuMoney());
-        tv6.setText("还需支付：￥" + needMoney);
-        tv7.setText("预定金：￥" + weixinOrderBean.getYufupice());
+        BigDecimal yuanjia = new BigDecimal(weixinOrderBean.getYuanjia()).setScale(2, BigDecimal.ROUND_DOWN);
+        BigDecimal canju = new BigDecimal(weixinOrderBean.getCanju()).setScale(2, BigDecimal.ROUND_DOWN);
+        BigDecimal youhui = new BigDecimal(getYouhuiMoney() + weixinOrderBean.getYufupice() + weixinOrderBean.getYouhui()).setScale(2, BigDecimal.ROUND_DOWN);
+        BigDecimal yintui = new BigDecimal(weixinOrderBean.getYintui()).setScale(2, BigDecimal.ROUND_DOWN);
+        BigDecimal yinfu = new BigDecimal(getYinfuMoney()).setScale(2, BigDecimal.ROUND_DOWN);
+        BigDecimal need = new BigDecimal(needMoney).setScale(2, BigDecimal.ROUND_DOWN);
+        BigDecimal yuFuPice = new BigDecimal(weixinOrderBean.getYufupice()).setScale(2, BigDecimal.ROUND_DOWN);
+
+        tv1.setText("原价：￥" + yuanjia);
+        tv2.setText("餐具：￥" + canju);
+        tv3.setText("优惠：￥" + youhui);
+        tv5.setText("应退：￥" + yintui);
+        tv4.setText("应付：￥" + yinfu);
+        tv6.setText("还需支付：￥" + need);
+        tv7.setText("预定金：￥" + yuFuPice);
     }
 
     private void initPay() {
@@ -1062,8 +1044,10 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             return;
         }
         double result = weixinOrderBean.getYuanjia() - weixinOrderBean.getYufupice() - weixinOrderBean.getYouhui() - getYouhuiMoney();
-
-
+        Log.d("dj","开始："+result);
+        BigDecimal resultBD = new BigDecimal(result).setScale(2, BigDecimal.ROUND_DOWN);
+        result = Double.parseDouble(resultBD + "");
+        Log.d("dj","后来："+result);
         String[] payTypes = getResources().getStringArray(R.array.payType);
         List<PayMeEntity> datas = new ArrayList<>();
         for (int i = 0; i < payTypes.length; i++) {
@@ -1254,6 +1238,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 }
             }
             if (idazhe > 0) {
+
                 haveOneDaZhe = true;
                 ijianmian = 0;
                 jianMian.setText("");
