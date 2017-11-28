@@ -552,11 +552,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             memberId = memberBean == null ? "" : memberBean.getId();
             if (type == P3) {
-                if(!TextUtils.isEmpty(tabName)){
+                if (!TextUtils.isEmpty(tabName)) {
                     presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                             memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tabName,
                             free, "4", guiId, "");
-                }else{
+                } else {
                     presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                             memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "",
                             free, "4", guiId, "");
@@ -690,7 +690,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             return super.onKeyDown(keyCode, event);
         }
     }
+
     private Double zhifubaoScanMoney;
+
     private void initRVIew() {
         adapter = new BillAdapter(R.layout.item_bill);
         recyclerView.addItemDecoration(new VerticalDividerItemDecoration.Builder(BillActivity.this).sizeResId(R.dimen._20sdp)
@@ -916,7 +918,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     });
                     AlertDialog dialog = builder.create();
                     dialog.show();
-                    Toasty.info(BillActivity.this ,"position"+position).show();
+                    Toasty.info(BillActivity.this, "position" + position).show();
                 }
             });
             laheiPop.setOutsideTouchable(true);
@@ -1173,7 +1175,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         BigDecimal b = new BigDecimal(aDouble).setScale(2, BigDecimal.ROUND_DOWN);
         Toasty.success(this, "打折优惠价格为" + b, Toast.LENGTH_SHORT, true).show();
         idazhe = aDouble;
-        Log.d("dj", "dazhe:"+aDouble+"b:"+b);
+        Log.d("dj", "dazhe:" + aDouble + "b:" + b);
         if (aDouble > 0) {
             ijianmian = 0;
             jianMian.setText("");
