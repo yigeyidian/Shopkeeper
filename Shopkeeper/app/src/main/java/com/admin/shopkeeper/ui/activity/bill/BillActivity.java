@@ -369,9 +369,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     @OnClick(R.id.bill_dazhe)
     public void dazheClick() {
         if (App.INSTANCE().getUser().getPermissionValue().contains("quanxiandazhe")) {
-            if(haveOneDaZhe){
+            if (haveOneDaZhe) {
                 warning("您已进行单个菜品打折");
-            }else{
+            } else {
                 presenter.getDazheList();
             }
         } else {
@@ -896,7 +896,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             PopupWindow laheiPop = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
             RecyclerView recyclerView = (RecyclerView) laheiView.findViewById(R.id.pop_recycler);
-            MenuListAdapter menuListAdapter = new MenuListAdapter(R.layout.item_menu_list , BillActivity.this ,true);
+            MenuListAdapter menuListAdapter = new MenuListAdapter(R.layout.item_menu_list, BillActivity.this, true);
             /*View header = LayoutInflater.from(this).inflate(R.layout.item_menu_list, (ViewGroup) recyclerView.getParent(), false);
             menuListAdapter.addHeaderView(header);*/
 
@@ -933,7 +933,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 }
             });
             menuListAdapter.setOnItemChildClickListener((adapter1, view, position1) -> {
-                if(view.getId() == R.id.etSale){
+                if (view.getId() == R.id.etSale) {
                     if (!App.INSTANCE().getUser().getPermissionValue().contains("quanxiandazhe")) {
                         warning("没有打折权限");
                         return;
@@ -949,24 +949,41 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Tools.hideSoftKeyboard(BillActivity.this, editText);
                             textView.setText("");
                             dialog.dismiss();
                             menuListAdapter.notifyDataSetChanged();
+
                         }
                     });
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
+                            Tools.hideSoftKeyboard(BillActivity.this, editText);
                             int saleNum = 0;
-                            if(!TextUtils.isEmpty(editText.getText().toString())){
+                            if (!TextUtils.isEmpty(editText.getText().toString())) {
                                 saleNum = Integer.parseInt(editText.getText().toString());
                             }
-                            if (saleNum>0 && saleNum < 100) {
-                                textView.setText(saleNum+"");
+                            if (saleNum > 0 && saleNum < 100) {
+                                textView.setText(saleNum + "");
                                 item.setSale(saleNum);
-                                MsgEvent event = new MsgEvent(MsgEvent.oneSale);
-                                EventBus.getDefault().post(event);
-                            }else{
+
+                                for (OrderDetailFood orderDetailFood : list) {
+                                    if (orderDetailFood.getSale() > 0) {
+                                        idazhe += orderDetailFood.getPrice() * ((100.0 - orderDetailFood.getSale()) / 100.0);
+                                    }
+                                }
+                                if (idazhe > 0) {
+                                    haveOneDaZhe = true;
+                                    ijianmian = 0;
+                                    jianMian.setText("");
+                                    youhuiMoney = (ijianmian + idazhe);
+
+                                    initPay();
+                                    getNeed();
+                                    intText();
+                                }
+                            } else {
                                 warning("请输入正确的打折数");
                             }
                             dialog.dismiss();
@@ -1231,9 +1248,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     public void onMsgEvent(MsgEvent event) {
         idazhe = 0;
         if (event.getType() == MsgEvent.oneSale) {
-            for(OrderDetailFood orderDetailFood : list){
-                if(orderDetailFood.getSale()>0){
-                    idazhe += orderDetailFood.getPrice()*((100-orderDetailFood.getSale())/100);
+            for (OrderDetailFood orderDetailFood : list) {
+                if (orderDetailFood.getSale() > 0) {
+                    idazhe += orderDetailFood.getPrice() * ((100 - orderDetailFood.getSale()) / 100);
                 }
             }
             if (idazhe > 0) {
@@ -1248,6 +1265,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             }
         }
     }
+
     @Override
     public void dazheSucccess(double aDouble) {
         BigDecimal b = new BigDecimal(aDouble).setScale(2, BigDecimal.ROUND_DOWN);
