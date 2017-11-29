@@ -238,7 +238,49 @@ public class PrintClass58 {
             //切刀
             socketwriter.write(bty_tmp, 0, bty_tmp.length);
         }
-
+//充值打印
+        if (type.equals("10"))
+        {
+            String[] er = product.split("\\@");
+            socketwriter.write(Internal, 0, Internal.length);
+            byte[] temps = new byte[] { 29, 33, 17 };//1D 21 选择字体大小,0x01放大一倍
+            socketwriter.write(temps, 0, temps.length);//设置字符集
+            byte[] datas11 = ("" + sname.split("\\@")[0] + "" + "\n\n").getBytes("gbk");
+            socketwriter.write(datas11, 0, datas11.length);//输出文字
+            byte[] temp8 = new byte[] { 27, 50 };//1D 21 选择字体大小,0x01放大一倍
+            socketwriter.write(temp8, 0, temp8.length);//设置字符集
+            byte[] temp9 = new byte[] { 29, 33, 0 };//1D 21 选择字体大小,0x01放大一倍
+            socketwriter.write(temp9, 0, temp9.length);//设置字符集
+            byte[] datas31 = ("       会员卡充值凭据        \n").getBytes("gbk");
+            socketwriter.write(datas31, 0, datas31.length);//输出文字
+            byte[] datas3 = ("-------------------------------\n").getBytes("gbk");
+            socketwriter.write(datas3, 0, datas3.length);//输出文字
+            socketwriter.write(Internal, 0, Internal.length);
+            byte[] temp = new byte[] { 29, 33, 0 };//1D 21 选择字体大小,0x01放大一倍
+            socketwriter.write(temp, 0, temp.length);//设置字符集
+            byte[] datas32 = ("操 作 人：" + username + "\n\n").getBytes("gbk");
+            socketwriter.write(datas32, 0, datas32.length);//输出文字
+            byte[] datas33 = ("卡    号：" + tname + "\n\n").getBytes("gbk");
+            socketwriter.write(datas33, 0, datas33.length);//输出文字
+            byte[] datas34 = ("充值金额：" + shiji.split("\\@")[0] + "\n\n").getBytes("gbk");
+            socketwriter.write(datas34, 0, datas34.length);//输出文字
+            byte[] datas38 = ("会员余额：" + shiji.split("\\@")[1] + "\n\n").getBytes("gbk");
+            socketwriter.write(datas38, 0, datas38.length);//输出文字
+            byte[] datas39 = ("充值类型：" + shiji.split("\\@")[2] + "\n\n").getBytes("gbk");
+            socketwriter.write(datas39, 0, datas39.length);//输出文字
+            byte[] datas35 = ("充值时间：" + CalendarUtils.stringToDate(String.valueOf(System.currentTimeMillis())) + "\n\n").getBytes("gbk");
+            socketwriter.write(datas35, 0, datas35.length);//输出文字
+            byte[] datas37 = ("注意：请仔细核对小票,并妥善保管\n\n").getBytes("gbk");
+            socketwriter.write(datas37, 0, datas37.length);//输出文字
+            byte[] datas36 = ("-------------------------------\n").getBytes("gbk");
+            socketwriter.write(datas36, 0, datas36.length);//输出文字
+            byte[] datas14 = ("商家地址:" + sname.split("\\@")[2] + "\n商家电话:" + sname.split("\\@")[1] + "\n").getBytes("gbk");
+            socketwriter.write(datas14, 0, datas14.length);//输出文字
+            byte[] datas15 = ("欢迎下次光临！\n\n\n\n\n").getBytes("gbk");
+            socketwriter.write(datas15, 0, datas15.length);//输出文字
+            //切刀
+            socketwriter.write(bty_tmp, 0, bty_tmp.length);
+        }
 
         if (type.equals("0")) {
 

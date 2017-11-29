@@ -2,6 +2,7 @@ package com.admin.shopkeeper.ui.activity.rechargedetail;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
@@ -116,6 +117,8 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
+                        Log.d("ttt",stringModel.getResult());
+                        printResult(stringModel.getResult());
                         iView.success("充值成功");
                     } else {
                         iView.error("充值失败");
@@ -134,11 +137,12 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(stringModel -> {
+                .subscribe(intModel -> {
                     DialogUtils.hintDialog();
-                    if (stringModel.getCode().equals("1")) {
+                    if (intModel.getCode().equals("1")) {
+                        Log.d("ttt",intModel.getResult());
+                        printResult(intModel.getResult());
                         iView.success("充值成功");
-                        printResult(stringModel.getResult());
                     } else {
                         iView.error("充值失败");
                     }
@@ -150,6 +154,7 @@ public class RechargeDetailPresenter extends BasePresenter<IRechargeDetailView> 
 
     private void printResult(String result) {
         new Thread(() -> Print.socketDataArrivalHandler(result)).start();
+//        Print.rxPrint(result);
     }
 
     public void check(String checkCode, int type, RechargeBean bean) {

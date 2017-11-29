@@ -41,9 +41,11 @@ public class Print {
             //调用打印机打印数据
             String[] enty = null;
             String[] ss = data.split("\\^");
+            Log.d("ttt" ,"第一个字符串："+ ss[0]);
             for (String s : ss) {
                 // MessageBox.Show(s);
                 enty = s.split("\\$");
+                Log.d("ttt","打印字段长度length:"+enty.length);
                 Timber.d(enty.length + "");
                 if (enty.length >= 12) {
                     //后厨
@@ -178,10 +180,20 @@ public class Print {
                             boolean t = p.Print(s);
                         }
                     }
+                    //充值打印
+                    if (enty[3].equals("10")) {
+                        if (enty[10].equals("0")) {
+                            PrintClass58 p = new PrintClass58();
+                            boolean t = p.Print(s);
+                        } else {
+                            PrintClass p = new PrintClass();
+                            boolean t = p.Print(s);
+                        }
+                    }
                 }
             }
         } catch (Exception ex) {
-
+            Log.d("ttt",ex.toString());
             ex.printStackTrace();
         }
 

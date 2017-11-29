@@ -44,10 +44,6 @@ public class MenuListAdapter extends BaseQuickAdapter<OrderDetailFood, BaseViewH
 
     @Override
     protected void convert(BaseViewHolder helper, OrderDetailFood item) {
-//        TextView tvSale = helper.getView(R.id.etSale) ;
-//        if(mIsVisible){
-//           tvSale.setVisibility(View.VISIBLE);
-//        }
         helper.setVisible(R.id.etSale, mIsVisible);
         helper.setText(R.id.name, item.getProductNmae());
         if (item.getGiving() > 0) {
