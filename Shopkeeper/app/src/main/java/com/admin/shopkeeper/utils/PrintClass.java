@@ -1,6 +1,7 @@
 package com.admin.shopkeeper.utils;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import com.admin.shopkeeper.R;
 
@@ -11,6 +12,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import timber.log.Timber;
 
@@ -265,7 +267,7 @@ public class PrintClass {
             socketwriter.write(datas38, 0, datas38.length);//输出文字
             byte[] datas39 = ("充值类型：" + shiji.split("\\@")[2] + "\n\n").getBytes("gbk");
             socketwriter.write(datas39, 0, datas39.length);//输出文字
-            byte[] datas35 = ("充值时间：" + CalendarUtils.stringToDate(String.valueOf(System.currentTimeMillis())) + "\n\n").getBytes("gbk");
+            byte[] datas35 = ("充值时间：" + CalendarUtils.formatDate(new Date()) + "\n\n").getBytes("gbk");
             socketwriter.write(datas35, 0, datas35.length);//输出文字
             byte[] datas37 = ("注意：请仔细核对小票,并妥善保管\n\n").getBytes("gbk");
             socketwriter.write(datas37, 0, datas37.length);//输出文字

@@ -41,7 +41,6 @@ public class Print {
             //调用打印机打印数据
             String[] enty = null;
             String[] ss = data.split("\\^");
-            Log.d("ttt" ,"第一个字符串："+ ss[0]);
             for (String s : ss) {
                 // MessageBox.Show(s);
                 enty = s.split("\\$");
