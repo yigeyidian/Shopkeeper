@@ -1811,7 +1811,7 @@ public interface ShopkeeperApi {
             @Field("RESTAURANTID") String shopId,
             @Field("CardID") String cardID,
             @Field("PayType") int payType,
-            @Field("OperaName ") String operaName,
+            @Field("OperaName") String operaName,
             @Field("OperaID") String operaId);
 
     @FormUrlEncoded
