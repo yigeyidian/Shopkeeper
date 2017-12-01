@@ -47,7 +47,6 @@
         android:background="@color/gray"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-
         app:layout_constraintTop_toBottomOf="@+id/tv_order_id" />
 
 
@@ -58,7 +57,6 @@
         android:layout_marginTop="@dimen/_30sdp"
         android:text="订单金额：￥200"
         android:textSize="@dimen/_26ssp"
-
         app:layout_constraintLeft_toLeftOf="@+id/view"
         app:layout_constraintTop_toBottomOf="@+id/tv_order_id" />
 
@@ -71,7 +69,15 @@
         android:textSize="@dimen/_26ssp"
         app:layout_constraintLeft_toLeftOf="@+id/view"
         app:layout_constraintTop_toBottomOf="@+id/orderMoney" />
-
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/payType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="支付方式："
+        android:textSize="@dimen/_26ssp"
+        app:layout_constraintLeft_toLeftOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/payStatus" />
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/table_id"
         android:layout_width="wrap_content"
@@ -79,14 +85,13 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:textSize="@dimen/_26ssp"
         app:layout_constraintLeft_toLeftOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/payStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/payType" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/orderType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/_30sdp"
-        
         android:textSize="@dimen/_26ssp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/orderMoney" />
@@ -98,9 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/_30sdp"
-
         android:textColor="#CECECE"
-
         app:layout_constraintTop_toBottomOf="@+id/table_id" />
 
     <android.support.v7.widget.AppCompatTextView

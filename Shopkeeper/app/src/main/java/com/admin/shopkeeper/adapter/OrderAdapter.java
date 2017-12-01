@@ -1,6 +1,7 @@
 package com.admin.shopkeeper.adapter;
 
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.entity.Order;
@@ -36,7 +37,6 @@ public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
         helper.setText(R.id.orderOperator, String.format(mContext.getString(R.string.string_order_operator), item.getUsername()));
 
 //        Type  1.预定菜品 2 预定桌位  3.外卖  4.快餐 5.扫码点餐 6.排队点餐 7.店内点餐
-
 //        OrderSate 1.待处理（未支付） 2.已确定（已支付） 3.已完成（已经开单）4.已取消 5.制作中（暂时未使用） 6.等待配送 （暂时未使用）
 
         switch (item.getType()) {
@@ -81,6 +81,45 @@ public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
                 break;
             default:
                 break;
+        }
+        if (!TextUtils.isEmpty(item.getPayType())) {
+            //"PayType":"现金", "银行卡", "主扫微信", "挂账", "会员卡", "被扫支付宝", "被扫微信", "美团券", "大众点评券", "主扫支付宝"
+            switch (item.getPayType()) {
+                case "1":
+                    helper.setText(R.id.payType, "支付方式：现金");
+                    break;
+                case "2":
+                    helper.setText(R.id.payType, "支付状态：银行卡");
+                    break;
+                case "3":
+                    helper.setText(R.id.payType, "支付状态：主扫微信");
+                    break;
+                case "4":
+                    helper.setText(R.id.payType, "支付状态：挂账");
+                    break;
+                case "5":
+                    helper.setText(R.id.payType, "支付状态：会员卡支付");
+                    break;
+                case "6":
+                    helper.setText(R.id.payType, "支付状态：被扫支付宝支付");
+                    break;
+                case "7":
+                    helper.setText(R.id.payType, "支付状态：被扫微信支付");
+                    break;
+                case "8":
+                    helper.setText(R.id.payType, "支付状态：美团券支付");
+                    break;
+                case "9":
+                    helper.setText(R.id.payType, "支付状态：大众点评券支付");
+                    break;
+                case "10":
+                    helper.setText(R.id.payType, "支付状态：主扫支付宝支付");
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            helper.setVisible(R.id.payType, false);
         }
         if (item.getPayIs().equals("1")) {
             if (item.getType().equals("1")) {
