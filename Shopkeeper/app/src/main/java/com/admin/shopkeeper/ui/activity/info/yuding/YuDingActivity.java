@@ -52,7 +52,7 @@ public class YuDingActivity extends BaseActivity<YuDingPresenter> implements IYu
             return;
         }
 
-        presenter.KuaiSu(foodInfo, "", "", username.getText().toString().trim(), "", phone.getText().toString().trim(), "", Double.valueOf(money.getText().toString().trim()), "", "", "1",totalPrice);
+        presenter.KuaiSu(foodInfo, "", "", username.getText().toString().trim(), "", phone.getText().toString().trim(), remark.getText().toString().isEmpty()?"":remark.getText().toString().trim(), Double.valueOf(money.getText().toString().trim()), "", "", "1",totalPrice);
     }
 
 

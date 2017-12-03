@@ -147,6 +147,8 @@
     <string name="string_order_time">下单时间：%1$s</string>
     <string name="string_table_id">桌台编号：%1$s</string>
     <string name="string_order_operator">点餐员：%1$s</string>
+    <string name="string_order_remark">备注信息：%1$s</string>
+    <string name="string_order_pay_type">支付方式：%1$s</string>
     <string name="title_activity_table_operation">TableOperationActivity</string>
     <string name="string_print_1">交班人：%1s\n</string>
     <string name="string_request_error">数据库查询失败</string>

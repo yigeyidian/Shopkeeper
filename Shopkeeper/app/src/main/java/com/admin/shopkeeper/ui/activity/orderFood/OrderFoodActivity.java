@@ -1195,6 +1195,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         menuAdapter.setNewData(menuTypeEntities);
         for (int i = 0; i < QuickIndexBar.LETTERS.length; i++) {
             QuickIndexBar.INDEX[i] = 0;
+
             for (int j = 0; j < menuTypeEntities.get(0).getFoods().size(); j++) {
                 FoodEntity foodEntity = menuTypeEntities.get(0).getFoods().get(j);
                 if (!TextUtils.isEmpty((foodEntity.getPinYin())) && (foodEntity.getPinYin().substring(0, 1).equalsIgnoreCase(QuickIndexBar.LETTERS[i]))) {

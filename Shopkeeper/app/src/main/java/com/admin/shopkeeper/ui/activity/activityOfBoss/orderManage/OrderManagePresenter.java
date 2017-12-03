@@ -37,8 +37,13 @@ public class OrderManagePresenter extends BasePresenter<IOrderManageView> {
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        OrderManage[] beens = new Gson().fromJson(stringModel.getResult(), OrderManage[].class);
-                        iView.success(Arrays.asList(beens));
+                        if(stringModel.getResult().equals("0")){
+                            iView.success("暂无数据");
+                        }else{
+                            OrderManage[] beens = new Gson().fromJson(stringModel.getResult(), OrderManage[].class);
+                            iView.success(Arrays.asList(beens));
+                        }
+
                     }
                 }, throwable -> {
                     DialogUtils.hintDialog();

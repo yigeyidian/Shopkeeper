@@ -10,12 +10,44 @@
 
     <include layout="@layout/boss_common_toolbar" />
 
+    <LinearLayout
+        android:id="@+id/top_search_order_manage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:background="#EFEFF4"
+        android:padding="@dimen/_15sdp"
+        >
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/et_food_search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60sdp"
+            android:background="@drawable/bg_search"
+            android:hint="搜索"
+            android:inputType="text"
+            android:paddingLeft="10dp"
+            android:textSize="@dimen/_24ssp"
+             />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/queryLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/queryBg"
+        android:visibility="gone"
+       >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/queryView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/item_root"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_88sdp"
-        android:layout_marginTop="@dimen/_30sdp"
         android:background="@drawable/selector_item"
         android:orientation="horizontal">
 

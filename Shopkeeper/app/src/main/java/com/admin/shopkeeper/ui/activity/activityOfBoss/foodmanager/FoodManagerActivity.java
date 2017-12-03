@@ -4,9 +4,13 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.foodmanager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,15 +18,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.FoodManagerAdapter;
+import com.admin.shopkeeper.adapter.OrderFoodAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.foodedit.FoodEditActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.kouwei.KouweiActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.season.SeasonActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.shuxing.ShuxingActivity;
+import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
@@ -37,7 +44,14 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
     Toolbar toolbar;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.et_food_search)
+    AppCompatEditText etSearch;
+    @BindView(R.id.queryView)
+    RecyclerView queryView;
+    @BindView(R.id.queryLayout)
+    RelativeLayout queryLayout;
     private FoodManagerAdapter adapter;
+    private FoodManagerAdapter queryAdapter;
     private PopupWindow laheiPop;
 
     @Override
@@ -75,8 +89,38 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
                 showDeletePop(adapter.getData().get(position));
             }
         });
-
         presenter.getData();
+
+        queryView.setLayoutManager(new LinearLayoutManager(FoodManagerActivity.this));
+        queryView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
+                .colorResId(R.color.gray)
+                .sizeResId(R.dimen._1sdp)
+                .marginResId(R.dimen._30sdp, R.dimen._1sdp)
+                .build());
+        queryAdapter = new FoodManagerAdapter(R.layout.item_foodmanager);
+        queryView.setAdapter(queryAdapter);
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString().trim())) {
+                    queryAdapter.getData().clear();
+                    queryAdapter.notifyDataSetChanged();
+                    queryLayout.setVisibility(View.GONE);
+                } else {
+//                    presenter.queryFoods(s.toString().trim());
+                }
+            }
+        });
     }
 
     @Override
