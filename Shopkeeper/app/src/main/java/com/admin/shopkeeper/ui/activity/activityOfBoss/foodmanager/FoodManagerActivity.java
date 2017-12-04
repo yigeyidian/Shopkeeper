@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -34,9 +35,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> implements IFoodManagerView {
 
@@ -46,12 +49,10 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
     RecyclerView recyclerView;
     @BindView(R.id.et_food_search)
     AppCompatEditText etSearch;
-    @BindView(R.id.queryView)
-    RecyclerView queryView;
-    @BindView(R.id.queryLayout)
-    RelativeLayout queryLayout;
+    @BindView(R.id.iv_clear)
+    ImageView ivClear;
+
     private FoodManagerAdapter adapter;
-    private FoodManagerAdapter queryAdapter;
     private PopupWindow laheiPop;
 
     @Override
@@ -83,22 +84,11 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
                 .build());
         adapter = new FoodManagerAdapter(R.layout.item_foodmanager);
         recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
-                showDeletePop(adapter.getData().get(position));
-            }
+        adapter.setOnItemClickListener((adapter1, view, position) -> {
+            showDeletePop(adapter.getData().get(position));
         });
         presenter.getData();
 
-        queryView.setLayoutManager(new LinearLayoutManager(FoodManagerActivity.this));
-        queryView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
-                .colorResId(R.color.gray)
-                .sizeResId(R.dimen._1sdp)
-                .marginResId(R.dimen._30sdp, R.dimen._1sdp)
-                .build());
-        queryAdapter = new FoodManagerAdapter(R.layout.item_foodmanager);
-        queryView.setAdapter(queryAdapter);
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -113,14 +103,30 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
             @Override
             public void afterTextChanged(Editable s) {
                 if (TextUtils.isEmpty(s.toString().trim())) {
-                    queryAdapter.getData().clear();
-                    queryAdapter.notifyDataSetChanged();
-                    queryLayout.setVisibility(View.GONE);
+                    ivClear.setVisibility(View.INVISIBLE);
+                    adapter.setNewData(datas);
                 } else {
-//                    presenter.queryFoods(s.toString().trim());
+                    ivClear.setVisibility(View.VISIBLE);
+                    searchFood(s.toString().trim());
                 }
             }
         });
+        etSearch.clearFocus();
+    }
+
+    @OnClick(R.id.iv_clear)
+    public void clearClick() {
+        etSearch.setText("");
+    }
+
+    private void searchFood(String str) {
+        List<FoodBean> list = new ArrayList<>();
+        for (FoodBean bean : datas) {
+            if (bean.getProductName().contains(str) || bean.getName().contains(str)) {
+                list.add(bean);
+            }
+        }
+        adapter.setNewData(list);
     }
 
     @Override
@@ -156,9 +162,13 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
         }
     }
 
+    List<FoodBean> datas = new ArrayList<>();
+
     @Override
     public void success(List<FoodBean> foods) {
-        adapter.setNewData(foods);
+        datas.clear();
+        datas.addAll(foods);
+        adapter.setNewData(datas);
     }
 
     public void showDeletePop(FoodBean bean) {
