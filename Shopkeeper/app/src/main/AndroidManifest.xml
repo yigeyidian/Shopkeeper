@@ -376,9 +376,21 @@
         <activity
             android:name=".ui.activity.activityOfBoss.sensitiveOpearationDetail.SensitiveDetailActivity"
             android:theme="@style/BossTheme" />
-        <activity android:name=".ui.activity.activityOfBoss.mansong.MansongActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.mansongedit.MansongEditActivity" />
-        <activity android:name=".ui.activity.activityOfBoss.wxsetting.WXSettingActivity"></activity>
+        <activity
+            android:name=".ui.activity.activityOfBoss.mansong.MansongActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.mansongedit.MansongEditActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.couponLineDown.CouponLineDownActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.wxsetting.WXSettingActivity"
+            android:theme="@style/BossTheme"/>
+        <activity
+            android:name=".ui.activity.activityOfBoss.editCouponLineDown.EditCouponLineDownActivity"
+            android:theme="@style/BossTheme"/>
     </application>
 
 </manifest>

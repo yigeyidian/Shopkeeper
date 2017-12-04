@@ -18,12 +18,12 @@
 
         <TextView
             style="@style/SettingItemText2Style"
-            android:text="满送规则名称" />
+            android:text="线下券名称" />
 
         <EditText
-            android:id="@+id/item_name"
+            android:id="@+id/item_name_coupon_line"
             style="@style/SettingItemEditStyle"
-            android:hint="请输入满送规则名称" />
+            android:hint="请输入线下券名称" />
 
     </LinearLayout>
 
@@ -34,13 +34,13 @@
 
         <TextView
             style="@style/SettingItemText2Style"
-            android:text="满送条件金额" />
+            android:text="线下券数量" />
 
         <EditText
-            android:id="@+id/item_tiaojian"
+            android:id="@+id/item_nums_coupon_line"
             android:inputType="number"
             style="@style/SettingItemEditStyle"
-            android:hint="请输入满送条件金额" />
+            android:hint="请输入线下券数量" />
 
     </LinearLayout>
 
@@ -51,12 +51,12 @@
 
         <TextView
             style="@style/SettingItemText2Style"
-            android:text="满送金额" />
+            android:text="最大使用量" />
 
         <EditText
-            android:id="@+id/item_money"
+            android:id="@+id/item_max_use_coupon_line"
             style="@style/SettingItemEditStyle"
-            android:hint="请输入满送金额"
+            android:hint="请输入单次最大使用量"
             android:inputType="number" />
 
     </LinearLayout>
@@ -68,13 +68,13 @@
 
         <TextView
             style="@style/SettingItemText2Style"
-            android:text="开始日期" />
+            android:text="优惠金额" />
 
-        <TextView
-            android:id="@+id/item_starttime"
+        <EditText
+            android:id="@+id/item_money_free_coupon_line"
             style="@style/SettingItemEditStyle"
-            android:gravity="center_vertical"
-            android:hint="请选择开始日期" />
+            android:hint="请输入优惠金额"
+            android:inputType="number" />
 
     </LinearLayout>
 
@@ -85,30 +85,13 @@
 
         <TextView
             style="@style/SettingItemText2Style"
-            android:text="结束日期" />
+            android:text="适用商家" />
 
         <TextView
-            android:id="@+id/item_endtime"
+            android:id="@+id/item_shop_coupon_line"
             style="@style/SettingItemEditStyle"
             android:gravity="center_vertical"
-            android:hint="请选择结束日期" />
-
-    </LinearLayout>
-
-
-    <View style="@style/LineHorStyle" />
-
-    <LinearLayout style="@style/SettingItemStyle">
-
-        <TextView
-            style="@style/SettingItemText2Style"
-            android:text="适用类型" />
-
-        <TextView
-            android:id="@+id/item_type"
-            style="@style/SettingItemEditStyle"
-            android:gravity="center_vertical"
-            android:hint="请选择适用类型" />
+            android:hint="请选择适用商家" />
 
     </LinearLayout>
 
@@ -122,7 +105,7 @@
             android:text="是否启用" />
 
         <RadioGroup
-            android:id="@+id/item_enable"
+            android:id="@+id/item_enable_coupon_line"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">

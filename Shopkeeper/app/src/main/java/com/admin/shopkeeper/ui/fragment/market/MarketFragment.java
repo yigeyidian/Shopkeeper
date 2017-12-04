@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseFragment;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.couponLineDown.CouponLineDownActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.couponManage.CouponManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.mansong.MansongActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.memberLevelManage.MemberLevelManageActivity;
@@ -95,5 +96,9 @@ public class MarketFragment extends BaseFragment<MarketPresenter> implements IMa
         startActivity(MansongActivity.class);
     }
 
+    @OnClick(R.id.market_ll_line_down)
+    public void lineDownClick() {
+        startActivity(CouponLineDownActivity.class);
+    }
 
 }

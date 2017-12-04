@@ -95,11 +95,11 @@ public class CouponManagePresenter extends BasePresenter<ICouponManageView> {
                 });
     }
 
-    public void getCommodityCouponInfo() {
+    public void getLineDownInfo(int index) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getCommodityCouponInfo("1", App.INSTANCE().getShopID())
+                .getLineDownInfo("1", App.INSTANCE().getShopID(),20 ,index,"")
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

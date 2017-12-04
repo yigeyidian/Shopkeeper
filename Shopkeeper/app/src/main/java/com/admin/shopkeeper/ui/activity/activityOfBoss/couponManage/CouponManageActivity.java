@@ -100,8 +100,8 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
         titleStr = getIntent().getStringExtra(Config.PARAM1);
         if (titleStr.equals("优惠券管理")) {
             toolbar.setTitle("优惠券管理");
-        } else if (titleStr.equals("团购券管理")) {
-            toolbar.setTitle("团购券管理");
+        } else if (titleStr.equals("线下券管理")) {
+            toolbar.setTitle("线下券管理");
         } else {
             toolbar.setTitle("商品券管理");
         }
@@ -135,8 +135,8 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
         });
         if (titleStr.equals("优惠券管理")) {
             presenter.getCouponInfo(1, "");
-        } else if (titleStr.equals("商品券管理")) {
-            presenter.getCommodityCouponInfo();
+        } else if (titleStr.equals("线下券管理")) {
+            presenter.getLineDownInfo(1);
         } else {
             presenter.getGroupCouponInfo();
             presenter.getRechargeInfo();
@@ -361,8 +361,8 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
         showSuccessToast(msg);
         if (titleStr.equals("优惠券管理")) {
             presenter.getCouponInfo(1, "");
-        } else if (titleStr.equals("商品券管理")) {
-            presenter.getCommodityCouponInfo();
+        } else if (titleStr.equals("线下券管理")) {
+            presenter.getLineDownInfo(1);
         } else {
             presenter.getGroupCouponInfo();
             presenter.getRechargeInfo();

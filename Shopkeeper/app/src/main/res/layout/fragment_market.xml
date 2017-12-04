@@ -252,8 +252,40 @@
                 android:src="@mipmap/list_icon_arrow_right" />
         </LinearLayout>
 
-        <View style="@style/LineHorStyle" />
+        <View
+            style="@style/LineHorStyle"
+            android:layout_marginTop="@dimen/_29sdp" />
+        <!--线下券管理-->
+        <LinearLayout
+            android:id="@+id/market_ll_line_down"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_90sdp"
+            android:background="@drawable/selector_item"
+            android:orientation="horizontal">
 
+            <ImageView
+                android:layout_width="@dimen/_58sdp"
+                android:layout_height="@dimen/_58sdp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/_30sdp"
+                android:src="@mipmap/marketing_icon_fullgive" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/_21sdp"
+                android:layout_weight="1"
+                android:text="线下券管理"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/_30sdp"
+                android:src="@mipmap/list_icon_arrow_right" />
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

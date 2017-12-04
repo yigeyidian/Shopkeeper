@@ -1523,6 +1523,22 @@ public interface ShopkeeperApi {
     Observable<StringModel> getCommodityCouponInfo(
             @Field("Type") String type,
             @Field("RESTAURANTID") String shopId);
+    /**
+     * 获取线下券
+     *
+     * @param type   1
+     * @param shopId
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewCardManagerQiTaASHX.ashx")
+    Observable<StringModel> getLineDownInfo(
+            @Field("Type") String type,
+            @Field("RID") String shopId,
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("Product") String product
+    );
 
     /**
      * 新增优惠券
@@ -2009,16 +2025,16 @@ public interface ShopkeeperApi {
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "WeiXinJiFen.ashx")
     Observable<StringModel> editMansong(
-            @Field("Type") String type,
-            @Field("Guid") String guid,
-            @Field("Name") String name,
-            @Field("TiaoJian") String tiaoJian,
-            @Field("JinEr") String jinEr,
-            @Field("Btime") String btime,
-            @Field("Etime") String etime,
-            @Field("Apply") int apply,
-            @Field("IsBegin") int isBegin,
-            @Field("RESTAURANTID") String shopId);
+                    @Field("Type") String type,
+                    @Field("Guid") String guid,
+                    @Field("Name") String name,
+                    @Field("TiaoJian") String tiaoJian,
+                    @Field("JinEr") String jinEr,
+                    @Field("Btime") String btime,
+                    @Field("Etime") String etime,
+                    @Field("Apply") int apply,
+                    @Field("IsBegin") int isBegin,
+                    @Field("RESTAURANTID") String shopId);
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "WeiXinJiFen.ashx")
@@ -2026,4 +2042,26 @@ public interface ShopkeeperApi {
             @Field("Type") String type,
             @Field("Guid") String guid,
             @Field("RESTAURANTID") String shopId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewCardManagerQiTaASHX.ashx")
+    Observable<StringModel> editCouponLineDown(
+            @Field("Type") String type,
+            @Field("Name") String name,
+            @Field("shu") int shu,
+            @Field("maxshu") int maxShu,
+            @Field("pice") String money,
+            @Field("ShangID") String shangId,
+            @Field("Isok") int state,
+            @Field("Rid") String shopId);
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewCardManagerQiTaASHX.ashx")
+    Observable<StringModel> deleteCouponLine(
+            @Field("Type") String type,
+            @Field("id") String guid);
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "IntergialCounts.ashx")
+    Observable<StringModel> getShopOfCouponLine(
+            @Field("Type") String type,
+            @Field("PiCi") String pcId);
 }
