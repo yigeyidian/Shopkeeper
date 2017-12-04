@@ -45,6 +45,7 @@ import com.admin.shopkeeper.dialog.DaZheDialog;
 import com.admin.shopkeeper.dialog.GuaZhangDialog;
 import com.admin.shopkeeper.entity.BillJson;
 import com.admin.shopkeeper.entity.CardBean;
+import com.admin.shopkeeper.entity.CouponLineDownBean;
 import com.admin.shopkeeper.entity.DaZheEntity;
 import com.admin.shopkeeper.entity.GuaZhangBean;
 import com.admin.shopkeeper.entity.MemberBean;
@@ -123,6 +124,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     AppCompatButton scanBtn;
     @BindView(R.id.bill_score_text)
     TextView tvScoreText;
+    @BindView(R.id.bill_coupon_other_tv)
+    TextView tvCouponOther;
 
     private int type;
     private String tabName;
@@ -377,6 +380,12 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         } else {
             warning("没有打折权限");
         }
+    }
+
+    @OnClick(R.id.bill_coupon_other_ll)
+    public void billCouponOtherClick() {
+        presenter.getLineDownInfo(1, "");
+
     }
 
     @OnClick(R.id.bill_jianmian)
@@ -1043,10 +1052,10 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             return;
         }
         double result = weixinOrderBean.getYuanjia() - weixinOrderBean.getYufupice() - weixinOrderBean.getYouhui() - getYouhuiMoney();
-        Log.d("dj","开始："+result);
+        Log.d("dj", "开始：" + result);
         BigDecimal resultBD = new BigDecimal(result).setScale(2, BigDecimal.ROUND_DOWN);
         result = Double.parseDouble(resultBD + "");
-        Log.d("dj","后来："+result);
+        Log.d("dj", "后来：" + result);
         String[] payTypes = getResources().getStringArray(R.array.payType);
         List<PayMeEntity> datas = new ArrayList<>();
         for (int i = 0; i < payTypes.length; i++) {
@@ -1181,6 +1190,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     @Override
     public void cancelSuccess() {
         finish();
+    }
+
+    @Override
+    public void successOfGetCouponLine(List<CouponLineDownBean> couponLineDownBeans) {
+
     }
 
     @Override

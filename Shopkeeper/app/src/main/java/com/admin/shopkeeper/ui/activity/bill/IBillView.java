@@ -2,6 +2,7 @@ package com.admin.shopkeeper.ui.activity.bill;
 
 import com.admin.shopkeeper.base.IBaseView;
 import com.admin.shopkeeper.entity.CardBean;
+import com.admin.shopkeeper.entity.CouponLineDownBean;
 import com.admin.shopkeeper.entity.DaZheEntity;
 import com.admin.shopkeeper.entity.GuaZhangBean;
 import com.admin.shopkeeper.entity.MemberBean;
@@ -48,4 +49,6 @@ public interface IBillView extends IBaseView {
     void success(String msg);
 
     void cancelSuccess();
+
+    void successOfGetCouponLine(List<CouponLineDownBean> couponLineDownBeans);
 }

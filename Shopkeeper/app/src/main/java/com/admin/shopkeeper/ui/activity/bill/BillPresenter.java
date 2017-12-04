@@ -10,6 +10,7 @@ import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.entity.CanJu;
 import com.admin.shopkeeper.entity.CardBean;
+import com.admin.shopkeeper.entity.CouponLineDownBean;
 import com.admin.shopkeeper.entity.DaZheEntity;
 import com.admin.shopkeeper.entity.GuaZhangBean;
 import com.admin.shopkeeper.entity.MemberBean;
@@ -599,6 +600,29 @@ class BillPresenter extends BasePresenter<IBillView> {
                 }, throwable -> {
                     DialogUtils.hintDialog();
                     iView.warning("支付失败");
+                });
+    }
+
+    public void getLineDownInfo(int index , String productName) {
+        DialogUtils.showDialog(context, "数据加载中");
+        RetrofitHelper.getInstance()
+                .getApi()
+                .getLineDownInfo("1", App.INSTANCE().getShopID(),20 ,index,"")
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if (stringModel.getCode().equals("1")) {
+                        CouponLineDownBean[] couponLineDownBeen = new Gson().fromJson(stringModel.getResult(), CouponLineDownBean[].class);
+                        iView.successOfGetCouponLine(Arrays.asList(couponLineDownBeen));
+                    } else {
+                        iView.error("加载失败");
+                    }
+
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    iView.error("加载失败");
                 });
     }
 }
