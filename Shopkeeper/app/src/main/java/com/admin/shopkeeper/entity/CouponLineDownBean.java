@@ -33,6 +33,16 @@ public class CouponLineDownBean implements Serializable {
     @SerializedName("RESTAURANTID")
     String shopId;
 
+    boolean isSelected;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     public String getGuid() {
         return guid;
     }

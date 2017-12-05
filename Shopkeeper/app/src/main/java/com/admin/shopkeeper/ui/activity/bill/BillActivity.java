@@ -41,6 +41,7 @@ import com.admin.shopkeeper.adapter.BillAdapter;
 import com.admin.shopkeeper.adapter.MenuListAdapter;
 import com.admin.shopkeeper.adapter.PopSaleAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
+import com.admin.shopkeeper.dialog.CouponLineDialog;
 import com.admin.shopkeeper.dialog.DaZheDialog;
 import com.admin.shopkeeper.dialog.GuaZhangDialog;
 import com.admin.shopkeeper.entity.BillJson;
@@ -135,6 +136,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     private TableEntity tableEntity;
 
     private double youhuiMoney;//优惠
+    private double couponLineYouhuiMoney;//线下券优惠
     private int scoreMoney = 0;
     private int scoreCount = 0;
     private int cardMoney = 0;
@@ -150,6 +152,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     private Order order;
     private List<OrderDetailFood> list;
     private GuaZhangDialog guaZhangDialog;
+    private CouponLineDialog couponLineDialog;
 
     MemberBean memberBean;
     String memberId = "";
@@ -169,6 +172,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     private int poptype = 1;
     private boolean haveQXDaZhe;//是否进行权限打折或单个菜品打折
     private boolean haveOneDaZhe;//是否进行单个菜品打折
+    private List<CouponLineDownBean> couponLineDownBeanList = new ArrayList<>();
 
 
     @OnClick(R.id.bill_print)
@@ -385,7 +389,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     @OnClick(R.id.bill_coupon_other_ll)
     public void billCouponOtherClick() {
         presenter.getLineDownInfo(1, "");
-
     }
 
     @OnClick(R.id.bill_jianmian)
@@ -496,7 +499,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 BillJson.BillJsonBase d = new BillJson.BillJsonBase();
                 d.setGuid(System.currentTimeMillis() + "");
                 d.setPice(idazhe + "");
-                d.setType("1");
+                if(haveOneDaZhe){
+                    d.setType("6");
+                }else{
+                    d.setType("1");
+                }
                 q.add(d);
             }
             if (ijianmian > 0) {
@@ -513,8 +520,24 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 m.setType("3");
                 q.add(m);
             }
+            if(couponLineYouhuiMoney>0){
+                for (int k = 0; k < couponLineDownBeanList.size(); k++) {
+                    CouponLineDownBean entity = couponLineDownBeanList.get(k);
+                    if (entity != null) {
+                        BillJson.BillJsonBase pe = new BillJson.BillJsonBase();
+                        pe.setGuid(System.currentTimeMillis() + "");
+                        pe.setPice(entity.getPice() + "");
+                        pe.setPiceGuid("");
+                        pe.setSate(entity.getName() + "");
+                        pe.setType(5 + "");
+                        pe.setIsSql(entity.getGuid() + "");
+                        q.add(pe);
+                    }
+                }
+            }
             quanxian.setQuanxian(q);
             String qStr = new Gson().toJson(quanxian);
+            Log.d("ttt","quanxian:"+qStr);
 
             BillJson.Pays pays = new BillJson.Pays();
             List<BillJson.BillJsonBase> p = new ArrayList<>();
@@ -527,36 +550,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     pe.setGuid(System.currentTimeMillis() + "");
                     pe.setPice(entity.getMoney() + "");
                     pe.setPiceGuid(entity.getGuid() + "");
-//                    switch (entity.getName()) {
-//                        case "银行卡":
-//                            pe.setPiceGuid("2");
-//                            break;
-//                        case "会员卡":
-//                            pe.setPiceGuid("5");
-//                            break;
-//                        case "现金":
-//                            pe.setPiceGuid("1");
-//                            break;
-//                        case "主扫微信":
-//                            pe.setPiceGuid("3");
-//                            break;
-//                        case "被扫微信":
-//                            pe.setPiceGuid("7");
-//                            break;
-//                        case "被扫支付宝":
-//                            pe.setPiceGuid("6");
-//                            break;
-//                        case "美团":
-//                            pe.setPiceGuid("8");
-//                            break;
-//                        case "大众点评":
-//                            pe.setPiceGuid("9");
-//                            break;
-//                        case "主扫支付宝":
-//                            pe.setPiceGuid("10");
-//                            break;
-//
-//                    }
                     p.add(pe);
                 }
             }
@@ -1016,7 +1009,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     }
 
     private double getYouhuiMoney() {
-        return youhuiMoney + cardMoney + scoreMoney;
+        return youhuiMoney + cardMoney + scoreMoney + couponLineYouhuiMoney;
     }
 
     private double getYinfuMoney() {
@@ -1073,6 +1066,56 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     }
 
     String guiId = "";
+
+    @Override
+    public void successOfGetCouponLine(List<CouponLineDownBean> couponLineDownBeans) {
+        CouponLineDialog.Builder builder = new CouponLineDialog.Builder(this, R.style.OrderDialogStyle);
+        builder.setTitle("请选择线下券");
+        builder.setReasons(couponLineDownBeans);
+        builder.setBtnStr("确定");
+        builder.setText((needMoney + ""));
+        couponLineDialog = builder.creater();
+        couponLineYouhuiMoney = 0.0;
+        builder.setButtonClick(new CouponLineDialog.OnButtonClick() {
+            @Override
+            public void onBtnClick(List<CouponLineDownBean> list) {
+                if (list == null) {
+//                    couponLineYouhuiMoney += bean.getPice();
+//                    tvCouponOther.setText(String.valueOf(couponLineYouhuiMoney));
+                    /* if (money == 0) {
+                        guiId = "";
+                    } else {
+                        guiId = bean.getGuid();
+                    }
+                    getNeed();
+                    intText();
+                    adapter.notifyDataSetChanged();*/
+                } else {
+                    couponLineDownBeanList = list;
+                    for (CouponLineDownBean bean : list) {
+                        couponLineYouhuiMoney += bean.getPice();
+                    }
+                    tvCouponOther.setText(String.valueOf(couponLineYouhuiMoney));
+                    guiId = "";
+                    initPay();
+                    getNeed();
+                    intText();
+                    adapter.notifyDataSetChanged();
+                }
+                couponLineDialog.dismiss();
+            }
+
+            @Override
+            public void onCancel() {
+                guiId = "";
+                tvCouponOther.setText(String.valueOf(couponLineYouhuiMoney));
+                getNeed();
+                intText();
+                adapter.notifyDataSetChanged();
+            }
+        });
+        couponLineDialog.show();
+    }
 
     @Override
     public void guazhangSuccess(List<GuaZhangBean> result, PayMeEntity entity) {
@@ -1192,10 +1235,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         finish();
     }
 
-    @Override
-    public void successOfGetCouponLine(List<CouponLineDownBean> couponLineDownBeans) {
-
-    }
 
     @Override
     public void warning(String s) {
@@ -1299,7 +1338,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             BillJson.BillJsonBase d = new BillJson.BillJsonBase();
             d.setGuid(System.currentTimeMillis() + "");
             d.setPice(idazhe + "");
-            d.setType("1");
+            if(haveOneDaZhe){
+                d.setType("6");
+            }else{
+                d.setType("1");
+            }
             q.add(d);
         }
         if (ijianmian > 0) {
@@ -1315,6 +1358,21 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             m.setPice(youhuiMoney + "");
             m.setType("3");
             q.add(m);
+        }
+        if(couponLineYouhuiMoney>0){
+            for (int k = 0; k < couponLineDownBeanList.size(); k++) {
+                CouponLineDownBean entity = couponLineDownBeanList.get(k);
+                if (entity != null) {
+                    BillJson.BillJsonBase pe = new BillJson.BillJsonBase();
+                    pe.setGuid(System.currentTimeMillis() + "");
+                    pe.setPice(entity.getPice() + "");
+                    pe.setPiceGuid("");
+                    pe.setSate(entity.getName() + "");
+                    pe.setType(5 + "");
+                    pe.setIsSql(entity.getGuid() + "");
+                    q.add(pe);
+                }
+            }
         }
         quanxian.setQuanxian(q);
         String qStr = new Gson().toJson(quanxian);
@@ -1387,7 +1445,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             BillJson.BillJsonBase d = new BillJson.BillJsonBase();
             d.setGuid(System.currentTimeMillis() + "");
             d.setPice(idazhe + "");
-            d.setType("1");
+            if(haveOneDaZhe){
+                d.setType("6");
+            }else{
+                d.setType("1");
+            }
             q.add(d);
         }
         if (ijianmian > 0) {
@@ -1403,6 +1465,21 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             m.setPice(youhuiMoney + "");
             m.setType("3");
             q.add(m);
+        }
+        if(couponLineYouhuiMoney>0){
+            for (int k = 0; k < couponLineDownBeanList.size(); k++) {
+                CouponLineDownBean entity = couponLineDownBeanList.get(k);
+                if (entity != null) {
+                    BillJson.BillJsonBase pe = new BillJson.BillJsonBase();
+                    pe.setGuid(System.currentTimeMillis() + "");
+                    pe.setPice(entity.getPice() + "");
+                    pe.setPiceGuid("");
+                    pe.setSate(entity.getName() + "");
+                    pe.setType(5 + "");
+                    pe.setIsSql(entity.getGuid() + "");
+                    q.add(pe);
+                }
+            }
         }
         quanxian.setQuanxian(q);
         String qStr = new Gson().toJson(quanxian);

@@ -268,7 +268,7 @@
                 android:layout_height="@dimen/_58sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/marketing_icon_fullgive" />
+                android:src="@mipmap/marketing_icon_offlinequan" />
 
             <TextView
                 android:layout_width="0dp"

@@ -3,7 +3,7 @@
     android:id="@+id/textView"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_64sdp"
-    android:background="@drawable/selector_spec_da_zhe"
+    android:background="@drawable/selector_item"
     android:gravity="center"
     android:text="dd"
     android:textColor="@drawable/selector_text_color"
