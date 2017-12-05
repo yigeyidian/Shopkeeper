@@ -16,7 +16,8 @@ public class CouponLineDownBean implements Serializable {
     \"Counts\":100,
     \"MaxCout\":10,
     \"Pice\":20.00,
-    \"State\":\"1\"}
+    \"State\":\"1\"
+    MerchantName}
      */
     @SerializedName("GUID")
     String guid;
@@ -32,6 +33,17 @@ public class CouponLineDownBean implements Serializable {
     String state;
     @SerializedName("RESTAURANTID")
     String shopId;
+
+    @SerializedName("MerchantName")
+    String merchantName;
+
+    public String getMerchantName() {
+        return merchantName;
+    }
+
+    public void setMerchantName(String merchantName) {
+        this.merchantName = merchantName;
+    }
 
     boolean isSelected;
 

@@ -198,7 +198,11 @@ public class CouponLineDialog extends AppCompatDialog {
                             size++;
                         }
                     }
-                    if (size > bean.getMaxUseCount()) {
+                    if(size >= bean.getCounts()){
+                        Toasty.warning(context, bean.getName()+"已经使用完毕", Toast.LENGTH_SHORT, true).show();
+                        return;
+                    }
+                    if (size >= bean.getMaxUseCount()) {
                         Toasty.warning(context, bean.getName()+"超过单次最大使用量", Toast.LENGTH_SHORT, true).show();
                         return;
                     }

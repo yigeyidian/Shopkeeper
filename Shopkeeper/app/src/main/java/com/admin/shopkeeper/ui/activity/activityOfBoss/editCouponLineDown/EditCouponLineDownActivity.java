@@ -77,34 +77,33 @@ public class EditCouponLineDownActivity extends BaseActivity<EditCouponLineDownP
             toolbar.setTitle("添加线下券");
             ((RadioButton) rgEnable.getChildAt(0)).setChecked(true);
         } else {
-            toolbar.setTitle("修改线下券");
+            toolbar.setTitle("线下券详情");
 
             etName.setText(bean.getName());
+            etName.setEnabled(false);
             etNums.setText(String.valueOf(bean.getCounts()));
+            etNums.setEnabled(false);
             etMoney.setText(String.valueOf(bean.getPice()));
+            etMoney.setEnabled(false);
             etMaxUse.setText(String.valueOf(bean.getMaxUseCount()));
-            tvShop.setText(bean.getShopId());
-            /*if (TextUtils.isEmpty(bean.getApply())) {
-                tvShop.setText("预定");
-            } else if (bean.getApply().equals("1")) {
-                tvShop.setText("预定");
-            } else if (bean.getApply().equals("3")) {
-                tvShop.setText("外卖");
-            } else if (bean.getApply().equals("4")) {
-                tvShop.setText("快餐");
-            } else if (bean.getApply().equals("5")) {
-                tvShop.setText("扫码点餐");
-            }*/
+            etMaxUse.setEnabled(false);
+            tvShop.setText(bean.getMerchantName());
 
             if (bean.getState().equals("1")) {
                 ((RadioButton) rgEnable.getChildAt(0)).setChecked(true);
+                ((RadioButton) rgEnable.getChildAt(1)).setEnabled(false);
+
             } else {
                 ((RadioButton) rgEnable.getChildAt(1)).setChecked(true);
+                ((RadioButton) rgEnable.getChildAt(0)).setEnabled(false);
             }
         }
     }
     @OnClick(R.id.item_shop_coupon_line)
     public void shopClick(){
+        if(bean != null){
+            return;
+        }
         if (chainBeens.size() == 0) {
             showToast("获取门店失败");
             return;
@@ -124,7 +123,12 @@ public class EditCouponLineDownActivity extends BaseActivity<EditCouponLineDownP
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_submit, menu);
+        if(bean == null){
+            getMenuInflater().inflate(R.menu.menu_submit, menu);
+        }else{
+
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -170,19 +174,12 @@ public class EditCouponLineDownActivity extends BaseActivity<EditCouponLineDownP
         int enable = ((RadioButton) rgEnable.getChildAt(0)).isChecked() ? 1 : 0;
 
 
-        for (ChainBean chainBean : chainBeens) {
-            if (shopId.toLowerCase().equals(chainBean.getMerchantId())) {
-                tvShop.setText(chainBean.getNames());
-            }
-        }
-
-        String typeStr = tvShop.getText().toString();
-        if (TextUtils.isEmpty(typeStr)) {
+        if (TextUtils.isEmpty(shopId)) {
             showToast("请选择适用商家");
             return;
         }
 //        presenter.commit(bean == null ? "" : bean.getGuid(), nameStr, tiaojianStr, moneyStr, startStr, entStr, type, enable);
-        presenter.commit(nameStr, Integer.parseInt(numStr), Integer.parseInt(maxUse), moneyStr, typeStr, enable);
+        presenter.commit(nameStr, Integer.parseInt(numStr), Integer.parseInt(maxUse), moneyStr, shopId, enable);
     }
 
 
