@@ -11,9 +11,11 @@ import java.io.Serializable;
  * \"Price\":500.00,\
  * "Times\":\"2016-01-17 01:28:36\"}
  * Type 获取方式
+ * Counts 积分减少
  * IntergialTypeID 卡卷类别
  * EnterTime 获取时间
  * (UseTime 使用时间
+ * Times 操作时间
  */
 
 public class MemberInfoOfItemBean implements Serializable {
@@ -27,7 +29,7 @@ public class MemberInfoOfItemBean implements Serializable {
     @SerializedName("Price")
     private double price;
     //消费时间
-    @SerializedName("Times")
+    @SerializedName("DateTimes")
     private String times;
     @SerializedName("Type")
     private String type;
@@ -37,6 +39,16 @@ public class MemberInfoOfItemBean implements Serializable {
     private String enterTime;
     @SerializedName("UseTime")
     private String userTime;
+    @SerializedName("Counts")
+    private String counts;
+
+    public String getCounts() {
+        return counts;
+    }
+
+    public void setCounts(String counts) {
+        this.counts = counts;
+    }
 
     public String getType() {
         return type;

@@ -72,7 +72,7 @@ public class MemberInfoActivity extends BaseActivity<MemberInfoPresenter> implem
         setSupportActionBar(toolbar);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MemberInfoOfItemAdapter(R.layout.item_member_info);
+        adapter = new MemberInfoOfItemAdapter(R.layout.item_member_info ,type);
         recyclerView.setAdapter(adapter);
 
         presenter.getMemberInfoOfItem(type , bean.getId());
