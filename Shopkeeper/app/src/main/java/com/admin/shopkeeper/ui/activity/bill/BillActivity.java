@@ -24,8 +24,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,9 +53,6 @@ import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.PayMeEntity;
 import com.admin.shopkeeper.entity.TableEntity;
 import com.admin.shopkeeper.entity.WeixinOrderBean;
-import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
-import com.admin.shopkeeper.ui.activity.table.TableOperationActivity;
-import com.admin.shopkeeper.utils.ToastUtils;
 import com.admin.shopkeeper.utils.Tools;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -401,8 +396,10 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         AlertDialog.Builder builder = new AlertDialog.Builder(BillActivity.this);
         AppCompatEditText editText = new AppCompatEditText(BillActivity.this);
         builder.setTitle("设置减免");
-        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        editText.setHint("最高减免" + (weixinOrderBean.getYuanjia() - idazhe));
+//        editText.setInputType(InputType.TYPE_CLASS_TEXT);
+        editText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        BigDecimal yinfu = new BigDecimal(getYinfuMoney()).setScale(2, BigDecimal.ROUND_DOWN);
+        editText.setHint("最高减免" + yinfu);
         builder.setPositiveButton("确定", null);
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
@@ -426,7 +423,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     error("请输入正确的减免价格");
                     return;
                 }
-                int d = Integer.parseInt(str);
+                double d = Double.parseDouble(str);
 
                 if (d >= 0 && d > weixinOrderBean.getYuanjia() - idazhe) {
                     error("请输入正确的减免价格");
@@ -1016,6 +1013,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMaximumFractionDigits(2);
         double yinFu = weixinOrderBean.getYuanjia() - weixinOrderBean.getYufupice() - weixinOrderBean.getYouhui() - getYouhuiMoney();
+        Log.d("ttt","预付："+weixinOrderBean.getYufupice()+ "优惠："+weixinOrderBean.getYouhui()+"餐具："+weixinOrderBean.getCanju());
+        Log.d("ttt","应付："+Double.parseDouble(nf.format(yinFu)));
         return Double.parseDouble(nf.format(yinFu));
     }
 
@@ -1023,32 +1022,35 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         if (weixinOrderBean == null) {
             return;
         }
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(2);
         BigDecimal yuanjia = new BigDecimal(weixinOrderBean.getYuanjia()).setScale(2, BigDecimal.ROUND_DOWN);
         BigDecimal canju = new BigDecimal(weixinOrderBean.getCanju()).setScale(2, BigDecimal.ROUND_DOWN);
         BigDecimal youhui = new BigDecimal(getYouhuiMoney() + weixinOrderBean.getYufupice() + weixinOrderBean.getYouhui()).setScale(2, BigDecimal.ROUND_DOWN);
         BigDecimal yintui = new BigDecimal(weixinOrderBean.getYintui()).setScale(2, BigDecimal.ROUND_DOWN);
-        BigDecimal yinfu = new BigDecimal(getYinfuMoney()).setScale(2, BigDecimal.ROUND_DOWN);
+//        BigDecimal yinfu = new BigDecimal(getYinfuMoney()).setScale(2, BigDecimal.ROUND_DOWN);
         BigDecimal need = new BigDecimal(needMoney).setScale(2, BigDecimal.ROUND_DOWN);
         BigDecimal yuFuPice = new BigDecimal(weixinOrderBean.getYufupice()).setScale(2, BigDecimal.ROUND_DOWN);
 
-        tv1.setText("原价：￥" + yuanjia);
-        tv2.setText("餐具：￥" + canju);
-        tv3.setText("优惠：￥" + youhui);
-        tv5.setText("应退：￥" + yintui);
-        tv4.setText("应付：￥" + yinfu);
-        tv6.setText("还需支付：￥" + need);
-        tv7.setText("预定金：￥" + yuFuPice);
+        tv1.setText("原价：￥" + nf.format(weixinOrderBean.getYuanjia()));
+        tv2.setText("餐具：￥" + nf.format(weixinOrderBean.getCanju()));
+        tv3.setText("优惠：￥" + nf.format(getYouhuiMoney() + weixinOrderBean.getYufupice() + weixinOrderBean.getYouhui()));
+        tv5.setText("应退：￥" + nf.format(weixinOrderBean.getYintui()));
+        tv4.setText("应付：￥" + getYinfuMoney());
+        tv6.setText("还需支付：￥" + nf.format(needMoney));
+        tv7.setText("预定金：￥" + nf.format(weixinOrderBean.getYufupice()));
     }
 
     private void initPay() {
         if (weixinOrderBean == null) {
             return;
         }
-        double result = weixinOrderBean.getYuanjia() - weixinOrderBean.getYufupice() - weixinOrderBean.getYouhui() - getYouhuiMoney();
-        Log.d("dj", "开始：" + result);
-        BigDecimal resultBD = new BigDecimal(result).setScale(2, BigDecimal.ROUND_DOWN);
-        result = Double.parseDouble(resultBD + "");
-        Log.d("dj", "后来：" + result);
+//        double result = weixinOrderBean.getYuanjia() - weixinOrderBean.getYufupice() - weixinOrderBean.getYouhui() - getYouhuiMoney();
+        double result = getYinfuMoney();
+//        Log.d("dj", "开始：" + result);
+//        BigDecimal resultBD = new BigDecimal(result).setScale(2, BigDecimal.ROUND_DOWN);
+//        result = Double.parseDouble(resultBD + "");
+//        Log.d("dj", "后来：" + result);
         String[] payTypes = getResources().getStringArray(R.array.payType);
         List<PayMeEntity> datas = new ArrayList<>();
         for (int i = 0; i < payTypes.length; i++) {
@@ -1305,10 +1307,10 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
     @Override
     public void dazheSucccess(double aDouble) {
-        BigDecimal b = new BigDecimal(aDouble).setScale(2, BigDecimal.ROUND_DOWN);
-        Toasty.success(this, "打折优惠价格为" + b, Toast.LENGTH_SHORT, true).show();
+//        BigDecimal b = new BigDecimal(aDouble).setScale(2, BigDecimal.ROUND_DOWN);
+        Toasty.success(this, "打折优惠价格为" + aDouble, Toast.LENGTH_SHORT, true).show();
         idazhe = aDouble;
-        Log.d("dj", "dazhe:" + aDouble + "b:" + b);
+        Log.d("dj", "dazhe:" + aDouble + "b:" + aDouble);
         if (aDouble > 0) {
             haveQXDaZhe = true;
             ijianmian = 0;
