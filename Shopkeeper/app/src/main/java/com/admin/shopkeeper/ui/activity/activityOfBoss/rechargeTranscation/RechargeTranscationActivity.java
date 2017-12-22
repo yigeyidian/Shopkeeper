@@ -7,7 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -464,7 +463,7 @@ public class RechargeTranscationActivity extends BaseActivity<RechargeTranscatio
             this.data.clear();
         }
         this.data = memberTranscationBeanList;
-        adapter.setNewData(memberTranscationBeanList);
+        adapter.setNewData(data);
         if (data.size() < 20) {
             adapter.loadMoreEnd();
         } else {

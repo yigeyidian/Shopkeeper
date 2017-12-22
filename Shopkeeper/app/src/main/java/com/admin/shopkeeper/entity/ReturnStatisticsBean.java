@@ -17,9 +17,9 @@ public class ReturnStatisticsBean implements Serializable {
     String productName;
     @SerializedName("COUNTS")
     int counts;
-    @SerializedName("PRICE退菜金额")
+    @SerializedName("PRICE")
     double price;
-    @SerializedName("Pcounts")
+    @SerializedName("pcounts")
     int pcounts;
 
     public String getProductName() {

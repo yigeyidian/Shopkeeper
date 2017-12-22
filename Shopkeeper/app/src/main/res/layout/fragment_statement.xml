@@ -211,7 +211,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_21sdp"
                 android:layout_weight="1"
-                android:text="翻台率分析"
+                android:text="营业分析报表"
                 android:textColor="@color/black" />
 
             <ImageView

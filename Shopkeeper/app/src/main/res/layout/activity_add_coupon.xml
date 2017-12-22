@@ -323,7 +323,7 @@
 
                 <TextView
                     style="@style/SettingItemTextStyle"
-                    android:text="积分" />
+                    android:text="积分(现金)兑换" />
 
                 <EditText
                     android:id="@+id/coupon_jiFen"

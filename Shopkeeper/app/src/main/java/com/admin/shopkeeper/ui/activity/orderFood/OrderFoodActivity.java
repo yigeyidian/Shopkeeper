@@ -3,9 +3,6 @@ package com.admin.shopkeeper.ui.activity.orderFood;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -14,10 +11,8 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,7 +21,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,13 +54,10 @@ import com.admin.shopkeeper.ui.activity.BigImageActivity;
 import com.admin.shopkeeper.ui.activity.bill.BillActivity;
 import com.admin.shopkeeper.ui.activity.info.waimai.WaiMaiActivity;
 import com.admin.shopkeeper.ui.activity.info.yuding.YuDingActivity;
-import com.admin.shopkeeper.ui.activity.login.LoginActivity;
 import com.admin.shopkeeper.ui.activity.messageList.MessageListActivity;
 import com.admin.shopkeeper.ui.activity.table.TableOperationActivity;
 import com.admin.shopkeeper.weight.QuickIndexBar;
 import com.admin.shopkeeper.weight.TouchableRecyclerView;
-import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.google.gson.Gson;
 import com.gyf.barlibrary.ImmersionBar;
@@ -129,9 +122,11 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
     @BindView(R.id.quickIndexBar)
     QuickIndexBar quickIndexBar;
     @BindView(R.id.top_search)
-    ConstraintLayout clTopSearch;
+    FrameLayout clTopSearch;
     @BindView(R.id.food_search)
     AppCompatEditText etSearch;
+    @BindView(R.id.iv_clear)
+    ImageView ivClear;
 
     private BottomSheetFoodAdapter bottomAdapter;
     private QBadgeView badgeView;
@@ -196,7 +191,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(   OrderFoodActivity.this, TableOperationActivity.class);
+                            Intent intent = new Intent(OrderFoodActivity.this, TableOperationActivity.class);
                             intent.putExtra(Config.PARAM1, TableOperationActivity.P5);
                             startActivity(intent);
                         }
@@ -206,7 +201,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                         public void onClick(DialogInterface dialogInterface, int i) {
                             tableName = editText.getText().toString();
                             if (!TextUtils.isEmpty(tableName)) {
-                                presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total1, "", tableName, "4", false, false,true);
+                                presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total1, "", tableName, "4", false, false, true);
                             } else {
                                 Toasty.warning(OrderFoodActivity.this, "请输入桌号", Toast.LENGTH_SHORT, true).show();
                             }
@@ -221,7 +216,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     }
 
                 } else if (App.INSTANCE().getUser().getOperaType().contains("2")) {
-                    presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", false, false,false);
+                    presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", false, false, false);
                 }
 
                 break;
@@ -311,12 +306,12 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 }
             }
         }
-        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", true, false,false);
+        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", true, false, false);
     }
 
     @OnClick(R.id.scanBill)
     public void scanClick() {
-        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", getTotal(), "", "", "4", false, true,false);
+        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", getTotal(), "", "", "4", false, true, false);
 
     }
 
@@ -574,14 +569,21 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             @Override
             public void afterTextChanged(Editable s) {
                 if (TextUtils.isEmpty(s.toString().trim())) {
+                    ivClear.setVisibility(View.INVISIBLE);
                     queryAdapter.getData().clear();
                     queryAdapter.notifyDataSetChanged();
                     queryLayout.setVisibility(View.GONE);
                 } else {
+                    ivClear.setVisibility(View.VISIBLE);
                     presenter.queryFoods(s.toString().trim());
                 }
             }
         });
+    }
+
+    @OnClick(R.id.iv_clear)
+    public void clearClick() {
+        etSearch.setText("");
     }
 
     private void initAdapter() {
@@ -1410,7 +1412,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
     String billId;
 
     @Override
-    public void kuaisuSuccess(String result, double money, boolean isquick, boolean isScan ,boolean isEditTabName) {
+    public void kuaisuSuccess(String result, double money, boolean isquick, boolean isScan, boolean isEditTabName) {
         if (!isquick && !isScan) {
             Toasty.success(this, "下单成功", Toast.LENGTH_SHORT, true).show();
         }
@@ -1422,14 +1424,14 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 billId = result;
                 intent = new Intent(OrderFoodActivity.this, CaptureActivity.class);
                 startActivityForResult(intent, REQUEST_CODE);
-            } else if(isEditTabName){
+            } else if (isEditTabName) {
                 intent = new Intent(OrderFoodActivity.this, BillActivity.class);
                 intent.putExtra(Config.PARAM2, money);//总价
                 intent.putExtra(Config.PARAM1, result);
                 intent.putExtra(Config.PARAM5, BillActivity.P3);
-                intent.putExtra("TabName",tableName);
+                intent.putExtra("TabName", tableName);
                 startActivity(intent);
-            }else{
+            } else {
                 intent = new Intent(OrderFoodActivity.this, BillActivity.class);
                 intent.putExtra(Config.PARAM2, money);//总价
                 intent.putExtra(Config.PARAM1, result);

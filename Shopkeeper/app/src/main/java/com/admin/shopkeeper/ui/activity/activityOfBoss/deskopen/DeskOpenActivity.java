@@ -1,11 +1,8 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.deskopen;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,18 +18,11 @@ import android.widget.TextView;
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.DeskOpenAdapter;
-import com.admin.shopkeeper.adapter.FreeAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.DeskOpenBean;
-import com.admin.shopkeeper.entity.FreeBean;
-import com.admin.shopkeeper.entity.HandoverBean;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.free.FreeActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.freedetail.FreeDetailActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.jion.IJionView;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.jion.JionPresenter;
 import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.utils.UIUtils;
 import com.codbking.widget.DatePickDialog;
@@ -87,7 +77,7 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-        toolbar.setTitle("翻台率分析");
+        toolbar.setTitle("营业分析报表");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
