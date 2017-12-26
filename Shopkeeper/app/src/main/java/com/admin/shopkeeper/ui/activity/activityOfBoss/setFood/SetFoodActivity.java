@@ -181,7 +181,7 @@ public class SetFoodActivity extends BaseActivity<SetFoodPresenter> implements I
     }
 
     public void showDeletePop(FoodBean bean) {
-        View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_delete, null);
+        View laheiView = LayoutInflater.from(this).inflate(R.layout.dialog_set_food, null);
         laheiPop = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         TextView setFoodTV = (TextView) laheiView.findViewById(R.id.pop_setFood);
         setFoodTV.setVisibility(View.VISIBLE);

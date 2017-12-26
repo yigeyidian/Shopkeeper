@@ -11,8 +11,8 @@ android {
         applicationId "com.admin.shopkeeper"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 22
-        versionName "1.21"
+        versionCode 24
+        versionName "1.23"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
@@ -26,7 +26,7 @@ android {
         }
 
         p {
-            buildConfigField 'String', 'API_URL', '"https://www.xcyytc.com:8097/"'
+            buildConfigField 'String', 'API_URL', '"https://www.xcyytc.com:8099/"'
             buildConfigField 'String', 'APK_SUFFIX', '""'
         }
     }
