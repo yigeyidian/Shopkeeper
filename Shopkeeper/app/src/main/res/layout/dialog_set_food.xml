@@ -1,75 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:focusable="true"
     android:focusableInTouchMode="true">
-
 
     <LinearLayout
         android:layout_width="@dimen/_600sdp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/shape_dialog_bg">
-
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/foodName"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:paddingLeft="@dimen/_40sdp"
-            android:paddingRight="@dimen/_40sdp"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_36ssp"
-            tools:text="商品数量添加" />
-
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tipBtn"
-            android:layout_width="@dimen/_96sdp"
-            android:layout_height="@dimen/_96sdp"
-            android:gravity="center_vertical"
-            android:text="取消"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_1sdp"
-            android:background="@color/gray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tipBtn" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/scrollView"
+        android:background="@drawable/bg_dialog_menber"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/OneBtn"
-            style="@style/ButtonStyle"
+        <TextView
+            android:id="@+id/dialog_title"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="@dimen/_56sdp"
-            android:layout_marginEnd="@dimen/_50sdp"
-            android:layout_marginLeft="@dimen/_50sdp"
-            android:layout_marginRight="@dimen/_50sdp"
-            android:layout_marginStart="@dimen/_50sdp"
-            android:background="@drawable/selector_dialog_btn"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_36ssp"
-            tools:text="确定" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:padding="@dimen/_20sdp"
+            android:text="标题"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_40ssp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_88sdp"
+            android:layout_marginTop="@dimen/_33sdp"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:text="使用积分"
+                android:textColor="#000000"
+                android:textSize="@dimen/_34ssp" />
+
+            <EditText
+                android:id="@+id/edit_score"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/_34sdp"
+                android:background="@color/transparent"
+                android:hint="请输入要使用的积分"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_40sdp"
+            android:layout_marginLeft="@dimen/_32sdp"
+            android:layout_marginRight="@dimen/_32sdp"
+            android:layout_marginTop="@dimen/_60sdp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/dialog_ok"
+                style="@style/ButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="@dimen/_32sdp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_dialog_btn"
+                android:text="确定"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_30ssp" />
+
+            <Button
+                android:id="@+id/OneBtn"
+                style="@style/ButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/_32sdp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_dialog_btn"
+                android:text="取消"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_30ssp" />
+        </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>
-
+</FrameLayout>
