@@ -2155,5 +2155,5 @@ public interface ShopkeeperApi {
     Observable<StringModel> deleteFood(
             @Field("Type") String type,
             @Field("ProductID") String productID,
-            @Field("ProductPackageID") String productPackageID);
+            @Field("ID") String productPackageID);
 }
