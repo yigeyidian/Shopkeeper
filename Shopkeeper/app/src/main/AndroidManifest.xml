@@ -387,10 +387,25 @@
             android:theme="@style/BossTheme" />
         <activity
             android:name=".ui.activity.activityOfBoss.wxsetting.WXSettingActivity"
-            android:theme="@style/BossTheme"/>
+            android:theme="@style/BossTheme" />
         <activity
             android:name=".ui.activity.activityOfBoss.editCouponLineDown.EditCouponLineDownActivity"
-            android:theme="@style/BossTheme"/>
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.mealManger.MealManagerActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.mealEdit.MealEditActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.mealTypemanager.MealTypeManagerActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.mealTypeEdit.MealTypeEditActivity"
+            android:theme="@style/BossTheme" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.setFood.SetFoodActivity"
+            android:theme="@style/BossTheme" />
     </application>
 
 </manifest>

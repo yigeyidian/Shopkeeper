@@ -1,10 +1,7 @@
 package com.admin.shopkeeper.ui.fragment.setting;
 
 import android.content.Intent;
-import android.speech.RecognizerResultsIntent;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,13 +10,13 @@ import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseFragment;
 import com.admin.shopkeeper.entity.BossUserInfo;
-import com.admin.shopkeeper.entity.User;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.basicSets.BasicSetsActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.deskmanager.DeskManagerActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.desktype.DeskTypeActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.foodmanager.FoodManagerActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.guazhang.GuaZhangActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.house.HouseActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.mealManger.MealManagerActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.mealTypemanager.MealTypeManagerActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.my.MyActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.print.PrintManagerActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.returncause.ReturnCauseActivity;
@@ -30,8 +27,6 @@ import com.admin.shopkeeper.ui.activity.activityOfBoss.wechat.WechatActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.weight.WeightActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.wxsetting.WXSettingActivity;
 import com.admin.shopkeeper.ui.activity.login.LoginActivity;
-import com.admin.shopkeeper.utils.ToastUtils;
-import com.gyf.barlibrary.ImmersionBar;
 
 import java.util.List;
 
@@ -94,6 +89,16 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements I
     @OnClick(R.id.basic_commodity)
     public void commodityClick() {
         startActivity(FoodManagerActivity.class);
+    }
+
+    @OnClick(R.id.basic_meal_manage)
+    public void mealManageClick() {
+        startActivity(MealManagerActivity.class);
+    }
+
+    @OnClick(R.id.basic_meal_type_manage)
+    public void mealTypeManageClick() {
+        startActivity(MealTypeManagerActivity.class);
     }
 
     @OnClick(R.id.basic_print)

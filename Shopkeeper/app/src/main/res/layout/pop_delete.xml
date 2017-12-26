@@ -11,7 +11,18 @@
         android:layout_alignParentBottom="true"
         android:background="@color/setting_bg"
         android:orientation="vertical">
+        <TextView
+            android:id="@+id/pop_setFood"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:background="@drawable/selector_item"
+            android:gravity="center"
+            android:text="设置菜品"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_36ssp" />
 
+        <View style="@style/LineHorStyle" />
         <TextView
             android:id="@+id/pop_edit"
             android:layout_width="match_parent"

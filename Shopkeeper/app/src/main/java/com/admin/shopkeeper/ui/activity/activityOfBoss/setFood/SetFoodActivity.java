@@ -1,9 +1,10 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.foodmanager;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.setFood;
 
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,21 +14,19 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.FoodManagerAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.entity.FoodBean;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.foodedit.FoodEditActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.kouwei.KouweiActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.season.SeasonActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.shuxing.ShuxingActivity;
+import com.admin.shopkeeper.entity.MealBean;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.mealEdit.MealEditActivity;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -37,7 +36,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> implements IFoodManagerView {
+public class SetFoodActivity extends BaseActivity<SetFoodPresenter> implements ISetFoodView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -47,19 +46,23 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
     AppCompatEditText etSearch;
     @BindView(R.id.iv_clear)
     ImageView ivClear;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
 
     private FoodManagerAdapter adapter;
     private PopupWindow laheiPop;
+    int page = 1;
+    private MealBean mealBean;
 
     @Override
     protected void initPresenter() {
-        presenter = new FoodManagerPresenter(this, this);
+        presenter = new SetFoodPresenter(this, this);
         presenter.init();
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_food_manager;
+        return R.layout.activity_set_food;
     }
 
     @Override
@@ -68,8 +71,8 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-
-        toolbar.setTitle("商品管理");
+        mealBean = (MealBean) getIntent().getSerializableExtra("bean");
+        toolbar.setTitle("设置菜品");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
@@ -83,7 +86,15 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
         adapter.setOnItemClickListener((adapter1, view, position) -> {
             showDeletePop(adapter.getData().get(position));
         });
-        presenter.getData();
+        refreshLayout.setOnRefreshListener(() -> {
+            page = 1;
+            presenter.getData(page, "", mealBean.getId());
+        });
+        adapter.setOnLoadMoreListener(() -> {
+            page++;
+            presenter.getData(page, "", mealBean.getId());
+        }, recyclerView);
+        presenter.getData(page, "", mealBean.getId());
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -118,18 +129,15 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
     private void searchFood(String str) {
         List<FoodBean> list = new ArrayList<>();
         for (FoodBean bean : datas) {
-            if (bean.getProductName().contains(str) || bean.getName().contains(str)) {
+            if(bean.getProductName().contains(str)) {
                 list.add(bean);
             }
         }
         adapter.setNewData(list);
+        adapter.loadMoreComplete();
+        adapter.loadMoreEnd();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -137,10 +145,7 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.action_add:
-                Intent intent = new Intent(this, FoodEditActivity.class);
-                startActivityForResult(intent, 101);
-                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -162,38 +167,50 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
 
     @Override
     public void success(List<FoodBean> foods) {
-        datas.clear();
+        if (page == 1) {
+            datas.clear();
+        }
         datas.addAll(foods);
         adapter.setNewData(datas);
+        refreshLayout.setRefreshing(false);
+        if (foods.size() < 20) {
+            adapter.loadMoreEnd();
+        } else {
+            adapter.loadMoreComplete();
+        }
     }
 
     public void showDeletePop(FoodBean bean) {
-        View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_food, null);
+        View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_delete, null);
         laheiPop = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-
+        TextView setFoodTV = (TextView) laheiView.findViewById(R.id.pop_setFood);
+        setFoodTV.setVisibility(View.VISIBLE);
+        setFoodTV.setOnClickListener(view -> {
+            Intent intent = new Intent(SetFoodActivity.this, SetFoodActivity.class);
+            intent.putExtra("bean", bean);
+            startActivity(intent);
+        });
         laheiView.findViewById(R.id.pop_cancel).setOnClickListener(v -> {
             laheiPop.dismiss();
         });
-        laheiView.findViewById(R.id.pop_delete).setOnClickListener(v -> {
-            presenter.delete(bean);
-        });
-        laheiView.findViewById(R.id.pop_jialiao).setOnClickListener(v -> {
-            Intent intent = new Intent(FoodManagerActivity.this, SeasonActivity.class);
+
+        /*laheiView.findViewById(R.id.pop_jialiao).setOnClickListener(v -> {
+            Intent intent = new Intent(MealTypeManagerActivity.this, SeasonActivity.class);
             intent.putExtra("bean", bean);
             startActivity(intent);
         });
         laheiView.findViewById(R.id.pop_shuxing).setOnClickListener(v -> {
-            Intent intent = new Intent(FoodManagerActivity.this, ShuxingActivity.class);
+            Intent intent = new Intent(MealTypeManagerActivity.this, ShuxingActivity.class);
             intent.putExtra("bean", bean);
             startActivity(intent);
         });
         laheiView.findViewById(R.id.pop_kouwei).setOnClickListener(v -> {
-            Intent intent = new Intent(FoodManagerActivity.this, KouweiActivity.class);
+            Intent intent = new Intent(MealTypeManagerActivity.this, KouweiActivity.class);
             intent.putExtra("bean", bean);
             startActivity(intent);
-        });
+        });*/
         laheiView.findViewById(R.id.pop_edit).setOnClickListener(v -> {
-            Intent intent = new Intent(this, FoodEditActivity.class);
+            Intent intent = new Intent(this, MealEditActivity.class);
             intent.putExtra("food", bean);
             startActivityForResult(intent, 101);
             laheiPop.dismiss();
@@ -214,7 +231,7 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            presenter.getData();
+            presenter.getData(page, "", mealBean.getId());
         }
     }
 }

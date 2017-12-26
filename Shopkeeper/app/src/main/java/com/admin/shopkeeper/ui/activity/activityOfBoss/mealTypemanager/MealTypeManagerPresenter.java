@@ -1,10 +1,10 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.foodmanager;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.mealTypemanager;
 
 import android.content.Context;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
-import com.admin.shopkeeper.entity.FoodBean;
+import com.admin.shopkeeper.entity.MealTypeBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
@@ -18,25 +18,26 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Administrator on 2017/8/24.
  */
 
-public class FoodManagerPresenter extends BasePresenter<IFoodManagerView> {
+public class MealTypeManagerPresenter extends BasePresenter<IMealTypeManagerView> {
 
 
-    public FoodManagerPresenter(Context context, IFoodManagerView iView) {
+    public MealTypeManagerPresenter(Context context, IMealTypeManagerView iView) {
         super(context, iView);
     }
+
 
     public void getData() {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getFoodsList("1", App.INSTANCE().getShopID())
+                .getMealsList("12", App.INSTANCE().getShopID())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        FoodBean[] foods = new Gson().fromJson(stringModel.getResult(), FoodBean[].class);
+                        MealTypeBean[] foods = new Gson().fromJson(stringModel.getResult(), MealTypeBean[].class);
                         iView.success(Arrays.asList(foods));
                     } else {
                         iView.error("加载失败");
@@ -49,12 +50,11 @@ public class FoodManagerPresenter extends BasePresenter<IFoodManagerView> {
 
     }
 
-
-    public void delete(FoodBean bean) {
+    public void delete(MealTypeBean bean) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .deleteFood("3", bean.getProductId())
+                .deleteMealType("15", bean.getGuId())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
