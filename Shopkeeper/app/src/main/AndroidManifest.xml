@@ -393,7 +393,8 @@
             android:theme="@style/BossTheme" />
         <activity
             android:name=".ui.activity.activityOfBoss.mealManger.MealManagerActivity"
-            android:theme="@style/BossTheme" />
+            android:theme="@style/BossTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.activity.activityOfBoss.mealEdit.MealEditActivity"
             android:theme="@style/BossTheme" />
@@ -405,7 +406,12 @@
             android:theme="@style/BossTheme" />
         <activity
             android:name=".ui.activity.activityOfBoss.setFood.SetFoodActivity"
-            android:theme="@style/BossTheme" />
+            android:theme="@style/BossTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.deletefood.DeleteFoodActivity"
+            android:theme="@style/BossTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
     </application>
 
 </manifest>

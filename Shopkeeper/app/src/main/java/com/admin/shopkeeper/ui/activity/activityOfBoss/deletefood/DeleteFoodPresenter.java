@@ -1,4 +1,4 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.setFood;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.deletefood;
 
 import android.content.Context;
 
@@ -7,6 +7,7 @@ import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.entity.MealBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.setFood.ISetFoodView;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
 
@@ -19,10 +20,10 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Administrator on 2017/8/24.
  */
 
-public class SetFoodPresenter extends BasePresenter<ISetFoodView> {
+public class DeleteFoodPresenter extends BasePresenter<IDeleteFoodView> {
 
 
-    public SetFoodPresenter(Context context, ISetFoodView iView) {
+    public DeleteFoodPresenter(Context context, IDeleteFoodView iView) {
         super(context, iView);
     }
 
@@ -44,7 +45,6 @@ public class SetFoodPresenter extends BasePresenter<ISetFoodView> {
                 }, throwable -> {
                     iView.error("加载失败");
                 });
-
     }
 
     public void delete(MealBean bean) {
@@ -69,25 +69,25 @@ public class SetFoodPresenter extends BasePresenter<ISetFoodView> {
                 });
     }
 
-    public void addFood(FoodBean bean, MealBean mealBean, int i) {
+    public void deleteFood(FoodBean bean, MealBean mealBean) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .addFood("9", App.INSTANCE().getShopID(), i, bean.getProductName(), bean.getProductId(), mealBean.getId())
+                .deleteFood("16", bean.getProductId(), mealBean.getId())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        iView.success("添加成功");
+                        iView.success("删除成功");
                     } else {
-                        iView.error("添加失败");
+                        iView.error("删除失败");
                     }
                 }, throwable -> {
                     DialogUtils.hintDialog();
                     throwable.printStackTrace();
-                    iView.error("添加失败");
+                    iView.error("删除失败");
                 });
     }
 }

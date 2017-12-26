@@ -71,9 +71,7 @@ public class MealTypeManagerActivity extends BaseActivity<MealTypeManagerPresent
             showDeletePop(adapter.getData().get(position));
         });
         presenter.getData();
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

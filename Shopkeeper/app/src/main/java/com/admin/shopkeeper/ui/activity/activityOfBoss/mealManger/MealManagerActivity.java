@@ -26,6 +26,7 @@ import com.admin.shopkeeper.adapter.MealManagerAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.entity.MealBean;
 import com.admin.shopkeeper.entity.MealTypeBean;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.deletefood.DeleteFoodActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.mealEdit.MealEditActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.setFood.SetFoodActivity;
 import com.gyf.barlibrary.ImmersionBar;
@@ -177,12 +178,15 @@ public class MealManagerActivity extends BaseActivity<MealManagerPresenter> impl
     }
 
     public void showDeletePop(MealBean bean) {
-        View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_delete, null);
+        View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_setfood, null);
         laheiPop = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        TextView setFoodTV = (TextView) laheiView.findViewById(R.id.pop_setFood);
-        setFoodTV.setVisibility(View.VISIBLE);
-        setFoodTV.setOnClickListener(view -> {
+        laheiView.findViewById(R.id.pop_setFood).setOnClickListener(view -> {
             Intent intent = new Intent(MealManagerActivity.this, SetFoodActivity.class);
+            intent.putExtra("bean", bean);
+            startActivity(intent);
+        });
+        laheiView.findViewById(R.id.pop_deleteFood).setOnClickListener(v -> {
+            Intent intent = new Intent(MealManagerActivity.this, DeleteFoodActivity.class);
             intent.putExtra("bean", bean);
             startActivity(intent);
         });
@@ -192,21 +196,6 @@ public class MealManagerActivity extends BaseActivity<MealManagerPresenter> impl
         laheiView.findViewById(R.id.pop_delete).setOnClickListener(v -> {
             presenter.delete(bean);
         });
-        /*laheiView.findViewById(R.id.pop_jialiao).setOnClickListener(v -> {
-            Intent intent = new Intent(MealTypeManagerActivity.this, SeasonActivity.class);
-            intent.putExtra("bean", bean);
-            startActivity(intent);
-        });
-        laheiView.findViewById(R.id.pop_shuxing).setOnClickListener(v -> {
-            Intent intent = new Intent(MealTypeManagerActivity.this, ShuxingActivity.class);
-            intent.putExtra("bean", bean);
-            startActivity(intent);
-        });
-        laheiView.findViewById(R.id.pop_kouwei).setOnClickListener(v -> {
-            Intent intent = new Intent(MealTypeManagerActivity.this, KouweiActivity.class);
-            intent.putExtra("bean", bean);
-            startActivity(intent);
-        });*/
         laheiView.findViewById(R.id.pop_edit).setOnClickListener(v -> {
             Intent intent = new Intent(this, MealEditActivity.class);
             intent.putExtra("food", bean);

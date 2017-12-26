@@ -292,7 +292,7 @@
                 android:layout_height="@dimen/_58sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/basics_icon_commodity" />
+                android:src="@mipmap/marketing_icon_package" />
 
             <TextView
                 android:layout_width="0dp"
@@ -325,7 +325,7 @@
                 android:layout_height="@dimen/_58sdp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/basics_icon_commodity" />
+                android:src="@mipmap/marketing_icon_category" />
 
             <TextView
                 android:layout_width="0dp"
