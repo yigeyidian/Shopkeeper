@@ -3,11 +3,6 @@ package com.admin.shopkeeper.dialog;
 import android.content.Context;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatImageButton;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,12 +15,7 @@ import android.widget.Toast;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.DaZhaAdapter;
-import com.admin.shopkeeper.entity.DaZheEntity;
 import com.admin.shopkeeper.utils.Tools;
-import com.admin.shopkeeper.weight.MarginDecoration;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-
-import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
@@ -94,9 +84,9 @@ public class SetFoodDialog extends AppCompatDialog {
 
             oneBtn = (AppCompatButton) view.findViewById(R.id.OneBtn);
             AppCompatButton btnCancel = (AppCompatButton) view.findViewById(R.id.btn_cancel);
-            TextView tvName = view.findViewById(R.id.tv_name);
-            EditText editText = view.findViewById(R.id.editText);
-            TextView tvTitle = view.findViewById(R.id.title);
+            TextView tvName = (TextView) view.findViewById(R.id.tv_name);
+            EditText editText = (EditText) view.findViewById(R.id.editText);
+            TextView tvTitle = (TextView) view.findViewById(R.id.title);
 
             tvTitle.setText("套餐数量添加");
             oneBtn.setText("确定");

@@ -149,17 +149,17 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 Log.i("ttt", "---" + tableEntity);
                 presenter.orderFood(App.INSTANCE().getShopID(),
                         tableEntity.getRoomTableID(), tableEntity.getBillID(), getInfo(), App.INSTANCE().getUser().getId(),
-                        App.INSTANCE().getUser().getName(), tableEntity.getTableName(), tableEntity.getTableWareCount(), getTotal());
+                        App.INSTANCE().getUser().getName(), tableEntity.getTableName(), tableEntity.getTableWareCount(), getTotal(),"0");
                 break;
             case P2:
                 presenter.orderFood(App.INSTANCE().getShopID(),
                         order.getTableId(), order.getBillid(), getInfo(), App.INSTANCE().getUser().getId(),
-                        App.INSTANCE().getUser().getName(), order.getTableName(), order.getPeopleCount() + "", getTotal());
+                        App.INSTANCE().getUser().getName(), order.getTableName(), order.getPeopleCount() + "", getTotal(),"1");
                 break;
             case P3:
                 presenter.orderFood(App.INSTANCE().getShopID(),
                         order.getTableId(), order.getBillid(), getInfo(), App.INSTANCE().getUser().getId(),
-                        App.INSTANCE().getUser().getName(), order.getTableName(), order.getPeopleCount() + "", getTotal());
+                        App.INSTANCE().getUser().getName(), order.getTableName(), order.getPeopleCount() + "", getTotal(),"1");
                 break;
             case P5:
                 double total = 0;
