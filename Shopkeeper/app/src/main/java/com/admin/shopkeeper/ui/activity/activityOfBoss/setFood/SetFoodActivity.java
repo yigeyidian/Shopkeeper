@@ -87,9 +87,9 @@ public class SetFoodActivity extends BaseActivity<SetFoodPresenter> implements I
                 .build());
         adapter = new FoodManagerAdapter(R.layout.item_foodmanager);
         recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener((adapter1, view, position) -> {
-            showDeletePop(adapter.getData().get(position));
-        });
+//        adapter.setOnItemClickListener((adapter1, view, position) -> {
+//            showDeletePop(adapter.getData().get(position));
+//        });
         refreshLayout.setOnRefreshListener(() -> {
             page = 1;
             presenter.getData(type == 0 ? "10" : "11", page, "", mealBean.getId());
@@ -131,6 +131,36 @@ public class SetFoodActivity extends BaseActivity<SetFoodPresenter> implements I
         etSearch.setText("");
     }
 
+    @OnClick(R.id.tv_cancel)
+    public void cancelClick() {
+        for (FoodBean bean : adapter.getData()) {
+            bean.setCount(0);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    @OnClick(R.id.tv_bind)
+    public void bindClick() {
+        String names = "";
+        String ids = "";
+        String counts = "";
+        for (FoodBean bean : adapter.getData()) {
+            if (bean.getCount() > 0) {
+                names += bean.getProductName() + ",";
+                ids += bean.getProductId() + ",";
+                counts += bean.getCount() + ",";
+            }
+        }
+
+        if (!TextUtils.isEmpty(names)) {
+            names = names.substring(0, names.length() - 1);
+            ids = ids.substring(0, ids.length() - 1);
+            counts = counts.substring(0, counts.length() - 1);
+        }
+
+        presenter.addFood(names, ids, counts, mealBean);
+    }
+
     private void searchFood(String str) {
         List<FoodBean> list = new ArrayList<>();
         for (FoodBean bean : datas) {
@@ -142,7 +172,6 @@ public class SetFoodActivity extends BaseActivity<SetFoodPresenter> implements I
         adapter.loadMoreComplete();
         adapter.loadMoreEnd();
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -189,7 +218,7 @@ public class SetFoodActivity extends BaseActivity<SetFoodPresenter> implements I
         builder.setButtonClick(new SetFoodDialog.OnButtonClick() {
             @Override
             public void onBtnClick(int i) {
-                presenter.addFood(bean, mealBean, i);
+                //presenter.addFood(bean, mealBean, i);
             }
         });
         builder.creater().show();

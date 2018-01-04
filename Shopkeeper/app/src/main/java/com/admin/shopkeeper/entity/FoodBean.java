@@ -107,6 +107,25 @@ public class FoodBean implements Serializable {
     @SerializedName("PRODUCTFile")
     private String productFile;
 
+    int count;
+    boolean delete;
+
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void setDelete(boolean delete) {
+        this.delete = delete;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     public String getTasteId() {
         return tasteId;
     }

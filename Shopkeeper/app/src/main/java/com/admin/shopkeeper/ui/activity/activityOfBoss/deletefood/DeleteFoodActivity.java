@@ -4,35 +4,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.Toast;
 
-import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.DeleteFoodAdapter;
-import com.admin.shopkeeper.adapter.FoodManagerAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
-import com.admin.shopkeeper.dialog.SetFoodDialog;
 import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.entity.MealBean;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.setFood.ISetFoodView;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.setFood.SetFoodPresenter;
-import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
-import com.admin.shopkeeper.ui.activity.table.TableOperationActivity;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -90,9 +77,9 @@ public class DeleteFoodActivity extends BaseActivity<DeleteFoodPresenter> implem
                 .build());
         adapter = new DeleteFoodAdapter(R.layout.item_deletefood);
         recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener((adapter1, view, position) -> {
-            showDeletePop(adapter.getData().get(position));
-        });
+//        adapter.setOnItemClickListener((adapter1, view, position) -> {
+//            showDeletePop(adapter.getData().get(position));
+//        });
         refreshLayout.setOnRefreshListener(() -> {
             page = 1;
             presenter.getData("11", page, "", mealBean.getId());
@@ -146,6 +133,29 @@ public class DeleteFoodActivity extends BaseActivity<DeleteFoodPresenter> implem
         adapter.loadMoreEnd();
     }
 
+    @OnClick(R.id.tv_cancel)
+    public void cancelClick() {
+        for (FoodBean bean : adapter.getData()) {
+            bean.setDelete(false);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    @OnClick(R.id.tv_bind)
+    public void bindClick() {
+        String ids = "";
+        for (FoodBean bean : adapter.getData()) {
+            if (bean.isDelete()) {
+                ids += bean.getId() + ",";
+            }
+        }
+
+        if (!TextUtils.isEmpty(ids)) {
+            ids = ids.substring(0, ids.length() - 1);
+        }
+
+        presenter.deleteFood(ids, mealBean);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -199,7 +209,7 @@ public class DeleteFoodActivity extends BaseActivity<DeleteFoodPresenter> implem
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                presenter.deleteFood(bean, mealBean);
+                //presenter.deleteFood(bean, mealBean);
             }
         });
         AlertDialog dialog = builder.create();

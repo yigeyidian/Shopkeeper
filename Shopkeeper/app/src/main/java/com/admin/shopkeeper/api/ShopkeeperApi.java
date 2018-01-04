@@ -2145,7 +2145,7 @@ public interface ShopkeeperApi {
     Observable<StringModel> addFood(
             @Field("Type") String type,
             @Field("RESTAURANTID") String shopId,
-            @Field("ProductCount") int productCount,
+            @Field("ProductCount") String productCount,
             @Field("ProductName") String productName,
             @Field("ProductID") String productID,
             @Field("ProductPackageID") String productPackageID);
@@ -2154,6 +2154,6 @@ public interface ShopkeeperApi {
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "ProductBackManager.ashx")
     Observable<StringModel> deleteFood(
             @Field("Type") String type,
-            @Field("ProductID") String productID,
+            @Field("RESTAURANTID") String shopId,
             @Field("ID") String productPackageID);
 }

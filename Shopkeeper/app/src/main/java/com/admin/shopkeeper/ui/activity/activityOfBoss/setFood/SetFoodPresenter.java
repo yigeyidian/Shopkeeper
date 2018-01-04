@@ -69,11 +69,11 @@ public class SetFoodPresenter extends BasePresenter<ISetFoodView> {
                 });
     }
 
-    public void addFood(FoodBean bean, MealBean mealBean, int i) {
+    public void addFood(String names, String ids, String counts, MealBean mealBean) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .addFood("9", App.INSTANCE().getShopID(), i, bean.getProductName(), bean.getProductId(), mealBean.getId())
+                .addFood("9", App.INSTANCE().getShopID(), counts, names, ids, mealBean.getId())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

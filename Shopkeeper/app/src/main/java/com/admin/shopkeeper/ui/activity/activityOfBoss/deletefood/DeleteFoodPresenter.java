@@ -69,11 +69,11 @@ public class DeleteFoodPresenter extends BasePresenter<IDeleteFoodView> {
                 });
     }
 
-    public void deleteFood(FoodBean bean, MealBean mealBean) {
+    public void deleteFood(String ids, MealBean mealBean) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .deleteFood("16", bean.getProductId(), mealBean.getId())
+                .deleteFood("16", App.INSTANCE().getShopID(), ids)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

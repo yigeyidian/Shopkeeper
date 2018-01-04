@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.DaZhaAdapter;
 import com.admin.shopkeeper.entity.DaZheEntity;
+import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.weight.MarginDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -55,7 +56,6 @@ public class SetFoodDialog extends AppCompatDialog {
 
         private String title;
         private String name;
-
 
 
         private OnButtonClick buttonClick;
@@ -101,12 +101,14 @@ public class SetFoodDialog extends AppCompatDialog {
             tvTitle.setText("套餐数量添加");
             oneBtn.setText("确定");
             btnCancel.setText("取消");
+            editText.setText("1");
 
             tvName.setText(name);
 
             oneBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Tools.hideSoftKeyboard(context, editText);
                     if (buttonClick != null) {
                         if (TextUtils.isEmpty(editText.getText())) {
                             Toasty.warning(context, "数量不为空", Toast.LENGTH_SHORT, true).show();
@@ -120,6 +122,7 @@ public class SetFoodDialog extends AppCompatDialog {
             });
 
             view.findViewById(R.id.btn_cancel).setOnClickListener(v -> {
+                Tools.hideSoftKeyboard(context, editText);
                 dialog.dismiss();
             });
 
