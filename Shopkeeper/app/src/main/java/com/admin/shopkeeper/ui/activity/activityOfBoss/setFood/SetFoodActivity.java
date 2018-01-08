@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.FoodManagerAdapter;
+import com.admin.shopkeeper.adapter.SetFoodAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.DaZheDialog;
 import com.admin.shopkeeper.dialog.SetFoodDialog;
@@ -51,7 +52,7 @@ public class SetFoodActivity extends BaseActivity<SetFoodPresenter> implements I
     @BindView(R.id.refreshLayout)
     SwipeRefreshLayout refreshLayout;
 
-    private FoodManagerAdapter adapter;
+    private SetFoodAdapter adapter;
     int page = 1;
     private MealBean mealBean;
     private int type;
@@ -85,7 +86,7 @@ public class SetFoodActivity extends BaseActivity<SetFoodPresenter> implements I
                 .marginResId(R.dimen._30sdp, R.dimen._1sdp)
                 .color(getResources().getColor(R.color.item_line_color))
                 .build());
-        adapter = new FoodManagerAdapter(R.layout.item_foodmanager);
+        adapter = new SetFoodAdapter(R.layout.item_setfood);
         recyclerView.setAdapter(adapter);
 //        adapter.setOnItemClickListener((adapter1, view, position) -> {
 //            showDeletePop(adapter.getData().get(position));
@@ -210,18 +211,6 @@ public class SetFoodActivity extends BaseActivity<SetFoodPresenter> implements I
         } else {
             adapter.loadMoreComplete();
         }
-    }
-
-    public void showDeletePop(FoodBean bean) {
-        SetFoodDialog.Builder builder = new SetFoodDialog.Builder(this, R.style.OrderDialogStyle);
-        builder.setName(bean.getProductName());
-        builder.setButtonClick(new SetFoodDialog.OnButtonClick() {
-            @Override
-            public void onBtnClick(int i) {
-                //presenter.addFood(bean, mealBean, i);
-            }
-        });
-        builder.creater().show();
     }
 
     @Override

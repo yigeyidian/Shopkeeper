@@ -114,6 +114,7 @@ public class SetFoodDialog extends AppCompatDialog {
             view.findViewById(R.id.btn_cancel).setOnClickListener(v -> {
                 Tools.hideSoftKeyboard(context, editText);
                 dialog.dismiss();
+                buttonClick.onCancel();
             });
 
 
@@ -132,5 +133,7 @@ public class SetFoodDialog extends AppCompatDialog {
     public interface OnButtonClick {
 
         void onBtnClick(int i);
+
+        void onCancel();
     }
 }
