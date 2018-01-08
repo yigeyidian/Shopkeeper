@@ -375,7 +375,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
             this.data.clear();
         }
         this.data.addAll(couponManageBeanList);
-        adapter.setNewData(couponManageBeanList);
+        adapter.setNewData(data);
         refreshLayout.setRefreshing(false);
         if (couponManageBeanList.size() < 20) {
             adapter.loadMoreEnd();
