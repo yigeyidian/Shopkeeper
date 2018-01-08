@@ -2,31 +2,22 @@ package com.admin.shopkeeper.api;
 
 
 import com.admin.shopkeeper.Config;
-import com.admin.shopkeeper.entity.FoodEntity;
 import com.admin.shopkeeper.model.FoodsModel;
 import com.admin.shopkeeper.model.IntModel;
 import com.admin.shopkeeper.model.StringModel;
-import com.google.gson.JsonElement;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
-import retrofit2.http.Query;
-import retrofit2.http.QueryMap;
 
 /**
  * Created by zeng on 2016/11/8.
@@ -843,6 +834,29 @@ public interface ShopkeeperApi {
             @Field("RESTAURANTID") String restaurantId);
 
     @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "ProductBackManager.ashx")
+    Observable<StringModel> getMealsList(
+            @Field("Type") String type,
+            @Field("RESTAURANTID") String restaurantId);
+
+    /**
+     * 未绑定商品
+     *
+     * @param type
+     * @param restaurantId
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "ProductBackManager.ashx")
+    Observable<StringModel> getFoodOfNoBindList(
+            @Field("Type") String type,
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("Product") String product,
+            @Field("PackID") String mealId,
+            @Field("RESTAURANTID") String restaurantId);
+
+    @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerchantsProductManager.ashx")
     Observable<StringModel> addFood(
             @Field("type") String type,
@@ -871,6 +885,52 @@ public interface ShopkeeperApi {
             @Field("ProtuctShuXing") int protuctShuXing,
             @Field("AccordIng") int accordIng);
 
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "ProductBackManager.ashx")
+    Observable<StringModel> addMeal(
+            @Field("Type") String type,
+            @Field("RESTAURANTID") String restaurantId,
+            @Field("PackageName") String productName,
+            @Field("Types") String types,
+            @Field("ProductTypes") String productType,
+            @Field("Price") double price,
+            @Field("Status") int status,
+            @Field("Info") String remark,
+            @Field("MemberPice") double memberPice,
+            @Field("Candiscount") int canDiscount,
+            @Field("PackageImgName") String imgName);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "ProductBackManager.ashx")
+    Observable<StringModel> changeMeal(
+            @Field("Type") String type,
+            @Field("ID") String mealId,
+            @Field("PackageName") String productName,
+            @Field("Types") String types,
+            @Field("ProductTypes") String productType,
+            @Field("Price") double price,
+            @Field("Status") int status,
+            @Field("Info") String remark,
+            @Field("MemberPice") double memberPice,
+            @Field("Candiscount") int canDiscount,
+            @Field("PackageImgName") String imgName);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "ProductBackManager.ashx")
+    Observable<StringModel> addMealType(
+            @Field("Type") String type,
+            @Field("ProductTypeName") String productTypeName,
+            @Field("SortNum") String sortNum,
+            @Field("RESTAURANTID") String shopId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "ProductBackManager.ashx")
+    Observable<StringModel> changeMealType(
+            @Field("Type") String type,
+            @Field("ProductTypeName") String productTypeName,
+            @Field("SortNum") String sortNum,
+            @Field("GUID") String guId);
+
     @Multipart
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerchantsProductManager.ashx")
     Observable<StringModel> editFood(@PartMap Map<String, RequestBody> map, @Part List<MultipartBody.Part> parts);
@@ -880,6 +940,18 @@ public interface ShopkeeperApi {
     Observable<StringModel> deleteFood(
             @Field("type") String type,
             @Field("PRODUCTID") String productId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "ProductBackManager.ashx")
+    Observable<StringModel> deleteMeal(
+            @Field("Type") String type,
+            @Field("ID") String productId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "ProductBackManager.ashx")
+    Observable<StringModel> deleteMealType(
+            @Field("Type") String type,
+            @Field("Guid") String guId);
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "PrinterManager.ashx")
@@ -1523,6 +1595,7 @@ public interface ShopkeeperApi {
     Observable<StringModel> getCommodityCouponInfo(
             @Field("Type") String type,
             @Field("RESTAURANTID") String shopId);
+
     /**
      * 获取线下券
      *
@@ -2025,16 +2098,16 @@ public interface ShopkeeperApi {
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "WeiXinJiFen.ashx")
     Observable<StringModel> editMansong(
-                    @Field("Type") String type,
-                    @Field("Guid") String guid,
-                    @Field("Name") String name,
-                    @Field("TiaoJian") String tiaoJian,
-                    @Field("JinEr") String jinEr,
-                    @Field("Btime") String btime,
-                    @Field("Etime") String etime,
-                    @Field("Apply") int apply,
-                    @Field("IsBegin") int isBegin,
-                    @Field("RESTAURANTID") String shopId);
+            @Field("Type") String type,
+            @Field("Guid") String guid,
+            @Field("Name") String name,
+            @Field("TiaoJian") String tiaoJian,
+            @Field("JinEr") String jinEr,
+            @Field("Btime") String btime,
+            @Field("Etime") String etime,
+            @Field("Apply") int apply,
+            @Field("IsBegin") int isBegin,
+            @Field("RESTAURANTID") String shopId);
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "WeiXinJiFen.ashx")
@@ -2054,14 +2127,33 @@ public interface ShopkeeperApi {
             @Field("ShangID") String shangId,
             @Field("Isok") int state,
             @Field("Rid") String shopId);
+
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewCardManagerQiTaASHX.ashx")
     Observable<StringModel> deleteCouponLine(
             @Field("Type") String type,
             @Field("id") String guid);
+
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "IntergialCounts.ashx")
     Observable<StringModel> getShopOfCouponLine(
             @Field("Type") String type,
             @Field("PiCi") String pcId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "ProductBackManager.ashx")
+    Observable<StringModel> addFood(
+            @Field("Type") String type,
+            @Field("RESTAURANTID") String shopId,
+            @Field("ProductCount") String productCount,
+            @Field("ProductName") String productName,
+            @Field("ProductID") String productID,
+            @Field("ProductPackageID") String productPackageID);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "ProductBackManager.ashx")
+    Observable<StringModel> deleteFood(
+            @Field("Type") String type,
+            @Field("RESTAURANTID") String shopId,
+            @Field("ID") String productPackageID);
 }

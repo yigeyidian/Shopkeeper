@@ -68,6 +68,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -425,14 +426,14 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 }
                 double d = Double.parseDouble(str);
 
-                if (d >= 0 && d > weixinOrderBean.getYuanjia() - idazhe) {
+                if (d >= 0 && d > getYinfuMoney()) {
                     error("请输入正确的减免价格");
                     return;
                 }
 
                 ijianmian = d;
-                youhuiMoney = ijianmian + idazhe;
                 jianMian.setText(ijianmian + "");
+                youhuiMoney = ijianmian + idazhe;
                 initPay();
                 getNeed();
                 intText();
@@ -1010,12 +1011,14 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     }
 
     private double getYinfuMoney() {
-        NumberFormat nf = NumberFormat.getNumberInstance();
-        nf.setMaximumFractionDigits(2);
+        DecimalFormat df = new DecimalFormat("0.00");
+//        NumberFormat nf = NumberFormat.getNumberInstance();
+//        nf.setMaximumFractionDigits(2);
         double yinFu = weixinOrderBean.getYuanjia() - weixinOrderBean.getYufupice() - weixinOrderBean.getYouhui() - getYouhuiMoney();
         Log.d("ttt","预付："+weixinOrderBean.getYufupice()+ "优惠："+weixinOrderBean.getYouhui()+"餐具："+weixinOrderBean.getCanju());
-        Log.d("ttt","应付："+Double.parseDouble(nf.format(yinFu)));
-        return Double.parseDouble(nf.format(yinFu));
+        Log.d("ttt","应付："+df.format(yinFu));
+        double yinfu = Double.parseDouble(df.format(yinFu));
+        return yinfu;
     }
 
     private void intText() {

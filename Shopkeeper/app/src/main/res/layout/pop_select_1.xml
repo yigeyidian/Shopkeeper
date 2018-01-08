@@ -115,7 +115,7 @@
                 android:drawableRight="@mipmap/list_arrow_right"
                 android:paddingRight="@dimen/_30sdp"
                 android:drawablePadding="@dimen/_30sdp"
-                android:hint="东家二掌柜" />
+                android:hint="请选择门店" />
 
         </LinearLayout>
 

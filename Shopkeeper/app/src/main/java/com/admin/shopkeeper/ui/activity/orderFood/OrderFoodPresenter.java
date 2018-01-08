@@ -1,8 +1,6 @@
 package com.admin.shopkeeper.ui.activity.orderFood;
 
 import android.content.Context;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
@@ -10,29 +8,18 @@ import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.db.AppDbHelper;
 import com.admin.shopkeeper.entity.FoodEntity;
-import com.admin.shopkeeper.entity.KouWei;
 import com.admin.shopkeeper.entity.MenuTypeEntity;
-import com.admin.shopkeeper.entity.OrderDetailFood;
-import com.admin.shopkeeper.entity.OrderfoodEntity;
 import com.admin.shopkeeper.entity.PayType;
-import com.admin.shopkeeper.entity.Season;
-import com.admin.shopkeeper.entity.TableEntity;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.model.IntModel;
 import com.admin.shopkeeper.model.StringModel;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.admin.shopkeeper.utils.Print;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 
-import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.http.Field;
-import timber.log.Timber;
 
 /**
  * Created by admin on 2017/6/30.
@@ -63,7 +50,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                     }
                 }, Throwable::printStackTrace);
     }
-
+    //foodType加菜传1
     public void orderFood(String id,
                           String tableid,
                           String billid,
@@ -72,11 +59,12 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                           String name,
                           String tableName,
                           String personCount,
-                          double price) {
+                          double price,
+                          String foodType) {
         DialogUtils.showDialog(context, "数据提交中...");
         RetrofitHelper.getInstance()
                 .getApi()
-                .orderFood("6", id, tableid, billid, info, userID, name, tableName, price, "0", personCount, "")
+                .orderFood("6", id, tableid, billid, info, userID, name, tableName, price, foodType, personCount, "")
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

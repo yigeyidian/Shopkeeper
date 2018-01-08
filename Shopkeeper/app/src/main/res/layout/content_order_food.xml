@@ -8,7 +8,7 @@
     tools:context="com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity"
     tools:showIn="@layout/activity_order_food">
 
-    <android.support.constraint.ConstraintLayout
+    <!--<android.support.constraint.ConstraintLayout
         android:id="@+id/top_search"
         android:layout_width="0dp"
         android:layout_height="@dimen/_90sdp"
@@ -34,8 +34,46 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/iv_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="@dimen/_20sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@mipmap/input_clear" />
+    </android.support.constraint.ConstraintLayout>-->
+    <FrameLayout
+        android:id="@+id/top_search"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:background="#EFEFF4"
+        android:visibility="gone"
+        android:padding="@dimen/_15sdp">
 
-    </android.support.constraint.ConstraintLayout>
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/food_search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60sdp"
+            android:background="@drawable/bg_search"
+            android:hint="搜索"
+            android:inputType="text"
+            android:paddingLeft="10dp"
+            android:textSize="@dimen/_24ssp" />
+
+        <ImageView
+            android:id="@+id/iv_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:src="@mipmap/input_clear" />
+    </FrameLayout>
 
     <com.flipboard.bottomsheet.BottomSheetLayout
         android:id="@+id/bottomsheet"

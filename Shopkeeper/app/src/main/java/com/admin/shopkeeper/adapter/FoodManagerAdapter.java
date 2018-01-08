@@ -2,13 +2,16 @@ package com.admin.shopkeeper.adapter;
 
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
+import com.admin.shopkeeper.dialog.SetFoodDialog;
 import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.ui.activity.BigImageActivity;
+import com.admin.shopkeeper.utils.Tools;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -29,16 +32,39 @@ public class FoodManagerAdapter extends BaseQuickAdapter<FoodBean, BaseViewHolde
         helper.setText(R.id.item_type, item.getProductTypeName());
         helper.setText(R.id.item_price, item.getPrice() + "");
 
-        ImageView imageView = helper.getView(R.id.item_image);
-        Glide.with(mContext)
-                .load(Config.BASE_IMG + App.INSTANCE().getShopID() + "/" + item.getProductFile())
-                .centerCrop().into(imageView);
-
-
-        imageView.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, BigImageActivity.class);
-            intent.putExtra(Config.PARAM1, item.getProductFile());
-            mContext.startActivity(intent);
+        CheckBox checkBox = helper.getView(R.id.item_check);
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                SetFoodDialog.Builder builder = new SetFoodDialog.Builder(helper.getConvertView().getContext(), R.style.OrderDialogStyle);
+                builder.setName(item.getProductName());
+                builder.setButtonClick(i -> {
+                    item.setCount(i);
+                    helper.setText(R.id.item_count, i + "");
+                });
+                builder.creater().show();
+            } else {
+                item.setCount(0);
+                helper.setText(R.id.item_count, "未添加");
+            }
         });
+        if (item.getCount() == 0) {
+            helper.setText(R.id.item_count, "未添加");
+            checkBox.setChecked(false);
+        } else {
+            helper.setText(R.id.item_count, item.getCount() + "");
+            checkBox.setChecked(true);
+        }
+
+//        ImageView imageView = helper.getView(R.id.item_image);
+//        Glide.with(mContext)
+//                .load(Config.BASE_IMG + App.INSTANCE().getShopID() + "/" + item.getProductFile())
+//                .centerCrop().into(imageView);
+
+
+//        imageView.setOnClickListener(v -> {
+//            Intent intent = new Intent(mContext, BigImageActivity.class);
+//            intent.putExtra(Config.PARAM1, item.getProductFile());
+//            mContext.startActivity(intent);
+//        });
     }
 }

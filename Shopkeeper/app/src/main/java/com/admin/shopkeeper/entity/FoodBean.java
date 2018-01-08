@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Administrator on 2017/8/30.
  */
 
-public class FoodBean implements Serializable{
+public class FoodBean implements Serializable {
 
     //{\"PRODUCTID\":\"498d601a-1908-4391-9c6a-31a51463c372\",
     // \"RESTAURANTID\":\"4b176f0e-0553-4094-8181-5048641b20ef\",
@@ -78,13 +78,13 @@ public class FoodBean implements Serializable{
     private String printId;
     @SerializedName("Name")
     private String name;
-    @SerializedName("PRODUCTID")
+    @SerializedName(value = "PRODUCTID", alternate = {"ProductID"})
     String productId;
     @SerializedName("RESTAURANTID")
     String restaurantId;
     @SerializedName("ID")
     String id;
-    @SerializedName("PRODUCTNAME")
+    @SerializedName(value = "PRODUCTNAME", alternate = {"ProductName"})
     String productName;
     @SerializedName("PINYIN")
     String pinyin;
@@ -106,6 +106,25 @@ public class FoodBean implements Serializable{
     String remark;
     @SerializedName("PRODUCTFile")
     private String productFile;
+
+    int count;
+    boolean delete;
+
+    public boolean isDelete() {
+        return delete;
+    }
+
+    public void setDelete(boolean delete) {
+        this.delete = delete;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     public String getTasteId() {
         return tasteId;

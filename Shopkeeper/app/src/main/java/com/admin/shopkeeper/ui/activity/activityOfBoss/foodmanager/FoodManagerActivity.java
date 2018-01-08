@@ -19,19 +19,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.FoodManagerAdapter;
-import com.admin.shopkeeper.adapter.OrderFoodAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.foodedit.FoodEditActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.kouwei.KouweiActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.season.SeasonActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.shuxing.ShuxingActivity;
-import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 

@@ -5,19 +5,11 @@ import android.content.Context;
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.entity.FoodBean;
-import com.admin.shopkeeper.entity.FoodEntity;
-import com.admin.shopkeeper.entity.KouWei;
-import com.admin.shopkeeper.entity.MenuTypeEntity;
-import com.admin.shopkeeper.entity.RetCauseBean;
-import com.admin.shopkeeper.entity.Season;
-import com.admin.shopkeeper.entity.Spec;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.my.IMyView;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -56,6 +48,7 @@ public class FoodManagerPresenter extends BasePresenter<IFoodManagerView> {
                 });
 
     }
+
 
     public void delete(FoodBean bean) {
         DialogUtils.showDialog(context, "数据提交中");
