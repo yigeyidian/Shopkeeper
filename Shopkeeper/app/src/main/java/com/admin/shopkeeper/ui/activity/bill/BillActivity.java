@@ -174,6 +174,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
     double mading = 0;
     double rounding = 0;
+    double moMoney = 0;
 
 
     @OnClick(R.id.bill_print)
@@ -407,6 +408,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             @Override
             public void onBtnClick(double i) {
+                mading = 0;
+                rounding = 0;
+                moMoney = 0;
                 ijianmian = i;
                 jianMian.setText(ijianmian + "");
                 youhuiMoney = ijianmian + idazhe;
@@ -422,8 +426,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 switch (i) {
                     case 1:
                         youhuiMoney = idazhe;
-                        ijianmian = getYinfuMoney() % 10;
-                        mading = ijianmian;
+                        if (moMoney >= getYinfuMoney() % 10 - getYinfuMoney() % 1) {
+                            return;
+                        }
+                        moMoney += getYinfuMoney() % 10 - getYinfuMoney() % 1;
+                        ijianmian = mading = moMoney;
                         jianMian.setText(new BigDecimal(ijianmian).setScale(2, BigDecimal.ROUND_HALF_UP) + "");
                         youhuiMoney = ijianmian + idazhe;
                         initPay();
@@ -432,8 +439,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                         break;
                     case 2:
                         youhuiMoney = idazhe;
-                        ijianmian = getYinfuMoney() % 1;
-                        mading = ijianmian;
+                        if (moMoney % 1 >= getYinfuMoney() % 1 - getYinfuMoney() % 0.1) {
+                            return;
+                        }
+                        moMoney += getYinfuMoney() % 1 - getYinfuMoney() % 0.1;
+                        ijianmian = mading = moMoney;
                         jianMian.setText(new BigDecimal(ijianmian).setScale(2, BigDecimal.ROUND_HALF_UP) + "");
                         youhuiMoney = ijianmian + idazhe;
                         initPay();
@@ -442,8 +452,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                         break;
                     case 3:
                         youhuiMoney = idazhe;
-                        ijianmian = getYinfuMoney() % 0.1;
-                        mading = ijianmian;
+                        if (moMoney % 0.1 >= getYinfuMoney() % 0.1) {
+                            return;
+                        }
+                        moMoney += getYinfuMoney() % 0.1;
+                        ijianmian = mading = moMoney;
                         jianMian.setText(new BigDecimal(ijianmian).setScale(2, BigDecimal.ROUND_HALF_UP) + "");
                         youhuiMoney = ijianmian + idazhe;
                         initPay();
@@ -451,6 +464,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                         intText();
                         break;
                     case 4:
+                        moMoney = 0;
+
                         youhuiMoney = idazhe;
                         double k = getYinfuMoney() % 1;
                         if (k >= 0.5) {
@@ -471,6 +486,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             @Override
             public void onCancel() {
+                mading = 0;
+                rounding = 0;
+                moMoney = 0;
                 ijianmian = 0;
                 youhuiMoney = ijianmian + idazhe;
                 jianMian.setText(ijianmian + "");
@@ -605,22 +623,22 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 if (!TextUtils.isEmpty(tabName)) {
                     presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                             memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tabName,
-                            free, "4", guiId, "",mading,rounding);
+                            free, "4", guiId, "", mading, rounding);
                 } else {
                     presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                             memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "",
-                            free, "4", guiId, "",mading,rounding);
+                            free, "4", guiId, "", mading, rounding);
                 }
             } else if (type == P4) {
                 presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                         memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
-                        , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId, "",mading,rounding);
+                        , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId, "", mading, rounding);
             } else if (type == P6) {
                 presenter.rebill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
-                        , tStr, pStr, order.getType().equals("7") ? "7" : "4", free, order.getBillid(), result,mading,rounding);
+                        , tStr, pStr, order.getType().equals("7") ? "7" : "4", free, order.getBillid(), result, mading, rounding);
             } else {
                 presenter.bill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
-                        , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId, "",mading,rounding);
+                        , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId, "", mading, rounding);
             }
         }
     }
@@ -1444,10 +1462,10 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         if (type == P3) {
             presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                     memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, getYinfuMoney(), tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId, payType,mading,rounding);
+                    , tStr, pStr, 1, getYinfuMoney(), tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId, payType, mading, rounding);
         } else if (type == P1) {
             presenter.bill(billId, App.INSTANCE().getShopID(), order != null ? order.getTableId() : "", memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, getYinfuMoney(), order != null ? order.getTableName() : "", free, "7", guiId, payType,mading,rounding);
+                    , tStr, pStr, 1, getYinfuMoney(), order != null ? order.getTableName() : "", free, "7", guiId, payType, mading, rounding);
         }
     }
 
@@ -1551,13 +1569,13 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         if (type == P3) {
             presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                     memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId, "",mading,rounding);
+                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId, "", mading, rounding);
         } else if (type == P4) {
             presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "", memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId, "",mading,rounding);
+                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId, "", mading, rounding);
         } else {
             presenter.bill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId, "",mading,rounding);
+                    , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId, "", mading, rounding);
         }
     }
 
