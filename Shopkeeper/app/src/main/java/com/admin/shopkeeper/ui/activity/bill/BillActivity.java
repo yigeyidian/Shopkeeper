@@ -42,6 +42,8 @@ import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CouponLineDialog;
 import com.admin.shopkeeper.dialog.DaZheDialog;
 import com.admin.shopkeeper.dialog.GuaZhangDialog;
+import com.admin.shopkeeper.dialog.JianmianDialog;
+import com.admin.shopkeeper.dialog.SetFoodDialog;
 import com.admin.shopkeeper.entity.BillJson;
 import com.admin.shopkeeper.entity.CardBean;
 import com.admin.shopkeeper.entity.CouponLineDownBean;
@@ -169,6 +171,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     private boolean haveQXDaZhe;//是否进行权限打折或单个菜品打折
     private boolean haveOneDaZhe;//是否进行单个菜品打折
     private List<CouponLineDownBean> couponLineDownBeanList = new ArrayList<>();
+
+    double mading = 0;
+    double rounding = 0;
 
 
     @OnClick(R.id.bill_print)
@@ -394,52 +399,87 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             return;
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(BillActivity.this);
-        AppCompatEditText editText = new AppCompatEditText(BillActivity.this);
-        builder.setTitle("设置减免");
-//        editText.setInputType(InputType.TYPE_CLASS_TEXT);
-        editText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         BigDecimal yinfu = new BigDecimal(getYinfuMoney()).setScale(2, BigDecimal.ROUND_DOWN);
-        editText.setHint("最高减免" + yinfu);
-        builder.setPositiveButton("确定", null);
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+        JianmianDialog.Builder builder = new JianmianDialog.Builder(this, R.style.OrderDialogStyle);
+        builder.setHintStr("最高减免" + yinfu + "元");
+        builder.setButtonClick(new JianmianDialog.OnButtonClick() {
+
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onBtnClick(double i) {
+                ijianmian = i;
+                jianMian.setText(ijianmian + "");
+                youhuiMoney = ijianmian + idazhe;
+                initPay();
+                getNeed();
+                intText();
+            }
+
+            @Override
+            public void onItemClick(int i) {
+                mading = 0;
+                rounding = 0;
+                switch (i) {
+                    case 1:
+                        youhuiMoney = idazhe;
+                        ijianmian = getYinfuMoney() % 10;
+                        mading = ijianmian;
+                        jianMian.setText(new BigDecimal(ijianmian).setScale(2, BigDecimal.ROUND_HALF_UP) + "");
+                        youhuiMoney = ijianmian + idazhe;
+                        initPay();
+                        getNeed();
+                        intText();
+                        break;
+                    case 2:
+                        youhuiMoney = idazhe;
+                        ijianmian = getYinfuMoney() % 1;
+                        mading = ijianmian;
+                        jianMian.setText(new BigDecimal(ijianmian).setScale(2, BigDecimal.ROUND_HALF_UP) + "");
+                        youhuiMoney = ijianmian + idazhe;
+                        initPay();
+                        getNeed();
+                        intText();
+                        break;
+                    case 3:
+                        youhuiMoney = idazhe;
+                        ijianmian = getYinfuMoney() % 0.1;
+                        mading = ijianmian;
+                        jianMian.setText(new BigDecimal(ijianmian).setScale(2, BigDecimal.ROUND_HALF_UP) + "");
+                        youhuiMoney = ijianmian + idazhe;
+                        initPay();
+                        getNeed();
+                        intText();
+                        break;
+                    case 4:
+                        youhuiMoney = idazhe;
+                        double k = getYinfuMoney() % 1;
+                        if (k >= 0.5) {
+                            ijianmian = k - 1;
+                            rounding = -ijianmian;
+                        } else {
+                            ijianmian = k;
+                            mading = ijianmian;
+                        }
+                        jianMian.setText(new BigDecimal(ijianmian).setScale(2, BigDecimal.ROUND_HALF_UP) + "");
+                        youhuiMoney = ijianmian + idazhe;
+                        initPay();
+                        getNeed();
+                        intText();
+                        break;
+                }
+            }
+
+            @Override
+            public void onCancel() {
                 ijianmian = 0;
                 youhuiMoney = ijianmian + idazhe;
                 jianMian.setText(ijianmian + "");
                 initPay();
                 getNeed();
                 intText();
-                dialog.dismiss();
             }
         });
-        builder.setView(editText);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        if (dialog.getButton(AlertDialog.BUTTON_POSITIVE) != null) {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-                String str = editText.getText().toString().trim();
-                if (TextUtils.isEmpty(str)) {
-                    error("请输入正确的减免价格");
-                    return;
-                }
-                double d = Double.parseDouble(str);
-
-                if (d >= 0 && d > getYinfuMoney()) {
-                    error("请输入正确的减免价格");
-                    return;
-                }
-
-                ijianmian = d;
-                jianMian.setText(ijianmian + "");
-                youhuiMoney = ijianmian + idazhe;
-                initPay();
-                getNeed();
-                intText();
-                dialog.dismiss();
-            });
-        }
+        builder.creater().show();
     }
 
     @OnClick(R.id.button_scan)
@@ -497,9 +537,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 BillJson.BillJsonBase d = new BillJson.BillJsonBase();
                 d.setGuid(System.currentTimeMillis() + "");
                 d.setPice(idazhe + "");
-                if(haveOneDaZhe){
+                if (haveOneDaZhe) {
                     d.setType("6");
-                }else{
+                } else {
                     d.setType("1");
                 }
                 q.add(d);
@@ -518,7 +558,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 m.setType("3");
                 q.add(m);
             }
-            if(couponLineYouhuiMoney>0){
+            if (couponLineYouhuiMoney > 0) {
                 for (int k = 0; k < couponLineDownBeanList.size(); k++) {
                     CouponLineDownBean entity = couponLineDownBeanList.get(k);
                     if (entity != null) {
@@ -535,7 +575,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             }
             quanxian.setQuanxian(q);
             String qStr = new Gson().toJson(quanxian);
-            Log.d("ttt","quanxian:"+qStr);
+            Log.d("ttt", "quanxian:" + qStr);
 
             BillJson.Pays pays = new BillJson.Pays();
             List<BillJson.BillJsonBase> p = new ArrayList<>();
@@ -565,22 +605,22 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 if (!TextUtils.isEmpty(tabName)) {
                     presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                             memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tabName,
-                            free, "4", guiId, "");
+                            free, "4", guiId, "",mading,rounding);
                 } else {
                     presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                             memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr, tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "",
-                            free, "4", guiId, "");
+                            free, "4", guiId, "",mading,rounding);
                 }
             } else if (type == P4) {
                 presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                         memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
-                        , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId, "");
+                        , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId, "",mading,rounding);
             } else if (type == P6) {
                 presenter.rebill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
-                        , tStr, pStr, order.getType().equals("7") ? "7" : "4", free, order.getBillid(), result);
+                        , tStr, pStr, order.getType().equals("7") ? "7" : "4", free, order.getBillid(), result,mading,rounding);
             } else {
                 presenter.bill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, weixinOrderBean.getYuanjia(), weixinOrderBean.getCanju(), qStr
-                        , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId, "");
+                        , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId, "",mading,rounding);
             }
         }
     }
@@ -1015,8 +1055,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 //        NumberFormat nf = NumberFormat.getNumberInstance();
 //        nf.setMaximumFractionDigits(2);
         double yinFu = weixinOrderBean.getYuanjia() - weixinOrderBean.getYufupice() - weixinOrderBean.getYouhui() - getYouhuiMoney();
-        Log.d("ttt","预付："+weixinOrderBean.getYufupice()+ "优惠："+weixinOrderBean.getYouhui()+"餐具："+weixinOrderBean.getCanju());
-        Log.d("ttt","应付："+df.format(yinFu));
+        Log.d("ttt", "预付：" + weixinOrderBean.getYufupice() + "优惠：" + weixinOrderBean.getYouhui() + "餐具：" + weixinOrderBean.getCanju());
+        Log.d("ttt", "应付：" + df.format(yinFu));
         double yinfu = Double.parseDouble(df.format(yinFu));
         return yinfu;
     }
@@ -1343,9 +1383,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             BillJson.BillJsonBase d = new BillJson.BillJsonBase();
             d.setGuid(System.currentTimeMillis() + "");
             d.setPice(idazhe + "");
-            if(haveOneDaZhe){
+            if (haveOneDaZhe) {
                 d.setType("6");
-            }else{
+            } else {
                 d.setType("1");
             }
             q.add(d);
@@ -1364,7 +1404,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             m.setType("3");
             q.add(m);
         }
-        if(couponLineYouhuiMoney>0){
+        if (couponLineYouhuiMoney > 0) {
             for (int k = 0; k < couponLineDownBeanList.size(); k++) {
                 CouponLineDownBean entity = couponLineDownBeanList.get(k);
                 if (entity != null) {
@@ -1404,10 +1444,10 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         if (type == P3) {
             presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                     memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, getYinfuMoney(), tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId, payType);
+                    , tStr, pStr, 1, getYinfuMoney(), tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId, payType,mading,rounding);
         } else if (type == P1) {
             presenter.bill(billId, App.INSTANCE().getShopID(), order != null ? order.getTableId() : "", memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, getYinfuMoney(), order != null ? order.getTableName() : "", free, "7", guiId, payType);
+                    , tStr, pStr, 1, getYinfuMoney(), order != null ? order.getTableName() : "", free, "7", guiId, payType,mading,rounding);
         }
     }
 
@@ -1450,9 +1490,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             BillJson.BillJsonBase d = new BillJson.BillJsonBase();
             d.setGuid(System.currentTimeMillis() + "");
             d.setPice(idazhe + "");
-            if(haveOneDaZhe){
+            if (haveOneDaZhe) {
                 d.setType("6");
-            }else{
+            } else {
                 d.setType("1");
             }
             q.add(d);
@@ -1471,7 +1511,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             m.setType("3");
             q.add(m);
         }
-        if(couponLineYouhuiMoney>0){
+        if (couponLineYouhuiMoney > 0) {
             for (int k = 0; k < couponLineDownBeanList.size(); k++) {
                 CouponLineDownBean entity = couponLineDownBeanList.get(k);
                 if (entity != null) {
@@ -1511,13 +1551,13 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         if (type == P3) {
             presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "",
                     memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId, "");
+                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "4", guiId, "",mading,rounding);
         } else if (type == P4) {
             presenter.bill(billId, App.INSTANCE().getShopID(), tableEntity != null ? tableEntity.getRoomTableID() : "", memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId, "");
+                    , tStr, pStr, 1, result, tableEntity != null ? tableEntity.getTableName() : "", free, "3", guiId, "",mading,rounding);
         } else {
             presenter.bill(order.getBillid(), App.INSTANCE().getShopID(), order.getTableId(), memberId, foodMoney, weixinOrderBean.getCanju(), qStr
-                    , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId, "");
+                    , tStr, pStr, order.getPeopleCount(), result, order.getTableName(), free, "7", guiId, "",mading,rounding);
         }
     }
 

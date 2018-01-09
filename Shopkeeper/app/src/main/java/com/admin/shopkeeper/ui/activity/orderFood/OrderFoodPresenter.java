@@ -115,7 +115,7 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                 .getApi()
                 .bill("3", id, Rid, memberID, TableId, zon, can, 0, 0, types, jsonObjquanxian, jsonObj, payType, jsonPay,
                         "", "", App.INSTANCE().getUser().getId(), App.INSTANCE().getUser().getName(), "", "", "", peoplecount,
-                        price, tablename, free)
+                        price, tablename, free,0,0)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

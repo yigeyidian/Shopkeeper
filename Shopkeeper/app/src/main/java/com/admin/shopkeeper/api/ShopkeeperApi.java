@@ -392,6 +392,8 @@ public interface ShopkeeperApi {
             @Field("personcount") int personcount,
             @Field("price") double price,
             @Field("tablename") String tablename,
+            @Field("MaLing") double maLing,
+            @Field("Rounding") double rounding,
             @Field("free") double free);
 
 
@@ -804,6 +806,8 @@ public interface ShopkeeperApi {
             @Field("zonstate") String zonstate,
             @Field("free") double free,
             @Field("price") double price,
+            @Field("MaLing") double maLing,
+            @Field("Rounding") double rounding,
             @Field("FnaBill") String fnaNill);
 
     @FormUrlEncoded

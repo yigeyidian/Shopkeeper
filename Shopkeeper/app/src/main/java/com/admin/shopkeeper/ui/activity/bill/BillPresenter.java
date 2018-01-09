@@ -105,12 +105,12 @@ class BillPresenter extends BasePresenter<IBillView> {
     public void bill(String id, String Rid, String tableId,
                      String memberId, double zon, double can, String jsonObjquanxian,
                      String jsonObj, String jsonPay, int peoplecount, double price, String tablename, double free,
-                     String types, String guiId ,String payType) {
+                     String types, String guiId, String payType, double maling, double rounding) {
         DialogUtils.showDialog(context, "结账中...");
         RetrofitHelper.getInstance().getApi()
                 .bill("3", id, Rid, memberId, tableId, zon, can, 0, 0, types, jsonObjquanxian, jsonObj, payType, jsonPay,
                         guiId, "", App.INSTANCE().getUser().getId(), App.INSTANCE().getUser().getName(), "", "", "",
-                        peoplecount, price, tablename, free)
+                        peoplecount, price, tablename, maling, rounding, free)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -139,11 +139,11 @@ class BillPresenter extends BasePresenter<IBillView> {
     }
 
     public void rebill(String id, String Rid, String TableId, String memberId, double zon, double can, String jsonObjquanxian,
-                       String jsonObj, String jsonPay, String types, double free, String fanBill, double price) {
+                       String jsonObj, String jsonPay, String types, double free, String fanBill, double price, double maling, double rounding) {
         DialogUtils.showDialog(context, "结账中...");
         RetrofitHelper.getInstance().getApi()
                 .reBill("3", id, Rid, memberId, TableId, zon, can, 0, 0, types, jsonObjquanxian, jsonObj, "4", jsonPay,
-                        "", "", App.INSTANCE().getUser().getId(), App.INSTANCE().getUser().getName(), "", "", "", free, price, fanBill)
+                        "", "", App.INSTANCE().getUser().getId(), App.INSTANCE().getUser().getName(), "", "", "", free, price, maling, rounding, fanBill)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -560,6 +560,7 @@ class BillPresenter extends BasePresenter<IBillView> {
                     iView.error("修改状态失败");
                 });
     }
+
     public void scanBill(String code, double price, String billId) {
         DialogUtils.showDialog(context, "数据提交中...");
         RetrofitHelper.getInstance()
@@ -570,31 +571,31 @@ class BillPresenter extends BasePresenter<IBillView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
-                    if(stringModel.getCode().equals("1")){
+                    if (stringModel.getCode().equals("1")) {
                         if (stringModel.getResult().contains("SUCCESS")) {
                             String parType[] = stringModel.getResult().split("&");
-                            iView.scanBillSuccess(parType[1] ,billId , price ,"" ,"");
-                        }else if(stringModel.getResult().contains("FAILED")){
+                            iView.scanBillSuccess(parType[1], billId, price, "", "");
+                        } else if (stringModel.getResult().contains("FAILED")) {
                             iView.warning("支付失败");
-                        }else if(stringModel.getResult().contains("UNKNOWN")){
+                        } else if (stringModel.getResult().contains("UNKNOWN")) {
                             iView.warning("支付错误");
-                        }else if(stringModel.getResult().contains("USERPAYING")){
-                            iView.scanBillSuccess("3" ,billId , price ,"","用户正在支付中" );
-                        }else if(stringModel.getResult().contains("ORDERPAID")){
+                        } else if (stringModel.getResult().contains("USERPAYING")) {
+                            iView.scanBillSuccess("3", billId, price, "", "用户正在支付中");
+                        } else if (stringModel.getResult().contains("ORDERPAID")) {
                             iView.warning("订单已支付");
-                        }else if(stringModel.getResult().contains("AUTHCODEEXPIRE")){
+                        } else if (stringModel.getResult().contains("AUTHCODEEXPIRE")) {
                             iView.warning("二维码已过期");
-                        }else if(stringModel.getResult().contains("NOTENOUGH")){
+                        } else if (stringModel.getResult().contains("NOTENOUGH")) {
                             iView.warning("余额不足");
-                        }else if(stringModel.getResult().contains("OUT_TRADE_NO_USED")){
+                        } else if (stringModel.getResult().contains("OUT_TRADE_NO_USED")) {
                             iView.warning("订单号重复");
-                        }else if(stringModel.getResult().contains("QITA")){
+                        } else if (stringModel.getResult().contains("QITA")) {
                             iView.warning("其他错误");
-                        }else if(stringModel.getResult().contains("CODEUNKNOWN")){
+                        } else if (stringModel.getResult().contains("CODEUNKNOWN")) {
                             iView.warning("二维码错误");
-                        }else{
+                        } else {
                             String parType[] = stringModel.getResult().split("&");
-                            iView.scanBillSuccess(parType[1] ,billId , price ,parType[0] ,"" );
+                            iView.scanBillSuccess(parType[1], billId, price, parType[0], "");
                         }
                     }
                 }, throwable -> {
@@ -603,11 +604,11 @@ class BillPresenter extends BasePresenter<IBillView> {
                 });
     }
 
-    public void getLineDownInfo(int index , String productName) {
+    public void getLineDownInfo(int index, String productName) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getLineDownInfo("1", App.INSTANCE().getShopID(),20 ,index,"")
+                .getLineDownInfo("5", App.INSTANCE().getShopID(), 20, index, "")
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
