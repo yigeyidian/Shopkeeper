@@ -18,8 +18,8 @@ public class OrderfoodEntity {
         return memberPice;
     }
 
-    public void setMemberPrice(double memberPrice) {
-        this.memberPice = memberPrice;
+    public void setMemberPice(double memberPice) {
+        this.memberPice = memberPice;
     }
 
     private boolean isNumLayout;//是否显示加减号layout

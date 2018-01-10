@@ -377,7 +377,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 id = TextUtils.isEmpty(orderfoodEntity.getGuid()) ? "" : orderfoodEntity.getGuid();
                 number = TextUtils.isEmpty(orderfoodEntity.getCounts()) ? "" : orderfoodEntity.getCounts().replaceAll(",", "\\^");
                 info += orderfoodEntity.getPackageName() + "@"
-                        + orderfoodEntity.getOriginalPrice() + "@"
+                        + orderfoodEntity.getMemberPice() + "@"
                         + "-1" + "@"
                         + orderfoodEntity.getPrice() + "@"
                         + orderfoodEntity.getUnit() + "$"
@@ -657,7 +657,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 entity.setNumber(1);//设置份数
                 entity.setPrice(foodEntity.getPrice());
                 entity.setOriginalPrice(foodEntity.getPrice());
-                entity.setMemberPrice(foodEntity.getMemberPice());
+                entity.setMemberPice(foodEntity.getMemberPice());
                 if (!TextUtils.isEmpty(foodEntity.getProductShuXing()) && foodEntity.getProductShuXing().equals("1")) {
                     entity.setShowWeight(true);
                 }
@@ -763,6 +763,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
 //                    if (foodEntity.getProductShuXing().equals("1")) {
 //                        entity.setShowWeight(true);
 //                    }
+                    entity.setMemberPice(foodEntity.getPrice());
                     entity.setOriginalPrice(foodEntity.getPrice());
 
                     if (!carts.contains(entity)) {
@@ -825,6 +826,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     entity.setNumber(foodEntity.getNumber());//设置份数
                     entity.setPrice(foodEntity.getPrice());
                     entity.setUnit(foodEntity.getUnit());
+                    entity.setMemberPice(foodEntity.getMemberPice());
                     entity.setOriginalPrice(foodEntity.getPrice());
                     if (foodEntity.getProductShuXing().equals("1")) {
                         entity.setShowWeight(true);
@@ -1264,6 +1266,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             foodEntity.setNumber(foodEntity.getNumber() + entity.getNumber());
         }
         entity.setPrice(foodEntity.getPrice());
+        entity.setMemberPice(foodEntity.getMemberPice());
         entity.setOriginalPrice(foodEntity.getPrice());
         entity.setGivingnum(detailFood.getGiving());
         entity.setNumLayout(true);
