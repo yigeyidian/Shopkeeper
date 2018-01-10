@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import com.admin.shopkeeper.adapter.DeleteFoodAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.entity.MealBean;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.setFood.SetFoodActivity;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -28,7 +30,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import es.dmoral.toasty.Toasty;
 
 public class DeleteFoodActivity extends BaseActivity<DeleteFoodPresenter> implements IDeleteFoodView {
 
@@ -156,12 +157,22 @@ public class DeleteFoodActivity extends BaseActivity<DeleteFoodPresenter> implem
 
         presenter.deleteFood(ids, mealBean);
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.action_add:
+                Intent intent = new Intent(this, SetFoodActivity.class);
+                intent.putExtra("bean", mealBean);
+                startActivityForResult(intent, 101);
                 break;
 
         }

@@ -2,12 +2,6 @@ package com.admin.shopkeeper.dialog;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatImageButton;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,10 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.DaZhaAdapter;
 import com.admin.shopkeeper.entity.DaZheEntity;
-import com.admin.shopkeeper.weight.MarginDecoration;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.List;
 
@@ -116,14 +107,14 @@ public class JianmianDialog extends AppCompatDialog {
             View view = inflater.inflate(R.layout.dialog_jianmian, null);
             dialog = new JianmianDialog(context, theme, view);
 
-            EditText editText = view.findViewById(R.id.editText);
-            TextView textView1 = view.findViewById(R.id.tv_1);
-            TextView textView2 = view.findViewById(R.id.tv_2);
-            TextView textView3 = view.findViewById(R.id.tv_3);
-            TextView textView4 = view.findViewById(R.id.tv_4);
+            EditText editText = (EditText) view.findViewById(R.id.editText);
+            TextView textView1 = (TextView) view.findViewById(R.id.tv_1);
+            TextView textView2 = (TextView) view.findViewById(R.id.tv_2);
+            TextView textView3 = (TextView) view.findViewById(R.id.tv_3);
+            TextView textView4 = (TextView) view.findViewById(R.id.tv_4);
 
-            Button btCancel = view.findViewById(R.id.btn_cancel);
-            Button btOk = view.findViewById(R.id.OneBtn);
+            Button btCancel = (Button) view.findViewById(R.id.btn_cancel);
+            Button btOk = (Button) view.findViewById(R.id.OneBtn);
 
             if(!TextUtils.isEmpty(hintStr)){
                 editText.setHint(hintStr);

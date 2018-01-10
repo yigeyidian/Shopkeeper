@@ -411,7 +411,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 number = (orderfoodEntity.getNumber() > 0 ? orderfoodEntity.getNumber() + "" : "1");
 
                 info += name + "@"
-                        + orderfoodEntity.getOriginalPrice() + "@"
+                        + orderfoodEntity.getMemberPice() + "@"
                         + "0" + "@"
                         + orderfoodEntity.getPrice() + "@"
                         + orderfoodEntity.getUnit() + "$"
@@ -657,6 +657,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 entity.setNumber(1);//设置份数
                 entity.setPrice(foodEntity.getPrice());
                 entity.setOriginalPrice(foodEntity.getPrice());
+                entity.setMemberPrice(foodEntity.getMemberPice());
                 if (!TextUtils.isEmpty(foodEntity.getProductShuXing()) && foodEntity.getProductShuXing().equals("1")) {
                     entity.setShowWeight(true);
                 }

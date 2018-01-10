@@ -12,6 +12,16 @@ public class OrderfoodEntity {
     private String unit;//单位
     private double price;//价格
     private double originalPrice;//原价
+    private double memberPice;//会员价格
+
+    public double getMemberPice() {
+        return memberPice;
+    }
+
+    public void setMemberPrice(double memberPrice) {
+        this.memberPice = memberPrice;
+    }
+
     private boolean isNumLayout;//是否显示加减号layout
     private boolean isShowWeight;//是否显示称重layout
 

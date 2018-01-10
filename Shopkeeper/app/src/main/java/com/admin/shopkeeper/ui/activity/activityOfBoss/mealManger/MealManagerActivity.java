@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.MealManagerAdapter;
@@ -28,7 +27,6 @@ import com.admin.shopkeeper.entity.MealBean;
 import com.admin.shopkeeper.entity.MealTypeBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.deletefood.DeleteFoodActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.mealEdit.MealEditActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.setFood.SetFoodActivity;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -180,11 +178,11 @@ public class MealManagerActivity extends BaseActivity<MealManagerPresenter> impl
     public void showDeletePop(MealBean bean) {
         View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_setfood, null);
         laheiPop = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        laheiView.findViewById(R.id.pop_setFood).setOnClickListener(view -> {
+       /* laheiView.findViewById(R.id.pop_setFood).setOnClickListener(view -> {
             Intent intent = new Intent(MealManagerActivity.this, SetFoodActivity.class);
             intent.putExtra("bean", bean);
             startActivity(intent);
-        });
+        });*/
         laheiView.findViewById(R.id.pop_deleteFood).setOnClickListener(v -> {
             Intent intent = new Intent(MealManagerActivity.this, DeleteFoodActivity.class);
             intent.putExtra("bean", bean);

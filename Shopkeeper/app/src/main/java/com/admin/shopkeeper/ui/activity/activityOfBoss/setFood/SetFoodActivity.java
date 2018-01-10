@@ -2,8 +2,6 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.setFood;
 
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,24 +10,15 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.FoodManagerAdapter;
 import com.admin.shopkeeper.adapter.SetFoodAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
-import com.admin.shopkeeper.dialog.DaZheDialog;
-import com.admin.shopkeeper.dialog.SetFoodDialog;
 import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.entity.MealBean;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.mealEdit.MealEditActivity;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -77,7 +66,7 @@ public class SetFoodActivity extends BaseActivity<SetFoodPresenter> implements I
         mealBean = (MealBean) getIntent().getSerializableExtra("bean");
         type = getIntent().getIntExtra("type", 0);
 
-        toolbar.setTitle(type == 0 ? "设置菜品" : "删除菜品");
+        toolbar.setTitle(type == 0 ? "绑定菜品" : "删除菜品");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 

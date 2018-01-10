@@ -12,17 +12,17 @@
         android:background="@color/setting_bg"
         android:orientation="vertical">
 
-        <TextView
+        <!--<TextView
             android:id="@+id/pop_setFood"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_100sdp"
             android:background="@drawable/selector_item"
             android:gravity="center"
-            android:text="设置菜品"
+            android:text="绑定菜品"
             android:textColor="@color/black"
             android:textSize="@dimen/_36ssp" />
 
-        <View style="@style/LineHorStyle" />
+        <View style="@style/LineHorStyle" />-->
 
         <TextView
             android:id="@+id/pop_deleteFood"
@@ -30,7 +30,7 @@
             android:layout_height="@dimen/_100sdp"
             android:background="@drawable/selector_item"
             android:gravity="center"
-            android:text="删除菜品"
+            android:text="菜品管理"
             android:textColor="@color/black"
             android:textSize="@dimen/_36ssp" />
 
