@@ -978,6 +978,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         dialog.setBtnStr("确定");
         dialog.setMoreBtn(false);
 
+        dialog.setMemberPice(item.getMemberPice());
+
         builder.setEntity(dialog);
         builder.setButtonClick(new OrderFoodDialog.OnButtonClick() {
             @Override
