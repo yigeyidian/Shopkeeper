@@ -317,7 +317,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             if (poptype == 2) {
                 if (needMoney == 0) {
-                    youhuiMoneyOfMember = weixinOrderBean.getYuanjia()-weixinOrderBean.getMemberpiceNew();
+                    youhuiMoneyOfMember = weixinOrderBean.getYuanjia() - weixinOrderBean.getMemberpiceNew();
                     billClick();
                 } else {
                     showToast("余额不足" + needMoney);
@@ -351,7 +351,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 getNeed();
                 intText();
 
-            }else{
+            } else {
                 youhuiMoneyOfMember = weixinOrderBean.getYuanjia() - weixinOrderBean.getMemberpiceNew();
                 initPay();
                 getNeed();
@@ -360,14 +360,18 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             saleWindow.dismiss();
         });
         tvCancel.setOnClickListener(v -> {
+            editText.setText("");
+            scoreCount = 0;
+            cardMoney = 0;
             if (memberPayEntity != null) {
                 memberPayEntity.setMoney(0);
                 memberPayEntity.setSelected(false);
-                //initPay();
-                getNeed();
-                intText();
-                adapter.notifyDataSetChanged();
             }
+            initPay();
+            getNeed();
+            intText();
+            adapter.notifyDataSetChanged();
+
             saleWindow.dismiss();
         });
 
