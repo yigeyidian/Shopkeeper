@@ -350,7 +350,6 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 initPay();
                 getNeed();
                 intText();
-
             }else{
                 youhuiMoneyOfMember = weixinOrderBean.getYuanjia() - weixinOrderBean.getMemberpiceNew();
                 initPay();
@@ -367,6 +366,16 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 getNeed();
                 intText();
                 adapter.notifyDataSetChanged();
+            }
+            if(poptype != 2){
+                scoreMoney = 0;
+                scoreCount = 0;
+                cardMoney = 0;
+                cardBeenList.clear();
+                youhuiMoneyOfMember = weixinOrderBean.getYuanjia() - weixinOrderBean.getMemberpiceNew();
+                initPay();
+                getNeed();
+                intText();
             }
             saleWindow.dismiss();
         });
