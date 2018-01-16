@@ -25,11 +25,9 @@ import com.admin.shopkeeper.entity.BillJson;
 import com.admin.shopkeeper.entity.CommonDialogEntity;
 import com.admin.shopkeeper.entity.Order;
 import com.admin.shopkeeper.entity.OrderDetailFood;
-import com.admin.shopkeeper.entity.OrderfoodEntity;
 import com.admin.shopkeeper.entity.RadioEntity;
-import com.admin.shopkeeper.entity.Season;
 import com.admin.shopkeeper.entity.TableEntity;
-
+import com.admin.shopkeeper.entity.WeixinOrderBean;
 import com.admin.shopkeeper.ui.activity.bill.BillActivity;
 import com.admin.shopkeeper.ui.activity.orderDetail.OrderDetailActivity;
 import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
@@ -37,7 +35,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
-
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -390,6 +387,23 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
         }
     }
 
+    WeixinOrderBean weixinOrderBean;
+
+    @Override
+    public void success(List<WeixinOrderBean> beans) {
+        this.weixinOrderBean = beans.get(0);
+        if (weixinOrderBean == null) {
+            Toasty.error(getContext(), "获取数据失败", Toast.LENGTH_SHORT, true).show();
+            //finish();
+            return;
+        }
+    }
+
+    @Override
+    public void fail() {
+
+    }
+
     @Override
     public void changeTableSuccess(int position, String tableName, String tableId) {
         Toasty.success(getContext(), "换桌成功", Toast.LENGTH_SHORT, true).show();
@@ -565,6 +579,7 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
         getActivity().finish();
     }
     double total;
+    double memberTotal;
   /*  public double getTotal(List<OrderDetailFood> orderDetailFoods) {
         double total = 0;
         for (OrderfoodEntity entity : orderDetailFoods) {
@@ -590,10 +605,15 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
     public void inBillSuccess(Order order1, List<OrderDetailFood> orderDetailFoods, int position , boolean isScanBill) {
         Intent intent;
         if(isScanBill){
+            presenter.getOrderData(order1.getBillid() , order1.getType());
             total = 0;
+            memberTotal = 0;
             for (int i = 0; i < orderDetailFoods.size(); i++) {
                 total += orderDetailFoods.get(i).getPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
                 total += orderDetailFoods.get(i).getSeasonPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
+
+                memberTotal += orderDetailFoods.get(i).getMemberPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
+                memberTotal += orderDetailFoods.get(i).getSeasonPrice() * (orderDetailFoods.get(i).getAmmount() - orderDetailFoods.get(i).getGiving());
             }
             order = order1;
             intent = new Intent(getActivity(), CaptureActivity.class);
@@ -813,7 +833,11 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
         }
         if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
             String result = bundle.getString(CodeUtils.RESULT_STRING);
-            presenter.scanBill(result, total, order.getBillid());
+           /* if(weixinOrderBean != null){
+                total = weixinOrderBean.getMemberpiceNew();
+            }*/
+            Log.d("dj","总价"+total +"会员价："+memberTotal);
+            presenter.scanBill(result, total,memberTotal , order.getBillid());
             total=0;
         } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
             warning("解析二维码失败");

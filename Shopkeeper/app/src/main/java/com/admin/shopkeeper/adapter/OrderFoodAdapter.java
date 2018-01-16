@@ -2,7 +2,6 @@ package com.admin.shopkeeper.adapter;
 
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.AppCompatImageView;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 
@@ -14,9 +13,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
-import timber.log.Timber;
 
 /**
  * Created by admin on 2017/6/30.
@@ -38,9 +35,7 @@ public class OrderFoodAdapter extends BaseQuickAdapter<FoodEntity, OrderFoodAdap
             helper.setText(R.id.foodName, item.getProductName());
             helper.setText(R.id.unit, String.format(mContext.getString(R.string.string_unit), item.getUnit()));
         }
-
         helper.setText(R.id.price, String.format(mContext.getString(R.string.string_money), item.getPrice()));
-
         if (!item.getProductShuXing().equals("0")) { //1是称斤 2是规格菜品 0是默认菜品
             helper.setVisible(R.id.layout, false);
             helper.setVisible(R.id.root, true);

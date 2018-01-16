@@ -1,9 +1,7 @@
 package com.admin.shopkeeper.ui.fragment.table;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
@@ -15,16 +13,13 @@ import com.admin.shopkeeper.entity.MenuTypeEntity;
 import com.admin.shopkeeper.entity.Order;
 import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.TableEntity;
+import com.admin.shopkeeper.entity.WeixinOrderBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.model.IntModel;
 import com.admin.shopkeeper.model.StringModel;
-
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.admin.shopkeeper.utils.Print;
 import com.google.gson.Gson;
 
-import java.io.Serializable;
-import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 
@@ -488,7 +483,7 @@ class TablePresenter extends BasePresenter<ITableView> {
                 });
     }
 
-    public void scanBill(String code, double price, String billId) {
+    public void scanBill(String code, double price,double memberPrice, String billId) {
         DialogUtils.showDialog(context, "数据提交中...");
         RetrofitHelper.getInstance()
                 .getApi()
@@ -501,7 +496,11 @@ class TablePresenter extends BasePresenter<ITableView> {
                     if(stringModel.getCode().equals("1")){
                         if (stringModel.getResult().contains("SUCCESS")) {
                             String parType[] = stringModel.getResult().split("&");
-                            iView.scanBillSuccess(parType[1] ,billId , price ,"" ,"");
+                            if(parType[1].equals("5")){
+                                iView.scanBillSuccess(parType[1] ,billId , memberPrice ,"" ,"");
+                            }else{
+                                iView.scanBillSuccess(parType[1] ,billId , price ,"" ,"");
+                            }
                         }else if(stringModel.getResult().contains("FAILED")){
                             iView.warning("支付失败");
                         }else if(stringModel.getResult().contains("UNKNOWN")){
@@ -567,5 +566,26 @@ class TablePresenter extends BasePresenter<ITableView> {
     }
     private void printResult(String result) {
         new Thread(() -> Print.socketDataArrivalHandler(result)).start();
+    }
+    public void getOrderData(String billId, String types) {
+        RetrofitHelper.getInstance()
+                .getApi()
+                .getOrderData("17", App.INSTANCE().getShopID(), billId, types)
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if (stringModel.getCode().equals("1")) {
+                        WeixinOrderBean[] beans = new Gson().fromJson(stringModel.getResult(), WeixinOrderBean[].class);
+                        iView.success(Arrays.asList(beans));
+                    } else {
+                        iView.fail();
+                    }
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    throwable.printStackTrace();
+                    iView.fail();
+                });
     }
 }

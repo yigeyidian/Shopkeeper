@@ -5,6 +5,7 @@ import com.admin.shopkeeper.entity.CommonDialogEntity;
 import com.admin.shopkeeper.entity.Order;
 import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.TableEntity;
+import com.admin.shopkeeper.entity.WeixinOrderBean;
 
 import java.util.List;
 
@@ -23,6 +24,10 @@ public interface ITableView extends IBaseView {
 
 
     void success(boolean b, int position, String result, CommonDialogEntity entity);
+
+    void success(List<WeixinOrderBean> weixinOrderBeen);
+
+    void fail();
 
     void changeTableSuccess(int position, String tableName, String tableId);
 
