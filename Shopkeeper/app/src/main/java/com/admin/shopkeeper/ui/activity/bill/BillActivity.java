@@ -317,7 +317,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             if (poptype == 2) {
                 if (needMoney == 0) {
-                    youhuiMoneyOfMember = weixinOrderBean.getYuanjia() - weixinOrderBean.getMemberpiceNew();
+                    youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice()- weixinOrderBean.getMemberpiceNew();
                     billClick();
                 } else {
                     showToast("余额不足" + needMoney);
@@ -345,12 +345,12 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     return;
                 }
                 scoreCount = scoreNum;
-                youhuiMoneyOfMember = weixinOrderBean.getYuanjia() - weixinOrderBean.getMemberpiceNew();
+                youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice()- weixinOrderBean.getMemberpiceNew();
                 initPay();
                 getNeed();
                 intText();
             }else{
-                youhuiMoneyOfMember = weixinOrderBean.getYuanjia() - weixinOrderBean.getMemberpiceNew();
+                youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice()- weixinOrderBean.getMemberpiceNew();
                 initPay();
                 getNeed();
                 intText();
@@ -367,7 +367,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 scoreCount = 0;
                 cardMoney = 0;
                 cardBeenList.clear();
-                youhuiMoneyOfMember = weixinOrderBean.getYuanjia() - weixinOrderBean.getMemberpiceNew();
+                youhuiMoneyOfMember = weixinOrderBean.getYinfu()+weixinOrderBean.getMemberzenupice() - weixinOrderBean.getMemberpiceNew();
                 initPay();
                 getNeed();
                 intText();

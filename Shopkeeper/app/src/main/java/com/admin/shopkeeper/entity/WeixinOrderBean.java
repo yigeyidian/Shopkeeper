@@ -21,7 +21,9 @@ public class WeixinOrderBean implements Serializable {
 // \"yuanjia\":\"128.00\",
 // \"yintui\":\"0\",
 // \"yinfu\":\"0\"
-// memberpiceNew}
+// memberpiceNew
+//memberzenupice
+// }
     @SerializedName("zenupice")
     private double zenupice;
     @SerializedName("memberpice")
@@ -48,6 +50,16 @@ public class WeixinOrderBean implements Serializable {
     private double yinfu;
     @SerializedName("memberpiceNew")
     private double memberpiceNew;
+    @SerializedName("memberzenupice")
+    private double memberzenupice;
+
+    public double getMemberzenupice() {
+        return memberzenupice;
+    }
+
+    public void setMemberzenupice(double memberzenupice) {
+        this.memberzenupice = memberzenupice;
+    }
 
     public double getMemberpiceNew() {
         return memberpiceNew;

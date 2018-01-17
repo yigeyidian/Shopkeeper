@@ -108,6 +108,8 @@ public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
                 }
             }
         }
+        if(payTypeList!=null)
+            payTypeList.clear();
         if (!TextUtils.isEmpty(payTypeStr)) {
             helper.setText(R.id.payType, String.format(mContext.getString(R.string.string_order_pay_type), payTypeStr.substring(0, payTypeStr.length() - 1)));
         } else {
