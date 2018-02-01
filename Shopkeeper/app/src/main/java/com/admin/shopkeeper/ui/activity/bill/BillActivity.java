@@ -43,7 +43,6 @@ import com.admin.shopkeeper.dialog.CouponLineDialog;
 import com.admin.shopkeeper.dialog.DaZheDialog;
 import com.admin.shopkeeper.dialog.GuaZhangDialog;
 import com.admin.shopkeeper.dialog.JianmianDialog;
-import com.admin.shopkeeper.dialog.SetFoodDialog;
 import com.admin.shopkeeper.entity.BillJson;
 import com.admin.shopkeeper.entity.CardBean;
 import com.admin.shopkeeper.entity.CouponLineDownBean;
@@ -134,6 +133,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     private TableEntity tableEntity;
 
     private double youhuiMoney;//优惠
+    private double youhuiMoneyOfMember = 0;//会员优惠
     private double couponLineYouhuiMoney;//线下券优惠
     private int scoreMoney = 0;
     private int scoreCount = 0;
@@ -317,6 +317,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             if (poptype == 2) {
                 if (needMoney == 0) {
+                    youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice()- weixinOrderBean.getMemberpiceNew();
                     billClick();
                 } else {
                     showToast("余额不足" + needMoney);
@@ -343,8 +344,13 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     showToast("优惠金额不能大于应付金额");
                     return;
                 }
-
                 scoreCount = scoreNum;
+                youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice()- weixinOrderBean.getMemberpiceNew();
+                initPay();
+                getNeed();
+                intText();
+            }else{
+                youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice()- weixinOrderBean.getMemberpiceNew();
                 initPay();
                 getNeed();
                 intText();
@@ -355,10 +361,16 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             if (memberPayEntity != null) {
                 memberPayEntity.setMoney(0);
                 memberPayEntity.setSelected(false);
-                //initPay();
+            }
+            if(poptype != 2){
+                scoreMoney = 0;
+                scoreCount = 0;
+                cardMoney = 0;
+                cardBeenList.clear();
+                youhuiMoneyOfMember = weixinOrderBean.getYinfu()+weixinOrderBean.getMemberzenupice() - weixinOrderBean.getMemberpiceNew();
+                initPay();
                 getNeed();
                 intText();
-                adapter.notifyDataSetChanged();
             }
             saleWindow.dismiss();
         });
@@ -1065,7 +1077,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     }
 
     private double getYouhuiMoney() {
-        return youhuiMoney + cardMoney + scoreMoney + couponLineYouhuiMoney;
+        return youhuiMoney + cardMoney + scoreMoney + couponLineYouhuiMoney + youhuiMoneyOfMember;
     }
 
     private double getYinfuMoney() {

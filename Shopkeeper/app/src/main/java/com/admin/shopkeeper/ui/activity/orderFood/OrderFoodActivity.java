@@ -763,7 +763,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
 //                    if (foodEntity.getProductShuXing().equals("1")) {
 //                        entity.setShowWeight(true);
 //                    }
-                    entity.setMemberPice(foodEntity.getPrice());
+                    entity.setMemberPice(foodEntity.getMemberPice());
                     entity.setOriginalPrice(foodEntity.getPrice());
 
                     if (!carts.contains(entity)) {
