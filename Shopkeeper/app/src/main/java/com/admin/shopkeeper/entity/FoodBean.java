@@ -110,6 +110,16 @@ public class FoodBean implements Serializable {
     int count;
     boolean delete;
 
+    boolean check;
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
+    }
+
     public boolean isDelete() {
         return delete;
     }

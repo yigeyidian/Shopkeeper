@@ -59,6 +59,16 @@ public class MenuTypeEntity implements Serializable {
     @Transient
     private int count;
 
+    boolean check;
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
+    }
+
     public int getCount() {
         return count;
     }
@@ -89,14 +99,15 @@ public class MenuTypeEntity implements Serializable {
         this.selected = selected;
     }
 
-    @Generated(hash = 1902743163)
+    @Generated(hash = 1148826198)
     public MenuTypeEntity(String productTypeID, String productTypeName, String restaurantID,
-                          int orderNO, boolean isType) {
+            int orderNO, boolean isType, boolean check) {
         this.productTypeID = productTypeID;
         this.productTypeName = productTypeName;
         this.restaurantID = restaurantID;
         this.orderNO = orderNO;
         this.isType = isType;
+        this.check = check;
     }
 
     @Generated(hash = 1529432203)
@@ -239,5 +250,9 @@ public class MenuTypeEntity implements Serializable {
                 ", daoSession=" + daoSession +
                 ", myDao=" + myDao +
                 '}';
+    }
+
+    public boolean getCheck() {
+        return this.check;
     }
 }

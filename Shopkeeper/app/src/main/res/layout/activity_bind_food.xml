@@ -35,7 +35,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="折扣(%)"
+            android:text="折扣"
             android:textColor="#333333"
             android:textSize="@dimen/_30ssp" />
 

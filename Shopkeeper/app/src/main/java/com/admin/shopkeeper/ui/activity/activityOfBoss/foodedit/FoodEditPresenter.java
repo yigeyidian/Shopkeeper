@@ -14,6 +14,7 @@ import com.admin.shopkeeper.entity.MenuTypeEntity;
 import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.PrintBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
+import com.admin.shopkeeper.model.FoodsModel;
 import com.admin.shopkeeper.model.StringModel;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.edit.IEditView;
 import com.admin.shopkeeper.utils.DeviceUtils;
@@ -129,17 +130,18 @@ public class FoodEditPresenter extends BasePresenter<IFoodEditView> {
     }
 
     public void getFoodType() {
-        AppDbHelper.INSTANCE()
-                .getMenuTypes(App.INSTANCE().getShopID())
-                .compose(getFragmentLifecycleProvider().<List<MenuTypeEntity>>bindToLifecycle())
-                .subscribeOn(Schedulers.io())
+        RetrofitHelper.getInstance().getApi()
+                .getFoods("0", App.INSTANCE().getShopID())
+                .compose(getActivityLifecycleProvider().<FoodsModel>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(menuTypeEntities -> {
-                    if (menuTypeEntities.size() > 0) {
-                        iView.getFoodSuccess(menuTypeEntities);
+                .subscribeOn(Schedulers.io())
+                .subscribe(foodsModel -> {
+                    if (foodsModel.getCode().equals(Config.REQUEST_SUCCESS)) {
+                        MenuTypeEntity[] menuTypeEntities = new Gson().fromJson(foodsModel.getFoodType(), MenuTypeEntity[].class);
+                        iView.getFoodSuccess(Arrays.asList(menuTypeEntities));
+                    } else {
                     }
                 }, throwable -> {
-
                 });
     }
 

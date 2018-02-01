@@ -100,7 +100,8 @@ public class HomePresenter extends BasePresenter<IHomeView> {
     public void getMeal() {
         RetrofitHelper.getInstance()
                 .getApi()
-                .getMeal("2", App.INSTANCE().getShopID(), 1, 1000).compose(getActivityLifecycleProvider().bindToLifecycle())
+                .getMeal("2", App.INSTANCE().getShopID(), 1, 1000)
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(foodsModel -> {

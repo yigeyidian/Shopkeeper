@@ -53,6 +53,64 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:paddingLeft="@dimen/_32sdp"
+            android:text="选择商品"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_34ssp" />
+
+        <TextView
+            android:id="@+id/tv_food"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_32sdp"
+            android:background="@color/transparent"
+            android:gravity="center_vertical"
+            android:hint="请选择商品"
+            android:textSize="@dimen/_32ssp" />
+
+    </LinearLayout>
+
+    <View style="@style/LineHor2Style" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="@dimen/_32sdp"
+            android:text="选择商品类别"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_34ssp" />
+
+        <TextView
+            android:id="@+id/tv_foodtype"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_32sdp"
+            android:background="@color/transparent"
+            android:gravity="center_vertical"
+            android:hint="请选择商品类别"
+            android:textSize="@dimen/_32ssp" />
+
+    </LinearLayout>
+
+    <View style="@style/LineHor2Style" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90sdp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="@dimen/_32sdp"
             android:text="折扣数量"
             android:textColor="@color/black"
             android:textSize="@dimen/_34ssp" />

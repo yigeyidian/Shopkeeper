@@ -13,20 +13,22 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.FoodDialogAdapter;
-import com.admin.shopkeeper.adapter.SingleDialogAdapter;
-import com.admin.shopkeeper.entity.FoodEntity;
+import com.admin.shopkeeper.adapter.PopFoodAdapter;
+import com.admin.shopkeeper.adapter.PopFoodTypeAdapter;
+import com.admin.shopkeeper.entity.FoodBean;
+import com.admin.shopkeeper.entity.MenuTypeEntity;
 import com.admin.shopkeeper.weight.MarginDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/7/22 0022.
  */
 
-public class FoodSelectDialog extends AppCompatDialog {
+public class SelectFoodTypeDialog extends AppCompatDialog {
 
-    public FoodSelectDialog(Context context, int theme, View view) {
+    public SelectFoodTypeDialog(Context context, int theme, View view) {
         super(context, theme);
         Window window = getWindow();
         assert window != null;
@@ -37,20 +39,20 @@ public class FoodSelectDialog extends AppCompatDialog {
     }
 
     public static class Builder {
-        private FoodSelectDialog dialog;
+        private SelectFoodTypeDialog dialog;
         private Context context;
         private int theme;
-        FoodDialogAdapter adapter;
+        PopFoodTypeAdapter adapter;
 
         private String title;
-        private List<FoodEntity> foodEntities;
+        private List<MenuTypeEntity> datas;
 
-        public List<FoodEntity> getFoods() {
-            return foodEntities;
+        public List<MenuTypeEntity> getDatas() {
+            return datas;
         }
 
-        public void setFoods(List<FoodEntity> reasons) {
-            this.foodEntities = reasons;
+        public void setDatas(List<MenuTypeEntity> datas) {
+            this.datas = datas;
         }
 
         private OnButtonClick buttonClick;
@@ -72,34 +74,58 @@ public class FoodSelectDialog extends AppCompatDialog {
             this.title = title;
         }
 
-        public FoodSelectDialog creater() {
+        public SelectFoodTypeDialog creater() {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.dialog_list, null);
-            dialog = new FoodSelectDialog(context, theme, view);
+            View view = inflater.inflate(R.layout.dialog_muti, null);
+            dialog = new SelectFoodTypeDialog(context, theme, view);
 
             Button oneBtn = (Button) view.findViewById(R.id.OneBtn);
+            Button okBtn = (Button) view.findViewById(R.id.dialog_ok);
             TextView titletv = (TextView) view.findViewById(R.id.dialog_title);
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.scrollView);
 
             titletv.setText(title);
 
             oneBtn.setOnClickListener(v -> {
+                dismiss();
+            });
+
+            okBtn.setOnClickListener(v -> {
                 if (buttonClick != null) {
-                    buttonClick.onCancel();
+                    List<MenuTypeEntity> list = new ArrayList<>();
+                    for (MenuTypeEntity food : getDatas()) {
+                        if(food.isCheck()){
+                            list.add(food);
+                        }
+                    }
+                    buttonClick.onOk(list);
                 }
                 dismiss();
             });
 
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            adapter = new FoodDialogAdapter(R.layout.item_text, getFoods());
+            adapter = new PopFoodTypeAdapter(R.layout.item_muti, getDatas());
+            recyclerView.setHasFixedSize(true);
+            recyclerView.addItemDecoration(new MarginDecoration(context, R.dimen._10sdp));
             recyclerView.setAdapter(adapter);
 
-            adapter.setOnItemClickListener((adapter, view1, position) -> {
-                if (buttonClick != null) {
-                    buttonClick.onOk(getFoods().get(position), position);
-                }
-                dismiss();
 
+            adapter.setOnItemClickListener((adapter, view1, position) -> {
+                MenuTypeEntity bean = getDatas().get(position);
+                if (bean.getProductTypeName().equals("全选")) {
+                    boolean check = bean.isCheck();
+                    for (MenuTypeEntity food : getDatas()) {
+                        food.setCheck(!check);
+                    }
+                } else {
+                    if (getDatas().get(position).isCheck()) {
+                        getDatas().get(position).setCheck(false);
+                    } else {
+                        getDatas().get(position).setCheck(true);
+                    }
+                }
+
+                adapter.notifyDataSetChanged();
             });
 
             return dialog;
@@ -115,8 +141,6 @@ public class FoodSelectDialog extends AppCompatDialog {
     }
 
     public interface OnButtonClick {
-        void onOk(FoodEntity foodEntity, int position);
-
-        void onCancel();
+        void onOk(List<MenuTypeEntity> list);
     }
 }

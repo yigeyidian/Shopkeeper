@@ -19,6 +19,7 @@ import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.SaleAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.entity.SaleBean;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.bindfood.BindFoodActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.saleEdit.SaleEditActivity;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
@@ -74,7 +75,7 @@ public class SaleActivity extends BaseActivity<SalePresenter> implements ISaleVi
     }
 
     public void showDeletePop(SaleBean bean) {
-        View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_delete, null);
+        View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_delete_sale, null);
         laheiPop = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
         laheiView.findViewById(R.id.pop_cancel).setOnClickListener(v -> {
@@ -82,6 +83,12 @@ public class SaleActivity extends BaseActivity<SalePresenter> implements ISaleVi
         });
         laheiView.findViewById(R.id.pop_delete).setOnClickListener(v -> {
             presenter.delete(bean);
+        });
+        laheiView.findViewById(R.id.pop_setFood).setOnClickListener(v -> {
+            Intent intent = new Intent(this, BindFoodActivity.class);
+            intent.putExtra("bean", bean);
+            startActivity(intent);
+            laheiPop.dismiss();
         });
         laheiView.findViewById(R.id.pop_edit).setOnClickListener(v -> {
             Intent intent = new Intent(this, SaleEditActivity.class);

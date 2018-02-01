@@ -74,4 +74,6 @@ public class SalePresenter extends BasePresenter<ISaleView> {
                     iView.error("删除失败");
                 });
     }
+
+
 }
