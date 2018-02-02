@@ -14,17 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.CouponLineDownAdapter;
-import com.admin.shopkeeper.adapter.MansongAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
-import com.admin.shopkeeper.dialog.ShopSelectDialog;
 import com.admin.shopkeeper.entity.CouponLineDownBean;
-import com.admin.shopkeeper.entity.MansongBean;
-import com.admin.shopkeeper.entity.ShopBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.editCouponLineDown.EditCouponLineDownActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.mansongedit.MansongEditActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.setOrLookFood.SetOrLookFoodActivity;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -98,7 +95,14 @@ public class CouponLineDownActivity extends BaseActivity<CouponPresenter> implem
         laheiView.findViewById(R.id.pop_cancel).setOnClickListener(v -> {
             laheiPop.dismiss();
         });
-        laheiView.findViewById(R.id.pop_setshop).setVisibility(View.GONE);
+        TextView tv = (TextView) laheiView.findViewById(R.id.pop_setshop);
+        tv.setText("设置与查看设置商品（类别）");
+        laheiView.findViewById(R.id.pop_setshop).setOnClickListener(view -> {
+            Intent intent = new Intent(this, SetOrLookFoodActivity.class);
+            intent.putExtra("bean", bean);
+            startActivityForResult(intent, 101);
+            laheiPop.dismiss();
+        });
         laheiView.findViewById(R.id.pop_delete).setOnClickListener(v -> {
             presenter.delete(bean.getGuid());
         });

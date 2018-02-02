@@ -108,7 +108,7 @@
         </RadioGroup>
 
     </LinearLayout>
-
+    <View style="@style/LineHor2Style" />
     <LinearLayout style="@style/SettingItemStyle">
 
         <TextView
@@ -123,7 +123,7 @@
             android:layout_marginRight="@dimen/_32sdp" />
 
     </LinearLayout>
-
+    <View style="@style/LineHor2Style" />
     <LinearLayout style="@style/SettingItemStyle">
 
         <TextView
@@ -154,7 +154,7 @@
         </RadioGroup>
 
     </LinearLayout>
-
+    <View style="@style/LineHor2Style" />
     <LinearLayout style="@style/SettingItemStyle">
 
         <TextView

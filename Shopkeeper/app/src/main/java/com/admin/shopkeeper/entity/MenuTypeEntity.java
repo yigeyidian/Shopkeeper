@@ -1,26 +1,19 @@
 package com.admin.shopkeeper.entity;
 
-import android.util.Log;
-
-import com.google.gson.annotations.SerializedName;
-
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Keep;
-import org.greenrobot.greendao.annotation.OrderBy;
-import org.greenrobot.greendao.annotation.Property;
-import org.greenrobot.greendao.annotation.ToMany;
-import org.greenrobot.greendao.annotation.Transient;
-import org.greenrobot.greendao.annotation.Generated;
-
-import java.io.Serializable;
-import java.util.List;
-
-import org.greenrobot.greendao.DaoException;
-
 import com.admin.greendao.gen.DaoSession;
 import com.admin.greendao.gen.FoodEntityDao;
 import com.admin.greendao.gen.MenuTypeEntityDao;
+import com.google.gson.annotations.SerializedName;
+
+import org.greenrobot.greendao.DaoException;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.ToMany;
+import org.greenrobot.greendao.annotation.Transient;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by guxiaogasumi on 2017/6/18.

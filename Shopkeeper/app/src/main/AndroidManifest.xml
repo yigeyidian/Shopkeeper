@@ -416,6 +416,10 @@
             android:name=".ui.activity.activityOfBoss.bindfood.BindFoodActivity"
             android:theme="@style/BossTheme"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".ui.activity.activityOfBoss.setOrLookFood.SetOrLookFoodActivity"
+            android:theme="@style/BossTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
     </application>
 
 </manifest>
