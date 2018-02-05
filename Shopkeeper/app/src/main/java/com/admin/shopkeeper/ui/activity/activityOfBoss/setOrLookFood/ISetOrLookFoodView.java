@@ -1,9 +1,9 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.setOrLookFood;
 
 import com.admin.shopkeeper.base.IBaseView;
+import com.admin.shopkeeper.entity.FindFoodCouponDownBean;
 import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.entity.MenuTypeEntity;
-import com.admin.shopkeeper.entity.SaleBean;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface ISetOrLookFoodView extends IBaseView {
 
     void success(String msg);
 
-    void success(List<SaleBean> datas);
+    void success(List<FindFoodCouponDownBean> datas);
 
     void getFoodTypeSuccess(List<MenuTypeEntity> foodTypes);
 

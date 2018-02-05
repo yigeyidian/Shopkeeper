@@ -2,28 +2,23 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.setOrLookFood;
 
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.SetOrLookFoodAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
+import com.admin.shopkeeper.dialog.FindFoodCouponDialog;
 import com.admin.shopkeeper.dialog.SetFoodCouponDialog;
 import com.admin.shopkeeper.entity.CouponLineDownBean;
+import com.admin.shopkeeper.entity.FindFoodCouponDownBean;
 import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.entity.MenuTypeEntity;
-import com.admin.shopkeeper.entity.SaleBean;
 import com.admin.shopkeeper.entity.ShopBean;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.saleEdit.SaleEditActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
@@ -32,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import es.dmoral.toasty.Toasty;
 
 public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> implements ISetOrLookFoodView {
 
@@ -49,7 +43,10 @@ public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> 
     List<FoodBean> foods;
     List<MenuTypeEntity> types;
     List<FoodBean> selectFoods;
+    List<FindFoodCouponDownBean> selectedFoods = new ArrayList<>();
     List<MenuTypeEntity> selectFoodTypes;
+    int page = 1;
+    private FindFoodCouponDialog.Builder builder;
 
     @Override
     protected void initPresenter() {
@@ -77,7 +74,9 @@ public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> 
         if (bean.getMerchantName() != null) {
             shopName = bean.getMerchantName().split(",");
         }
-
+        presenter.getFood();
+        presenter.getFoodType();
+        presenter.getSetFood(1,"",bean.getGuid());
         for (int i = 0; i < shopName.length; i++) {
             ShopBean shopBean = new ShopBean();
             shopBean.setName(shopName[i]);
@@ -97,62 +96,61 @@ public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> 
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (view.getId() == R.id.item_set_food) {
-                    if (foods == null || foods.size() == 0) {
+                    if (foods == null || foods.size() == 0 || types == null || types.size() == 0) {
                         presenter.getFood();
+                        presenter.getFoodType();
                     } else {
-                        SetFoodCouponDialog.Builder builder = new SetFoodCouponDialog.Builder(SetOrLookFoodActivity.this, foods, R.style.setFoodDialogStyle);
-//                    builder.setName(item.getProductName());
+                        SetFoodCouponDialog.Builder builder = new SetFoodCouponDialog.Builder(SetOrLookFoodActivity.this, foods,types ,R.style.setFoodDialogStyle);
                         builder.setButtonClick(new SetFoodCouponDialog.OnButtonClick() {
+
                             @Override
-                            public void onBtnClick(int i) {
-//                            item.setCount(i);
-//                            helper.setText(R.id.item_count, i + "");
+                            public void onBtnClick(List<MenuTypeEntity> typeEntityList, List<FoodBean> foodBeanList) {
+                                String typeIdString = "";
+                                for(MenuTypeEntity bean : typeEntityList){
+                                    typeIdString += bean.getProductTypeID() + ",";
+                                }
+                                typeIdString = typeIdString.substring(0, typeIdString.length() - 1);
+
+                                String foodIdString = "";
+                                for(FoodBean bean : foodBeanList){
+                                    foodIdString += bean.getProductId() + ",";
+                                }
+                                foodIdString = foodIdString.substring(0, foodIdString.length() - 1);
+                                presenter.save(foodIdString , typeIdString ,bean.getGuid());
                             }
 
                             @Override
                             public void onCancel() {
-//                            checkBox.setChecked(false);
-                                //item.setCount(0);
-                                //helper.setText(R.id.item_count, "未添加");
+
                             }
                         });
                         builder.creater().show();
                     }
                 } else if (view.getId() == R.id.item_look_food) {
-                    Toasty.warning(SetOrLookFoodActivity.this, "还点我").show();
+                    if(selectedFoods == null || selectedFoods.size()<1){
+                        presenter.getSetFood(1,"",bean.getGuid());
+                    }else{
+                        builder = new FindFoodCouponDialog.Builder(SetOrLookFoodActivity.this, selectedFoods ,R.style.setFoodDialogStyle ,presenter);
+                        builder.setOnRefresh(new FindFoodCouponDialog.OnRefresh() {
+                            @Override
+                            public void onRefresh() {
+                                presenter.getSetFood(1,"",bean.getGuid());
+                            }
+                        });
+                        builder.setOnLoadMore(new FindFoodCouponDialog.OnLoadMore() {
+                            @Override
+                            public void onLoadMore(int i) {
+                                page ++;
+                                presenter.getSetFood(page,"",bean.getGuid());
+                            }
+                        });
+                        builder.creater().show();
+                    }
+
                 }
             }
         });
     }
-
-    public void showFoodPop(SaleBean bean) {
-        View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_delete, null);
-        laheiPop = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-
-        laheiView.findViewById(R.id.pop_cancel).setOnClickListener(v -> {
-            laheiPop.dismiss();
-        });
-        laheiView.findViewById(R.id.pop_delete).setOnClickListener(v -> {
-            presenter.delete(bean);
-        });
-        laheiView.findViewById(R.id.pop_edit).setOnClickListener(v -> {
-            Intent intent = new Intent(this, SaleEditActivity.class);
-            intent.putExtra("bean", bean);
-            startActivityForResult(intent, 101);
-            laheiPop.dismiss();
-        });
-
-        laheiPop.setOutsideTouchable(true);
-        laheiPop.setFocusable(true);
-        laheiPop.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33000000")));
-        laheiPop.setOnDismissListener(() -> {
-            backgroundAlpha(1f);
-        });
-        laheiPop.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM
-                | Gravity.CENTER_HORIZONTAL, 0, 0);
-        backgroundAlpha(0.5f);
-    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -168,13 +166,18 @@ public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            presenter.getData();
+//            presenter.getData();
         }
     }
 
     @Override
     public void error(String msg) {
         showFailToast(msg);
+        if(builder != null){
+            builder.refreshLayout.setRefreshing(false);
+            builder.adapter.loadMoreEnd();
+        }
+
     }
 
 
@@ -187,13 +190,30 @@ public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> 
     }
 
     @Override
-    public void success(List<SaleBean> datas) {
+    public void success(List<FindFoodCouponDownBean> datas) {
+        if (page == 1) {
+            datas.clear();
+        }
+        selectedFoods = datas;
+        if(builder != null){
+            builder.adapter.setNewData(datas);
+            builder.refreshLayout.setRefreshing(false);
+            if (selectFoods.size() < 20) {
+                builder.adapter.loadMoreEnd();
+            } else {
+                builder.adapter.loadMoreComplete();
+            }
+        }
+
 
     }
 
     @Override
     public void getFoodTypeSuccess(List<MenuTypeEntity> foodTypes) {
-
+        this.types = new ArrayList<>(foodTypes);
+        MenuTypeEntity entity = new MenuTypeEntity();
+        entity.setProductTypeName("全选");
+        types.add(0, entity);
     }
 
     @Override
