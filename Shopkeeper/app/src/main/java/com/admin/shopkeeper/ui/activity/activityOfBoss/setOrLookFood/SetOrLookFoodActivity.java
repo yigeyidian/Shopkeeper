@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import es.dmoral.toasty.Toasty;
 
 public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> implements ISetOrLookFoodView {
 
@@ -195,6 +196,9 @@ public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> 
             datas.clear();
         }
         selectedFoods = datas;
+        if(selectedFoods == null || selectedFoods.size() == 0){
+            Toasty.warning(SetOrLookFoodActivity.this , "没有设置的商品").show();
+        }
         if(builder != null){
             builder.adapter.setNewData(datas);
             builder.refreshLayout.setRefreshing(false);
