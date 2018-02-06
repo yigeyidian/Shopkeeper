@@ -354,6 +354,7 @@ public interface ShopkeeperApi {
     @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortBillManagerNweASHX.ashx")
     Observable<IntModel> getOherYouhui(
             @Field("Type") String type,
+            @Field("daid") String couponid,
             @Field("bilid") String billid,
             @Field("id") String shopId,
             @Field("xiapice") double xiaPice,

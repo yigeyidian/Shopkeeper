@@ -317,7 +317,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
             if (poptype == 2) {
                 if (needMoney == 0) {
-                    youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice()- weixinOrderBean.getMemberpiceNew();
+                    youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice() - weixinOrderBean.getMemberpiceNew();
                     billClick();
                 } else {
                     showToast("余额不足" + needMoney);
@@ -345,12 +345,12 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     return;
                 }
                 scoreCount = scoreNum;
-                youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice()- weixinOrderBean.getMemberpiceNew();
+                youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice() - weixinOrderBean.getMemberpiceNew();
                 initPay();
                 getNeed();
                 intText();
-            }else{
-                youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice()- weixinOrderBean.getMemberpiceNew();
+            } else {
+                youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice() - weixinOrderBean.getMemberpiceNew();
                 initPay();
                 getNeed();
                 intText();
@@ -362,16 +362,16 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 memberPayEntity.setMoney(0);
                 memberPayEntity.setSelected(false);
             }
-            if(poptype != 2){
-                scoreMoney = 0;
-                scoreCount = 0;
-                cardMoney = 0;
-                cardBeenList.clear();
-                youhuiMoneyOfMember = weixinOrderBean.getYinfu()+weixinOrderBean.getMemberzenupice() - weixinOrderBean.getMemberpiceNew();
-                initPay();
-                getNeed();
-                intText();
-            }
+//            if(poptype != 2){
+            scoreMoney = 0;
+            scoreCount = 0;
+            cardMoney = 0;
+            cardBeenList.clear();
+            youhuiMoneyOfMember = weixinOrderBean.getYinfu() + weixinOrderBean.getMemberzenupice() - weixinOrderBean.getMemberpiceNew();
+            initPay();
+            getNeed();
+            intText();
+//            }
             saleWindow.dismiss();
         });
 
@@ -1167,10 +1167,10 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     adapter.notifyDataSetChanged();*/
                 } else {
                     couponLineDownBeanList = list;
-                    String couponId ="";
+                    String couponId = "";
                     for (CouponLineDownBean bean : list) {
                         couponLineYouhuiMoney += bean.getPice();
-                        couponId += bean.getGuid()+",";
+                        couponId += bean.getGuid() + ",";
                     }
                     couponId = couponId.substring(0, couponId.length() - 1);
 
@@ -1193,7 +1193,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     }
                     quanxian.setQuanxian(q);
                     String qStr = new Gson().toJson(quanxian);
-                    presenter.getOtherYouhui(couponId,order.getBillid() ,couponLineYouhuiMoney ,getYinfuMoney(),qStr);
+                    presenter.getOtherYouhui(couponId, order.getBillid(), couponLineYouhuiMoney, getYinfuMoney()+couponLineYouhuiMoney, qStr);
                     guiId = "";
                    /* initPay();
                     getNeed();
@@ -1421,7 +1421,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
     @Override
     public void otherYouhuiSucccess(double aDouble) {
         Log.d("dj", "otherYouhui:" + aDouble);
-        couponLineYouhuiMoney = -aDouble;
+        couponLineYouhuiMoney = aDouble;
         tvCouponOther.setText(String.valueOf(couponLineYouhuiMoney));
         initPay();
         getNeed();

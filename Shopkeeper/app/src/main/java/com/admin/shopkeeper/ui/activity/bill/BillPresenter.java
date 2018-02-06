@@ -80,7 +80,7 @@ class BillPresenter extends BasePresenter<IBillView> {
         DialogUtils.showDialog(context, "获取数据中...");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getOherYouhui("23", billid,App.INSTANCE().getShopID() ,couponPice,YingFu ,json)
+                .getOherYouhui("23",couponId, billid,App.INSTANCE().getShopID() ,couponPice,YingFu ,json)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
