@@ -206,6 +206,7 @@ public class FindFoodCouponDialog extends AppCompatDialog {
                 }
             }
             adapter.setNewData(FFCDBlist);
+            refreshLayout.setRefreshing(false);
         }
 
         public void dismiss() {

@@ -1167,15 +1167,38 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     adapter.notifyDataSetChanged();*/
                 } else {
                     couponLineDownBeanList = list;
+                    String couponId ="";
                     for (CouponLineDownBean bean : list) {
                         couponLineYouhuiMoney += bean.getPice();
+                        couponId += bean.getGuid()+",";
                     }
-                    tvCouponOther.setText(String.valueOf(couponLineYouhuiMoney));
+                    couponId = couponId.substring(0, couponId.length() - 1);
+
+                    BillJson.Quanxian quanxian = new BillJson.Quanxian();
+                    List<BillJson.BillJsonBase> q = new ArrayList<>();
+                    if (couponLineYouhuiMoney > 0) {
+                        for (int k = 0; k < couponLineDownBeanList.size(); k++) {
+                            CouponLineDownBean entity = couponLineDownBeanList.get(k);
+                            if (entity != null) {
+                                BillJson.BillJsonBase pe = new BillJson.BillJsonBase();
+                                pe.setGuid(System.currentTimeMillis() + "");
+                                pe.setPice(entity.getPice() + "");
+                                pe.setPiceGuid("");
+                                pe.setSate(entity.getName() + "");
+                                pe.setType(5 + "");
+                                pe.setIsSql(entity.getGuid() + "");
+                                q.add(pe);
+                            }
+                        }
+                    }
+                    quanxian.setQuanxian(q);
+                    String qStr = new Gson().toJson(quanxian);
+                    presenter.getOtherYouhui(couponId,order.getBillid() ,couponLineYouhuiMoney ,getYinfuMoney(),qStr);
                     guiId = "";
-                    initPay();
+                   /* initPay();
                     getNeed();
                     intText();
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();*/
                 }
                 couponLineDialog.dismiss();
             }
@@ -1380,10 +1403,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
 
     @Override
     public void dazheSucccess(double aDouble) {
-//        BigDecimal b = new BigDecimal(aDouble).setScale(2, BigDecimal.ROUND_DOWN);
         Toasty.success(this, "打折优惠价格为" + aDouble, Toast.LENGTH_SHORT, true).show();
         idazhe = aDouble;
-        Log.d("dj", "dazhe:" + aDouble + "b:" + aDouble);
+        Log.d("dj", "dazhe:" + aDouble);
         if (aDouble > 0) {
             haveQXDaZhe = true;
             ijianmian = 0;
@@ -1394,6 +1416,17 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             getNeed();
             intText();
         }
+    }
+
+    @Override
+    public void otherYouhuiSucccess(double aDouble) {
+        Log.d("dj", "otherYouhui:" + aDouble);
+        couponLineYouhuiMoney = -aDouble;
+        tvCouponOther.setText(String.valueOf(couponLineYouhuiMoney));
+        initPay();
+        getNeed();
+        intText();
+        adapter.notifyDataSetChanged();
     }
 
     private void scanBill(String payType, String result, double money, String memberId) {

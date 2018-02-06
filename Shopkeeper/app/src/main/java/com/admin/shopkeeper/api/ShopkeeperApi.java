@@ -340,6 +340,27 @@ public interface ShopkeeperApi {
             @Field("dazhe") int dazhe
     );
 
+    /**
+     *
+     * @param s
+     * @param billid
+     * @param shopId
+     * @param xiaPice 优惠金额
+     * @param yinFu 应付金额
+     * @param json 权限json
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortBillManagerNweASHX.ashx")
+    Observable<IntModel> getOherYouhui(
+            @Field("Type") String type,
+            @Field("bilid") String billid,
+            @Field("id") String shopId,
+            @Field("xiapice") double xiaPice,
+            @Field("yingfu") double yinFu,
+            @Field("jsonObjquanxian") String json
+    );
+
     //    Type	类型	3
 //    id	账单主键
 //    Rid	商家主键

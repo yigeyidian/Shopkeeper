@@ -28,6 +28,8 @@ public interface IBillView extends IBaseView {
 
     void dazheSucccess(double aDouble);
 
+    void otherYouhuiSucccess(double aDouble);
+
     void weixinSuccess();
 
     void scanBillSuccess(String payType,String result,double money , String memberId ,String str);

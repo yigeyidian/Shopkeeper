@@ -43,11 +43,12 @@ public class BindFoodActivity extends BaseActivity<BindFoodPresenter> implements
 
     int page = 1;
     private FindFoodAdapter adapter;
+    boolean isSearch = false;
 
 
     @Override
     protected void initPresenter() {
-        presenter = new BindFoodPresenter(this,this);
+        presenter = new BindFoodPresenter(this, this);
         presenter.init();
     }
 
@@ -69,6 +70,9 @@ public class BindFoodActivity extends BaseActivity<BindFoodPresenter> implements
 
         bean = (SaleBean) getIntent().getSerializableExtra("bean");
         refreshLayout.setOnRefreshListener(() -> {
+            if(isSearch){
+                return;
+            }
             page = 1;
             presenter.getFood(bean, "");
         });
@@ -77,7 +81,7 @@ public class BindFoodActivity extends BaseActivity<BindFoodPresenter> implements
                 .marginResId(R.dimen._30sdp, R.dimen._1sdp)
                 .color(getResources().getColor(R.color.item_line_color))
                 .build());
-        adapter = new FindFoodAdapter(R.layout.item_find_food , this);
+        adapter = new FindFoodAdapter(R.layout.item_find_food, this);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnLoadMoreListener(() -> {
@@ -86,7 +90,7 @@ public class BindFoodActivity extends BaseActivity<BindFoodPresenter> implements
         }, recyclerView);
 
 
-        presenter.getFood(bean,"");
+        presenter.getFood(bean, "");
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -102,9 +106,11 @@ public class BindFoodActivity extends BaseActivity<BindFoodPresenter> implements
             @Override
             public void afterTextChanged(Editable s) {
                 if (TextUtils.isEmpty(s.toString().trim())) {
+                    isSearch = false;
                     ivClear.setVisibility(View.INVISIBLE);
                     adapter.setNewData(datas);
                 } else {
+                    isSearch = true;
                     ivClear.setVisibility(View.VISIBLE);
                     searchFood(s.toString().trim());
                 }
@@ -126,6 +132,7 @@ public class BindFoodActivity extends BaseActivity<BindFoodPresenter> implements
             }
         }
         adapter.setNewData(list);
+        refreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -144,7 +151,9 @@ public class BindFoodActivity extends BaseActivity<BindFoodPresenter> implements
         refreshLayout.setRefreshing(false);
         adapter.loadMoreEnd();
     }
+
     List<FindFoodCouponDownBean> datas = new ArrayList<>();
+
     @Override
     public void success(List<FindFoodCouponDownBean> data) {
         if (page == 1) {

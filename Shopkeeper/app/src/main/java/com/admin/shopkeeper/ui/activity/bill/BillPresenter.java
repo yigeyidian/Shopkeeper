@@ -19,7 +19,6 @@ import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.PayMeEntity;
 import com.admin.shopkeeper.entity.WeixinOrderBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.model.IntModel;
 import com.admin.shopkeeper.model.StringModel;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.admin.shopkeeper.utils.Print;
@@ -32,11 +31,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -78,6 +74,36 @@ class BillPresenter extends BasePresenter<IBillView> {
                 }, throwable -> {
                     DialogUtils.hintDialog();
                     iView.error("获取折后价格错误");
+                });
+    }
+    void getOtherYouhui(String couponId ,String billid, double couponPice , double YingFu,String json) {
+        DialogUtils.showDialog(context, "获取数据中...");
+        RetrofitHelper.getInstance()
+                .getApi()
+                .getOherYouhui("23", billid,App.INSTANCE().getShopID() ,couponPice,YingFu ,json)
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(intModel -> {
+                    DialogUtils.hintDialog();
+                    switch (intModel.getCode()) {
+                        case Config.REQUEST_SUCCESS:
+                            if (intModel.getResult().equals("0")) {
+                                iView.warning("获取其他优惠价格错误");
+                            } else
+                                iView.otherYouhuiSucccess(Double.parseDouble(intModel.getResult()));
+                            break;
+                        case Config.REQUEST_FAILED:
+                            iView.error("获取其他优惠价格错误");
+                            break;
+                        case Config.REQUEST_ERROR:
+                            iView.error(context.getString(R.string.string_request_error));
+                            break;
+                    }
+                    Timber.d(intModel.toString());
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    iView.error("获取其他价格错误");
                 });
     }
 
