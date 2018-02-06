@@ -71,6 +71,7 @@ public class SetOrLookFoodPresenter extends BasePresenter<ISetOrLookFoodView> {
                 });
 
     }
+
     public void delete(SaleBean bean) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
