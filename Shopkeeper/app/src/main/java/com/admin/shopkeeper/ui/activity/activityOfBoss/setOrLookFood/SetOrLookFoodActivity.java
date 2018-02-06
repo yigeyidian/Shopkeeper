@@ -77,7 +77,7 @@ public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> 
         }
         presenter.getFood();
         presenter.getFoodType();
-        presenter.getSetFood(1,"",bean.getGuid());
+        //presenter.getSetFood(1, "", bean.getGuid());
         for (int i = 0; i < shopName.length; i++) {
             ShopBean shopBean = new ShopBean();
             shopBean.setName(shopName[i]);
@@ -91,8 +91,9 @@ public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> 
                 .build());
         setOrLookFoodAdapter = new SetOrLookFoodAdapter(R.layout.item_set_or_look_food);
         recyclerView.setAdapter(setOrLookFoodAdapter);
-        if (shopNameList != null)
+        if (shopNameList != null) {
             setOrLookFoodAdapter.setNewData(shopNameList);
+        }
         setOrLookFoodAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -101,23 +102,23 @@ public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> 
                         presenter.getFood();
                         presenter.getFoodType();
                     } else {
-                        SetFoodCouponDialog.Builder builder = new SetFoodCouponDialog.Builder(SetOrLookFoodActivity.this, foods,types ,R.style.setFoodDialogStyle);
+                        SetFoodCouponDialog.Builder builder = new SetFoodCouponDialog.Builder(SetOrLookFoodActivity.this, foods, types, R.style.setFoodDialogStyle);
                         builder.setButtonClick(new SetFoodCouponDialog.OnButtonClick() {
 
                             @Override
                             public void onBtnClick(List<MenuTypeEntity> typeEntityList, List<FoodBean> foodBeanList) {
                                 String typeIdString = "";
-                                for(MenuTypeEntity bean : typeEntityList){
+                                for (MenuTypeEntity bean : typeEntityList) {
                                     typeIdString += bean.getProductTypeID() + ",";
                                 }
                                 typeIdString = typeIdString.substring(0, typeIdString.length() - 1);
 
                                 String foodIdString = "";
-                                for(FoodBean bean : foodBeanList){
+                                for (FoodBean bean : foodBeanList) {
                                     foodIdString += bean.getProductId() + ",";
                                 }
                                 foodIdString = foodIdString.substring(0, foodIdString.length() - 1);
-                                presenter.save(foodIdString , typeIdString ,bean.getGuid());
+                                presenter.save(foodIdString, typeIdString, bean.getGuid());
                             }
 
                             @Override
@@ -128,25 +129,27 @@ public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> 
                         builder.creater().show();
                     }
                 } else if (view.getId() == R.id.item_look_food) {
-                    if(selectedFoods == null || selectedFoods.size()<1){
-                        presenter.getSetFood(1,"",bean.getGuid());
-                    }else{
-                        builder = new FindFoodCouponDialog.Builder(SetOrLookFoodActivity.this, selectedFoods ,R.style.setFoodDialogStyle ,presenter);
-                        builder.setOnRefresh(new FindFoodCouponDialog.OnRefresh() {
-                            @Override
-                            public void onRefresh() {
-                                presenter.getSetFood(1,"",bean.getGuid());
-                            }
-                        });
-                        builder.setOnLoadMore(new FindFoodCouponDialog.OnLoadMore() {
-                            @Override
-                            public void onLoadMore(int i) {
-                                page ++;
-                                presenter.getSetFood(page,"",bean.getGuid());
-                            }
-                        });
-                        builder.creater().show();
-                    }
+//                    if (selectedFoods == null || selectedFoods.size() == 0) {
+//                        presenter.getSetFood(1, "", bean.getGuid());
+//                    } else {
+                    builder = new FindFoodCouponDialog.Builder(SetOrLookFoodActivity.this, R.style.setFoodDialogStyle, presenter);
+                    builder.setOnRefreshListener(new FindFoodCouponDialog.OnRefreshListener() {
+
+                        @Override
+                        public void onRefresh() {
+                            presenter.getSetFood(1, "", bean.getGuid());
+                        }
+
+                        @Override
+                        public void onLoadMore() {
+                            page++;
+                            presenter.getSetFood(page, "", bean.getGuid());
+                        }
+                    });
+
+                    builder.creater().show();
+                    presenter.getSetFood(1, "", bean.getGuid());
+                    //}
 
                 }
             }
@@ -174,11 +177,11 @@ public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> 
     @Override
     public void error(String msg) {
         showFailToast(msg);
-        if(builder != null){
-            builder.refreshLayout.setRefreshing(false);
-            builder.adapter.loadMoreEnd();
+        if (builder != null) {
+//            builder.refreshLayout.setRefreshing(false);
+//            builder.adapter.loadMoreEnd();
+            builder.errorRefresh();
         }
-
     }
 
 
@@ -196,17 +199,19 @@ public class SetOrLookFoodActivity extends BaseActivity<SetOrLookFoodPresenter> 
             selectedFoods.clear();
         }
         selectedFoods.addAll(datas);
-        if(selectedFoods.size() == 0){
-            Toasty.warning(SetOrLookFoodActivity.this , "没有设置的商品").show();
+        if (selectedFoods.size() == 0) {
+            Toasty.warning(SetOrLookFoodActivity.this, "没有设置的商品").show();
         }
-        if(builder != null){
-            builder.adapter.setNewData(selectedFoods);
-            builder.refreshLayout.setRefreshing(false);
-            if (selectFoods.size() < 20) {
-                builder.adapter.loadMoreEnd();
-            } else {
-                builder.adapter.loadMoreComplete();
-            }
+
+        if (builder != null) {
+            builder.setDatas(selectedFoods);
+//            builder.adapter.setNewData(selectedFoods);
+//            builder.refreshLayout.setRefreshing(false);
+//            if (selectFoods.size() < 20) {
+//                builder.adapter.loadMoreEnd();
+//            } else {
+//                builder.adapter.loadMoreComplete();
+//            }
         }
     }
 

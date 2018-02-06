@@ -13,14 +13,25 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.FindFoodAdapter;
+import com.admin.shopkeeper.entity.CouponLineDownBean;
 import com.admin.shopkeeper.entity.FindFoodCouponDownBean;
+import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.setOrLookFood.SetOrLookFoodPresenter;
+import com.google.gson.Gson;
+import com.trello.rxlifecycle2.LifecycleProvider;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2017/7/22 0022.
@@ -38,6 +49,7 @@ public class FindFoodCouponDialog extends AppCompatDialog {
         setContentView(view);
     }
 
+
     public static class Builder {
 
         private FindFoodCouponDialog dialog;
@@ -47,28 +59,32 @@ public class FindFoodCouponDialog extends AppCompatDialog {
 
         private String title;
         private String name;
-        int page = 1;
 
 
-        private OnRefresh onRefresh;
-        private OnLoadMore onLoadMore;
+        private OnRefreshListener onRefreshListener;
         private List<FindFoodCouponDownBean> list = new ArrayList<>();
         public FindFoodAdapter adapter;
         SetOrLookFoodPresenter mPresenter;
         public SwipeRefreshLayout refreshLayout;
         public RecyclerView recyclerView;
 
-        public void setOnRefresh(OnRefresh onRefresh) {
-            this.onRefresh = onRefresh;
-        }
-        public void setOnLoadMore(OnLoadMore onLoadMore) {
-            this.onLoadMore = onLoadMore;
+        CouponLineDownBean bean;
+
+        public CouponLineDownBean getBean() {
+            return bean;
         }
 
-        public Builder(Context context, List<FindFoodCouponDownBean> foodBeanList, int theme , SetOrLookFoodPresenter presenter) {
+        public void setBean(CouponLineDownBean bean) {
+            this.bean = bean;
+        }
+
+        public void setOnRefreshListener(OnRefreshListener listener) {
+            this.onRefreshListener = listener;
+        }
+
+        public Builder(Context context, int theme, SetOrLookFoodPresenter presenter) {
             this.context = context;
             this.theme = theme;
-            this.list = foodBeanList;
             this.mPresenter = presenter;
         }
 
@@ -88,6 +104,21 @@ public class FindFoodCouponDialog extends AppCompatDialog {
             this.title = title;
         }
 
+        public void setDatas(List<FindFoodCouponDownBean> data) {
+            this.list = data;
+            adapter.setNewData(list);
+            refreshLayout.setRefreshing(false);
+            if (data.size() % 20 == 0) {
+                adapter.loadMoreComplete();
+            } else {
+                adapter.loadMoreEnd();
+            }
+        }
+
+        public void errorRefresh() {
+            refreshLayout.setRefreshing(false);
+            adapter.loadMoreFail();
+        }
 
         public FindFoodCouponDialog creater() {
 
@@ -102,7 +133,9 @@ public class FindFoodCouponDialog extends AppCompatDialog {
 
             refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
             refreshLayout.setOnRefreshListener(() -> {
-                setOnRefresh(onRefresh);
+                if (onRefreshListener != null) {
+                    onRefreshListener.onRefresh();
+                }
             });
             recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -110,20 +143,15 @@ public class FindFoodCouponDialog extends AppCompatDialog {
                     .marginResId(R.dimen._30sdp, R.dimen._1sdp)
                     .color(context.getResources().getColor(R.color.item_line_color))
                     .build());
-            adapter = new FindFoodAdapter(R.layout.item_find_food , context);
+            adapter = new FindFoodAdapter(R.layout.item_find_food, context);
             recyclerView.setAdapter(adapter);
             adapter.setNewData(list);
 
             adapter.setOnLoadMoreListener(() -> {
-                page++;
-                setOnLoadMore(onLoadMore);
+                if (onRefreshListener != null) {
+                    onRefreshListener.onLoadMore();
+                }
             }, recyclerView);
-
-
-
-
-
-
 
             return dialog;
         }
@@ -136,11 +164,12 @@ public class FindFoodCouponDialog extends AppCompatDialog {
 
         }
     }
-    public  interface OnRefresh{
+
+    public interface OnRefreshListener {
+
         void onRefresh();
-    }
-    public  interface OnLoadMore{
-        void onLoadMore(int i);
+
+        void onLoadMore();
     }
 
 }
