@@ -65,6 +65,8 @@ public class FindFoodCouponDialog extends AppCompatDialog {
 
         CouponLineDownBean bean;
 
+        boolean isSearch = false;
+
         public CouponLineDownBean getBean() {
             return bean;
         }
@@ -132,6 +134,9 @@ public class FindFoodCouponDialog extends AppCompatDialog {
 
             refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
             refreshLayout.setOnRefreshListener(() -> {
+                if(isSearch){
+                    return;
+                }
                 if (onRefreshListener != null) {
                     onRefreshListener.onRefresh();
                 }
@@ -160,9 +165,13 @@ public class FindFoodCouponDialog extends AppCompatDialog {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (TextUtils.isEmpty(s.toString().trim())) {
+                        isSearch = false;
+                        adapter.setEnableLoadMore(true);
                         iv.setVisibility(View.INVISIBLE);
                         adapter.setNewData(list);
                     } else {
+                        isSearch = true;
+                        adapter.setEnableLoadMore(false);
                         iv.setVisibility(View.VISIBLE);
                         searchFood(s.toString().trim());
                     }
@@ -178,6 +187,9 @@ public class FindFoodCouponDialog extends AppCompatDialog {
             });
 
             adapter.setOnLoadMoreListener(() -> {
+                if(isSearch){
+                    return;
+                }
                 if (onRefreshListener != null) {
                     onRefreshListener.onLoadMore();
                 }
