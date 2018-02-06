@@ -2172,4 +2172,23 @@ public interface ShopkeeperApi {
             @Field("Type") String type,
             @Field("RESTAURANTID") String shopId,
             @Field("ID") String productPackageID);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewCardManagerQiTaASHX.ashx")
+    Observable<StringModel> saveFoodAndType(
+            @Field("type") String type,
+            @Field("mid") String shopId,
+            @Field("ptypeid") String productTypeId,
+            @Field("pid1") String productId,
+            @Field("cardid") String couponId);
+
+    @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewCardManagerQiTaASHX.ashx")
+    Observable<StringModel> getSetFood(
+            @Field("type") String type,
+            @Field("pageSize") int pageSize,
+            @Field("pageIndex") int pageIndex,
+            @Field("Product") String productName,
+            @Field("pid") String productId,
+            @Field("mid") String shopId);
 }

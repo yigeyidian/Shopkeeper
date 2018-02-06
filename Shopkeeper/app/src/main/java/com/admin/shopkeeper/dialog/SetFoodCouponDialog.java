@@ -9,13 +9,16 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.DaZhaAdapter;
 import com.admin.shopkeeper.entity.FoodBean;
+import com.admin.shopkeeper.entity.MenuTypeEntity;
 import com.admin.shopkeeper.widget.MySpinner;
 
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by Administrator on 2017/7/22 0022.
@@ -40,24 +43,26 @@ public class SetFoodCouponDialog extends AppCompatDialog {
         private Context context;
         private int theme;
         AppCompatButton oneBtn;
-        DaZhaAdapter daZhaAdapter;
-        private List<FoodBean> list;
 
         private String title;
         private String name;
 
 
         private OnButtonClick buttonClick;
+        private List<FoodBean> list;
         private List<FoodBean> selectFoods;
+        private List<MenuTypeEntity> types;
+        private List<MenuTypeEntity> selectTypes;
 
         public void setButtonClick(OnButtonClick buttonClick) {
             this.buttonClick = buttonClick;
         }
 
-        public Builder(Context context, List<FoodBean> foodBeanList, int theme) {
+        public Builder(Context context, List<FoodBean> foodBeanList, List<MenuTypeEntity> types, int theme) {
             this.context = context;
             this.theme = theme;
             this.list = foodBeanList;
+            this.types = types;
         }
 
         public String getName() {
@@ -103,11 +108,42 @@ public class SetFoodCouponDialog extends AppCompatDialog {
 
                         spinerFood.setText(names.substring(0, names.length() - 1));
                     }
-                
+
                 }
+
+                @Override
+                public void onSureTypes(List<MenuTypeEntity> typeEntityList) {
+
+                }
+
             });
             MySpinner spinerFoodType = (MySpinner) view.findViewById(R.id.spiner_food_type);
+            spinerFoodType.initTypeContent(types);
+            spinerFoodType.setButtonClick(new MySpinner.OnButtonClick() {
+                @Override
+                public void onSure(List<FoodBean> list) {
 
+
+                }
+
+                @Override
+                public void onSureTypes(List<MenuTypeEntity> typeEntityList) {
+                    selectTypes = typeEntityList;
+                    if (selectTypes == null || selectTypes.size() == 0) {
+                        spinerFoodType.setText("请选择商品类型");
+                    } else if (selectTypes.get(0).getProductTypeName().equals("全选")) {
+                        spinerFoodType.setText("全选");
+                    } else {
+                        String names = "";
+                        for (MenuTypeEntity bean : selectTypes) {
+                            names += bean.getProductTypeName() + ",";
+                        }
+
+                        spinerFoodType.setText(names.substring(0, names.length() - 1));
+                    }
+                }
+
+            });
             TextView tvTitle = (TextView) view.findViewById(R.id.title);
 
 
@@ -120,12 +156,19 @@ public class SetFoodCouponDialog extends AppCompatDialog {
                 @Override
                 public void onClick(View v) {
                     if (buttonClick != null) {
-                       /* if (TextUtils.isEmpty(editText.getText())) {
-                            Toasty.warning(context, "数量不为空", Toast.LENGTH_SHORT, true).show();
+                        if (selectFoods != null && selectFoods.size() > 0) {
+
+                        } else {
+                            Toasty.warning(context, "请选择商品", Toast.LENGTH_SHORT, true).show();
                             return;
                         }
+                        if (selectTypes != null && selectTypes.size() > 0) {
 
-                        buttonClick.onBtnClick(Integer.parseInt(editText.getText().toString().trim()));*/
+                        } else {
+                            Toasty.warning(context, "请选择商品类型", Toast.LENGTH_SHORT, true).show();
+                            return;
+                        }
+                        buttonClick.onBtnClick(selectTypes, selectFoods);
                         dialog.dismiss();
                     }
                 }
@@ -152,7 +195,7 @@ public class SetFoodCouponDialog extends AppCompatDialog {
 
     public interface OnButtonClick {
 
-        void onBtnClick(int i);
+        void onBtnClick(List<MenuTypeEntity> typeEntityList, List<FoodBean> foodBeanList);
 
         void onCancel();
     }
