@@ -24,7 +24,7 @@ public class SetOrLookFoodAdapter extends BaseQuickAdapter<ShopBean, BaseViewHol
 
         helper.setText(R.id.item_shop_name, item.getName());
         helper.setText(R.id.item_set_food, "设置商品（类别）");
-        helper.setText(R.id.item_look_food, "查看设置商品（类别）");
+        helper.setText(R.id.item_look_food, "查看设置商品");
 
         helper.addOnClickListener(R.id.item_look_food);
         helper.addOnClickListener(R.id.item_set_food);

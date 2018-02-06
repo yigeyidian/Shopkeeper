@@ -4,22 +4,14 @@ import android.content.Context;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
-import com.admin.shopkeeper.db.AppDbHelper;
-import com.admin.shopkeeper.entity.BossUserInfo;
-import com.admin.shopkeeper.entity.FoodBean;
-import com.admin.shopkeeper.entity.MenuTypeEntity;
+import com.admin.shopkeeper.entity.FindFoodCouponDownBean;
 import com.admin.shopkeeper.entity.SaleBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.model.StringModel;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.boss.IBossMainView;
-import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -42,7 +34,12 @@ public class BindFoodPresenter extends BasePresenter<IBindFoodView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(stringModel -> {
                     if (stringModel.getCode().equals("1")) {
-
+                        if (stringModel.getResult().equals("0")) {
+                            iView.error("加载失败");
+                        } else {
+                            FindFoodCouponDownBean[] been = new Gson().fromJson(stringModel.getResult(), FindFoodCouponDownBean[].class);
+                            iView.success(Arrays.asList(been));
+                        }
                     } else {
                         iView.error("加载失败");
                     }

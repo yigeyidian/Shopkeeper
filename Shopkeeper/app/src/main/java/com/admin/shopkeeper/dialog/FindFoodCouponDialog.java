@@ -4,34 +4,29 @@ import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.FindFoodAdapter;
 import com.admin.shopkeeper.entity.CouponLineDownBean;
 import com.admin.shopkeeper.entity.FindFoodCouponDownBean;
-import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.setOrLookFood.SetOrLookFoodPresenter;
-import com.google.gson.Gson;
-import com.trello.rxlifecycle2.LifecycleProvider;
-import com.trello.rxlifecycle2.android.ActivityEvent;
-import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2017/7/22 0022.
@@ -126,10 +121,14 @@ public class FindFoodCouponDialog extends AppCompatDialog {
             View view = inflater.inflate(R.layout.dialog_look_food_coupon_down, null);
             dialog = new FindFoodCouponDialog(context, theme, view);
 
-
             TextView tvTitle = (TextView) view.findViewById(R.id.title);
+            TextView tvFoodName = (TextView) view.findViewById(R.id.food_name);
 
             tvTitle.setText("查看设置商品");
+            tvFoodName.setText("商品名称");
+
+            AppCompatEditText editText = (AppCompatEditText) view.findViewById(R.id.et_food_search);
+            ImageView iv = (ImageView) view.findViewById(R.id.iv_clear);
 
             refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
             refreshLayout.setOnRefreshListener(() -> {
@@ -147,6 +146,37 @@ public class FindFoodCouponDialog extends AppCompatDialog {
             recyclerView.setAdapter(adapter);
             adapter.setNewData(list);
 
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (TextUtils.isEmpty(s.toString().trim())) {
+                        iv.setVisibility(View.INVISIBLE);
+                        adapter.setNewData(list);
+                    } else {
+                        iv.setVisibility(View.VISIBLE);
+                        searchFood(s.toString().trim());
+                    }
+                }
+            });
+            editText.clearFocus();
+
+            iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editText.setText("");
+                }
+            });
+
             adapter.setOnLoadMoreListener(() -> {
                 if (onRefreshListener != null) {
                     onRefreshListener.onLoadMore();
@@ -156,6 +186,15 @@ public class FindFoodCouponDialog extends AppCompatDialog {
             return dialog;
         }
 
+        private void searchFood(String str) {
+            List<FindFoodCouponDownBean> FFCDBlist = new ArrayList<>();
+            for (FindFoodCouponDownBean bean : list) {
+                if (bean.getProductName().contains(str)) {
+                    FFCDBlist.add(bean);
+                }
+            }
+            adapter.setNewData(FFCDBlist);
+        }
 
         public void dismiss() {
             if (dialog != null && dialog.isShowing()) {

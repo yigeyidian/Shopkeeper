@@ -32,7 +32,7 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="查看设置商品类别"
+        android:text="查看设置商品"
         android:textColor="#FF0D80E6"
         android:textSize="@dimen/_30ssp" />
 

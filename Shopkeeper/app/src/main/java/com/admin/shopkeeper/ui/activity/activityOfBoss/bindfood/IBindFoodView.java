@@ -1,7 +1,7 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.bindfood;
 
 import com.admin.shopkeeper.base.IBaseView;
-import com.admin.shopkeeper.entity.BossUserInfo;
+import com.admin.shopkeeper.entity.FindFoodCouponDownBean;
 
 import java.util.List;
 
@@ -13,4 +13,6 @@ public interface IBindFoodView extends IBaseView {
 
 
     void error(String msg);
+
+    void success(List<FindFoodCouponDownBean> list);
 }

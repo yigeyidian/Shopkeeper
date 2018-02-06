@@ -13,9 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.PopFoodAdapter;
 import com.admin.shopkeeper.adapter.PopFoodTypeAdapter;
-import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.entity.MenuTypeEntity;
 import com.admin.shopkeeper.weight.MarginDecoration;
 
@@ -80,7 +78,9 @@ public class SelectFoodTypeDialog extends AppCompatDialog {
             dialog = new SelectFoodTypeDialog(context, theme, view);
 
             Button oneBtn = (Button) view.findViewById(R.id.OneBtn);
+            oneBtn.setBackgroundResource(R.drawable.selector_dialog_btn2);
             Button okBtn = (Button) view.findViewById(R.id.dialog_ok);
+            okBtn.setBackgroundResource(R.drawable.selector_dialog_btn2);
             TextView titletv = (TextView) view.findViewById(R.id.dialog_title);
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.scrollView);
 

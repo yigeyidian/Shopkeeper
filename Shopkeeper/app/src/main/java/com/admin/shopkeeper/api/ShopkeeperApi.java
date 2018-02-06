@@ -992,7 +992,7 @@ public interface ShopkeeperApi {
             @Field("RESTAURANTID") String restaurantId);
 
     @FormUrlEncoded
-    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "PortBillManagerNweASHX.ashx")
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "BILLDAZHE.ashx")
     Observable<StringModel> getSaleBindFood(
             @Field("type") String type,
             @Field("pageSize") int pageSize,

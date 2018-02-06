@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.MutiDialogAdapter;
 import com.admin.shopkeeper.adapter.PopFoodAdapter;
 import com.admin.shopkeeper.entity.FoodBean;
-import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.weight.MarginDecoration;
 
 import java.util.ArrayList;
@@ -81,7 +78,9 @@ public class SelectFoodDialog extends AppCompatDialog {
             dialog = new SelectFoodDialog(context, theme, view);
 
             Button oneBtn = (Button) view.findViewById(R.id.OneBtn);
+            oneBtn.setBackgroundResource(R.drawable.selector_dialog_btn2);
             Button okBtn = (Button) view.findViewById(R.id.dialog_ok);
+            okBtn.setBackgroundResource(R.drawable.selector_dialog_btn2);
             TextView titletv = (TextView) view.findViewById(R.id.dialog_title);
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.scrollView);
 
