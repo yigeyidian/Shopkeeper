@@ -337,8 +337,11 @@ public interface ShopkeeperApi {
     Observable<IntModel> getDazhe(
             @Field("Type") String s,
             @Field("id") String billid,
-            @Field("dazhe") int dazhe
-    );
+            @Field("mid") String shopId,
+            @Field("chengdazhe") String chengdazhe,
+            @Field("dazhe") int dazhe,
+            @Field("daid") String daId
+            );
 
     /**
      *

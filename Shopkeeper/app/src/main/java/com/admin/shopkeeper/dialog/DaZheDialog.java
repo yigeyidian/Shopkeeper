@@ -18,9 +18,7 @@ import android.widget.Toast;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.DaZhaAdapter;
-import com.admin.shopkeeper.adapter.ResaonAdapter;
 import com.admin.shopkeeper.entity.DaZheEntity;
-import com.admin.shopkeeper.entity.RetreatReason;
 import com.admin.shopkeeper.weight.MarginDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -146,7 +144,7 @@ public class DaZheDialog extends AppCompatDialog {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     if (buttonClick != null) {
-                        buttonClick.onItemClick(Integer.parseInt(daZhaAdapter.getData().get(position).getCount()));
+                        buttonClick.onItemClick(Integer.parseInt(daZhaAdapter.getData().get(position).getCount()),daZhaAdapter.getData().get(position).getGuid());
                     }
                 }
             });
@@ -172,6 +170,6 @@ public class DaZheDialog extends AppCompatDialog {
 
         void onBtnClick(int i);
 
-        void onItemClick(int i);
+        void onItemClick(int i , String id);
     }
 }

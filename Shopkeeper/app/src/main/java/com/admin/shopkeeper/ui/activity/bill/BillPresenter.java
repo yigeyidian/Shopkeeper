@@ -46,11 +46,11 @@ class BillPresenter extends BasePresenter<IBillView> {
         super(context, iView);
     }
 
-    void getDazhe(String billid, int dazhe) {
+    void getDazhe(String billid, int dazhe, String daId) {
         DialogUtils.showDialog(context, "获取数据中...");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getDazhe("4", billid, dazhe)
+                .getDazhe("24", billid, App.INSTANCE().getShopID(), "0", dazhe, daId)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -76,11 +76,12 @@ class BillPresenter extends BasePresenter<IBillView> {
                     iView.error("获取折后价格错误");
                 });
     }
-    void getOtherYouhui(String couponId ,String billid, double couponPice , double YingFu,String json) {
+
+    void getOtherYouhui(String couponId, String billid, double couponPice, double YingFu, String json) {
         DialogUtils.showDialog(context, "获取数据中...");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getOherYouhui("23",couponId, billid,App.INSTANCE().getShopID() ,couponPice,YingFu ,json)
+                .getOherYouhui("23", couponId, billid, App.INSTANCE().getShopID(), couponPice, YingFu, json)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

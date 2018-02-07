@@ -1193,7 +1193,7 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                     }
                     quanxian.setQuanxian(q);
                     String qStr = new Gson().toJson(quanxian);
-                    presenter.getOtherYouhui(couponId, order.getBillid(), couponLineYouhuiMoney, getYinfuMoney()+couponLineYouhuiMoney, qStr);
+                    presenter.getOtherYouhui(couponId, order.getBillid(), couponLineYouhuiMoney, getYinfuMoney() + couponLineYouhuiMoney, qStr);
                     guiId = "";
                    /* initPay();
                     getNeed();
@@ -1708,18 +1708,18 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             @Override
             public void onBtnClick(int i) {
                 if (type == 3) {
-                    presenter.getDazhe(billId, i);
-                } else presenter.getDazhe(order.getBillid(), i);
+                    presenter.getDazhe(billId, i, "");
+                } else presenter.getDazhe(order.getBillid(), i, "");
 
                 dazhe.setText(i + "");
                 builder.dismiss();
             }
 
             @Override
-            public void onItemClick(int i) {
+            public void onItemClick(int i, String dazheId) {
                 if (type == 3) {
-                    presenter.getDazhe(billId, i);
-                } else presenter.getDazhe(order.getBillid(), i);
+                    presenter.getDazhe(billId, i, dazheId);
+                } else presenter.getDazhe(order.getBillid(), i, dazheId);
 
                 dazhe.setText(i + "");
                 builder.dismiss();
