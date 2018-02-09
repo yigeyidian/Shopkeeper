@@ -1434,6 +1434,12 @@ public interface ShopkeeperApi {
             @Field("RESTAURANTID") String restaurantId);
 
     @FormUrlEncoded
+    @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "NewSinglShopStatisASHX.ashx")
+    Observable<StringModel> checkShop(
+            @Field("Type") String type,
+            @Field("ShangJiaID") String restaurantId);
+
+    @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerchantBasicSetup.ashx")
     Observable<StringModel> editBasicSet(
             @Field("type") String type,

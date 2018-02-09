@@ -20,7 +20,9 @@ import android.widget.TextView;
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
+import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.entity.BossUserInfo;
+import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.my.MyActivity;
 import com.admin.shopkeeper.ui.activity.login.LoginActivity;
 import com.admin.shopkeeper.ui.fragment.bossOrder.BossOrderFragment;
@@ -289,6 +291,21 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
     }
 
     @Override
+    public void getChainInfoSuccess(List<ChainBean> chainBeanList) {
+        CollectionSelectDialog.Builder builder = new CollectionSelectDialog.Builder(this, R.style.OrderDialogStyle);
+        builder.setTitle("选择门店");
+        builder.setReasons(chainBeanList);
+        builder.setSelect(App.INSTANCE().getShopName());
+        builder.setSingleSelect(true);
+        builder.setButtonClick((text, value) -> {
+            App.INSTANCE().setShopName(text);
+            App.INSTANCE().setShopID(value);
+            presenter.queryUserInfo(App.INSTANCE().getShopID());
+        });
+        builder.creater().show();
+    }
+
+    @Override
     public void error(String msg) {
         showFailToast(msg);
     }
@@ -313,6 +330,9 @@ public class BossMainActivity extends BaseActivity<BossMainPresenter> implements
                 break;
             case R.id.nav_datas:
                 presenter.checkData();
+                break;
+            case R.id.check_shop:
+                presenter.checkShop();
                 break;
             case R.id.nav_exit:
                 builder = new AlertDialog.Builder(this);

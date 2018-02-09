@@ -2,6 +2,7 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.boss;
 
 import com.admin.shopkeeper.base.IBaseView;
 import com.admin.shopkeeper.entity.BossUserInfo;
+import com.admin.shopkeeper.entity.ChainBean;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ import java.util.List;
 public interface IBossMainView extends IBaseView {
 
     void getInfoSuccess(List<BossUserInfo> bossUserInfos);
+
+    void getChainInfoSuccess(List<ChainBean> chainBeanList);
 
     void error(String msg);
 }

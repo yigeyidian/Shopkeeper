@@ -47,7 +47,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginRight="@dimen/_32sdp"
                 android:layout_weight="1"
-                android:background="@drawable/selector_dialog_btn"
+                android:background="@drawable/selector_dialog_btn2"
                 android:text="确定"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_30ssp" />
@@ -60,7 +60,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="@dimen/_32sdp"
                 android:layout_weight="1"
-                android:background="@drawable/selector_dialog_btn"
+                android:background="@drawable/selector_dialog_btn2"
                 android:text="取消"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_30ssp" />

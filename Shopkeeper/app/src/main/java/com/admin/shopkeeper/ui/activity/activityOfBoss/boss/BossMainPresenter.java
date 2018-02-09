@@ -1,12 +1,11 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.boss;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.admin.shopkeeper.App;
-import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.entity.BossUserInfo;
+import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.model.StringModel;
 import com.admin.shopkeeper.utils.DialogUtils;
@@ -63,6 +62,28 @@ public class BossMainPresenter extends BasePresenter<IBossMainView> {
                 }, throwable -> {
                     DialogUtils.hintDialog();
                     iView.error("校验失败");
+                });
+    }
+
+    public void checkShop() {
+        DialogUtils.showDialog(context, "数据加载中");
+        RetrofitHelper.getInstance()
+                .getApi()
+                .checkShop("26", App.INSTANCE().getShopID())
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    DialogUtils.hintDialog();
+                    if (stringModel.getCode().equals("1")) {
+                        ChainBean[] chainBeen = new Gson().fromJson(stringModel.getResult(), ChainBean[].class);
+                        iView.getChainInfoSuccess(Arrays.asList(chainBeen));
+                    } else {
+                        iView.error("检索失败");
+                    }
+                }, throwable -> {
+                    DialogUtils.hintDialog();
+                    iView.error("检索失败");
                 });
     }
 }
