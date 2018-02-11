@@ -9,6 +9,7 @@ import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.model.StringModel;
 import com.admin.shopkeeper.utils.DialogUtils;
+import com.admin.shopkeeper.utils.SPUtils;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
@@ -69,7 +70,7 @@ public class BossMainPresenter extends BasePresenter<IBossMainView> {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .checkShop("26", App.INSTANCE().getShopID())
+                .checkShop("26",  SPUtils.getInstance().getString(SPUtils.PREFERENCE_SHOP_ID))
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

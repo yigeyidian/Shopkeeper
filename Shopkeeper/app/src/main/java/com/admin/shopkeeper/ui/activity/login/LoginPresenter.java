@@ -36,7 +36,7 @@ class LoginPresenter extends BasePresenter<ILoginView> {
         DialogUtils.showDialog(context, "登录中...");
         RetrofitHelper.getInstance()
                 .getApi()
-                .login(u, App.INSTANCE().getShopID(), p)
+                .login(u, SPUtils.getInstance().getString(SPUtils.PREFERENCE_SHOP_ID), p)
                 .compose(getActivityLifecycleProvider().<IntModel>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

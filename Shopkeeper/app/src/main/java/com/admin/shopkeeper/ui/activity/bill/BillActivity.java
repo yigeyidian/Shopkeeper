@@ -1206,6 +1206,8 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
             @Override
             public void onCancel() {
                 guiId = "";
+                couponLineYouhuiMoney = 0.0;
+                initPay();
                 tvCouponOther.setText(String.valueOf(couponLineYouhuiMoney));
                 getNeed();
                 intText();
