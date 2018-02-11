@@ -2,16 +2,13 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.free;
 
 import android.content.Context;
 
-import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
-import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.FreeBean;
-import com.admin.shopkeeper.entity.HandoverBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.jion.IJionView;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -38,8 +35,13 @@ public class FreePresenter extends BasePresenter<IFreeView> {
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        FreeBean[] beens = new Gson().fromJson(stringModel.getResult(), FreeBean[].class);
-                        iView.success(Arrays.asList(beens));
+                        if (stringModel.getResult().equals("")) {
+                            iView.error("查询数据为空");
+                            iView.success(new ArrayList<>());
+                        } else {
+                            FreeBean[] beens = new Gson().fromJson(stringModel.getResult(), FreeBean[].class);
+                            iView.success(Arrays.asList(beens));
+                        }
                     } else {
                         iView.error("加载失败");
                     }

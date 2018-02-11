@@ -5,12 +5,12 @@ import android.content.Context;
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.entity.FoodEntity;
-import com.admin.shopkeeper.entity.SaleStatisticsBean;
 import com.admin.shopkeeper.entity.SaleStatisticsProductBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,8 +37,13 @@ public class SaleStatisticsProductPresenter extends BasePresenter<ISaleStatistic
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        SaleStatisticsProductBean[] beens = new Gson().fromJson(stringModel.getResult(), SaleStatisticsProductBean[].class);
-                        iView.success(Arrays.asList(beens));
+                        if (stringModel.getResult().equals("")) {
+                            iView.error("查询数据为空");
+                            iView.success(new ArrayList<>());
+                        } else {
+                            SaleStatisticsProductBean[] beens = new Gson().fromJson(stringModel.getResult(), SaleStatisticsProductBean[].class);
+                            iView.success(Arrays.asList(beens));
+                        }
                     } else {
                         iView.error("加载失败");
                     }

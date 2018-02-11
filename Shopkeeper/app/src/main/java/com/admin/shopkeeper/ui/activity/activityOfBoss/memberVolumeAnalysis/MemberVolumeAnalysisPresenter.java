@@ -1,12 +1,11 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.memberVolumeAnalysis;
 
 import android.content.Context;
+import android.text.TextUtils;
 
-import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.entity.MemberTranscationBean;
 import com.admin.shopkeeper.entity.MemberVolumeAnalysisBean;
-import com.admin.shopkeeper.entity.RechargeDetailTableBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
@@ -60,8 +59,12 @@ public class MemberVolumeAnalysisPresenter extends BasePresenter<IMemberVolumeAn
                 .subscribe(stringModel -> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
-                        MemberVolumeAnalysisBean[] beens = new Gson().fromJson(stringModel.getResult(), MemberVolumeAnalysisBean[].class);
-                        iView.success(Arrays.asList(beens));
+                        if (TextUtils.isEmpty(stringModel.getResult())) {
+                            iView.success("暂无数据");
+                        } else {
+                            MemberVolumeAnalysisBean[] beens = new Gson().fromJson(stringModel.getResult(), MemberVolumeAnalysisBean[].class);
+                            iView.success(Arrays.asList(beens));
+                        }
                     } else {
                         iView.error("加载失败");
                     }

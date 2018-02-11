@@ -3,10 +3,8 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.integralTransactionDetai
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.entity.IntegralDetailTableBean;
-import com.admin.shopkeeper.entity.MemberConsumeDetailBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
@@ -39,12 +37,16 @@ public class IntegralTransactionDetailPresenter extends BasePresenter<IIntegralT
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
                         if(TextUtils.isEmpty(stringModel.getResult())){
+                            iView.success("暂无数据");
+                        }else{
                             IntegralDetailTableBean[] beens = new Gson().fromJson(stringModel.getResult(), IntegralDetailTableBean[].class);
                             iView.success(Arrays.asList(beens));
                         }
                     } else {
+                        iView.error("加载失败");
                     }
                 }, throwable -> {
+                    iView.error("加载失败");
                     DialogUtils.hintDialog();
                 });
     }
