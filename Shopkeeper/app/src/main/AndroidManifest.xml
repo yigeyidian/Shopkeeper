@@ -398,6 +398,10 @@
         <activity
             android:name=".ui.activity.activityOfBoss.mealEdit.MealEditActivity"
             android:theme="@style/BossTheme" />
+
+        <activity
+            android:name=".ui.activity.activityOfBoss.collectionStatistics.CollectionStatisticsActivity"
+            android:theme="@style/BossTheme" />
         <activity
             android:name=".ui.activity.activityOfBoss.mealTypemanager.MealTypeManagerActivity"
             android:theme="@style/BossTheme" />

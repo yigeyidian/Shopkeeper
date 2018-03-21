@@ -11,8 +11,8 @@ android {
         applicationId "com.admin.shopkeeper"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 26
-        versionName "1.25"
+        versionCode 27
+        versionName "1.26"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
@@ -137,5 +137,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.android.support:multidex:1.0.2'
+
+    compile 'com.kelin.scrollablepanel:library:1.2.0'
 
 }

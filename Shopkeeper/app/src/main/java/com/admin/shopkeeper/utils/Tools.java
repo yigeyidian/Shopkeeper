@@ -19,13 +19,23 @@ public class Tools {
         return new SimpleDateFormat(format).format(new Date());
     }
 
-    public static String formatNowDate(String format,Date date) {
+    public static String formatNowDate(String format, Date date) {
         return new SimpleDateFormat(format).format(date);
     }
 
     public static String formatLastMonthDate(String format) {
         long l = System.currentTimeMillis() - 60 * 60 * 24 * 30 * 1000L;
         return new SimpleDateFormat(format).format(new Date(l));
+    }
+
+    public static long getLastMonth() {
+        long l = System.currentTimeMillis() - 60 * 60 * 24 * 30 * 1000L;
+        return l;
+    }
+
+    public static long getLastWeek() {
+        long l = System.currentTimeMillis() - 60 * 60 * 24 * 7 * 1000L;
+        return l;
     }
 
     public static Date toDate(String str) {

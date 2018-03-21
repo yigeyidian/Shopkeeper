@@ -32,4 +32,8 @@ public class UIUtils {
         Drawable top = textView.getContext().getResources().getDrawable(drawable);
         textView.setCompoundDrawablesWithIntrinsicBounds(null, null, top, null);
     }
+
+    public static void setNullDrawable(TextView textView) {
+        textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+    }
 }

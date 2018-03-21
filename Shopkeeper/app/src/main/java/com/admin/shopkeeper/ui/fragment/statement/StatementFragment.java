@@ -6,6 +6,7 @@ import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseFragment;
 import com.admin.shopkeeper.entity.ChainBean;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.collectionStatistics.CollectionStatisticsActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.couponDetailTable.CouponDetailTableActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.deskopen.DeskOpenActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.free.FreeActivity;
@@ -19,7 +20,6 @@ import com.admin.shopkeeper.ui.activity.activityOfBoss.rechargeTranscation.Recha
 import com.admin.shopkeeper.ui.activity.activityOfBoss.saleStatisticsProduct.SaleStatisticsProductActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.ShopCollectionActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.OnClick;
@@ -53,14 +53,15 @@ public class StatementFragment extends BaseFragment<StatementPresenter> implemen
 
     @OnClick(R.id.staff_manage_ll)
     public void shopCollectionClick() {
-        Intent intent = new Intent(getActivity(), ShopCollectionActivity.class);
+        //Intent intent = new Intent(getActivity(), ShopCollectionActivity.class);
+        Intent intent = new Intent(getActivity(), CollectionStatisticsActivity.class);
         intent.putExtra("type", 1);
         startActivity(intent);
     }
 
     @OnClick(R.id.member_manage_ll)
     public void chainCollectionClick() {
-        Intent intent = new Intent(getActivity(), ShopCollectionActivity.class);
+        Intent intent = new Intent(getActivity(), CollectionStatisticsActivity.class);
         intent.putExtra("type", 2);
         startActivity(intent);
     }
