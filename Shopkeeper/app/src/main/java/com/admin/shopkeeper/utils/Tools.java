@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,6 +15,12 @@ import java.util.Date;
  */
 
 public class Tools {
+
+    public static String valueOf(double d) {
+        BigDecimal bg = new BigDecimal(d);
+        double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return f1 + "";
+    }
 
     public static String formatNowDate(String format) {
         return new SimpleDateFormat(format).format(new Date());

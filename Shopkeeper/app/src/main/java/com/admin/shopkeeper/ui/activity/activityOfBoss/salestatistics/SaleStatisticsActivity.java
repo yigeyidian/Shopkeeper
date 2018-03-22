@@ -3,17 +3,12 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.salestatistics;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -21,25 +16,26 @@ import android.widget.TextView;
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.HandoverAdapter;
-import com.admin.shopkeeper.adapter.SaleStatisticsAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.FoodSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.ChainBean;
+import com.admin.shopkeeper.entity.DeskOpenBean;
 import com.admin.shopkeeper.entity.FoodEntity;
 import com.admin.shopkeeper.entity.SaleStatisticsBean;
 import com.admin.shopkeeper.entity.SaleStatisticsProductBean;
 import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.utils.UIUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
+import com.kelin.scrollablepanel.library.ScrollablePanel;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -50,33 +46,26 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.tv_date)
+    TextView tvDate;
+    @BindView(R.id.tv_today)
+    TextView tvDay;
+    @BindView(R.id.tv_week)
+    TextView tvWeek;
+    @BindView(R.id.tv_month)
+    TextView tvMonth;
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.tv_total)
-    TextView tvTotle;
-    @BindView(R.id.ll_total)
-    LinearLayout llTotle;
-    @BindView(R.id.item_type)
-    TextView tvType;
-    @BindView(R.id.item_count)
-    TextView tvCount;
-    @BindView(R.id.item_money)
-    TextView tvMoney;
-    @BindView(R.id.item_free)
-    TextView tvFree;
-    @BindView(R.id.item_free_l)
-    TextView tvFree2;
+    ScrollablePanel recyclerView;
 
     private PopupWindow popupWindow;
 
     int page = 1;
-    private SaleStatisticsAdapter adapter;
     private SaleStatisticsProductBean bean;
 
     List<ChainBean> chainBeens = new ArrayList<>();
     String shopId;
+    private SaleStatisticsAdapter adapter;
+    private SaleStatisticsBean totleBean;
 
     @Override
     protected void initPresenter() {
@@ -86,7 +75,7 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_sale_statistics2;
+        return R.layout.activity_collectionstatistics;
     }
 
     @Override
@@ -100,30 +89,23 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
+        shopId = App.INSTANCE().getShopID();
+        chainBeens = App.INSTANCE().getChainBeans();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SaleStatisticsAdapter(R.layout.item_salestatistics);
-        recyclerView.setAdapter(adapter);
-
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        adapter = new SaleStatisticsAdapter();
+        recyclerView.setPanelAdapter(adapter);
+        adapter.setOnItemClickListener(new SaleStatisticsAdapter.OnItemClickLishener() {
             @Override
-            public void onRefresh() {
-                page = 1;
-                presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                        Tools.formatNowDate("yyyy-MM-dd", entDate),
-                        Tools.formatNowDate("HH:mm:ss", startDate),
-                        Tools.formatNowDate("HH:mm:ss", entDate),
-                        0, currentFood.getProductID(), bean.getProductId(),shopId);
+            public void onItemClick(int raw) {
+
+            }
+
+            @Override
+            public void onSort(int col, int status) {
+                sort(col, status);
             }
         });
-        adapter.setOnLoadMoreListener(() -> {
-            page++;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                    Tools.formatNowDate("yyyy-MM-dd", entDate),
-                    Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", entDate),
-                    0, currentFood.getProductID(), bean.getProductId(),shopId);
-        }, recyclerView);
+
 
         FoodEntity foodEntity = new FoodEntity();
         foodEntity.setProductName("全部");
@@ -132,18 +114,57 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
 
         currentFood = foodEntity;
 
-        startDate = new Date(System.currentTimeMillis());
-        entDate = new Date(System.currentTimeMillis());
-
-        shopId = App.INSTANCE().getShopID();
-        chainBeens = App.INSTANCE().getChainBeans();
-
         presenter.getGoods();
-        presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                Tools.formatNowDate("yyyy-MM-dd", entDate),
-                Tools.formatNowDate("HH:mm:ss", startDate),
-                Tools.formatNowDate("HH:mm:ss", entDate),
-                0, currentFood.getProductID(), bean.getProductId(),shopId);
+        dayClick();
+    }
+
+
+    private void sort(int col, int status) {
+        if (datas == null || datas.size() == 0) {
+            return;
+        }
+        datas.remove(totleBean);
+
+        if (status % 3 == 1) {
+            List<SaleStatisticsBean> newData = new ArrayList<>();
+            newData.addAll(datas);
+            Collections.sort(newData, (o1, o2) -> {
+                switch (col) {
+                    case 3:
+                        return o1.getCounts() > o2.getCounts() ? 1 : -1;
+                    case 4:
+                        return o1.getTotalPrice() > o2.getTotalPrice() ? 1 : -1;
+                    case 5:
+                        return o1.getFreePrice() > o2.getFreePrice() ? 1 : -1;
+                    default:
+                        return o1.getChargeMoney() > o2.getChargeMoney() ? 1 : -1;
+                }
+            });
+            newData.add(totleBean);
+            adapter.setDatas(newData);
+        } else if (status % 3 == 2) {
+
+            List<SaleStatisticsBean> newData = new ArrayList<>();
+            newData.addAll(datas);
+            Collections.sort(newData, (o1, o2) -> {
+                switch (col) {
+                    case 3:
+                        return o1.getCounts() > o2.getCounts() ? -1 : 1;
+                    case 4:
+                        return o1.getTotalPrice() > o2.getTotalPrice() ? -1 : 1;
+                    case 5:
+                        return o1.getFreePrice() > o2.getFreePrice() ? -1 : 1;
+                    default:
+                        return o1.getChargeMoney() > o2.getChargeMoney() ? -1 : 1;
+                }
+            });
+            newData.add(totleBean);
+            adapter.setDatas(newData);
+        } else {
+            datas.add(totleBean);
+            adapter.setDatas(datas);
+        }
+        recyclerView.notifyDataSetChanged();
     }
 
     @Override
@@ -165,15 +186,61 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.tv_total)
-    public void totleClick() {
-        if (llTotle.getVisibility() != View.VISIBLE) {
-            llTotle.setVisibility(View.VISIBLE);
-            UIUtils.setDrawableRight(tvTotle, R.mipmap.list_arrow_up);
-        } else {
-            llTotle.setVisibility(View.GONE);
-            UIUtils.setDrawableRight(tvTotle, R.mipmap.list_arrow_down);
-        }
+    @OnClick(R.id.tv_today)
+    public void dayClick() {
+        tvDay.setTextColor(Color.WHITE);
+        tvDay.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(System.currentTimeMillis());
+        entDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, currentFood.getProductID(), bean.getProductId(), shopId);
+    }
+
+    @OnClick(R.id.tv_week)
+    public void weekClick() {
+        tvWeek.setTextColor(Color.WHITE);
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_green);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastWeek());
+        entDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, currentFood.getProductID(), bean.getProductId(), shopId);
+    }
+
+    @OnClick(R.id.tv_month)
+    public void monthClick() {
+        tvMonth.setTextColor(Color.WHITE);
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastMonth());
+        entDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, currentFood.getProductID(), bean.getProductId(), shopId);
     }
 
     Date startDate;
@@ -205,7 +272,7 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
         }
 
         tvShop.setOnClickListener(v -> {
-            if(chainBeens.size() == 0){
+            if (chainBeens.size() == 0) {
                 showToast("获取门店失败");
                 return;
             }
@@ -331,13 +398,12 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
                 return;
             }
 
-
             page = 1;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+            presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
-                    typestr.equals("营业时间") ? 0 : 1, currentFood.getProductID(), bean.getProductId(),shopId);
+                    typestr.equals("营业时间") ? 0 : 1, currentFood.getProductID(), bean.getProductId(), shopId);
 
             popupWindow.dismiss();
         };
@@ -359,8 +425,6 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
     @Override
     public void error(String msg) {
         showFailToast(msg);
-        refreshLayout.setRefreshing(false);
-        adapter.loadMoreEnd();
     }
 
     List<FoodEntity> foodEntities = new ArrayList<>();
@@ -374,17 +438,30 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
 
     @Override
     public void success(List<SaleStatisticsBean> list) {
-        if (page == 1) {
-            datas.clear();
+        datas = new ArrayList<>(list);
+
+        totleBean = new SaleStatisticsBean();
+
+        int count = 0;
+        double sale = 0, free = 0, charge = 0;
+        for (SaleStatisticsBean bean : list) {
+            count += bean.getCounts();
+            sale += bean.getTotalPrice();
+            free += bean.getFreePrice();
+            charge += bean.getChargeMoney();
         }
-        datas.addAll(list);
-        adapter.setNewData(datas);
-        refreshLayout.setRefreshing(false);
-        if (list.size() < 20) {
-            adapter.loadMoreEnd();
-        } else {
-            adapter.loadMoreComplete();
-        }
+
+        totleBean.setProductName("合计信息");
+        totleBean.setProductTypeName("");
+        totleBean.setId("");
+        totleBean.setCounts(count);
+        totleBean.setTotalPrice(new BigDecimal(sale).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        totleBean.setFreePrice(new BigDecimal(free).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        totleBean.setChargeMoney(new BigDecimal(charge).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+
+        datas.add(totleBean);
+        adapter.setDatas(datas);
+        recyclerView.notifyDataSetChanged();
     }
 
     @Override
@@ -393,10 +470,6 @@ public class SaleStatisticsActivity extends BaseActivity<SaleStatisticsPresenter
             return;
         }
         SaleStatisticsBean item = saleStatisticsBeen.get(0);
-        tvType.setText(bean.getProductName());
-        tvCount.setText(String.valueOf(item.getCounts()));
-        tvMoney.setText("￥" + String.valueOf(item.getTotalPrice()));
-        tvFree.setText("￥" + String.valueOf(item.getFreePrice()));
-        tvFree2.setText("￥" + String.valueOf(item.getChargeMoney()));
+
     }
 }

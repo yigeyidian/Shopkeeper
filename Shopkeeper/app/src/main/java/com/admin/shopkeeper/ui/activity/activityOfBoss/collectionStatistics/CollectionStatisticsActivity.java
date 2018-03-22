@@ -29,6 +29,7 @@ import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
 import com.kelin.scrollablepanel.library.ScrollablePanel;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +51,6 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
     TextView tvWeek;
     @BindView(R.id.tv_month)
     TextView tvMonth;
-
     @BindView(R.id.recyclerView)
     ScrollablePanel recyclerView;
 
@@ -415,9 +415,9 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
 
     @Override
     public void success(List<ShopCollectionBean> data) {
-        this.datas = data;
-        totleBean = new ShopCollectionBean();
+        datas = new ArrayList<>(data);
 
+        totleBean = new ShopCollectionBean();
         totleBean.setNames("合计信息");
         totleBean.setDinnerDate(tvDate.getText().toString());
 
@@ -431,11 +431,11 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
             free += bean.getFreeMoney();
             real += bean.getChargeMoney();
         }
-        totleBean.setChargeMoney(real);
-        totleBean.setFreeMoney(free);
-        totleBean.setTotalMoney(sale);
-        totleBean.setChongzhi(charge);
-        datas = new ArrayList<>(data);
+        totleBean.setChargeMoney(new BigDecimal(real).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        totleBean.setFreeMoney(new BigDecimal(free).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        totleBean.setTotalMoney(new BigDecimal(sale).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        totleBean.setChongzhi(new BigDecimal(charge).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+
         datas.add(totleBean);
         adapter.setDatas(datas);
         recyclerView.notifyDataSetChanged();

@@ -2,11 +2,6 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.giftstatistics;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,46 +14,51 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.GiftStatisticsAdapter;
-import com.admin.shopkeeper.adapter.SaleStatisticsAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
-import com.admin.shopkeeper.dialog.FoodSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.ChainBean;
-import com.admin.shopkeeper.entity.FoodEntity;
+import com.admin.shopkeeper.entity.DeskOpenBean;
 import com.admin.shopkeeper.entity.GiftStatisticsBean;
-import com.admin.shopkeeper.entity.SaleStatisticsBean;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.salestatistics.ISaleStatisticsView;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.salestatistics.SaleStatisticsPresenter;
 import com.admin.shopkeeper.utils.Tools;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
+import com.kelin.scrollablepanel.library.ScrollablePanel;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter> implements IGiftStatisticsView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.tv_date)
+    TextView tvDate;
+    @BindView(R.id.tv_today)
+    TextView tvDay;
+    @BindView(R.id.tv_week)
+    TextView tvWeek;
+    @BindView(R.id.tv_month)
+    TextView tvMonth;
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout refreshLayout;
+    ScrollablePanel recyclerView;
 
     private PopupWindow popupWindow;
 
     int page = 1;
-    private GiftStatisticsAdapter adapter;
 
     List<ChainBean> chainBeens = new ArrayList<>();
     String shopId;
+    private GiftStatisticsAdapter adapter;
+    private GiftStatisticsBean totleBean;
 
     @Override
     protected void initPresenter() {
@@ -68,7 +68,7 @@ public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_gift_statistics;
+        return R.layout.activity_collectionstatistics;
     }
 
     @Override
@@ -81,38 +81,65 @@ public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new GiftStatisticsAdapter(R.layout.item_giftstatistics);
-        recyclerView.setAdapter(adapter);
 
-        refreshLayout.setOnRefreshListener(() -> {
-            page = 1;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                    Tools.formatNowDate("yyyy-MM-dd", entDate),
-                    Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", entDate),
-                    0, shopId);
+        adapter = new GiftStatisticsAdapter();
+        recyclerView.setPanelAdapter(adapter);
+        adapter.setOnItemClickListener(new GiftStatisticsAdapter.OnItemClickLishener() {
+            @Override
+            public void onItemClick(int raw) {
+
+            }
+
+            @Override
+            public void onSort(int col, int status) {
+                sort(col,status);
+            }
         });
-        adapter.setOnLoadMoreListener(() -> {
-            page++;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                    Tools.formatNowDate("yyyy-MM-dd", entDate),
-                    Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", entDate),
-                    0, shopId);
-        }, recyclerView);
-
-
-        startDate = new Date(System.currentTimeMillis());
-        entDate = new Date(System.currentTimeMillis());
 
         shopId = App.INSTANCE().getShopID();
         chainBeens = App.INSTANCE().getChainBeans();
 
-        presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                Tools.formatNowDate("yyyy-MM-dd", entDate),
-                Tools.formatNowDate("HH:mm:ss", startDate),
-                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
+        dayClick();
+    }
+
+    private void sort(int col, int status) {
+        if (datas == null || datas.size() == 0) {
+            return;
+        }
+        datas.remove(totleBean);
+
+        if (status % 3 == 1) {
+            List<GiftStatisticsBean> newData = new ArrayList<>();
+            newData.addAll(datas);
+            Collections.sort(newData, (o1, o2) -> {
+                switch (col) {
+                    case 2:
+                        return o1.getGiving() > o2.getGiving() ? 1 : -1;
+                    default:
+                        return o1.getPrice() > o2.getPrice() ? 1 : -1;
+                }
+            });
+            newData.add(totleBean);
+            adapter.setDatas(newData);
+        } else if (status % 3 == 2) {
+
+            List<GiftStatisticsBean> newData = new ArrayList<>();
+            newData.addAll(datas);
+            Collections.sort(newData, (o1, o2) -> {
+                switch (col) {
+                    case 2:
+                        return o1.getGiving() > o2.getGiving() ? -1 : 1;
+                    default:
+                        return o1.getPrice() > o2.getPrice() ? -1 : 1;
+                }
+            });
+            newData.add(totleBean);
+            adapter.setDatas(newData);
+        } else {
+            datas.add(totleBean);
+            adapter.setDatas(datas);
+        }
+        recyclerView.notifyDataSetChanged();
     }
 
     @Override
@@ -132,6 +159,63 @@ public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.tv_today)
+    public void dayClick() {
+        tvDay.setTextColor(Color.WHITE);
+        tvDay.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(System.currentTimeMillis());
+        entDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
+    }
+
+    @OnClick(R.id.tv_week)
+    public void weekClick() {
+        tvWeek.setTextColor(Color.WHITE);
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_green);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastWeek());
+        entDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
+    }
+
+    @OnClick(R.id.tv_month)
+    public void monthClick() {
+        tvMonth.setTextColor(Color.WHITE);
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastMonth());
+        entDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
     }
 
     Date startDate;
@@ -259,7 +343,7 @@ public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter
 
 
             page = 1;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+            presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
@@ -283,25 +367,27 @@ public class GiftStatisticsActivity extends BaseActivity<GiftStatisticsPresenter
     @Override
     public void error(String msg) {
         showFailToast(msg);
-        refreshLayout.setRefreshing(false);
-        adapter.loadMoreEnd();
     }
-
 
     List<GiftStatisticsBean> datas = new ArrayList<>();
 
     @Override
     public void success(List<GiftStatisticsBean> list) {
-        if (page == 1) {
-            datas.clear();
+        datas = new ArrayList<>(list);
+
+        totleBean = new GiftStatisticsBean();
+        int count = 0;
+        double price = 0;
+        for (GiftStatisticsBean bean : list) {
+            count += bean.getGiving();
+            price += bean.getPrice();
         }
-        datas.addAll(list);
-        adapter.setNewData(datas);
-        refreshLayout.setRefreshing(false);
-        if (list.size() < 20) {
-            adapter.loadMoreEnd();
-        } else {
-            adapter.loadMoreComplete();
-        }
+
+        totleBean.setProductName("合计信息");
+        totleBean.setGiving(count);
+        totleBean.setPrice(new BigDecimal(price).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        datas.add(totleBean);
+        adapter.setDatas(datas);
+        recyclerView.notifyDataSetChanged();
     }
 }

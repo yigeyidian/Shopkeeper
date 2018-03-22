@@ -3,13 +3,7 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.free;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,8 +15,6 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.FreeAdapter;
-import com.admin.shopkeeper.adapter.HandoverAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
@@ -30,17 +22,14 @@ import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.FreeBean;
 import com.admin.shopkeeper.entity.HandoverBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.freedetail.FreeDetailActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.jion.IJionView;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.jion.JionActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.jion.JionPresenter;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.jiondetail.JionDetailActivity;
-import com.admin.shopkeeper.utils.ToastUtils;
 import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.utils.UIUtils;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
+import com.kelin.scrollablepanel.library.ScrollablePanel;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,21 +43,24 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.sort_1)
-    TextView tvSort1;
-    @BindView(R.id.sort_2)
-    TextView tvSort2;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.tv_date)
+    TextView tvDate;
+    @BindView(R.id.tv_today)
+    TextView tvDay;
+    @BindView(R.id.tv_week)
+    TextView tvWeek;
+    @BindView(R.id.tv_month)
+    TextView tvMonth;
 
-    int page = 1;
+    @BindView(R.id.recyclerView)
+    ScrollablePanel recyclerView;
+
     private PopupWindow popupWindow;
-    private FreeAdapter adapter;
 
     List<ChainBean> chainBeens = new ArrayList<>();
     String shopId;
+    private FreeAdapter adapter;
+    private FreeBean totleBean;
 
     @Override
     protected void initPresenter() {
@@ -78,7 +70,7 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_free;
+        return R.layout.activity_collectionstatistics;
     }
 
     @Override
@@ -91,46 +83,55 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new FreeAdapter(R.layout.item_free);
-        recyclerView.setAdapter(adapter);
-
-        adapter.setOnItemClickListener((adapter1, view, position) -> {
-            Intent intent = new Intent(FreeActivity.this, FreeDetailActivity.class);
-            intent.putExtra("bean", adapter.getItem(position));
-            intent.putExtra("start", Tools.formatNowDate("yyyy-MM-dd", startDate));
-            intent.putExtra("end", Tools.formatNowDate("yyyy-MM-dd", entDate));
-            startActivity(intent);
-        });
-        adapter.setOnLoadMoreListener(() -> {
-            page++;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                    Tools.formatNowDate("yyyy-MM-dd", entDate),
-                    Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", entDate),
-                    0, shopId);
-        }, recyclerView);
-
-        refreshLayout.setOnRefreshListener(() -> {
-            page = 1;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                    Tools.formatNowDate("yyyy-MM-dd", entDate),
-                    Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", entDate),
-                    0, shopId);
-        });
-
-        startDate = new Date(System.currentTimeMillis());
-        entDate = new Date(System.currentTimeMillis());
-
         shopId = App.INSTANCE().getShopID();
         chainBeens = App.INSTANCE().getChainBeans();
 
-        presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                Tools.formatNowDate("yyyy-MM-dd", entDate),
-                Tools.formatNowDate("HH:mm:ss", startDate),
-                Tools.formatNowDate("HH:mm:ss", entDate),
-                0, shopId);
+        adapter = new FreeAdapter();
+        recyclerView.setPanelAdapter(adapter);
+
+        adapter.setOnItemClickListener(new FreeAdapter.OnItemClickLishener() {
+            @Override
+            public void onItemClick(int raw) {
+                Intent intent = new Intent(FreeActivity.this, FreeDetailActivity.class);
+                intent.putExtra("bean", datas.get(raw));
+                intent.putExtra("start", Tools.formatNowDate("yyyy-MM-dd", startDate));
+                intent.putExtra("end", Tools.formatNowDate("yyyy-MM-dd", entDate));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onSort(int col, int status) {
+                if (datas == null || datas.size() == 0) {
+                    return;
+                }
+                datas.remove(totleBean);
+
+                if (status % 3 == 1) {
+                    List<FreeBean> newData = new ArrayList<>();
+                    newData.addAll(datas);
+                    Collections.sort(newData, (o1, o2) -> {
+                        return o1.getFreeMoney() > o2.getFreeMoney() ? 1 : -1;
+                    });
+                    newData.add(totleBean);
+                    adapter.setDatas(newData);
+                } else if (status % 3 == 2) {
+
+                    List<FreeBean> newData = new ArrayList<>();
+                    newData.addAll(datas);
+                    Collections.sort(newData, (o1, o2) -> {
+                        return o1.getFreeMoney() > o2.getFreeMoney() ? -1 : 1;
+                    });
+                    newData.add(totleBean);
+                    adapter.setDatas(newData);
+                } else {
+                    datas.add(totleBean);
+                    adapter.setDatas(datas);
+                }
+                recyclerView.notifyDataSetChanged();
+            }
+        });
+
+        dayClick();
     }
 
     @Override
@@ -150,6 +151,63 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.tv_today)
+    public void dayClick() {
+        tvDay.setTextColor(Color.WHITE);
+        tvDay.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(System.currentTimeMillis());
+        entDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
+    }
+
+    @OnClick(R.id.tv_week)
+    public void weekClick() {
+        tvWeek.setTextColor(Color.WHITE);
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_green);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastWeek());
+        entDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
+    }
+
+    @OnClick(R.id.tv_month)
+    public void monthClick() {
+        tvMonth.setTextColor(Color.WHITE);
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastMonth());
+        entDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
     }
 
     Date startDate;
@@ -175,7 +233,7 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
         }
 
         tvShop.setOnClickListener(v -> {
-            if(chainBeens.size() == 0){
+            if (chainBeens.size() == 0) {
                 showToast("获取门店失败");
                 return;
             }
@@ -273,8 +331,7 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
             }
 
 
-            page = 1;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+            presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
@@ -294,68 +351,26 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
         backgroundAlpha(0.5f);
     }
 
-    @OnClick(R.id.sort_1)
-    public void sort1Click() {
-        UIUtils.setDrawableRight(tvSort1, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_default);
-        adapter.setNewData(datas);
-    }
-
-    int sort2 = 0;
-
-    @OnClick(R.id.sort_2)
-    public void sort2Click() {
-        if (datas == null || datas.size() == 0) {
-            return;
-        }
-        sort2++;
-        if (sort2 % 3 == 1) {
-            UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_a_z);
-
-            List<FreeBean> newData = new ArrayList<>();
-            newData.addAll(datas);
-            Collections.sort(newData, (o1, o2) -> {
-                return o1.getFreeMoney() > o2.getFreeMoney() ? 1 : -1;
-            });
-            adapter.setNewData(newData);
-        } else if (sort2 % 3 == 2) {
-            UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_z_a);
-
-            List<FreeBean> newData = new ArrayList<>();
-            newData.addAll(datas);
-            Collections.sort(newData, (o1, o2) -> {
-                return o1.getFreeMoney() > o2.getFreeMoney() ? -1 : 1;
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_default);
-            adapter.setNewData(datas);
-        }
-        UIUtils.setDrawableRight(tvSort1, R.mipmap.sort_default);
-    }
-
-
     @Override
     public void error(String msg) {
         showToast(msg);
-        adapter.loadMoreEnd();
-        refreshLayout.setRefreshing(false);
     }
 
     List<FreeBean> datas = new ArrayList<>();
 
     @Override
     public void success(List<FreeBean> data) {
-        if (page == 1) {
-            this.datas.clear();
+        datas = new ArrayList<>(data);
+
+        totleBean = new FreeBean();
+        double money = 0;
+        for (FreeBean bean : data) {
+            money += bean.getFreeMoney();
         }
-        this.datas.addAll(data);
-        adapter.setNewData(datas);
-        if (data.size() < 20) {
-            adapter.loadMoreEnd();
-        } else {
-            adapter.loadMoreComplete();
-        }
-        refreshLayout.setRefreshing(false);
+        totleBean.setNames("合计信息");
+        totleBean.setFreeMoney(new BigDecimal(money).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        datas.add(totleBean);
+        adapter.setDatas(datas);
+        recyclerView.notifyDataSetChanged();
     }
 }

@@ -24,11 +24,11 @@ public class JionPresenter extends BasePresenter<IJionView> {
         super(context, iView);
     }
 
-    public void getData(int page, String startDate, String endDate, String startTime, String endTime, int selectType, String shopId) {
+    public void getData(String startDate, String endDate, String startTime, String endTime, int selectType, String shopId) {
         DialogUtils.showDialog(context, "数据加载中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .getJion("4", 20, page, "ASC", startDate, endDate, startTime, endTime, shopId, selectType)
+                .getJion("4", 100, 1, "ASC", startDate, endDate, startTime, endTime, shopId, selectType)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

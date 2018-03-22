@@ -1,4 +1,4 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.collectionStatistics;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.jion;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
+import com.admin.shopkeeper.entity.HandoverBean;
 import com.admin.shopkeeper.entity.ShopCollectionBean;
-import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.utils.UIUtils;
 import com.kelin.scrollablepanel.library.PanelAdapter;
 
@@ -23,16 +23,16 @@ import java.util.List;
  * Created by Administrator on 2018/3/21.
  */
 
-public class CollectionStatisticsAdapter extends PanelAdapter {
+public class JionAdapter extends PanelAdapter {
 
     private static final int TITLE_TYPE = 4;
     private static final int ROOM_TYPE = 0;
     private static final int DATE_TYPE = 1;
     private static final int ORDER_TYPE = 2;
 
-    List<ShopCollectionBean> datas = new ArrayList<>();
+    List<HandoverBean> datas = new ArrayList<>();
 
-    public CollectionStatisticsAdapter() {
+    public JionAdapter() {
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CollectionStatisticsAdapter extends PanelAdapter {
         return 5;
     }
 
-    public void setDatas(List<ShopCollectionBean> datas) {
+    public void setDatas(List<HandoverBean> datas) {
         this.datas = datas;
     }
 
@@ -55,7 +55,7 @@ public class CollectionStatisticsAdapter extends PanelAdapter {
         if (row == 0) {
             setTitleView(viewHolder, column);
         } else {
-            ShopCollectionBean bean = datas.get(row - 1);
+            HandoverBean bean = datas.get(row - 1);
             setDataView(viewHolder, column, bean);
             viewHolder.textView.setOnClickListener(view -> {
                 if (lishener != null) {
@@ -65,7 +65,7 @@ public class CollectionStatisticsAdapter extends PanelAdapter {
         }
     }
 
-    private void setDataView(PanelViewHolder holder, int column, ShopCollectionBean bean) {
+    private void setDataView(PanelViewHolder holder, int column, HandoverBean bean) {
         UIUtils.setNullDrawable(holder.textView);
         if (bean == datas.get(datas.size() - 1)) {
             holder.textView.setTextColor(Color.parseColor("#FF8208"));
@@ -82,21 +82,21 @@ public class CollectionStatisticsAdapter extends PanelAdapter {
                 holder.textView.setText(TextUtils.isEmpty(bean.getNames()) ? App.INSTANCE().getShopName() : bean.getNames());
                 break;
             case 1:
-                holder.textView.setText(String.valueOf(bean.getTotalMoney()));
+                holder.textView.setText(bean.getUsername());
                 break;
             case 2:
-                holder.textView.setText(String.valueOf(bean.getChongzhi()));
+                holder.textView.setText("￥" + String.valueOf(bean.getPrice()));
                 break;
             case 3:
-                holder.textView.setText(String.valueOf(bean.getFreeMoney()));
+                holder.textView.setText("￥" + String.valueOf(bean.getPrice()));
                 break;
             case 4:
-                holder.textView.setText(String.valueOf(bean.getChargeMoney()));
+                holder.textView.setText("￥" + String.valueOf(bean.getPrice()));
                 break;
         }
     }
 
-    int[] status = {0, 0, 0, 0};
+    int[] status = {0, 0, 0};
 
     private void setTitleView(PanelViewHolder holder, int column) {
         holder.textView.setTextColor(Color.parseColor("#888888"));
@@ -107,25 +107,25 @@ public class CollectionStatisticsAdapter extends PanelAdapter {
                 holder.textView.setText("商家名称");
                 break;
             case 1:
-                holder.textView.setText("销售收入");
+                holder.textView.setText("交接人员");
                 break;
             case 2:
-                holder.textView.setText("充值收入");
+                holder.textView.setText("交接总金额");
                 break;
             case 3:
-                holder.textView.setText("优惠金额");
+                holder.textView.setText("备用金");
                 break;
             case 4:
-                holder.textView.setText("销售实收");
+                holder.textView.setText("交接金额");
                 break;
         }
 
-        if (column < 1) {
+        if (column < 2) {
             UIUtils.setNullDrawable(holder.textView);
             return;
         }
 
-        int index = column - 1;
+        int index = column - 2;
 
         if (status[index] == 0) {
             UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_default);
@@ -142,6 +142,19 @@ public class CollectionStatisticsAdapter extends PanelAdapter {
         holder.textView.setOnClickListener(view -> {
             if (lishener != null) {
                 status[index]++;
+//                for (int i = 0; i < status.length; i++) {
+//                    if (i != index) {
+//                        status[i] = 0;
+//                    }
+//                }
+//                if (status[index] % 3 == 0) {
+//                    UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_default);
+//                } else if (status[index] % 3 == 1) {
+//                    UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_a_z);
+//                } else if (status[index] % 3 == 2) {
+//                    UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_z_a);
+//                }
+
                 lishener.onSort(column, status[index]);
             }
         });

@@ -2,9 +2,6 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.deskopen;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,18 +14,18 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.DeskOpenAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.DeskOpenBean;
 import com.admin.shopkeeper.utils.Tools;
-import com.admin.shopkeeper.utils.UIUtils;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
+import com.kelin.scrollablepanel.library.ScrollablePanel;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,23 +39,23 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.sort_1)
-    TextView tvSort1;
-    @BindView(R.id.sort_2)
-    TextView tvSort2;
-    @BindView(R.id.sort_3)
-    TextView tvSort3;
+    @BindView(R.id.tv_date)
+    TextView tvDate;
+    @BindView(R.id.tv_today)
+    TextView tvDay;
+    @BindView(R.id.tv_week)
+    TextView tvWeek;
+    @BindView(R.id.tv_month)
+    TextView tvMonth;
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout refreshLayout;
+    ScrollablePanel recyclerView;
 
-    int page = 1;
     private PopupWindow popupWindow;
-    private DeskOpenAdapter adapter;
 
     List<ChainBean> chainBeens = new ArrayList<>();
     String shopId;
+    private DeskOpenAdapter adapter;
+    private DeskOpenBean totleBean;
 
     @Override
     protected void initPresenter() {
@@ -68,7 +65,7 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_desk_open;
+        return R.layout.activity_collectionstatistics;
     }
 
     @Override
@@ -81,41 +78,72 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new DeskOpenAdapter(R.layout.item_deskopen);
-        recyclerView.setAdapter(adapter);
-
-
-        adapter.setOnLoadMoreListener(() -> {
-            page++;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                    Tools.formatNowDate("yyyy-MM-dd", entDate),
-                    Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", entDate),
-                    0, shopId);
-        }, recyclerView);
-
-        refreshLayout.setOnRefreshListener(() -> {
-            page = 1;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                    Tools.formatNowDate("yyyy-MM-dd", entDate),
-                    Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", entDate),
-                    0, shopId);
-        });
-
-        startDate = new Date(System.currentTimeMillis());
-        entDate = new Date(System.currentTimeMillis());
-
-
         shopId = App.INSTANCE().getShopID();
         chainBeens = App.INSTANCE().getChainBeans();
 
-        presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                Tools.formatNowDate("yyyy-MM-dd", entDate),
-                Tools.formatNowDate("HH:mm:ss", startDate),
-                Tools.formatNowDate("HH:mm:ss", entDate),
-                0, shopId);
+        adapter = new DeskOpenAdapter();
+        recyclerView.setPanelAdapter(adapter);
+        adapter.setOnItemClickListener(new DeskOpenAdapter.OnItemClickLishener() {
+            @Override
+            public void onItemClick(int raw) {
+
+            }
+
+            @Override
+            public void onSort(int col, int status) {
+                sort(col, status);
+            }
+        });
+
+        dayClick();
+    }
+
+    private void sort(int col, int status) {
+        if (datas == null || datas.size() == 0) {
+            return;
+        }
+        datas.remove(totleBean);
+
+        if (status % 3 == 1) {
+            List<DeskOpenBean> newData = new ArrayList<>();
+            newData.addAll(datas);
+            Collections.sort(newData, (o1, o2) -> {
+                switch (col) {
+                    case 2:
+                        return o1.getPersonCount() > o2.getPersonCount() ? 1 : -1;
+                    case 3:
+                        return o1.getShangzuo() > o2.getShangzuo() ? 1 : -1;
+                    case 4:
+                        return o1.getKaitai() > o2.getKaitai() ? 1 : -1;
+                    default:
+                        return o1.getFantai() > o2.getFantai() ? 1 : -1;
+                }
+            });
+            newData.add(totleBean);
+            adapter.setDatas(newData);
+        } else if (status % 3 == 2) {
+
+            List<DeskOpenBean> newData = new ArrayList<>();
+            newData.addAll(datas);
+            Collections.sort(newData, (o1, o2) -> {
+                switch (col) {
+                    case 2:
+                        return o1.getPersonCount() > o2.getPersonCount() ? -1 : 1;
+                    case 3:
+                        return o1.getShangzuo() > o2.getShangzuo() ? -1 : 1;
+                    case 4:
+                        return o1.getKaitai() > o2.getKaitai() ? -1 : 1;
+                    default:
+                        return o1.getFantai() > o2.getFantai() ? -1 : 1;
+                }
+            });
+            newData.add(totleBean);
+            adapter.setDatas(newData);
+        } else {
+            datas.add(totleBean);
+            adapter.setDatas(datas);
+        }
+        recyclerView.notifyDataSetChanged();
     }
 
     @Override
@@ -135,6 +163,63 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.tv_today)
+    public void dayClick() {
+        tvDay.setTextColor(Color.WHITE);
+        tvDay.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(System.currentTimeMillis());
+        entDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
+    }
+
+    @OnClick(R.id.tv_week)
+    public void weekClick() {
+        tvWeek.setTextColor(Color.WHITE);
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_green);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastWeek());
+        entDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
+    }
+
+    @OnClick(R.id.tv_month)
+    public void monthClick() {
+        tvMonth.setTextColor(Color.WHITE);
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastMonth());
+        entDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", entDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
     }
 
     Date startDate;
@@ -160,7 +245,7 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
         }
 
         tvShop.setOnClickListener(v -> {
-            if(chainBeens == null){
+            if (chainBeens == null) {
                 showToast("获取门店列表失败");
                 return;
             }
@@ -258,8 +343,7 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
             }
 
 
-            page = 1;
-            presenter.getData(page, Tools.formatNowDate("yyyy-MM-dd", startDate),
+            presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
                     Tools.formatNowDate("yyyy-MM-dd", entDate),
                     Tools.formatNowDate("HH:mm:ss", startDate),
                     Tools.formatNowDate("HH:mm:ss", entDate),
@@ -279,104 +363,36 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
         backgroundAlpha(0.5f);
     }
 
-    @OnClick(R.id.sort_1)
-    public void sort1Click() {
-        UIUtils.setDrawableRight(tvSort1, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvSort3, R.mipmap.sort_default);
-        adapter.setNewData(datas);
-    }
-
-    int sort2 = 0;
-
-    @OnClick(R.id.sort_2)
-    public void sort2Click() {
-        if (datas == null || datas.size() == 0) {
-            return;
-        }
-        sort2++;
-        if (sort2 % 3 == 1) {
-            UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_a_z);
-
-            List<DeskOpenBean> newData = new ArrayList<>();
-            newData.addAll(datas);
-            Collections.sort(newData, (o1, o2) -> {
-                return o1.getShangzuo() > o2.getShangzuo() ? 1 : -1;
-            });
-            adapter.setNewData(newData);
-        } else if (sort2 % 3 == 2) {
-            UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_z_a);
-
-            List<DeskOpenBean> newData = new ArrayList<>();
-            newData.addAll(datas);
-            Collections.sort(newData, (o1, o2) -> {
-                return o1.getShangzuo() > o2.getShangzuo() ? -1 : 1;
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_default);
-            adapter.setNewData(datas);
-        }
-        UIUtils.setDrawableRight(tvSort1, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvSort3, R.mipmap.sort_default);
-    }
-
-    int sort3 = 0;
-
-    @OnClick(R.id.sort_3)
-    public void sort3Click() {
-        if (datas == null || datas.size() == 0) {
-            return;
-        }
-        sort3++;
-        if (sort3 % 3 == 1) {
-            UIUtils.setDrawableRight(tvSort3, R.mipmap.sort_a_z);
-
-            List<DeskOpenBean> newData = new ArrayList<>();
-            newData.addAll(datas);
-            Collections.sort(newData, (o1, o2) -> {
-                return o1.getKaitai() > o2.getKaitai() ? 1 : -1;
-            });
-            adapter.setNewData(newData);
-        } else if (sort3 % 3 == 2) {
-            UIUtils.setDrawableRight(tvSort3, R.mipmap.sort_z_a);
-
-            List<DeskOpenBean> newData = new ArrayList<>();
-            newData.addAll(datas);
-            Collections.sort(newData, (o1, o2) -> {
-                return o1.getKaitai() > o2.getKaitai() ? -1 : 1;
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvSort3, R.mipmap.sort_default);
-            adapter.setNewData(datas);
-        }
-        UIUtils.setDrawableRight(tvSort1, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvSort2, R.mipmap.sort_default);
-    }
-
 
     @Override
     public void error(String msg) {
         showToast(msg);
-        adapter.loadMoreEnd();
-        refreshLayout.setRefreshing(false);
     }
 
     List<DeskOpenBean> datas = new ArrayList<>();
 
     @Override
     public void success(List<DeskOpenBean> data) {
-        if (page == 1) {
-            this.datas.clear();
+        datas = new ArrayList<>(data);
+        totleBean = new DeskOpenBean();
+
+        int person = 0;
+        double shangzuo = 0, kaitai = 0, fantai = 0;
+        for (DeskOpenBean bean : data) {
+            person += bean.getPersonCount();
+            shangzuo += bean.getShangzuo();
+            kaitai += bean.getKaitai();
+            fantai += bean.getFantai();
         }
-        this.datas.addAll(data);
-        adapter.setNewData(datas);
-        if (data.size() < 20) {
-            adapter.loadMoreEnd();
-        } else {
-            adapter.loadMoreComplete();
-        }
-        refreshLayout.setRefreshing(false);
+
+        totleBean.setName("合计信息");
+        totleBean.setShangzuo(new BigDecimal(shangzuo).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        totleBean.setKaitai(new BigDecimal(kaitai).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        totleBean.setFantai(new BigDecimal(fantai).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        totleBean.setPersonCount(person);
+
+        datas.add(totleBean);
+        adapter.setDatas(datas);
+        recyclerView.notifyDataSetChanged();
     }
 }
