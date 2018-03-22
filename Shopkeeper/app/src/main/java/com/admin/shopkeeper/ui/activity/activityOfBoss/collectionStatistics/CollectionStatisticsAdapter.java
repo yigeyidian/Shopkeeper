@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.entity.ShopCollectionBean;
 import com.admin.shopkeeper.utils.Tools;
@@ -79,7 +80,7 @@ public class CollectionStatisticsAdapter extends PanelAdapter {
 
         switch (column) {
             case 0:
-                holder.textView.setText(TextUtils.isEmpty(bean.getNames()) ? "智慧餐厅" : bean.getNames());
+                holder.textView.setText(TextUtils.isEmpty(bean.getNames()) ? App.INSTANCE().getShopName() : bean.getNames());
                 break;
             case 1:
                 holder.textView.setText(bean.getDinnerDate());

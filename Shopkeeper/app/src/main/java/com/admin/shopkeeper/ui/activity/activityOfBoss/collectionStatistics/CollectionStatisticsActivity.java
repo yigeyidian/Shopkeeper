@@ -44,6 +44,12 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
     Toolbar toolbar;
     @BindView(R.id.tv_date)
     TextView tvDate;
+    @BindView(R.id.tv_today)
+    TextView tvDay;
+    @BindView(R.id.tv_week)
+    TextView tvWeek;
+    @BindView(R.id.tv_month)
+    TextView tvMonth;
 
     @BindView(R.id.recyclerView)
     ScrollablePanel recyclerView;
@@ -108,7 +114,7 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
                 }
                 datas.remove(totleBean);
 
-                if (status%3 == 1) {
+                if (status % 3 == 1) {
                     List<ShopCollectionBean> newData = new ArrayList<>();
                     newData.addAll(datas);
                     Collections.sort(newData, (o1, o2) -> {
@@ -125,7 +131,7 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
                     });
                     newData.add(totleBean);
                     adapter.setDatas(newData);
-                } else if (status%3 == 2) {
+                } else if (status % 3 == 2) {
 
                     List<ShopCollectionBean> newData = new ArrayList<>();
                     newData.addAll(datas);
@@ -155,15 +161,7 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
         shopId = App.INSTANCE().getShopID();
         chainBeens = App.INSTANCE().getChainBeans();
 
-        startDate = new Date(System.currentTimeMillis());
-        entDate = new Date(System.currentTimeMillis());
-
-        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
-
-        presenter.getData(type, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                Tools.formatNowDate("yyyy-MM-dd", entDate),
-                Tools.formatNowDate("HH:mm:ss", startDate),
-                Tools.formatNowDate("HH:mm:ss", entDate), 0, shopId);
+        dayClick();
     }
 
     @Override
@@ -187,6 +185,13 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
 
     @OnClick(R.id.tv_today)
     public void dayClick() {
+        tvDay.setTextColor(Color.WHITE);
+        tvDay.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
         startDate = new Date(System.currentTimeMillis());
         entDate = new Date(System.currentTimeMillis());
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
@@ -199,6 +204,13 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
 
     @OnClick(R.id.tv_week)
     public void weekClick() {
+        tvWeek.setTextColor(Color.WHITE);
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_green);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
         startDate = new Date(Tools.getLastWeek());
         entDate = new Date(System.currentTimeMillis());
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
@@ -211,6 +223,13 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
 
     @OnClick(R.id.tv_month)
     public void monthClick() {
+        tvMonth.setTextColor(Color.WHITE);
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+
         startDate = new Date(Tools.getLastMonth());
         entDate = new Date(System.currentTimeMillis());
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
@@ -354,6 +373,13 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
 
             tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
             popupWindow.dismiss();
+
+            tvMonth.setTextColor(Color.parseColor("#666666"));
+            tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+            tvWeek.setTextColor(Color.parseColor("#666666"));
+            tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+            tvDay.setTextColor(Color.parseColor("#666666"));
+            tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
         });
 
         popupWindow.setOutsideTouchable(true);

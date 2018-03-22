@@ -200,10 +200,9 @@
     <style name="DateTextStyle">
         <item name="android:layout_width">@dimen/_140sdp</item>
         <item name="android:layout_height">@dimen/_56sdp</item>
-        <item name="android:background">@drawable/bg_ract_green</item>
+        <item name="android:background">@drawable/bg_ract_white3</item>
         <item name="android:textSize">@dimen/_30ssp</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/white</item>
         <item name="android:layout_marginLeft">@dimen/_16sdp</item>
     </style>
 

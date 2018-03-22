@@ -55,17 +55,6 @@ android {
 
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
-//            applicationVariants.all { variant ->
-//                variant.outputs.each { output ->
-//                    if (output.outputFile != null && output.outputFile.name.endsWith('.apk') && 'release'.equals(variant.buildType.name)) {
-//                        def apkFile = new File(
-//                                output.outputFile.getParent(),
-//                                "app-${variant.flavorName}-${variant.versionName}.apk".replace("-t", "-test").replace("-p", ""))
-//                        output.outputFile = apkFile
-//                    }
-//                }
-//            }
         }
     }
 
@@ -83,7 +72,7 @@ android {
 }
 
 greendao {
-    schemaVersion 9
+    schemaVersion 10
     daoPackage 'com.admin.greendao.gen'
     targetGenDir 'src/main/java'
 }
