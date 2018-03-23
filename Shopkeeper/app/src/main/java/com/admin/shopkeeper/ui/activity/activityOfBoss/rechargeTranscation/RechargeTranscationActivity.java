@@ -3,9 +3,6 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.rechargeTranscation;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,7 +16,6 @@ import android.widget.TextView;
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.RechargeTranscationAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
@@ -27,13 +23,12 @@ import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.MemberTranscationBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.rechargeTransactionItemDetail.RechargeTranscationItemDetailActivity;
 import com.admin.shopkeeper.utils.Tools;
-import com.admin.shopkeeper.utils.UIUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
+import com.kelin.scrollablepanel.library.ScrollablePanel;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,16 +43,16 @@ public class RechargeTranscationActivity extends BaseActivity<RechargeTranscatio
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.tv_date)
+    TextView tvDate;
+    @BindView(R.id.tv_today)
+    TextView tvDay;
+    @BindView(R.id.tv_week)
+    TextView tvWeek;
+    @BindView(R.id.tv_month)
+    TextView tvMonth;
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.sort_default_recharge)
-    TextView tvDefault;
-    @BindView(R.id.sort_total_recharge)
-    TextView tvTotal;
-    @BindView(R.id.sort_yue_recharge)
-    TextView tvYue;
+    ScrollablePanel recyclerView;
     private PopupWindow laheiPop;
     List<MemberTranscationBean> data;
     private PopupWindow popupWindow;
@@ -76,7 +71,7 @@ public class RechargeTranscationActivity extends BaseActivity<RechargeTranscatio
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_recharge_transcation;
+        return R.layout.activity_collectionstatistics;
     }
 
     @Override
@@ -91,53 +86,140 @@ public class RechargeTranscationActivity extends BaseActivity<RechargeTranscatio
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
-                .marginResId(R.dimen._1sdp, R.dimen._1sdp)
-                .color(getResources().getColor(R.color.item_line_color))
-                .build());
-        adapter = new RechargeTranscationAdapter(R.layout.item_recharge_transcation_table);
-        recyclerView.setAdapter(adapter);
-        startDate = new Date(System.currentTimeMillis());
-        endDate = new Date(System.currentTimeMillis());
-        adapter.setOnItemClickListener((adapter1, view, position) -> {
-            Intent intent = new Intent(this, RechargeTranscationItemDetailActivity.class);
-            intent.putExtra(Config.PARAM1, Tools.formatNowDate("yyyy-MM-dd", startDate));
-            intent.putExtra(Config.PARAM2, Tools.formatNowDate("yyyy-MM-dd", endDate));
-            intent.putExtra("bean", adapter.getItem(position));
-            startActivity(intent);
+        adapter = new RechargeTranscationAdapter();
+        recyclerView.setPanelAdapter(adapter);
+
+        adapter.setOnItemClickListener(new RechargeTranscationAdapter.OnItemClickLishener() {
+            @Override
+            public void onItemClick(int raw) {
+                Intent intent = new Intent(RechargeTranscationActivity.this, RechargeTranscationItemDetailActivity.class);
+                intent.putExtra(Config.PARAM1, Tools.formatNowDate("yyyy-MM-dd", startDate));
+                intent.putExtra(Config.PARAM2, Tools.formatNowDate("yyyy-MM-dd", endDate));
+                intent.putExtra("bean", data.get(raw));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onSort(int col, int status) {
+                if (data == null || data.size() == 0) {
+                    return;
+                }
+                data.remove(totleBean);
+
+                if (status % 3 == 1) {
+                    List<MemberTranscationBean> newData = new ArrayList<>();
+                    newData.addAll(data);
+                    Collections.sort(newData, (o1, o2) -> {
+                        switch (col) {
+                            case 3:
+                                return Double.parseDouble(o1.getRechargeMoney()) > Double.parseDouble(o2.getRechargeMoney()) ? 1 : -1;
+                            case 4:
+                                return Double.parseDouble(o1.getUsedMoney()) > Double.parseDouble(o2.getUsedMoney()) ? 1 : -1;
+                            case 5:
+                                return Double.parseDouble(o1.getZonJian()) > Double.parseDouble(o2.getZonJian()) ? 1 : -1;
+                            case 6:
+                                return Double.parseDouble(o1.getZonAdd()) > Double.parseDouble(o2.getZonAdd()) ? 1 : -1;
+                            default:
+                                return Double.parseDouble(o1.getYue()) > Double.parseDouble(o2.getYue()) ? 1 : -1;
+
+                        }
+                    });
+                    newData.add(totleBean);
+                    adapter.setDatas(newData);
+                } else if (status % 3 == 2) {
+
+                    List<MemberTranscationBean> newData = new ArrayList<>();
+                    newData.addAll(data);
+                    Collections.sort(newData, (o1, o2) -> {
+                        switch (col) {
+                            case 3:
+                                return Double.parseDouble(o1.getRechargeMoney()) > Double.parseDouble(o2.getRechargeMoney()) ? -1 : 1;
+                            case 4:
+                                return Double.parseDouble(o1.getUsedMoney()) > Double.parseDouble(o2.getUsedMoney()) ? -1 : 1;
+                            case 5:
+                                return Double.parseDouble(o1.getZonJian()) > Double.parseDouble(o2.getZonJian()) ? -1 : 1;
+                            case 6:
+                                return Double.parseDouble(o1.getZonAdd()) > Double.parseDouble(o2.getZonAdd()) ? -1 : 1;
+                            default:
+                                return Double.parseDouble(o1.getYue()) > Double.parseDouble(o2.getYue()) ? -1 : 1;
+
+                        }
+                    });
+                    newData.add(totleBean);
+                    adapter.setDatas(newData);
+                } else {
+                    data.add(totleBean);
+                    adapter.setDatas(data);
+                }
+                recyclerView.notifyDataSetChanged();
+            }
         });
-        startDate = new Date(System.currentTimeMillis());
-        endDate = new Date(System.currentTimeMillis());
 
         shopId = App.INSTANCE().getShopID();
         chainBeens = App.INSTANCE().getChainBeans();
 
-        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                pageIndex++;
-                presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                        Tools.formatNowDate("yyyy-MM-dd", endDate),
-                        Tools.formatNowDate("HH:mm:ss", startDate),
-                        Tools.formatNowDate("HH:mm:ss", endDate),
-                        0, shopId);
-            }
-        }, recyclerView);
-        refreshLayout.setOnRefreshListener(() -> {
-            pageIndex = 1;
-            presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                    Tools.formatNowDate("yyyy-MM-dd", endDate),
-                    Tools.formatNowDate("HH:mm:ss", startDate),
-                    Tools.formatNowDate("HH:mm:ss", endDate),
-                    0, shopId);
-        });
+        dayClick();
+
+    }
+
+    @OnClick(R.id.tv_today)
+    public void dayClick() {
+        tvDay.setTextColor(Color.WHITE);
+        tvDay.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(System.currentTimeMillis());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
         presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),
                 Tools.formatNowDate("yyyy-MM-dd", endDate),
                 Tools.formatNowDate("HH:mm:ss", startDate),
                 Tools.formatNowDate("HH:mm:ss", endDate),
                 0, shopId);
+    }
 
+    @OnClick(R.id.tv_week)
+    public void weekClick() {
+        tvWeek.setTextColor(Color.WHITE);
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_green);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastWeek());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", endDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", endDate),
+                0, shopId);
+    }
+
+    @OnClick(R.id.tv_month)
+    public void monthClick() {
+        tvMonth.setTextColor(Color.WHITE);
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastMonth());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),
+                Tools.formatNowDate("yyyy-MM-dd", endDate),
+                Tools.formatNowDate("HH:mm:ss", startDate),
+                Tools.formatNowDate("HH:mm:ss", endDate),
+                0, shopId);
     }
 
     @Override
@@ -315,140 +397,10 @@ public class RechargeTranscationActivity extends BaseActivity<RechargeTranscatio
 
     int defaultType = 0;
 
-    @OnClick(R.id.sort_default_recharge)
-    public void setDefaultClick() {
-        defaultType++;
-
-        if (data == null) {
-            return;
-        }
-        if (defaultType % 3 == 1) {
-            UIUtils.setDrawableRight(tvDefault, R.mipmap.sort_a_z);
-            List<MemberTranscationBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getRechargeMoney()) > Integer.parseInt(o2.getRechargeMoney())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getRechargeMoney()) == Integer.parseInt(o2.getRechargeMoney())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else if (defaultType % 3 == 2) {
-            UIUtils.setDrawableRight(tvDefault, R.mipmap.sort_z_a);
-            List<MemberTranscationBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getRechargeMoney()) > Integer.parseInt(o2.getRechargeMoney())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getRechargeMoney()) == Integer.parseInt(o2.getRechargeMoney())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvDefault, R.mipmap.sort_default);
-            adapter.setNewData(data);
-        }
-        UIUtils.setDrawableRight(tvTotal, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvYue, R.mipmap.sort_default);
-    }
-
-    int nameType = 0;
-
-    @OnClick(R.id.sort_total_recharge)
-    public void setNameClick() {
-        nameType++;
-        if (data == null) {
-            return;
-        }
-        if (nameType % 3 == 1) {
-            UIUtils.setDrawableRight(tvTotal, R.mipmap.sort_a_z);
-            List<MemberTranscationBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getZonAdd()) > Integer.parseInt(o2.getZonAdd())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getZonAdd()) == Integer.parseInt(o2.getZonAdd())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else if (nameType % 3 == 2) {
-            UIUtils.setDrawableRight(tvTotal, R.mipmap.sort_z_a);
-            List<MemberTranscationBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getZonAdd()) > Integer.parseInt(o2.getZonAdd())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getZonAdd()) == Integer.parseInt(o2.getZonAdd())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvTotal, R.mipmap.sort_default);
-        }
-        UIUtils.setDrawableRight(tvDefault, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvYue, R.mipmap.sort_default);
-    }
-
-    int stateType = 0;
-
-    @OnClick(R.id.sort_yue_recharge)
-    public void setStateClick() {
-        stateType++;
-        if (data == null) {
-            return;
-        }
-        if (stateType % 3 == 1) {
-            UIUtils.setDrawableRight(tvYue, R.mipmap.sort_a_z);
-            List<MemberTranscationBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getYue()) > Integer.parseInt(o2.getYue())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getYue()) == Integer.parseInt(o2.getYue())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else if (stateType % 3 == 2) {
-            UIUtils.setDrawableRight(tvYue, R.mipmap.sort_z_a);
-            List<MemberTranscationBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getYue()) > Integer.parseInt(o2.getYue())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getYue()) == Integer.parseInt(o2.getYue())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvYue, R.mipmap.sort_default);
-        }
-        UIUtils.setDrawableRight(tvDefault, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvTotal, R.mipmap.sort_default);
-    }
 
     @Override
     public void error(String msg) {
         showFailToast(msg);
-        refreshLayout.setRefreshing(false);
-        adapter.loadMoreEnd();
     }
 
     @Override
@@ -456,20 +408,36 @@ public class RechargeTranscationActivity extends BaseActivity<RechargeTranscatio
         showSuccessToast(msg);
     }
 
+    private MemberTranscationBean totleBean;
+
     @Override
     public void success(List<MemberTranscationBean> memberTranscationBeanList) {
-        data = new ArrayList<>();
-        if (pageIndex == 1) {
-            this.data.clear();
+        data = new ArrayList<>(memberTranscationBeanList);
+
+        totleBean = new MemberTranscationBean();
+        totleBean.setShopName("合计信息");
+
+        double rechargeMoney = 0;//累积充值
+        double UsedMoney = 0;//消费金额
+        double zonJian = 0;//累积消费
+        double zonAdd = 0;//充值金额
+        double yue = 0;
+        for (MemberTranscationBean bean : data) {
+            rechargeMoney += Double.parseDouble(bean.getRechargeMoney());
+            UsedMoney += Double.parseDouble(bean.getUsedMoney());
+            zonJian += Double.parseDouble(bean.getZonJian());
+            zonAdd += Double.parseDouble(bean.getZonAdd());
+            yue += Double.parseDouble(bean.getYue());
         }
-        this.data = memberTranscationBeanList;
-        adapter.setNewData(data);
-        if (data.size() < 20) {
-            adapter.loadMoreEnd();
-        } else {
-            adapter.loadMoreComplete();
-        }
-        refreshLayout.setRefreshing(false);
+        totleBean.setRechargeMoney(new BigDecimal(rechargeMoney).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setUsedMoney(new BigDecimal(UsedMoney).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setZonJian(new BigDecimal(zonJian).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setZonAdd(new BigDecimal(zonAdd).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setYue(new BigDecimal(yue).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+
+        data.add(totleBean);
+        adapter.setDatas(data);
+        recyclerView.notifyDataSetChanged();
     }
 
 }

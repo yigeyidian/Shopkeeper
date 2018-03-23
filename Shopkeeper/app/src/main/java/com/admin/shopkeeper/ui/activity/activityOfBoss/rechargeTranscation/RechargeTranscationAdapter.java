@@ -1,4 +1,4 @@
-package com.admin.shopkeeper.ui.activity.activityOfBoss.jion;
+package com.admin.shopkeeper.ui.activity.activityOfBoss.rechargeTranscation;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.entity.HandoverBean;
+import com.admin.shopkeeper.entity.MemberTranscationBean;
 import com.admin.shopkeeper.utils.UIUtils;
 import com.kelin.scrollablepanel.library.PanelAdapter;
 
@@ -22,16 +22,16 @@ import java.util.List;
  * Created by Administrator on 2018/3/21.
  */
 
-public class JionAdapter extends PanelAdapter {
+public class RechargeTranscationAdapter extends PanelAdapter {
 
     private static final int TITLE_TYPE = 4;
     private static final int ROOM_TYPE = 0;
     private static final int DATE_TYPE = 1;
     private static final int ORDER_TYPE = 2;
 
-    List<HandoverBean> datas = new ArrayList<>();
+    List<MemberTranscationBean> datas = new ArrayList<>();
 
-    public JionAdapter() {
+    public RechargeTranscationAdapter() {
     }
 
     @Override
@@ -41,10 +41,10 @@ public class JionAdapter extends PanelAdapter {
 
     @Override
     public int getColumnCount() {
-        return 5;
+        return 8;
     }
 
-    public void setDatas(List<HandoverBean> datas) {
+    public void setDatas(List<MemberTranscationBean> datas) {
         this.datas = datas;
     }
 
@@ -54,7 +54,7 @@ public class JionAdapter extends PanelAdapter {
         if (row == 0) {
             setTitleView(viewHolder, column);
         } else {
-            HandoverBean bean = datas.get(row - 1);
+            MemberTranscationBean bean = datas.get(row - 1);
             setDataView(viewHolder, column, bean);
             viewHolder.textView.setOnClickListener(view -> {
                 if (lishener != null) {
@@ -64,7 +64,7 @@ public class JionAdapter extends PanelAdapter {
         }
     }
 
-    private void setDataView(PanelViewHolder holder, int column, HandoverBean bean) {
+    private void setDataView(PanelViewHolder holder, int column, MemberTranscationBean bean) {
         UIUtils.setNullDrawable(holder.textView);
         if (bean == datas.get(datas.size() - 1)) {
             holder.textView.setTextColor(Color.parseColor("#FF8208"));
@@ -78,24 +78,41 @@ public class JionAdapter extends PanelAdapter {
 
         switch (column) {
             case 0:
-                holder.textView.setText(TextUtils.isEmpty(bean.getNames()) ? App.INSTANCE().getShopName() : bean.getNames());
+                holder.textView.setText(TextUtils.isEmpty(bean.getShopName()) ? App.INSTANCE().getShopName() : bean.getShopName());
                 break;
             case 1:
-                holder.textView.setText(bean.getUsername());
+                if(!TextUtils.isEmpty(bean.getName())){
+                    holder.textView.setText(bean.getName());
+                }else{
+                    holder.textView.setText("");
+                }
                 break;
             case 2:
-                holder.textView.setText("￥" + String.valueOf(bean.getPrice()));
+                if(!TextUtils.isEmpty(bean.getPhone())){
+                    holder.textView.setText(bean.getPhone());
+                }else{
+                    holder.textView.setText("");
+                }
                 break;
             case 3:
-                holder.textView.setText("￥" + String.valueOf(bean.getPrice()));
+                holder.textView.setText(String.valueOf(bean.getRechargeMoney()));
                 break;
             case 4:
-                holder.textView.setText("￥" + String.valueOf(bean.getPrice()));
+                holder.textView.setText(String.valueOf(bean.getUsedMoney()));
+                break;
+            case 5:
+                holder.textView.setText(String.valueOf(bean.getZonJian()));
+                break;
+            case 6:
+                holder.textView.setText(String.valueOf(bean.getZonAdd()));
+                break;
+            case 7:
+                holder.textView.setText(String.valueOf(bean.getYue()));
                 break;
         }
     }
 
-    int[] status = {0, 0, 0};
+    int[] status = {0, 0, 0, 0,0};
 
     private void setTitleView(PanelViewHolder holder, int column) {
         holder.textView.setTextColor(Color.parseColor("#888888"));
@@ -106,25 +123,34 @@ public class JionAdapter extends PanelAdapter {
                 holder.textView.setText("商家名称");
                 break;
             case 1:
-                holder.textView.setText("交接人员");
+                holder.textView.setText("姓名");
                 break;
             case 2:
-                holder.textView.setText("交接总金额");
+                holder.textView.setText("手机号");
                 break;
             case 3:
-                holder.textView.setText("备用金");
+                holder.textView.setText("累积充值");
                 break;
             case 4:
-                holder.textView.setText("交接金额");
+                holder.textView.setText("累积消费");
+                break;
+            case 5:
+                holder.textView.setText("消费金额");
+                break;
+            case 6:
+                holder.textView.setText("充值金额");
+                break;
+            case 7:
+                holder.textView.setText("余额");
                 break;
         }
 
-        if (column < 2) {
+        if (column < 3) {
             UIUtils.setNullDrawable(holder.textView);
             return;
         }
 
-        int index = column - 2;
+        int index = column - 3;
 
         if (status[index] == 0) {
             UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_default);
@@ -141,19 +167,6 @@ public class JionAdapter extends PanelAdapter {
         holder.textView.setOnClickListener(view -> {
             if (lishener != null) {
                 status[index]++;
-//                for (int i = 0; i < status.length; i++) {
-//                    if (i != index) {
-//                        status[i] = 0;
-//                    }
-//                }
-//                if (status[index] % 3 == 0) {
-//                    UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_default);
-//                } else if (status[index] % 3 == 1) {
-//                    UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_a_z);
-//                } else if (status[index] % 3 == 2) {
-//                    UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_z_a);
-//                }
-
                 lishener.onSort(column, status[index]);
             }
         });

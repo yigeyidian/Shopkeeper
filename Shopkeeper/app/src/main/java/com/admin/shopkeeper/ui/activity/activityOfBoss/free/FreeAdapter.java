@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.entity.FreeBean;
-import com.admin.shopkeeper.entity.HandoverBean;
 import com.admin.shopkeeper.utils.UIUtils;
 import com.kelin.scrollablepanel.library.PanelAdapter;
 
@@ -147,7 +146,7 @@ public class FreeAdapter extends PanelAdapter {
             super(view);
             this.textView = (TextView) view.findViewById(R.id.title);
             line = view.findViewById(R.id.line);
-            ll = view.findViewById(R.id.item_ll);
+            ll = (LinearLayout) view.findViewById(R.id.item_ll);
         }
     }
 

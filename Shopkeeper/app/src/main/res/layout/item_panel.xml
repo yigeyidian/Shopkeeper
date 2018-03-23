@@ -14,7 +14,7 @@
         android:drawablePadding="@dimen/_5sdp"
         android:drawableRight="@mipmap/sort_default"
         android:gravity="center"
-        android:text="销售收入" />
+        />
 
     <View
         android:id="@+id/line"
