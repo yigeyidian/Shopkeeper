@@ -246,7 +246,7 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
     private void submit(String imageName) {
         presenter.commit(imageName, cbPrint.isChecked() ? "1" : "2", sizeType + "", payType + "", cbSale.isChecked() ? "1" : "0",
                 priceType + "", cdShowOfGuest.isChecked() ? "1" : "0", password.getText().toString(), payTypeValues,
-                cbIsMemberComUse.isClickable()?"1":"0",cbIsUnitePay.isClickable()?"1":"0");
+                cbIsMemberComUse.isChecked() ? "1" : "0", cbIsUnitePay.isChecked() ? "1" : "0");
     }
 
     @Override
@@ -371,7 +371,7 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
 
         payTypeValues = bean.getCashPayType();
         String payTypeStr;
-        
+
 
         if (!TextUtils.isEmpty(bean.getPayImage())) {
             Glide.with(this).load(Config.BASE_IMG + App.INSTANCE().getShopID() + "/pay/" + bean.getPayImage()).into(imageView);

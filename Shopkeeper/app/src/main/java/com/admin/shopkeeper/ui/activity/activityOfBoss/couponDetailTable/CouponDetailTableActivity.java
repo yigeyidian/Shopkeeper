@@ -29,7 +29,9 @@ import com.admin.shopkeeper.utils.UIUtils;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
+import com.kelin.scrollablepanel.library.ScrollablePanel;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,21 +46,23 @@ public class CouponDetailTableActivity extends BaseActivity<CouponDetailTablePre
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.tv_date)
+    TextView tvDate;
+    @BindView(R.id.tv_today)
+    TextView tvDay;
+    @BindView(R.id.tv_week)
+    TextView tvWeek;
+    @BindView(R.id.tv_month)
+    TextView tvMonth;
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.coupon_default)
-    TextView tVdefault;
-    @BindView(R.id.coupon_give)
-    TextView tVGiveCoupon;//券发放量
-    @BindView(R.id.coupon_consume)
-    TextView tVConsumeCoupon;//券使用量
-
+    ScrollablePanel recyclerView;
     private PopupWindow laheiPop;
-    List<CouponDetailTableBean> data;
     private PopupWindow popupWindow;
+    List<CouponDetailTableBean> data;
     private String titleStr;
-    CouponDetailTableAdapter adapter;
+    NewCouponDetailAdapter adapter;
     int pageIndex = 1;
+
 
     List<ChainBean> chainBeens = new ArrayList<>();
     String shopId;
@@ -72,7 +76,7 @@ public class CouponDetailTableActivity extends BaseActivity<CouponDetailTablePre
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_coupon_detail_table;
+        return R.layout.activity_collectionstatistics;
     }
 
     @Override
@@ -87,25 +91,137 @@ public class CouponDetailTableActivity extends BaseActivity<CouponDetailTablePre
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CouponDetailTableAdapter(R.layout.item_coupon_detail_table);
-        recyclerView.setAdapter(adapter);
+        adapter = new NewCouponDetailAdapter();
+        recyclerView.setPanelAdapter(adapter);
 
-        adapter.setOnItemClickListener((adapter1, view, position) -> {
+        adapter.setOnItemClickListener(new NewCouponDetailAdapter.OnItemClickLishener() {
+            @Override
+            public void onItemClick(int raw) {
 
+            }
+
+            @Override
+            public void onSort(int col, int status) {
+                if (data == null || data.size() == 0) {
+                    return;
+                }
+                data.remove(totleBean);
+
+                if (status % 3 == 1) {
+                    List<CouponDetailTableBean> newData = new ArrayList<>();
+                    newData.addAll(data);
+                    Collections.sort(newData, (o1, o2) -> {
+                        switch (col) {
+                            case 2:
+                                return Integer.parseInt(o1.getCouponPerson()) > Integer.parseInt(o2.getCouponPerson()) ? 1 : -1;
+                            case 3:
+                                return Integer.parseInt(o1.getGiveConponVolume()) > Integer.parseInt(o2.getGiveConponVolume()) ? 1 : -1;
+                            case 4:
+                                return Integer.parseInt(o1.getUseCoupon()) > Integer.parseInt(o2.getUseCoupon()) ? 1 : -1;
+                            case 5:
+                                return Double.parseDouble(o1.getDiscount()) > Double.parseDouble(o2.getDiscount()) ? 1 : -1;
+                            case 6:
+                                return Double.parseDouble(o1.getFreePriceByCoupon()) > Double.parseDouble(o2.getFreePriceByCoupon()) ? 1 : -1;
+                            case 7:
+                                return Integer.parseInt(o1.getUseCoupon()) > Integer.parseInt(o2.getUseCoupon()) ? 1 : -1;
+                            default:
+                                return Double.parseDouble(o1.getConsumeByCoupon()) > Double.parseDouble(o2.getConsumeByCoupon()) ? 1 : -1;
+
+                        }
+                    });
+                    newData.add(totleBean);
+                    adapter.setDatas(newData);
+                } else if (status % 3 == 2) {
+
+                    List<CouponDetailTableBean> newData = new ArrayList<>();
+                    newData.addAll(data);
+                    Collections.sort(newData, (o1, o2) -> {
+                        switch (col) {
+                            case 2:
+                                return Integer.parseInt(o1.getCouponPerson()) < Integer.parseInt(o2.getCouponPerson()) ? 1 : -1;
+                            case 3:
+                                return Integer.parseInt(o1.getGiveConponVolume()) < Integer.parseInt(o2.getGiveConponVolume()) ? 1 : -1;
+                            case 4:
+                                return Integer.parseInt(o1.getUseCoupon()) < Integer.parseInt(o2.getUseCoupon()) ? 1 : -1;
+                            case 5:
+                                return Double.parseDouble(o1.getDiscount()) < Double.parseDouble(o2.getDiscount()) ? 1 : -1;
+                            case 6:
+                                return Double.parseDouble(o1.getFreePriceByCoupon()) < Double.parseDouble(o2.getFreePriceByCoupon()) ? 1 : -1;
+                            case 7:
+                                return Integer.parseInt(o1.getUseCoupon()) < Integer.parseInt(o2.getUseCoupon()) ? 1 : -1;
+                            default:
+                                return Double.parseDouble(o1.getConsumeByCoupon()) < Double.parseDouble(o2.getConsumeByCoupon()) ? 1 : -1;
+
+                        }
+                    });
+                    newData.add(totleBean);
+                    adapter.setDatas(newData);
+                } else {
+                    data.add(totleBean);
+                    adapter.setDatas(data);
+                }
+                recyclerView.notifyDataSetChanged();
+
+            }
         });
-        String startDate = Tools.formatLastMonthDate("yyyy-MM-dd");
-        String endDate = Tools.formatNowDate("yyyy-MM-dd");
 
         shopId = App.INSTANCE().getShopID();
         chainBeens = App.INSTANCE().getChainBeans();
 
-        presenter.getData(pageIndex, startDate, endDate, "00:00:00", "23:59:59", 0,shopId);
+        monthClick();
+//        presenter.getData(pageIndex, startDate, endDate, "00:00:00", "23:59:59", 0,shopId);
 
-//        tvDate.setText(startDate + "至" + endDate);
+
+    }
+    @OnClick(R.id.tv_today)
+    public void dayClick() {
+        tvDay.setTextColor(Color.WHITE);
+        tvDay.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(System.currentTimeMillis());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),"00:00:00", "23:59:59", 0,shopId);
+    }
+
+    @OnClick(R.id.tv_week)
+    public void weekClick() {
+        tvWeek.setTextColor(Color.WHITE);
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_green);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastWeek());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),"00:00:00", "23:59:59", 0,shopId);
 
     }
 
+    @OnClick(R.id.tv_month)
+    public void monthClick() {
+        tvMonth.setTextColor(Color.WHITE);
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastMonth());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),"00:00:00", "23:59:59", 0,shopId);
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -277,134 +393,7 @@ public class CouponDetailTableActivity extends BaseActivity<CouponDetailTablePre
 
     int defaultType = 0;
 
-    @OnClick(R.id.coupon_default)
-    public void setDefaultClick() {
-        defaultType++;
 
-        if (data == null) {
-            return;
-        }
-        if (defaultType % 3 == 1) {
-            UIUtils.setDrawableRight(tVdefault, R.mipmap.sort_a_z);
-            List<CouponDetailTableBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getCouponPerson()) > Integer.parseInt(o2.getCouponPerson())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getCouponPerson()) == Integer.parseInt(o2.getCouponPerson())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else if (defaultType % 3 == 2) {
-            UIUtils.setDrawableRight(tVdefault, R.mipmap.sort_z_a);
-            List<CouponDetailTableBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getCouponPerson()) > Integer.parseInt(o2.getCouponPerson())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getCouponPerson()) > Integer.parseInt(o2.getCouponPerson())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tVdefault, R.mipmap.sort_default);
-            adapter.setNewData(data);
-        }
-        UIUtils.setDrawableRight(tVGiveCoupon, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tVConsumeCoupon, R.mipmap.sort_default);
-    }
-
-    int nameType = 0;
-
-    @OnClick(R.id.coupon_give)
-    public void setNameClick() {
-        nameType++;
-        if (data == null) {
-            return;
-        }
-        if (nameType % 3 == 1) {
-            UIUtils.setDrawableRight(tVGiveCoupon, R.mipmap.sort_a_z);
-            List<CouponDetailTableBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getGiveConponVolume()) > Integer.parseInt(o2.getGiveConponVolume())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getGiveConponVolume()) == Integer.parseInt(o2.getGiveConponVolume())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else if (nameType % 3 == 2) {
-            UIUtils.setDrawableRight(tVGiveCoupon, R.mipmap.sort_z_a);
-            List<CouponDetailTableBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getGiveConponVolume()) > Integer.parseInt(o2.getGiveConponVolume())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getGiveConponVolume()) == Integer.parseInt(o2.getGiveConponVolume())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tVGiveCoupon, R.mipmap.sort_default);
-        }
-        UIUtils.setDrawableRight(tVdefault, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tVConsumeCoupon, R.mipmap.sort_default);
-    }
-
-    int stateType = 0;
-
-    @OnClick(R.id.coupon_consume)
-    public void setStateClick() {
-        stateType++;
-        if (data == null) {
-            return;
-        }
-        if (stateType % 3 == 1) {
-            UIUtils.setDrawableRight(tVConsumeCoupon, R.mipmap.sort_a_z);
-            List<CouponDetailTableBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getUseCoupon()) > Integer.parseInt(o2.getUseCoupon())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getUseCoupon()) == Integer.parseInt(o2.getUseCoupon())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else if (stateType % 3 == 2) {
-            UIUtils.setDrawableRight(tVConsumeCoupon, R.mipmap.sort_z_a);
-            List<CouponDetailTableBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getUseCoupon()) > Integer.parseInt(o2.getUseCoupon())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getUseCoupon()) == Integer.parseInt(o2.getUseCoupon())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tVConsumeCoupon, R.mipmap.sort_default);
-        }
-        UIUtils.setDrawableRight(tVdefault, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tVGiveCoupon, R.mipmap.sort_default);
-    }
 
     @Override
     public void error(String msg) {
@@ -416,10 +405,38 @@ public class CouponDetailTableActivity extends BaseActivity<CouponDetailTablePre
         showSuccessToast(msg);
     }
 
+    private CouponDetailTableBean totleBean;
     @Override
     public void success(List<CouponDetailTableBean> couponDetailTableBeenList) {
-        this.data = couponDetailTableBeenList;
-        adapter.setNewData(couponDetailTableBeenList);
+        data = new ArrayList<>(couponDetailTableBeenList);
+
+        totleBean = new CouponDetailTableBean();
+        totleBean.setShopName("合计信息");
+
+        int couponPers = 0;//券获取人数
+        int volume = 0;//券发放量
+        int use = 0;//券使用量
+        double diacount = 0;//券优惠金额
+        double free = 0;//累积抵用金额
+        double consume = 0;//带动消费
+        for (CouponDetailTableBean bean : data) {
+            couponPers += Integer.parseInt(bean.getCouponPerson());
+            volume += Integer.parseInt(bean.getGiveConponVolume());
+            use += Integer.parseInt(bean.getUseCoupon());
+            diacount += Double.parseDouble(bean.getDiscount());
+            free += Double.parseDouble(bean.getFreePriceByCoupon());
+            consume += Double.parseDouble(bean.getConsumeByCoupon());
+        }
+        totleBean.setCouponPerson(new BigDecimal(couponPers).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setGiveConponVolume(new BigDecimal(volume).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setUseCoupon(new BigDecimal(use).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setDiscount(new BigDecimal(diacount).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setFreePriceByCoupon(new BigDecimal(free).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setConsumeByCoupon(new BigDecimal(consume).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+
+        data.add(totleBean);
+        adapter.setDatas(data);
+        recyclerView.notifyDataSetChanged();
     }
 
 }

@@ -28,14 +28,17 @@ import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.IntegralDetailTableBean;
 import com.admin.shopkeeper.entity.MemberConsumeDetailBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.integralTransactionItemDetail.IntegralTransactionItemDetailActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.memberconsumeDetails.NewMemberConsumeDetailAdapter;
 import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.utils.UIUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
+import com.kelin.scrollablepanel.library.ScrollablePanel;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,21 +53,21 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.tv_date)
+    TextView tvDate;
+    @BindView(R.id.tv_today)
+    TextView tvDay;
+    @BindView(R.id.tv_week)
+    TextView tvWeek;
+    @BindView(R.id.tv_month)
+    TextView tvMonth;
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.sort_default_integral)
-    TextView tvDefaultIntegral;
-    @BindView(R.id.sort_yue_integral)
-    TextView tvYueIntegral;
-    @BindView(R.id.sort_add_integral)
-    TextView tvAddIntegral;
-    @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout refreshLayout;
+    ScrollablePanel recyclerView;
     private PopupWindow laheiPop;
-    List<IntegralDetailTableBean> data;
     private PopupWindow popupWindow;
+    List<IntegralDetailTableBean> data;
     private String titleStr;
-    IntegralTransactionDetailAdapter adapter;
+    NewIntegralTransactionDetailAdapter adapter;
     int pageIndex = 1;
 
     List<ChainBean> chainBeens = new ArrayList<>();
@@ -78,7 +81,7 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_integral_transaction_detail;
+        return R.layout.activity_collectionstatistics;
     }
 
     @Override
@@ -93,59 +96,131 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
-                .marginResId(R.dimen._1sdp, R.dimen._1sdp)
-                .color(getResources().getColor(R.color.item_line_color))
-                .build());
-        adapter = new IntegralTransactionDetailAdapter(R.layout.item_integral_consume_detail);
-        recyclerView.setAdapter(adapter);
-        startDate = new Date(System.currentTimeMillis());
-        endDate = new Date(System.currentTimeMillis());
-        adapter.setOnItemClickListener((adapter1, view, position) -> {
-            Intent intent = new Intent(this, IntegralTransactionItemDetailActivity.class);
-            intent.putExtra("bean", adapter.getItem(position));
-            intent.putExtra(Config.PARAM1, Tools.formatNowDate("yyyy-MM-dd", startDate));
-            intent.putExtra(Config.PARAM2, Tools.formatNowDate("yyyy-MM-dd", endDate));
-            startActivity(intent);
+        adapter = new NewIntegralTransactionDetailAdapter();
+        recyclerView.setPanelAdapter(adapter);
+
+        adapter.setOnItemClickListener(new NewIntegralTransactionDetailAdapter.OnItemClickLishener() {
+            @Override
+            public void onItemClick(int raw) {
+
+                Intent intent = new Intent(IntegralTransactionDetailActivity.this, IntegralTransactionItemDetailActivity.class);
+                intent.putExtra("bean", data.get(raw));
+                intent.putExtra(Config.PARAM1, Tools.formatNowDate("yyyy-MM-dd", startDate));
+                intent.putExtra(Config.PARAM2, Tools.formatNowDate("yyyy-MM-dd", endDate));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onSort(int col, int status) {
+                if (data == null || data.size() == 0) {
+                    return;
+                }
+                data.remove(totleBean);
+
+                if (status % 3 == 1) {
+                    List<IntegralDetailTableBean> newData = new ArrayList<>();
+                    newData.addAll(data);
+                    Collections.sort(newData, (o1, o2) -> {
+                        switch (col) {
+                            case 3:
+                                return Integer.parseInt(o1.getRechargeAmount()) > Integer.parseInt(o2.getRechargeAmount()) ? 1 : -1;
+                            case 4:
+                                return Integer.parseInt(o1.getConsumeAmount()) > Integer.parseInt(o2.getConsumeAmount()) ? 1 : -1;
+                            case 5:
+                                return Integer.parseInt(o1.getAdd()) > Integer.parseInt(o2.getAdd()) ? 1 : -1;
+                            case 6:
+                                return Integer.parseInt(o1.getReduce()) > Integer.parseInt(o2.getReduce()) ? 1 : -1;
+                            default:
+                                return Double.parseDouble(o1.getYue()) > Double.parseDouble(o2.getYue()) ? 1 : -1;
+
+                        }
+                    });
+                    newData.add(totleBean);
+                    adapter.setDatas(newData);
+                } else if (status % 3 == 2) {
+
+                    List<IntegralDetailTableBean> newData = new ArrayList<>();
+                    newData.addAll(data);
+                    Collections.sort(newData, (o1, o2) -> {
+                        switch (col) {
+                            case 3:
+                                return Integer.parseInt(o1.getRechargeAmount()) < Integer.parseInt(o2.getRechargeAmount()) ? 1 : -1;
+                            case 4:
+                                return Integer.parseInt(o1.getConsumeAmount()) < Integer.parseInt(o2.getConsumeAmount()) ? 1 : -1;
+                            case 5:
+                                return Integer.parseInt(o1.getAdd()) < Integer.parseInt(o2.getAdd()) ? 1 : -1;
+                            case 6:
+                                return Integer.parseInt(o1.getReduce()) < Integer.parseInt(o2.getReduce()) ? 1 : -1;
+                            default:
+                                return Double.parseDouble(o1.getYue()) < Double.parseDouble(o2.getYue()) ? 1 : -1;
+
+                        }
+                    });
+                    newData.add(totleBean);
+                    adapter.setDatas(newData);
+                } else {
+                    data.add(totleBean);
+                    adapter.setDatas(data);
+                }
+                recyclerView.notifyDataSetChanged();
+
+            }
         });
-        startDate = new Date(System.currentTimeMillis());
-        endDate = new Date(System.currentTimeMillis());
         shopId = App.INSTANCE().getShopID();
         chainBeens = App.INSTANCE().getChainBeans();
 
-        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                pageIndex++;
-                presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                        Tools.formatNowDate("yyyy-MM-dd", endDate),
-                        Tools.formatNowDate("HH:mm:ss", startDate),
-                        Tools.formatNowDate("HH:mm:ss", endDate),
-                        0, shopId);
-            }
-        }, recyclerView);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                pageIndex = 1;
-                presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                        Tools.formatNowDate("yyyy-MM-dd", endDate),
-                        Tools.formatNowDate("HH:mm:ss", startDate),
-                        Tools.formatNowDate("HH:mm:ss", endDate),
-                        0, shopId);
-            }
-        });
-        presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),
-                Tools.formatNowDate("yyyy-MM-dd", endDate),
-                Tools.formatNowDate("HH:mm:ss", startDate),
-                Tools.formatNowDate("HH:mm:ss", endDate),
-                0, shopId);
+        dayClick();
+    }
 
-//        tvDate.setText(startDate + "至" + endDate);
+    @OnClick(R.id.tv_today)
+    public void dayClick() {
+        tvDay.setTextColor(Color.WHITE);
+        tvDay.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(System.currentTimeMillis());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),"00:00:00", "23:59:59", 0,shopId);
+    }
+
+    @OnClick(R.id.tv_week)
+    public void weekClick() {
+        tvWeek.setTextColor(Color.WHITE);
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_green);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastWeek());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),"00:00:00", "23:59:59", 0,shopId);
 
     }
 
+    @OnClick(R.id.tv_month)
+    public void monthClick() {
+        tvMonth.setTextColor(Color.WHITE);
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastMonth());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),"00:00:00", "23:59:59", 0,shopId);
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -318,142 +393,11 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
     }
 
 
-    int defaultType = 0;
 
-    @OnClick(R.id.sort_default_integral)
-    public void setDefaultClick() {
-        defaultType++;
-
-        if (data == null) {
-            return;
-        }
-        if (defaultType % 3 == 1) {
-            UIUtils.setDrawableRight(tvDefaultIntegral, R.mipmap.sort_a_z);
-            List<IntegralDetailTableBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getRechargeAmount()) > Integer.parseInt(o2.getRechargeAmount())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getRechargeAmount()) == Integer.parseInt(o2.getRechargeAmount())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else if (defaultType % 3 == 2) {
-            UIUtils.setDrawableRight(tvDefaultIntegral, R.mipmap.sort_z_a);
-            List<IntegralDetailTableBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getRechargeAmount()) > Integer.parseInt(o2.getRechargeAmount())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getRechargeAmount()) == Integer.parseInt(o2.getRechargeAmount())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvDefaultIntegral, R.mipmap.sort_default);
-            adapter.setNewData(data);
-        }
-        UIUtils.setDrawableRight(tvAddIntegral, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvYueIntegral, R.mipmap.sort_default);
-    }
-
-    int nameType = 0;
-
-    @OnClick(R.id.sort_yue_integral)
-    public void setNameClick() {
-        nameType++;
-        if (data == null) {
-            return;
-        }
-        if (nameType % 3 == 1) {
-            UIUtils.setDrawableRight(tvYueIntegral, R.mipmap.sort_a_z);
-            List<IntegralDetailTableBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getYue()) > Integer.parseInt(o2.getYue())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getYue()) == Integer.parseInt(o2.getYue())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else if (nameType % 3 == 2) {
-            UIUtils.setDrawableRight(tvYueIntegral, R.mipmap.sort_z_a);
-            List<IntegralDetailTableBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getYue()) > Integer.parseInt(o2.getYue())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getYue()) == Integer.parseInt(o2.getYue())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvYueIntegral, R.mipmap.sort_default);
-        }
-        UIUtils.setDrawableRight(tvDefaultIntegral, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvAddIntegral, R.mipmap.sort_default);
-    }
-
-    int stateType = 0;
-
-    @OnClick(R.id.sort_add_integral)
-    public void setStateClick() {
-        stateType++;
-        if (data == null) {
-            return;
-        }
-        if (stateType % 3 == 1) {
-            UIUtils.setDrawableRight(tvAddIntegral, R.mipmap.sort_a_z);
-            List<IntegralDetailTableBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getAdd()) > Integer.parseInt(o2.getAdd())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getAdd()) == Integer.parseInt(o2.getAdd())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else if (stateType % 3 == 2) {
-            UIUtils.setDrawableRight(tvAddIntegral, R.mipmap.sort_z_a);
-            List<IntegralDetailTableBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getAdd()) > Integer.parseInt(o2.getAdd())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getAdd()) == Integer.parseInt(o2.getAdd())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvAddIntegral, R.mipmap.sort_default);
-        }
-        UIUtils.setDrawableRight(tvDefaultIntegral, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvYueIntegral, R.mipmap.sort_default);
-    }
 
     @Override
     public void error(String msg) {
         showFailToast(msg);
-        refreshLayout.setRefreshing(false);
-        adapter.loadMoreEnd();
     }
 
     @Override
@@ -461,20 +405,35 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
         showSuccessToast(msg);
     }
 
+    private IntegralDetailTableBean totleBean;
     @Override
     public void success(List<IntegralDetailTableBean> integralDetailTableBeanList) {
-        data = new ArrayList<>();
-        if (pageIndex == 1) {
-            this.data.clear();
+        data = new ArrayList<>(integralDetailTableBeanList);
+
+        totleBean = new IntegralDetailTableBean();
+        totleBean.setShopName("合计信息");
+
+        int rechargeAmount = 0;//累计新增
+        int consumeAmount = 0;//累计消费
+        int add = 0;//新增积分
+        int reduce = 0;//减少积分
+        int yue = 0;//余额
+        for (IntegralDetailTableBean bean : data) {
+            rechargeAmount += Integer.parseInt(bean.getRechargeAmount());
+            consumeAmount += Double.parseDouble(bean.getConsumeAmount());
+            add += Double.parseDouble(bean.getAdd());
+            reduce += Double.parseDouble(bean.getReduce());
+            yue += Double.parseDouble(bean.getYue());
         }
-        this.data.addAll(integralDetailTableBeanList);
-        adapter.setNewData(data);
-        if (data.size() < 20) {
-            adapter.loadMoreEnd();
-        } else {
-            adapter.loadMoreComplete();
-        }
-        refreshLayout.setRefreshing(false);
+        totleBean.setRechargeAmount(new BigDecimal(rechargeAmount).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setConsumeAmount(new BigDecimal(consumeAmount).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setAdd(new BigDecimal(add).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setReduce(new BigDecimal(reduce).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setYue(new BigDecimal(yue).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+
+        data.add(totleBean);
+        adapter.setDatas(data);
+        recyclerView.notifyDataSetChanged();
     }
 
 }

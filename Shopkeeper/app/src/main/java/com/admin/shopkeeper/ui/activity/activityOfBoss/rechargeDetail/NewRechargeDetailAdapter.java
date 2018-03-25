@@ -78,21 +78,19 @@ public class NewRechargeDetailAdapter extends PanelAdapter {
 
         switch (column) {
             case 0:
-                holder.textView.setText( App.INSTANCE().getShopName());
+                holder.textView.setText(TextUtils.isEmpty(bean.getShopName()) ? App.INSTANCE().getShopName() : bean.getShopName());
                 break;
             case 1:
-                if(!TextUtils.isEmpty(bean.getDate())){
+                if (!TextUtils.isEmpty(bean.getDate())) {
                     holder.textView.setText(bean.getDate());
-                }else{
+                } else {
                     holder.textView.setText("");
                 }
                 break;
             case 2:
-                if(!TextUtils.isEmpty(bean.getWeixin())){
-                    holder.textView.setText(bean.getWeixin());
-                }else{
-                    holder.textView.setText("");
-                }
+
+                holder.textView.setText(String.valueOf(bean.getWeixin()));
+
                 break;
             case 3:
                 holder.textView.setText(String.valueOf(bean.getDiannei()));

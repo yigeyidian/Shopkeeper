@@ -19,6 +19,16 @@ public class MemberVolumeAnalysisBean implements Serializable {
     @SerializedName("TOTALPRICE")
     String total;
 
+    String shopName;
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
     public String getDate() {
         return date;
     }

@@ -19,8 +19,12 @@ public class IntegralTransactionItemDetailAdapter extends BaseQuickAdapter<Integ
 
     @Override
     protected void convert(BaseViewHolder helper, IntegralTranscationItemDetailBean item) {
-        helper.setText(R.id.item_consume_type, item.getConsumeType());
-        helper.setText(R.id.item_price, item.getPrice());
+        if(item.getConsumeType() != null){
+            helper.setText(R.id.item_consume_type, item.getConsumeType());
+        }
+        if(item.getPrice() != null){
+            helper.setText(R.id.item_price, item.getPrice());
+        }
         helper.setText(R.id.item_time, item.getTime());
     }
 }

@@ -59,7 +59,7 @@ class BillPresenter extends BasePresenter<IBillView> {
                     switch (intModel.getCode()) {
                         case Config.REQUEST_SUCCESS:
                             if (intModel.getResult().equals("0")) {
-                                iView.warning("获取打折优惠价格错误");
+                                iView.warning("存在无法打折菜品");
                             } else
                                 iView.dazheSucccess(Double.parseDouble(intModel.getResult()));
                             break;

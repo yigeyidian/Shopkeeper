@@ -84,6 +84,7 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
 
 
         adapter = new NewRechargeDetailAdapter();
+        recyclerView.setPanelAdapter(adapter);
         adapter.setOnItemClickListener(new NewRechargeDetailAdapter.OnItemClickLishener() {
             @Override
             public void onItemClick(int raw) {
@@ -103,13 +104,13 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
                     Collections.sort(newData, (o1, o2) -> {
                         switch (col) {
                             case 2:
-                                return Double.parseDouble(o1.getWeixin()) > Double.parseDouble(o2.getWeixin()) ? 1 : -1;
+                                return o1.getWeixin() > o2.getWeixin() ? 1 : -1;
                             case 3:
-                                return Double.parseDouble(o1.getDiannei()) > Double.parseDouble(o2.getDiannei()) ? 1 : -1;
+                                return o1.getDiannei() > o2.getDiannei() ? 1 : -1;
                             case 4:
-                                return Double.parseDouble(o1.getTotalPrice()) > Double.parseDouble(o2.getTotalPrice()) ? 1 : -1;
+                                return o1.getTotalPrice() > o2.getTotalPrice() ? 1 : -1;
                             default:
-                                return Double.parseDouble(o1.getZengsong()) > Double.parseDouble(o2.getZengsong()) ? 1 : -1;
+                                return o1.getZengsong() > o2.getZengsong() ? 1 : -1;
 
                         }
                     });
@@ -122,13 +123,13 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
                     Collections.sort(newData, (o1, o2) -> {
                         switch (col) {
                             case 2:
-                                return Double.parseDouble(o1.getWeixin()) > Double.parseDouble(o2.getWeixin()) ? -1 : 1;
+                                return o1.getWeixin() >o2.getWeixin() ? -1 : 1;
                             case 3:
-                                return Double.parseDouble(o1.getDiannei()) > Double.parseDouble(o2.getDiannei()) ? -1 : 1;
+                                return o1.getDiannei() > o2.getDiannei() ? -1 : 1;
                             case 4:
-                                return Double.parseDouble(o1.getTotalPrice()) > Double.parseDouble(o2.getTotalPrice()) ? -1 : 1;
+                                return o1.getTotalPrice() >o2.getTotalPrice() ? -1 : 1;
                             default:
-                                return Double.parseDouble(o1.getZengsong()) > Double.parseDouble(o2.getZengsong()) ? -1 : 1;
+                                return o1.getZengsong() > o2.getZengsong() ? -1 : 1;
 
                         }
                     });
@@ -147,9 +148,7 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
         shopId = App.INSTANCE().getShopID();
         chainBeens = App.INSTANCE().getChainBeans();
 
-        presenter.getData(startDate, endDate, shopId);
-
-        tvDate.setText(startDate + "至" + endDate);
+        monthClick();
 
     }
     @OnClick(R.id.tv_today)
@@ -387,7 +386,7 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
 
     @Override
     public void success(List<RechargeDetailTableBean> rechargeDetailTableBeanList) {
-        this.datas = rechargeDetailTableBeanList;
+        datas = new ArrayList<>(rechargeDetailTableBeanList);
         totleBean = new RechargeDetailTableBean();
         totleBean.setShopName("合计信息");
         double weixin = 0;
@@ -395,15 +394,15 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
         double recharge = 0;
         double give = 0;
         for (RechargeDetailTableBean bean : rechargeDetailTableBeanList) {
-            weixin += Double.parseDouble(bean.getWeixin());
-            diannei += Double.parseDouble(bean.getDiannei());
-            recharge += Double.parseDouble(bean.getTotalPrice());
-            give += Double.parseDouble(bean.getZengsong());
+            weixin += bean.getWeixin();
+            diannei += bean.getDiannei();
+            recharge += bean.getTotalPrice();
+            give += bean.getZengsong();
         }
-        totleBean.setWeixin(new BigDecimal(weixin).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-        totleBean.setDiannei(new BigDecimal(diannei).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-        totleBean.setTotalPrice(new BigDecimal(recharge).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-        totleBean.setZengsong(new BigDecimal(give).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setWeixin(new BigDecimal(weixin).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        totleBean.setDiannei(new BigDecimal(diannei).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        totleBean.setTotalPrice(new BigDecimal(recharge).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        totleBean.setZengsong(new BigDecimal(give).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
         datas.add(totleBean);
         adapter.setDatas(datas);
