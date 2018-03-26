@@ -30,10 +30,13 @@ import com.admin.shopkeeper.utils.UIUtils;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
+import com.kelin.scrollablepanel.library.ScrollablePanel;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -43,27 +46,24 @@ import butterknife.OnClick;
 public class MemberVolumeAnalysisActivity extends BaseActivity<MemberVolumeAnalysisPresenter> implements IMemberVolumeAnalysisView {
 
 
+
+    List<MemberVolumeAnalysisBean> data;
+    private String titleStr;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    private PopupWindow laheiPop;
-    List<MemberVolumeAnalysisBean> data;
-    private PopupWindow popupWindow;
-    private String titleStr;
     @BindView(R.id.tv_date)
     TextView tvDate;
-    @BindView(R.id.tv_weixin)
-    TextView tvWeixin;
-    @BindView(R.id.tv_diannei)
-    TextView tvDiannei;
-    @BindView(R.id.tv_zengsong)
-    TextView tvGive;
-    @BindView(R.id.ll_total)
-    LinearLayout totalLL;
-    @BindView(R.id.tv_total)
-    TextView tvTotal;
-    MemberVolumeAnalysisAdapter adapter;
+    @BindView(R.id.tv_today)
+    TextView tvDay;
+    @BindView(R.id.tv_week)
+    TextView tvWeek;
+    @BindView(R.id.tv_month)
+    TextView tvMonth;
+    @BindView(R.id.recyclerView)
+    ScrollablePanel recyclerView;
+    private PopupWindow laheiPop;
+    private PopupWindow popupWindow;
+    NewMemberVolumeAnalysisAdapter adapter;
 
     List<ChainBean> chainBeens = new ArrayList<>();
     String shopId;
@@ -76,7 +76,7 @@ public class MemberVolumeAnalysisActivity extends BaseActivity<MemberVolumeAnaly
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_member_volume_analysis;
+        return R.layout.activity_collectionstatistics;
     }
 
     @Override
@@ -91,16 +91,62 @@ public class MemberVolumeAnalysisActivity extends BaseActivity<MemberVolumeAnaly
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
-                .marginResId(R.dimen._1sdp, R.dimen._1sdp)
-                .color(getResources().getColor(R.color.item_line_color))
-                .build());
-        adapter = new MemberVolumeAnalysisAdapter(R.layout.item_member_volume_analysis);
-        recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener((adapter1, view, position) -> {
+        adapter = new NewMemberVolumeAnalysisAdapter();
+        recyclerView.setPanelAdapter(adapter);
 
+        adapter.setOnItemClickListener(new NewMemberVolumeAnalysisAdapter.OnItemClickLishener() {
+            @Override
+            public void onItemClick(int raw) {
+
+            }
+
+            @Override
+            public void onSort(int col, int status) {
+                if (data == null || data.size() == 0) {
+                    return;
+                }
+                data.remove(totleBean);
+
+                if (status % 3 == 1) {
+                    List<MemberVolumeAnalysisBean> newData = new ArrayList<>();
+                    newData.addAll(data);
+                    Collections.sort(newData, (o1, o2) -> {
+                        switch (col) {
+                            case 2:
+                                return Integer.parseInt(o1.getTotal()) > Integer.parseInt(o2.getTotal()) ? 1 : -1;
+                            case 3:
+                                return Integer.parseInt(o1.getWeChat()) > Integer.parseInt(o2.getWeChat()) ? 1 : -1;
+                            default:
+                                return Integer.parseInt(o1.getLineOfDown()) > Integer.parseInt(o2.getLineOfDown()) ? 1 : -1;
+                        }
+                    });
+                    newData.add(totleBean);
+                    adapter.setDatas(newData);
+                } else if (status % 3 == 2) {
+
+                    List<MemberVolumeAnalysisBean> newData = new ArrayList<>();
+                    newData.addAll(data);
+                    Collections.sort(newData, (o1, o2) -> {
+                        switch (col) {
+                            case 2:
+                                return Integer.parseInt(o1.getTotal()) < Integer.parseInt(o2.getTotal()) ? 1 : -1;
+                            case 3:
+                                return Integer.parseInt(o1.getWeChat()) < Integer.parseInt(o2.getWeChat()) ? 1 : -1;
+                            default:
+                                return Integer.parseInt(o1.getLineOfDown()) < Integer.parseInt(o2.getLineOfDown()) ? 1 : -1;
+
+                        }
+                    });
+                    newData.add(totleBean);
+                    adapter.setDatas(newData);
+                } else {
+                    data.add(totleBean);
+                    adapter.setDatas(data);
+                }
+                recyclerView.notifyDataSetChanged();
+
+            }
         });
         String startDate = Tools.formatLastMonthDate("yyyy-MM");
         String endDate = Tools.formatNowDate("yyyy-MM");
@@ -108,12 +154,60 @@ public class MemberVolumeAnalysisActivity extends BaseActivity<MemberVolumeAnaly
         shopId = App.INSTANCE().getShopID();
         chainBeens = App.INSTANCE().getChainBeans();
 
-        presenter.getData(startDate, endDate, shopId);
+        dayClick();
 
-        tvDate.setText(startDate + "至" + endDate);
 
     }
 
+    @OnClick(R.id.tv_today)
+    public void dayClick() {
+        tvDay.setTextColor(Color.WHITE);
+        tvDay.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(System.currentTimeMillis());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),shopId);
+    }
+
+    @OnClick(R.id.tv_week)
+    public void weekClick() {
+        tvWeek.setTextColor(Color.WHITE);
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_green);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastWeek());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),shopId);
+
+    }
+
+    @OnClick(R.id.tv_month)
+    public void monthClick() {
+        tvMonth.setTextColor(Color.WHITE);
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastMonth());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),shopId);
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -286,148 +380,6 @@ public class MemberVolumeAnalysisActivity extends BaseActivity<MemberVolumeAnaly
         backgroundAlpha(0.5f);
     }
 
-    @OnClick(R.id.tv_total)
-    public void totalClick() {
-        if (totalLL.getVisibility() != View.VISIBLE) {
-            totalLL.setVisibility(View.VISIBLE);
-            UIUtils.setDrawableRight(tvTotal, R.mipmap.list_arrow_up);
-        } else {
-            totalLL.setVisibility(View.GONE);
-            UIUtils.setDrawableRight(tvTotal, R.mipmap.list_arrow_down);
-        }
-    }
-
-    int defaultType = 0;
-
-    /*@OnClick(R.id.coupon_manage_num)
-    public void setDefaultClick() {
-        defaultType++;
-
-        if (data == null) {
-            return;
-        }
-        if (defaultType % 3 == 1) {
-            UIUtils.setDrawableRight(tvNum, R.mipmap.sort_a_z);
-            List<CouponManageBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getCounts()) == Integer.parseInt(o2.getCounts())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setDatas(newData);
-        } else if (defaultType % 3 == 2) {
-            UIUtils.setDrawableRight(tvNum, R.mipmap.sort_z_a);
-            List<CouponManageBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setDatas(newData);
-        } else {
-            UIUtils.setDrawableRight(tvNum, R.mipmap.sort_default);
-            adapter.setDatas(data);
-        }
-        UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_default);
-    }
-
-    int nameType = 0;
-
-    @OnClick(R.id.coupon_money)
-    public void setNameClick() {
-        nameType++;
-        if (data == null) {
-            return;
-        }
-        if (nameType % 3 == 1) {
-            UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_a_z);
-            List<CouponManageBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (o1.getPrice() > o2.getPrice()) {
-                    return 1;
-                } else if (o1.getPrice() == o2.getPrice()) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setDatas(newData);
-        } else if (nameType % 3 == 2) {
-            UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_z_a);
-            List<CouponManageBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (o1.getPrice() > o2.getPrice()) {
-                    return -1;
-                } else if (o1.getPrice() == o2.getPrice()) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setDatas(newData);
-        } else {
-            UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_default);
-        }
-        UIUtils.setDrawableRight(tvNum, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_default);
-    }
-
-    int stateType = 0;
-
-    @OnClick(R.id.coupon_manage_need_money)
-    public void setStateClick() {
-        stateType++;
-        if (data == null) {
-            return;
-        }
-        if (stateType % 3 == 1) {
-            UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_a_z);
-            List<CouponManageBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (o1.getSumPrice() > o2.getSumPrice()) {
-                    return 1;
-                } else if (o1.getSumPrice() == o2.getSumPrice()) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setDatas(newData);
-        } else if (stateType % 3 == 2) {
-            UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_z_a);
-            List<CouponManageBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (o1.getSumPrice() > o2.getSumPrice()) {
-                    return -1;
-                } else if (o1.getSumPrice() == o2.getSumPrice()) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setDatas(newData);
-        } else {
-            UIUtils.setDrawableRight(tvNeedMoney, R.mipmap.sort_default);
-        }
-        UIUtils.setDrawableRight(tvCouponMoney, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvNum, R.mipmap.sort_default);
-    }*/
-
     @Override
     public void error(String msg) {
         showFailToast(msg);
@@ -438,23 +390,30 @@ public class MemberVolumeAnalysisActivity extends BaseActivity<MemberVolumeAnaly
         showSuccessToast(msg);
     }
 
+
+    private MemberVolumeAnalysisBean totleBean;
     @Override
     public void success(List<MemberVolumeAnalysisBean> memberVolumeAnalysisBeanList) {
-        this.data = memberVolumeAnalysisBeanList;
+        data = new ArrayList<>(memberVolumeAnalysisBeanList);
 
-        adapter.setNewData(memberVolumeAnalysisBeanList);
-        int add = 0;
-        int weChat = 0;
-        int lineOfDown = 0;
-        for (MemberVolumeAnalysisBean bean : memberVolumeAnalysisBeanList) {
-            add += Integer.parseInt(bean.getTotal());
+        totleBean = new MemberVolumeAnalysisBean();
+        totleBean.setShopName("合计信息");
+
+        double total = 0;//累积充值
+        double weChat = 0;//消费金额
+        double lineDown = 0;//累积消费
+        for (MemberVolumeAnalysisBean bean : data) {
+            total += Double.parseDouble(bean.getTotal());
             weChat += Double.parseDouble(bean.getWeChat());
-            lineOfDown += Double.parseDouble(bean.getLineOfDown());
+            lineDown += Double.parseDouble(bean.getLineOfDown());
         }
+        totleBean.setTotal(new BigDecimal(total).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setWeChat(new BigDecimal(weChat).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setLineOfDown(new BigDecimal(lineDown).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
 
-        tvWeixin.setText(String.valueOf(add));
-        tvDiannei.setText(String.valueOf(weChat));
-        tvGive.setText(String.valueOf(lineOfDown));
+        data.add(totleBean);
+        adapter.setDatas(data);
+        recyclerView.notifyDataSetChanged();
     }
 
 }

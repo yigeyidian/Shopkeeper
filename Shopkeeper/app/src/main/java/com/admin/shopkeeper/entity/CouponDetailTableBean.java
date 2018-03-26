@@ -31,6 +31,16 @@ public class CouponDetailTableBean implements Serializable {
     @SerializedName("yfreeprice")
     String discount;
 
+    private String shopName;
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
     public String getCouponName() {
         return couponName;
     }

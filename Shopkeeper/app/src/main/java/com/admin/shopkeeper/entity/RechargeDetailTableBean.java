@@ -8,6 +8,8 @@ import java.io.Serializable;
  * Created by Administrator on 2017/10/25.
  * {\"DateTimes\":\"2017-10\",\"weixin\":\"500.00\",\"zengson\":\"150.00\",
  * \"diannei\":\"100.00\",\"TOTALPRICE\":\"750.00\"}
+ *
+ * {\"DateTimes\":\"2018-03\",\"zengson\":\"1038.00\",\"diannei\":\"132644.00\",\"TOTALPRICE\":\"133682.00\",\"weixin\":\"0\"}
  */
 
 public class RechargeDetailTableBean implements Serializable {
@@ -15,13 +17,23 @@ public class RechargeDetailTableBean implements Serializable {
     @SerializedName("DateTimes")
     String date;
     @SerializedName("weixin")
-    String weixin;
+    double weixin;
     @SerializedName("zengson")
-    String zengsong;
+    double zengsong;
     @SerializedName("diannei")
-    String diannei;
+    double diannei;
     @SerializedName("TOTALPRICE")
-    String totalPrice;
+    double totalPrice;
+
+    String shopName;
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
 
     public String getDate() {
         return date;
@@ -31,35 +43,35 @@ public class RechargeDetailTableBean implements Serializable {
         this.date = date;
     }
 
-    public String getWeixin() {
+    public double getWeixin() {
         return weixin;
     }
 
-    public void setWeixin(String weixin) {
+    public void setWeixin(double weixin) {
         this.weixin = weixin;
     }
 
-    public String getZengsong() {
+    public double getZengsong() {
         return zengsong;
     }
 
-    public void setZengsong(String zengsong) {
+    public void setZengsong(double zengsong) {
         this.zengsong = zengsong;
     }
 
-    public String getDiannei() {
+    public double getDiannei() {
         return diannei;
     }
 
-    public void setDiannei(String diannei) {
+    public void setDiannei(double diannei) {
         this.diannei = diannei;
     }
 
-    public String getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(String totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 }

@@ -23,13 +23,17 @@ import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.MemberConsumeDetailBean;
+import com.admin.shopkeeper.entity.MemberVolumeAnalysisBean;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.memberVolumeAnalysis.NewMemberVolumeAnalysisAdapter;
 import com.admin.shopkeeper.utils.Tools;
 import com.admin.shopkeeper.utils.UIUtils;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
+import com.kelin.scrollablepanel.library.ScrollablePanel;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,19 +48,21 @@ public class MemberConsumeDetailActivity extends BaseActivity<MemberConsumeDetai
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.tv_date)
+    TextView tvDate;
+    @BindView(R.id.tv_today)
+    TextView tvDay;
+    @BindView(R.id.tv_week)
+    TextView tvWeek;
+    @BindView(R.id.tv_month)
+    TextView tvMonth;
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.sort_default)
-    TextView tvDefaultSort;
-    @BindView(R.id.sort_consume_num)
-    TextView tvConsumeNumSort;
-    @BindView(R.id.sort_consume_money)
-    TextView tvConsumeMoneySort;
+    ScrollablePanel recyclerView;
     private PopupWindow laheiPop;
-    List<MemberConsumeDetailBean> data;
     private PopupWindow popupWindow;
+    List<MemberConsumeDetailBean> data;
     private String titleStr;
-    MemberConsumeDetailAdapter adapter;
+    NewMemberConsumeDetailAdapter adapter;
     int pageIndex = 1;
 
     List<ChainBean> chainBeens = new ArrayList<>();
@@ -69,7 +75,7 @@ public class MemberConsumeDetailActivity extends BaseActivity<MemberConsumeDetai
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_member_consume_detail;
+        return R.layout.activity_collectionstatistics;
     }
 
     @Override
@@ -84,29 +90,120 @@ public class MemberConsumeDetailActivity extends BaseActivity<MemberConsumeDetai
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
-                .marginResId(R.dimen._1sdp, R.dimen._1sdp)
-                .color(getResources().getColor(R.color.item_line_color))
-                .build());
-        adapter = new MemberConsumeDetailAdapter(R.layout.item_member_consume_detail);
-        recyclerView.setAdapter(adapter);
+        adapter = new NewMemberConsumeDetailAdapter();
+        recyclerView.setPanelAdapter(adapter);
 
-        adapter.setOnItemClickListener((adapter1, view, position) -> {
+        adapter.setOnItemClickListener(new NewMemberConsumeDetailAdapter.OnItemClickLishener() {
+            @Override
+            public void onItemClick(int raw) {
 
+            }
+
+            @Override
+            public void onSort(int col, int status) {
+                if (data == null || data.size() == 0) {
+                    return;
+                }
+                data.remove(totleBean);
+
+                if (status % 3 == 1) {
+                    List<MemberConsumeDetailBean> newData = new ArrayList<>();
+                    newData.addAll(data);
+                    Collections.sort(newData, (o1, o2) -> {
+                        switch (col) {
+                            case 2:
+                                return Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts()) ? 1 : -1;
+                            default:
+                                return Double.parseDouble(o1.getPrice()) > Double.parseDouble(o2.getPrice()) ? 1 : -1;
+
+                        }
+                    });
+                    newData.add(totleBean);
+                    adapter.setDatas(newData);
+                } else if (status % 3 == 2) {
+
+                    List<MemberConsumeDetailBean> newData = new ArrayList<>();
+                    newData.addAll(data);
+                    Collections.sort(newData, (o1, o2) -> {
+                        switch (col) {
+                            case 2:
+                                return Integer.parseInt(o1.getCounts()) < Integer.parseInt(o2.getCounts()) ? 1 : -1;
+                            default:
+                                return Double.parseDouble(o1.getPrice()) < Double.parseDouble(o2.getPrice()) ? 1 : -1;
+
+                        }
+                    });
+                    newData.add(totleBean);
+                    adapter.setDatas(newData);
+                } else {
+                    data.add(totleBean);
+                    adapter.setDatas(data);
+                }
+                recyclerView.notifyDataSetChanged();
+
+            }
         });
-        String startDate = Tools.formatLastMonthDate("yyyy-MM-dd");
+
+
         String endDate = Tools.formatNowDate("yyyy-MM-dd");
 
         shopId = App.INSTANCE().getShopID();
         chainBeens = App.INSTANCE().getChainBeans();
 
-        presenter.getData(pageIndex ,startDate, endDate,"00:00:00", "23:59:59", 0,shopId);
-
+        dayClick();
 //        tvDate.setText(startDate + "至" + endDate);
 
     }
 
+    @OnClick(R.id.tv_today)
+    public void dayClick() {
+        tvDay.setTextColor(Color.WHITE);
+        tvDay.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(System.currentTimeMillis());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),"00:00:00", "23:59:59", 0,shopId);
+    }
+
+    @OnClick(R.id.tv_week)
+    public void weekClick() {
+        tvWeek.setTextColor(Color.WHITE);
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_green);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvMonth.setTextColor(Color.parseColor("#666666"));
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastWeek());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),"00:00:00", "23:59:59", 0,shopId);
+
+    }
+
+    @OnClick(R.id.tv_month)
+    public void monthClick() {
+        tvMonth.setTextColor(Color.WHITE);
+        tvMonth.setBackgroundResource(R.drawable.bg_ract_green);
+        tvWeek.setTextColor(Color.parseColor("#666666"));
+        tvWeek.setBackgroundResource(R.drawable.bg_ract_white3);
+        tvDay.setTextColor(Color.parseColor("#666666"));
+        tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
+
+        startDate = new Date(Tools.getLastMonth());
+        endDate = new Date(System.currentTimeMillis());
+        tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
+
+        presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),"00:00:00", "23:59:59", 0,shopId);
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -279,136 +376,6 @@ public class MemberConsumeDetailActivity extends BaseActivity<MemberConsumeDetai
     }
 
 
-    int defaultType = 0;
-
-    @OnClick(R.id.sort_default)
-    public void setDefaultClick() {
-        defaultType++;
-
-        if (data == null) {
-            return;
-        }
-        if (defaultType % 3 == 1) {
-            UIUtils.setDrawableRight(tvDefaultSort, R.mipmap.sort_a_z);
-            List<MemberConsumeDetailBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getCounts()) == Integer.parseInt(o2.getCounts())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else if (defaultType % 3 == 2) {
-            UIUtils.setDrawableRight(tvDefaultSort, R.mipmap.sort_z_a);
-            List<MemberConsumeDetailBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getCounts())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvDefaultSort, R.mipmap.sort_default);
-            adapter.setNewData(data);
-        }
-        UIUtils.setDrawableRight(tvConsumeNumSort, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvConsumeMoneySort, R.mipmap.sort_default);
-    }
-
-    int nameType = 0;
-
-    @OnClick(R.id.sort_consume_num)
-    public void setNameClick() {
-        nameType++;
-        if (data == null) {
-            return;
-        }
-        if (nameType % 3 == 1) {
-            UIUtils.setDrawableRight(tvConsumeNumSort, R.mipmap.sort_a_z);
-            List<MemberConsumeDetailBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getPrice())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getCounts()) == Integer.parseInt(o2.getPrice())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else if (nameType % 3 == 2) {
-            UIUtils.setDrawableRight(tvConsumeNumSort, R.mipmap.sort_z_a);
-            List<MemberConsumeDetailBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getCounts()) > Integer.parseInt(o2.getPrice())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getCounts()) == Integer.parseInt(o2.getPrice())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvConsumeNumSort, R.mipmap.sort_default);
-        }
-        UIUtils.setDrawableRight(tvDefaultSort, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvConsumeMoneySort, R.mipmap.sort_default);
-    }
-
-    int stateType = 0;
-
-    @OnClick(R.id.sort_consume_money)
-    public void setStateClick() {
-        stateType++;
-        if (data == null) {
-            return;
-        }
-        if (stateType % 3 == 1) {
-            UIUtils.setDrawableRight(tvConsumeMoneySort, R.mipmap.sort_a_z);
-            List<MemberConsumeDetailBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getPrice()) > Integer.parseInt(o2.getPrice())) {
-                    return 1;
-                } else if (Integer.parseInt(o1.getPrice()) == Integer.parseInt(o2.getPrice())) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else if (stateType % 3 == 2) {
-            UIUtils.setDrawableRight(tvConsumeMoneySort, R.mipmap.sort_z_a);
-            List<MemberConsumeDetailBean> newData = new ArrayList<>();
-            newData.addAll(data);
-            Collections.sort(newData, (o1, o2) -> {
-                if (Integer.parseInt(o1.getPrice()) > Integer.parseInt(o2.getPrice())) {
-                    return -1;
-                } else if (Integer.parseInt(o1.getPrice()) == Integer.parseInt(o2.getPrice())) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-            adapter.setNewData(newData);
-        } else {
-            UIUtils.setDrawableRight(tvConsumeMoneySort, R.mipmap.sort_default);
-        }
-        UIUtils.setDrawableRight(tvDefaultSort, R.mipmap.sort_default);
-        UIUtils.setDrawableRight(tvConsumeNumSort, R.mipmap.sort_default);
-    }
 
     @Override
     public void error(String msg) {
@@ -420,10 +387,27 @@ public class MemberConsumeDetailActivity extends BaseActivity<MemberConsumeDetai
         showSuccessToast(msg);
     }
 
+
+    private MemberConsumeDetailBean totleBean;
     @Override
     public void success(List<MemberConsumeDetailBean> memberTranscationBeanList) {
-        this.data = memberTranscationBeanList;
-        adapter.setNewData(memberTranscationBeanList);
+        data = new ArrayList<>(memberTranscationBeanList);
+
+        totleBean = new MemberConsumeDetailBean();
+        totleBean.setShopName("合计信息");
+
+        int totalNums = 0;//消费总次数
+        double totalMoney = 0;//消费总金额
+        for (MemberConsumeDetailBean bean : data) {
+            totalNums += Integer.parseInt(bean.getCounts());
+            totalMoney += Double.parseDouble(bean.getPrice());
+    }
+        totleBean.setCounts(new BigDecimal(totalNums).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+        totleBean.setPrice(new BigDecimal(totalMoney).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+
+        data.add(totleBean);
+        adapter.setDatas(data);
+        recyclerView.notifyDataSetChanged();
     }
 
 }

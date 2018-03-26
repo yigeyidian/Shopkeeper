@@ -2,7 +2,6 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.giftstatistics;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.entity.DeskOpenBean;
 import com.admin.shopkeeper.entity.GiftStatisticsBean;
 import com.admin.shopkeeper.utils.UIUtils;
 import com.kelin.scrollablepanel.library.PanelAdapter;
@@ -162,7 +160,7 @@ public class GiftStatisticsAdapter extends PanelAdapter {
             super(view);
             this.textView = (TextView) view.findViewById(R.id.title);
             line = view.findViewById(R.id.line);
-            ll = view.findViewById(R.id.item_ll);
+            ll = (LinearLayout) view.findViewById(R.id.item_ll);
         }
     }
 
