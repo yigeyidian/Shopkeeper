@@ -84,10 +84,10 @@ public class JionAdapter extends PanelAdapter {
                 holder.textView.setText(bean.getUsername());
                 break;
             case 2:
-                holder.textView.setText("￥" + String.valueOf(bean.getPrice()));
+                holder.textView.setText(bean.getbTime());
                 break;
             case 3:
-                holder.textView.setText("￥" + String.valueOf(bean.getPrice()));
+                holder.textView.setText(bean.getTime());
                 break;
             case 4:
                 holder.textView.setText("￥" + String.valueOf(bean.getPrice()));
@@ -109,26 +109,22 @@ public class JionAdapter extends PanelAdapter {
                 holder.textView.setText("交接人员");
                 break;
             case 2:
-                holder.textView.setText("交接总金额");
+                holder.textView.setText("开始时间");
                 break;
             case 3:
-                holder.textView.setText("备用金");
+                holder.textView.setText("结束时间");
                 break;
             case 4:
-                holder.textView.setText("交接金额");
+                holder.textView.setText("交接总金额");
                 break;
         }
 
-        if (column < 2) {
+        if (column < 4) {
             UIUtils.setNullDrawable(holder.textView);
             return;
         }
 
-        int index = column - 2;
-
-        if (status[index] == 0) {
-            UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_default);
-        }
+        int index = column - 4;
 
         if (status[index] % 3 == 0) {
             UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_default);
@@ -141,19 +137,6 @@ public class JionAdapter extends PanelAdapter {
         holder.textView.setOnClickListener(view -> {
             if (lishener != null) {
                 status[index]++;
-//                for (int i = 0; i < status.length; i++) {
-//                    if (i != index) {
-//                        status[i] = 0;
-//                    }
-//                }
-//                if (status[index] % 3 == 0) {
-//                    UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_default);
-//                } else if (status[index] % 3 == 1) {
-//                    UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_a_z);
-//                } else if (status[index] % 3 == 2) {
-//                    UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_z_a);
-//                }
-
                 lishener.onSort(column, status[index]);
             }
         });

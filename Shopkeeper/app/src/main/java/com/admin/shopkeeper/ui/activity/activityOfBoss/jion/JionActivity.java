@@ -112,7 +112,6 @@ public class JionActivity extends BaseActivity<JionPresenter> implements IJionVi
                     return;
                 }
                 datas.remove(totleBean);
-
                 if (status % 3 == 1) {
                     List<HandoverBean> newData = new ArrayList<>();
                     newData.addAll(datas);
@@ -129,7 +128,6 @@ public class JionActivity extends BaseActivity<JionPresenter> implements IJionVi
                     newData.add(totleBean);
                     adapter.setDatas(newData);
                 } else if (status % 3 == 2) {
-
                     List<HandoverBean> newData = new ArrayList<>();
                     newData.addAll(datas);
                     Collections.sort(newData, (o1, o2) -> {
