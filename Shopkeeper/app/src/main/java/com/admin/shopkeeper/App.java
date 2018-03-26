@@ -194,14 +194,15 @@ public class App extends Application {
         for (ChainBean chainBean : chainBeans) {
             chainBean.setSelect(false);
         }
+        if (chainBeans.size() == 0) {
+            chainBeans.add(new ChainBean(shopID, shopName));
+        }
         return chainBeans;
     }
 
     public void setChainBeans(List<ChainBean> chainBeans) {
         this.chainBeans.clear();
         this.chainBeans.addAll(chainBeans);
-        if (chainBeans.size() == 0) {
-            chainBeans.add(new ChainBean(shopID, shopName));
-        }
+
     }
 }
