@@ -93,9 +93,16 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
         adapter.setOnItemClickListener(new CollectionStatisticsAdapter.OnItemClickLishener() {
             @Override
             public void onItemClick(int raw) {
+                if (raw == datas.size() - 1) {
+                    return;
+                }
+
+
                 if (type == 1) {
                     Intent intent = new Intent(CollectionStatisticsActivity.this, CollectionDetailActivity.class);
-                    intent.putExtra("bean", datas.get(raw));
+                    ShopCollectionBean item = datas.get(raw);
+                    item.setShopId(App.INSTANCE().getShopID());
+                    intent.putExtra("bean", item);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(CollectionStatisticsActivity.this, CollectionDetailActivity.class);
