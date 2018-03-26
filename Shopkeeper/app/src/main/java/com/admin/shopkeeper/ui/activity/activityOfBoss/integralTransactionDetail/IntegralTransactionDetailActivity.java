@@ -3,9 +3,6 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.integralTransactionDetai
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,24 +16,17 @@ import android.widget.TextView;
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.IntegralTransactionDetailAdapter;
-import com.admin.shopkeeper.adapter.MemberConsumeDetailAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.IntegralDetailTableBean;
-import com.admin.shopkeeper.entity.MemberConsumeDetailBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.integralTransactionItemDetail.IntegralTransactionItemDetailActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.memberconsumeDetails.NewMemberConsumeDetailAdapter;
 import com.admin.shopkeeper.utils.Tools;
-import com.admin.shopkeeper.utils.UIUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
 import com.kelin.scrollablepanel.library.ScrollablePanel;
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -197,8 +187,8 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
         tvMonth.setTextColor(Color.parseColor("#666666"));
         tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
 
-        startDate = new Date(Tools.getLastWeek());
-        endDate = new Date(System.currentTimeMillis());
+        startDate = Tools.getBeginDayOfWeek();
+        endDate = Tools.getEndDayOfWeek();
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
 
         presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),"00:00:00", "23:59:59", 0,shopId);
@@ -214,8 +204,8 @@ public class IntegralTransactionDetailActivity extends BaseActivity<IntegralTran
         tvDay.setTextColor(Color.parseColor("#666666"));
         tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
 
-        startDate = new Date(Tools.getLastMonth());
-        endDate = new Date(System.currentTimeMillis());
+        startDate = Tools.getBeginDayOfMonth();
+        endDate = Tools.getEndDayOfMonth();
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
 
         presenter.getData(pageIndex ,Tools.formatNowDate("yyyy-MM-dd", startDate), Tools.formatNowDate("yyyy-MM-dd", endDate),"00:00:00", "23:59:59", 0,shopId);

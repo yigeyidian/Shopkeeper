@@ -191,8 +191,8 @@ public class RechargeTranscationActivity extends BaseActivity<RechargeTranscatio
         tvMonth.setTextColor(Color.parseColor("#666666"));
         tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
 
-        startDate = new Date(Tools.getLastWeek());
-        endDate = new Date(System.currentTimeMillis());
+        startDate = Tools.getBeginDayOfWeek();
+        endDate = Tools.getEndDayOfWeek();
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
 
         presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),
@@ -211,8 +211,8 @@ public class RechargeTranscationActivity extends BaseActivity<RechargeTranscatio
         tvDay.setTextColor(Color.parseColor("#666666"));
         tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
 
-        startDate = new Date(Tools.getLastMonth());
-        endDate = new Date(System.currentTimeMillis());
+        startDate = Tools.getBeginDayOfMonth();
+        endDate = Tools.getEndDayOfMonth();
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", endDate));
 
         presenter.getData(pageIndex, Tools.formatNowDate("yyyy-MM-dd", startDate),

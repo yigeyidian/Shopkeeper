@@ -23,7 +23,6 @@ import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.ShopCollectionBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.collectiondetail.CollectionDetailActivity;
 import com.admin.shopkeeper.utils.Tools;
-import com.admin.shopkeeper.utils.UIUtils;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
@@ -218,8 +217,8 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
         tvMonth.setTextColor(Color.parseColor("#666666"));
         tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
 
-        startDate = new Date(Tools.getLastWeek());
-        entDate = new Date(System.currentTimeMillis());
+        startDate = Tools.getBeginDayOfWeek();
+        entDate = Tools.getEndDayOfWeek();
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
 
         presenter.getData(type, Tools.formatNowDate("yyyy-MM-dd", startDate),
@@ -237,8 +236,8 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
         tvDay.setTextColor(Color.parseColor("#666666"));
         tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
 
-        startDate = new Date(Tools.getLastMonth());
-        entDate = new Date(System.currentTimeMillis());
+        startDate = Tools.getBeginDayOfMonth();
+        entDate = Tools.getEndDayOfMonth();
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
 
         presenter.getData(type, Tools.formatNowDate("yyyy-MM-dd", startDate),
