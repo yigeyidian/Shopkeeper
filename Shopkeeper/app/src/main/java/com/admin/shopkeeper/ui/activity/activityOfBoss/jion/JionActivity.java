@@ -3,14 +3,7 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.jion;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,19 +15,13 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.HandoverAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.HandoverBean;
-import com.admin.shopkeeper.entity.ShopCollectionBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.jiondetail.JionDetailActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.IShopCollectionView;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.shopcollection.ShopCollectionPresenter;
 import com.admin.shopkeeper.utils.Tools;
-import com.admin.shopkeeper.utils.UIUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
@@ -200,8 +187,8 @@ public class JionActivity extends BaseActivity<JionPresenter> implements IJionVi
         tvMonth.setTextColor(Color.parseColor("#666666"));
         tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
 
-        startDate = new Date(Tools.getLastWeek());
-        entDate = new Date(System.currentTimeMillis());
+        startDate = Tools.getBeginDayOfWeek();
+        entDate = Tools.getEndDayOfWeek();
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
 
         presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
@@ -219,8 +206,8 @@ public class JionActivity extends BaseActivity<JionPresenter> implements IJionVi
         tvDay.setTextColor(Color.parseColor("#666666"));
         tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
 
-        startDate = new Date(Tools.getLastMonth());
-        entDate = new Date(System.currentTimeMillis());
+        startDate = Tools.getBeginDayOfMonth();
+        entDate = Tools.getEndDayOfMonth();
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
 
         presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),

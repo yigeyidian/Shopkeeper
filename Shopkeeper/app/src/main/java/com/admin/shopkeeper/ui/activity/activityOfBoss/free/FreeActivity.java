@@ -20,10 +20,8 @@ import com.admin.shopkeeper.dialog.CollectionSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.FreeBean;
-import com.admin.shopkeeper.entity.HandoverBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.freedetail.FreeDetailActivity;
 import com.admin.shopkeeper.utils.Tools;
-import com.admin.shopkeeper.utils.UIUtils;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
@@ -181,8 +179,8 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
         tvMonth.setTextColor(Color.parseColor("#666666"));
         tvMonth.setBackgroundResource(R.drawable.bg_ract_white3);
 
-        startDate = new Date(Tools.getLastWeek());
-        entDate = new Date(System.currentTimeMillis());
+        startDate = Tools.getBeginDayOfWeek();
+        entDate = Tools.getEndDayOfWeek();
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
 
         presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
@@ -200,8 +198,8 @@ public class FreeActivity extends BaseActivity<FreePresenter> implements IFreeVi
         tvDay.setTextColor(Color.parseColor("#666666"));
         tvDay.setBackgroundResource(R.drawable.bg_ract_white3);
 
-        startDate = new Date(Tools.getLastMonth());
-        entDate = new Date(System.currentTimeMillis());
+        startDate = Tools.getBeginDayOfMonth();
+        entDate = Tools.getEndDayOfMonth();
         tvDate.setText(Tools.formatNowDate("yyyy-MM-dd", startDate) + "\n~" + Tools.formatNowDate("yyyy-MM-dd", entDate));
 
         presenter.getData(Tools.formatNowDate("yyyy-MM-dd", startDate),
