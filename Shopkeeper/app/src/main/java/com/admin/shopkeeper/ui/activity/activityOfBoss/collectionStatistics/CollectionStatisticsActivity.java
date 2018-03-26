@@ -97,7 +97,6 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
                     return;
                 }
 
-
                 if (type == 1) {
                     Intent intent = new Intent(CollectionStatisticsActivity.this, CollectionDetailActivity.class);
                     ShopCollectionBean item = datas.get(raw);
