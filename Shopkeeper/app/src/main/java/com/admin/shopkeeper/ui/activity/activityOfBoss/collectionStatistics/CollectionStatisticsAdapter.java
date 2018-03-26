@@ -41,7 +41,7 @@ public class CollectionStatisticsAdapter extends PanelAdapter {
 
     @Override
     public int getColumnCount() {
-        return 5;
+        return 6;
     }
 
     public void setDatas(List<ShopCollectionBean> datas) {
@@ -92,6 +92,8 @@ public class CollectionStatisticsAdapter extends PanelAdapter {
             case 4:
                 holder.textView.setText(String.valueOf(bean.getChargeMoney()));
                 break;
+            default:
+                holder.textView.setText(bean.getDinnerDate());
         }
     }
 
@@ -117,9 +119,12 @@ public class CollectionStatisticsAdapter extends PanelAdapter {
             case 4:
                 holder.textView.setText("销售实收");
                 break;
+            default:
+                holder.textView.setText("日期");
+                break;
         }
 
-        if (column < 1) {
+        if (column < 1 || column == 5) {
             UIUtils.setNullDrawable(holder.textView);
             return;
         }
