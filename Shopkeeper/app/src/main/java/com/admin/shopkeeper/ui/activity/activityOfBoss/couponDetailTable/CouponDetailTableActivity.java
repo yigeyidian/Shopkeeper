@@ -163,7 +163,7 @@ public class CouponDetailTableActivity extends BaseActivity<CouponDetailTablePre
         shopId = App.INSTANCE().getShopID();
         chainBeens = App.INSTANCE().getChainBeans();
 
-        monthClick();
+        dayClick();
 //        presenter.getData(pageIndex, startDate, endDate, "00:00:00", "23:59:59", 0,shopId);
 
 

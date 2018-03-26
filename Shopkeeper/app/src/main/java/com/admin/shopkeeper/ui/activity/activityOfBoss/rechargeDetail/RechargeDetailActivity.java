@@ -148,7 +148,7 @@ public class RechargeDetailActivity extends BaseActivity<RechargeDetailPresenter
         shopId = App.INSTANCE().getShopID();
         chainBeens = App.INSTANCE().getChainBeans();
 
-        monthClick();
+        dayClick();
 
     }
     @OnClick(R.id.tv_today)

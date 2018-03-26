@@ -80,20 +80,22 @@ public class CollectionStatisticsAdapter extends PanelAdapter {
             case 0:
                 holder.textView.setText(TextUtils.isEmpty(bean.getNames()) ? App.INSTANCE().getShopName() : bean.getNames());
                 break;
-            case 1:
+
+            case 2:
                 holder.textView.setText(String.valueOf(bean.getTotalMoney()));
                 break;
-            case 2:
+            case 3:
                 holder.textView.setText(String.valueOf(bean.getChongzhi()));
                 break;
-            case 3:
+            case 4:
                 holder.textView.setText(String.valueOf(bean.getFreeMoney()));
                 break;
-            case 4:
+            case 5:
                 holder.textView.setText(String.valueOf(bean.getChargeMoney()));
                 break;
-            default:
+            case 1:
                 holder.textView.setText(bean.getDinnerDate());
+                break;
         }
     }
 
@@ -107,29 +109,29 @@ public class CollectionStatisticsAdapter extends PanelAdapter {
             case 0:
                 holder.textView.setText("商家名称");
                 break;
-            case 1:
+            case 2:
                 holder.textView.setText("销售收入");
                 break;
-            case 2:
+            case 3:
                 holder.textView.setText("充值收入");
                 break;
-            case 3:
+            case 4:
                 holder.textView.setText("优惠金额");
                 break;
-            case 4:
+            case 5:
                 holder.textView.setText("销售实收");
                 break;
-            default:
+            case 1:
                 holder.textView.setText("日期");
                 break;
         }
 
-        if (column < 1 || column == 5) {
+        if (column < 2) {
             UIUtils.setNullDrawable(holder.textView);
             return;
         }
 
-        int index = column - 1;
+        int index = column - 2;
 
         if (status[index] == 0) {
             UIUtils.setDrawableRight(holder.textView, R.mipmap.sort_default);
