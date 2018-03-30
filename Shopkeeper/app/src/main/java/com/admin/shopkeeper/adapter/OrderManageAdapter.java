@@ -7,7 +7,6 @@ import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.entity.OrderManage;
-import com.admin.shopkeeper.entity.SaleStatisticsBean;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -49,7 +48,15 @@ public class OrderManageAdapter extends BaseQuickAdapter<OrderManage, BaseViewHo
                 helper.setText(R.id.item_order_type, "预定桌位");
                 break;
             case "3":
-                helper.setText(R.id.item_order_type, "外卖");
+                if(!TextUtils.isEmpty(App.INSTANCE().getUser().getMasterType())){
+                    if(App.INSTANCE().getUser().getMasterType().equals("1")){
+                        helper.setText(R.id.item_order_type, "商家采购");
+                    }else{
+                        helper.setText(R.id.item_order_type, "外卖");
+                    }
+                }else{
+                    helper.setText(R.id.item_order_type, "外卖");
+                }
                 break;
             case "4":
                 helper.setText(R.id.item_order_type, "快餐");

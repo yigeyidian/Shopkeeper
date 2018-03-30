@@ -3,6 +3,7 @@ package com.admin.shopkeeper.adapter;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
+import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.entity.Order;
@@ -55,7 +56,15 @@ public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
                 helper.setText(R.id.orderType, "预定桌位");
                 break;
             case "3":
-                helper.setText(R.id.orderType, "外卖");
+                if(!TextUtils.isEmpty(App.INSTANCE().getUser().getMasterType())){
+                    if(App.INSTANCE().getUser().getMasterType().equals("1")){
+                        helper.setText(R.id.orderType, "商家采购");
+                    }else{
+                        helper.setText(R.id.orderType, "外卖");
+                    }
+                }else{
+                    helper.setText(R.id.orderType, "外卖");
+                }
                 break;
             case "4":
                 helper.setText(R.id.orderType, "快餐");
