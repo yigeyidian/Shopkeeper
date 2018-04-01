@@ -27,10 +27,9 @@ public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
         super(layoutResId);
     }
 
-    public OrderAdapter(int layoutResId, int type , String orderType) {
+    public OrderAdapter(int layoutResId, int type ) {
         super(layoutResId);
         this.type = type;
-        this.orderType = orderType;
     }
 
     @Override
@@ -39,11 +38,6 @@ public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
         helper.setText(R.id.tv_order_id, String.format(mContext.getString(R.string.string_order_id), item.getOrderNumber()));
         helper.setText(R.id.orderMoney, String.format(mContext.getString(R.string.string_order_money), item.getPayPrice()));
         helper.setText(R.id.orderTime, String.format(mContext.getString(R.string.string_order_time), item.getRecordDate()));
-        if(orderType.equals("外卖")){
-            helper.setText(R.id.table_id, String.format(mContext.getString(R.string.string_buy_shop), item.getTableName()));
-        }else{
-            helper.setText(R.id.table_id, String.format(mContext.getString(R.string.string_table_id), item.getTableName()));
-        }
         helper.setText(R.id.orderOperator, String.format(mContext.getString(R.string.string_order_operator), item.getUsername()));
         if (!TextUtils.isEmpty(item.getRemark())) {
             helper.setText(R.id.remark_msg, String.format(mContext.getString(R.string.string_order_remark), item.getRemark()));
@@ -53,7 +47,15 @@ public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
 
 //        Type  1.预定菜品 2 预定桌位  3.外卖  4.快餐 5.扫码点餐 6.排队点餐 7.店内点餐
 //        OrderSate 1.待处理（未支付） 2.已确定（已支付） 3.已完成（已经开单）4.已取消 5.制作中（暂时未使用） 6.等待配送 （暂时未使用）
-
+        if(!TextUtils.isEmpty(App.INSTANCE().getUser().getMasterType())){
+            if(App.INSTANCE().getUser().getMasterType().equals("1") && item.getType().equals("3")){
+                helper.setText(R.id.table_id, String.format(mContext.getString(R.string.string_buy_shop), item.getTableName()));
+            }else{
+                helper.setText(R.id.table_id, String.format(mContext.getString(R.string.string_table_id), item.getTableName()));
+            }
+        }else {
+            helper.setText(R.id.table_id, String.format(mContext.getString(R.string.string_table_id), item.getTableName()));
+        }
         switch (item.getType()) {
             case "1":
                 helper.setText(R.id.orderType, "预定菜品");

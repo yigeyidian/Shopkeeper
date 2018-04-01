@@ -69,8 +69,6 @@ public class OrderListActivity extends BaseActivity<OrderPresenter> implements I
 
     private List<View> popupViews = new ArrayList<>();
 
-    private String orderType;
-
     @Override
     protected void initPresenter() {
         presenter = new OrderPresenter(this, this);
@@ -131,8 +129,7 @@ public class OrderListActivity extends BaseActivity<OrderPresenter> implements I
 
 
         typeView.setOnItemClickListener((parent, view, position, id) -> {
-            orderType = position == 0 ? headers[1] : type[position] ;
-            dropDownMenu.setTabText(orderType);
+            dropDownMenu.setTabText(position == 0 ? headers[1] : type[position]);
             dropDownMenu.closeMenu();
             if (typeAdapter.getCheckItemPosition() != position) {
                 typeAdapter.setCheckItem(position);
@@ -148,7 +145,7 @@ public class OrderListActivity extends BaseActivity<OrderPresenter> implements I
         //init dropdownview
         dropDownMenu.setDropDownMenu(Arrays.asList(headers), popupViews, mFrameLayout);
         RecyclerView mRecyclerView = (RecyclerView) mFrameLayout.findViewById(R.id.recyclerView);
-        mAdapter = new OrderAdapter(R.layout.item_order,1,orderType);
+        mAdapter = new OrderAdapter(R.layout.item_order);
         mAdapter.setOnLoadMoreListener(this, mRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).color(Color.parseColor("#F8F8F8")).sizeResId(R.dimen._10sdp).build());
