@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.MsgEvent;
 import com.admin.shopkeeper.R;
@@ -68,6 +69,8 @@ public class OrderListActivity extends BaseActivity<OrderPresenter> implements I
 
     private List<View> popupViews = new ArrayList<>();
 
+    private String orderType;
+
     @Override
     protected void initPresenter() {
         presenter = new OrderPresenter(this, this);
@@ -103,6 +106,11 @@ public class OrderListActivity extends BaseActivity<OrderPresenter> implements I
         statusView.setAdapter(statusAdapter);
 
         ListView typeView = new ListView(this);
+        if (App.INSTANCE().getUser().getMasterType().equals("1")) {
+            type[3] = "采购商家";
+        } else {
+            type[3] = "外卖";
+        }
         typeAdapter = new MenuDropDownAdapter(this, Arrays.asList(type));
         typeView.setDividerHeight(0);
         typeView.setAdapter(typeAdapter);
@@ -123,7 +131,8 @@ public class OrderListActivity extends BaseActivity<OrderPresenter> implements I
 
 
         typeView.setOnItemClickListener((parent, view, position, id) -> {
-            dropDownMenu.setTabText(position == 0 ? headers[1] : type[position]);
+            orderType = position == 0 ? headers[1] : type[position] ;
+            dropDownMenu.setTabText(orderType);
             dropDownMenu.closeMenu();
             if (typeAdapter.getCheckItemPosition() != position) {
                 typeAdapter.setCheckItem(position);
@@ -139,7 +148,7 @@ public class OrderListActivity extends BaseActivity<OrderPresenter> implements I
         //init dropdownview
         dropDownMenu.setDropDownMenu(Arrays.asList(headers), popupViews, mFrameLayout);
         RecyclerView mRecyclerView = (RecyclerView) mFrameLayout.findViewById(R.id.recyclerView);
-        mAdapter = new OrderAdapter(R.layout.item_order);
+        mAdapter = new OrderAdapter(R.layout.item_order,1,orderType);
         mAdapter.setOnLoadMoreListener(this, mRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).color(Color.parseColor("#F8F8F8")).sizeResId(R.dimen._10sdp).build());

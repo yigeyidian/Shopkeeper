@@ -20,15 +20,17 @@ import java.util.List;
 public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
 
     int type = 0;
+    String orderType;
     List<MutiBean> payTypeList = new ArrayList<>();
 
     public OrderAdapter(int layoutResId) {
         super(layoutResId);
     }
 
-    public OrderAdapter(int layoutResId, int type) {
+    public OrderAdapter(int layoutResId, int type , String orderType) {
         super(layoutResId);
         this.type = type;
+        this.orderType = orderType;
     }
 
     @Override
@@ -37,7 +39,11 @@ public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
         helper.setText(R.id.tv_order_id, String.format(mContext.getString(R.string.string_order_id), item.getOrderNumber()));
         helper.setText(R.id.orderMoney, String.format(mContext.getString(R.string.string_order_money), item.getPayPrice()));
         helper.setText(R.id.orderTime, String.format(mContext.getString(R.string.string_order_time), item.getRecordDate()));
-        helper.setText(R.id.table_id, String.format(mContext.getString(R.string.string_table_id), item.getTableName()));
+        if(orderType.equals("外卖")){
+            helper.setText(R.id.table_id, String.format(mContext.getString(R.string.string_buy_shop), item.getTableName()));
+        }else{
+            helper.setText(R.id.table_id, String.format(mContext.getString(R.string.string_table_id), item.getTableName()));
+        }
         helper.setText(R.id.orderOperator, String.format(mContext.getString(R.string.string_order_operator), item.getUsername()));
         if (!TextUtils.isEmpty(item.getRemark())) {
             helper.setText(R.id.remark_msg, String.format(mContext.getString(R.string.string_order_remark), item.getRemark()));
