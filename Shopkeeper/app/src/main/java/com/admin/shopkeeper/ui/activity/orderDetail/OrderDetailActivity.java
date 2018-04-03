@@ -36,6 +36,7 @@ import com.admin.shopkeeper.entity.Order;
 import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.RadioEntity;
 import com.admin.shopkeeper.entity.RetreatReason;
+import com.admin.shopkeeper.entity.TPayType;
 import com.admin.shopkeeper.ui.activity.bill.BillActivity;
 import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
 import com.admin.shopkeeper.ui.activity.table.TableOperationActivity;
@@ -85,12 +86,15 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
     AppCompatTextView table_id;
     @BindView(R.id.orderOperator)
     AppCompatTextView orderOperator;
+    @BindView(R.id.payType)
+    AppCompatTextView tPayType;
 
 
     private LabelAdapter labelAdapter;
 
     private Order order;
     private ArrayList<OrderDetailFood> detailFoods;
+    private List<TPayType> tPayTypes;//组合支付
     private MenuListAdapter menuListAdapter;
 
     @Override
@@ -119,6 +123,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
         type = getIntent().getIntExtra(Config.PARAM4, 0);
         order = (Order) getIntent().getSerializableExtra(Config.PARAM1);
         detailFoods = (ArrayList<OrderDetailFood>) getIntent().getSerializableExtra(Config.PARAM2);
+        tPayTypes = (ArrayList<TPayType>) getIntent().getSerializableExtra(Config.PARAM5);
         position = getIntent().getIntExtra(Config.PARAM3, 0);
 
         Log.i("ttt", "---order:" + order);
@@ -277,7 +282,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
 
         initButton();
 
-        menuListAdapter = new MenuListAdapter(R.layout.item_menu_list , OrderDetailActivity.this ,false);
+        menuListAdapter = new MenuListAdapter(R.layout.item_menu_list, OrderDetailActivity.this, false);
         View header = LayoutInflater.from(this).inflate(R.layout.item_menu_list, (ViewGroup) mMenuRecyclerView.getParent(), false);
         menuListAdapter.addHeaderView(header);
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this) {
@@ -399,6 +404,49 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
         orderTime.setText(String.format(getString(R.string.string_order_time), order.getRecordDate()));
         table_id.setText(String.format(getString(R.string.string_table_id), order.getTableName()));
         orderOperator.setText(String.format(getString(R.string.string_order_operator), order.getUsername()));
+        StringBuilder builder = new StringBuilder();
+        if (!tPayTypes.isEmpty() && tPayTypes.size() > 0) {
+            for (int i = 0; i < tPayTypes.size(); i++) {
+                switch (tPayTypes.get(i).getPayType()){
+                    case "1":
+                        builder = builder.append("现金："+tPayTypes.get(i).getPice()+" |");
+                        break;
+                    case "2":
+                        builder = builder.append("银行卡："+tPayTypes.get(i).getPice()+" |");
+                        break;
+                    case "3":
+                        builder = builder.append("主扫微信："+tPayTypes.get(i).getPice()+" |");
+                        break;
+                    case "4":
+                        builder = builder.append("挂账："+tPayTypes.get(i).getPice()+" |");
+                        break;
+                    case "5":
+                        builder = builder.append("会员卡："+tPayTypes.get(i).getPice()+" |");
+                        break;
+                    case "6":
+                        builder = builder.append("被扫支付宝："+tPayTypes.get(i).getPice()+" |");
+                        break;
+                    case "7":
+                        builder = builder.append("被扫微信："+tPayTypes.get(i).getPice()+" |");
+                        break;
+                    case "8":
+                        builder = builder.append("美团券："+tPayTypes.get(i).getPice()+" |");
+                        break;
+                    case "9":
+                        builder = builder.append("大众点评券："+tPayTypes.get(i).getPice()+" |");
+                        break;
+                    default:
+                        builder = builder.append("主扫支付宝："+tPayTypes.get(i).getPice()+" |");
+                        break;
+                }
+            }
+            builder.deleteCharAt(builder.length()-1);
+        }
+        if(!builder.toString().isEmpty()){
+            tPayType.setVisibility(View.VISIBLE);
+            tPayType.setText(builder.toString());
+        }
+
 //        if (order.getPayIs().equals("1")) {
 //            payStatus.setText("支付状态：已支付");
 //        } else if (order.getPayIs().equals("2")) {
@@ -432,7 +480,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
 //            订单详细显示“取消”“确认”“已完成”
             labels.add(new Label("取消", R.mipmap.icon_addfood, Label.cancel));
             labels.add(new Label("确认", R.mipmap.icon_desk, Label.confirm));
-            labels.add(new Label("已完成", R.mipmap.icon_undo, Label.finish));
+            labels.add(new Label("已发货", R.mipmap.icon_undo, Label.finish));
         } else if (orderType.equals("3") && orderSate.equals("3")) {
 //            4、如果订单类型为“外卖（type=3）”并且订单状态为“已完成（OrderSate=3）”
 //            订单详细显示“打印消费单（就是补打消费单的意思）”
@@ -442,7 +490,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
 //            订单详细显示“取消”“确认”“已完成”
             labels.add(new Label("取消", R.mipmap.icon_addfood, Label.cancel));
             labels.add(new Label("确认", R.mipmap.icon_desk, Label.confirm));
-            labels.add(new Label("已完成", R.mipmap.icon_undo, Label.finish));
+            labels.add(new Label("已发货", R.mipmap.icon_undo, Label.finish));
         } else if (orderType.equals("1") && orderSate.equals("3")) {
 //            6、如果订单类型为“快餐（type=4）”并且订单状态为“已完成（OrderSate=3）”
 //            订单详细显示“打印消费单（就是补打消费单的意思）”
@@ -601,7 +649,8 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
     }
 
     @Override
-    public void toDetail(List<OrderDetailFood> orderDetailFoods) {
+    public void toDetail(List<OrderDetailFood> orderDetailFoods , List<TPayType> tPayTypesList) {
+        tPayTypes = tPayTypesList;
         menuListAdapter.setNewData(orderDetailFoods);
         double m = 0;
         for (OrderDetailFood o : orderDetailFoods) {
@@ -609,6 +658,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
         }
         order.setPayPrice(m);
         orderMoney.setText(String.format(getString(R.string.string_order_money), order.getPayPrice()));
+        setView();
     }
 
     @Override

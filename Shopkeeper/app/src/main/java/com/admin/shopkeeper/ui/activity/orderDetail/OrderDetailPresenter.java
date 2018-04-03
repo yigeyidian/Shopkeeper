@@ -6,14 +6,12 @@ import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BasePresenter;
-import com.admin.shopkeeper.entity.CanJu;
 import com.admin.shopkeeper.entity.CommonDialogEntity;
 import com.admin.shopkeeper.entity.Order;
 import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.RetreatReason;
+import com.admin.shopkeeper.entity.TPayType;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.model.FoodsModel;
-import com.admin.shopkeeper.model.IntModel;
 import com.admin.shopkeeper.model.StringModel;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.admin.shopkeeper.utils.Print;
@@ -90,11 +88,11 @@ class OrderDetailPresenter extends BasePresenter<IOrderDetailView> {
         new Thread(() -> Print.socketDataArrivalHandler(result)).start();
     }
 
-    void undo(String tableId, String billid, String tableName,String price) {
+    void undo(String tableId, String billid, String tableName, String price) {
         DialogUtils.showDialog(context, "数据提交中...");
         RetrofitHelper.getInstance()
                 .getApi()
-                .undo("4", tableId, billid, App.INSTANCE().getShopID(),price, tableName, App.INSTANCE().getUser().getName(),App.INSTANCE().getUser().getId())
+                .undo("4", tableId, billid, App.INSTANCE().getShopID(), price, tableName, App.INSTANCE().getUser().getName(), App.INSTANCE().getUser().getId())
                 .compose(getFragmentLifecycleProvider().bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -130,8 +128,10 @@ class OrderDetailPresenter extends BasePresenter<IOrderDetailView> {
                     DialogUtils.hintDialog();
                     switch (stringModel.getCode()) {
                         case Config.REQUEST_SUCCESS:
-                            OrderDetailFood[] detailFoods = new Gson().fromJson(stringModel.getResult(), OrderDetailFood[].class);
-                            iView.toDetail(Arrays.asList(detailFoods));
+                            String[] result = stringModel.getResult().split("^");
+                            OrderDetailFood[] detailFoods = new Gson().fromJson(result[0], OrderDetailFood[].class);
+                            TPayType[] tPayTypes = new Gson().fromJson(result[1], TPayType[].class);
+                            iView.toDetail(Arrays.asList(detailFoods) ,Arrays.asList(tPayTypes));
                             break;
                         case Config.REQUEST_FAILED:
                             iView.warning(stringModel.getMessage());
@@ -418,7 +418,7 @@ class OrderDetailPresenter extends BasePresenter<IOrderDetailView> {
                 });
     }
 
-    public void print(String billid, int personcount, String tableid, String tablename, double priceold, double price, double free,String state) {
+    public void print(String billid, int personcount, String tableid, String tablename, double priceold, double price, double free, String state) {
         RetrofitHelper.getInstance()
                 .getApi()
                 .print("3", App.INSTANCE().getShopID(), "1", state, billid, App.INSTANCE().getUser().getName(),

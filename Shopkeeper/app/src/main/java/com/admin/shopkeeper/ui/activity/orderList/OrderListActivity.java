@@ -2,11 +2,7 @@ package com.admin.shopkeeper.ui.activity.orderList;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +21,7 @@ import com.admin.shopkeeper.adapter.OrderAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.entity.Order;
 import com.admin.shopkeeper.entity.OrderDetailFood;
+import com.admin.shopkeeper.entity.TPayType;
 import com.admin.shopkeeper.ui.activity.orderDetail.OrderDetailActivity;
 import com.admin.shopkeeper.ui.fragment.order.IOrderView;
 import com.admin.shopkeeper.ui.fragment.order.OrderPresenter;
@@ -228,12 +225,13 @@ public class OrderListActivity extends BaseActivity<OrderPresenter> implements I
     }
 
     @Override
-    public void toDetail(Order order, List<OrderDetailFood> detailFoods, int position) {
+    public void toDetail(Order order, List<OrderDetailFood> detailFoods, List<TPayType> tPayTypes , int position) {
         Intent intent = new Intent(this, OrderDetailActivity.class);
         intent.putExtra(Config.PARAM1, order);
         intent.putExtra(Config.PARAM2, (Serializable) detailFoods);
         intent.putExtra(Config.PARAM3, position);
         intent.putExtra(Config.PARAM4, OrderDetailActivity.P1);
+        intent.putExtra(Config.PARAM5, (Serializable) tPayTypes);
         startActivity(intent);
     }
 

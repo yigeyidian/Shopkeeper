@@ -1,9 +1,6 @@
 package com.admin.shopkeeper.utils;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
-
-import com.admin.shopkeeper.R;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,8 +10,6 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import timber.log.Timber;
 
 public class PrintClass {
     public boolean Print(String enty) throws IOException {
@@ -451,7 +446,7 @@ public class PrintClass {
             socketwriter.write(temp, 0, temp.length);//设置字符集
             byte[] datas1 = ("" + sname.split("@")[0] + "" + "\n").getBytes("gbk");
             socketwriter.write(datas1, 0, datas1.length);//输出文字
-            byte[] datas11 = ("     " + oldshu[0] + "" + "\n").getBytes("gbk");
+            byte[] datas11 = ("        " + oldshu[0] + "" + "\n").getBytes("gbk");
             socketwriter.write(datas11, 0, datas11.length);//输出文字
             socketwriter.write(Internal, 0, Internal.length);
             byte[] datas7 = ("------------------------------------------------\n").getBytes("gbk");
@@ -462,7 +457,7 @@ public class PrintClass {
             socketwriter.write(temps, 0, temps.length);//设置字符集
             byte[] temp5 = new byte[]{27, 69, 1};//1D 21 选择字体大小,0x01放大一倍
             socketwriter.write(temp5, 0, temp5.length);//设置字符集
-            byte[] datas21 = ("打单日期:" + getTime() + "       订单号:" + oldshu[2].split("@")[0] + "\n").getBytes("gbk");
+            byte[] datas21 = ("打单日期:" + getTime() + "  订单号:" + oldshu[2].split("@")[0] + "\n").getBytes("gbk");
             socketwriter.write(datas21, 0, datas21.length);//输出文字
             socketwriter.write(Internal, 0, Internal.length);
             byte[] datas8 = ("姓名:" + names + "          电话:" + phone + "\n").getBytes("gbk");
