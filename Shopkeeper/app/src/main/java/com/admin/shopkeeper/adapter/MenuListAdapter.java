@@ -47,9 +47,17 @@ public class MenuListAdapter extends BaseQuickAdapter<OrderDetailFood, BaseViewH
         helper.setVisible(R.id.etSale, mIsVisible);
         helper.setText(R.id.name, item.getProductNmae());
         if (item.getGiving() > 0) {
-            helper.setText(R.id.number, String.valueOf(item.getAmmount()) + "(赠送" + item.getGiving() + "份)");
-        } else {
-            helper.setText(R.id.number, String.valueOf(item.getCount()));
+            if(item.getWeight() != 1 && item.getCount() ==1){
+                helper.setText(R.id.number, String.valueOf(item.getCount()) + "("+item.getWeight()+item.getUnit()+")"+"(赠送" + item.getGiving() + "份)");
+            }else{
+                helper.setText(R.id.number, String.valueOf(item.getCount()) + "(赠送" + item.getGiving() + "份)");
+            }
+        }else {
+            if(item.getWeight() != 1 && item.getCount() ==1){
+                helper.setText(R.id.number, String.valueOf(item.getCount()) + "("+item.getWeight()+item.getUnit()+")");
+            }else{
+                helper.setText(R.id.number, String.valueOf(item.getCount()));
+            }
         }
         helper.setText(R.id.price, item.getPrice() + "");
         helper.setText(R.id.vipPrice, item.getChargeMoney());
