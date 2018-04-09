@@ -429,9 +429,14 @@ class BillPresenter extends BasePresenter<IBillView> {
                     DialogUtils.hintDialog();
                     if (stringModel.getCode().equals("1")) {
                         String[] split = stringModel.getResult().split("∞");
-                        Order[] order = new Gson().fromJson(split[0], Order[].class);
-                        OrderDetailFood[] detailFoods = new Gson().fromJson(split[1], OrderDetailFood[].class);
-                        iView.showDetail(order.length > 0 ? order[0] : null, Arrays.asList(detailFoods));
+                        if (split.length > 1) {
+                            Order[] order = new Gson().fromJson(split[0], Order[].class);
+                            OrderDetailFood[] detailFoods = new Gson().fromJson(split[1], OrderDetailFood[].class);
+                            iView.showDetail(order.length > 0 ? order[0] : null, Arrays.asList(detailFoods));
+                        } else {
+                            Order[] order = new Gson().fromJson(split[0], Order[].class);
+                            iView.showDetail(order.length > 0 ? order[0] : null, new ArrayList<OrderDetailFood>());
+                        }
                     }
                 }, throwable -> {
                     throwable.printStackTrace();

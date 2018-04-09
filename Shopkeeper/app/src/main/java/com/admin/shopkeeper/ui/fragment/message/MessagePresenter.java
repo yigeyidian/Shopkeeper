@@ -1,6 +1,7 @@
 package com.admin.shopkeeper.ui.fragment.message;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
@@ -12,6 +13,7 @@ import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.model.StringModel;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -60,9 +62,20 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
                     switch (stringModel.getCode()) {
                         case Config.REQUEST_SUCCESS:
                             String[] result = stringModel.getResult().split("\\^");
-                            OrderDetailFood[] detailFoods = new Gson().fromJson(result[0], OrderDetailFood[].class);
-                            TPayType[] tPayTypes = new Gson().fromJson(result[1],TPayType[].class);
-                            iView.toDetail(item, Arrays.asList(detailFoods), Arrays.asList(tPayTypes), position);
+                            Log.i("ttt", result.length+"----"+result[0]);
+                            if (result.length > 1) {
+                                OrderDetailFood[] detailFoods = new Gson().fromJson(result[0], OrderDetailFood[].class);
+                                TPayType[] tPayTypes = new Gson().fromJson(result[1], TPayType[].class);
+                                iView.toDetail(item, Arrays.asList(detailFoods), Arrays.asList(tPayTypes), position);
+                            } else {
+                                OrderDetailFood[] detailFoods = new Gson().fromJson(result[0], OrderDetailFood[].class);
+                                iView.toDetail(item, Arrays.asList(detailFoods), new ArrayList<TPayType>(), position);
+                            }
+
+//                            String[] result = stringModel.getResult().split("\\^");
+//                            OrderDetailFood[] detailFoods = new Gson().fromJson(result[0], OrderDetailFood[].class);
+//                            TPayType[] tPayTypes = new Gson().fromJson(result[1],TPayType[].class);
+//                            iView.toDetail(item, Arrays.asList(detailFoods), Arrays.asList(tPayTypes), position);
                             break;
                         case Config.REQUEST_FAILED:
                             iView.warning(stringModel.getMessage());
@@ -73,6 +86,7 @@ public class MessagePresenter extends BasePresenter<IMessageView> {
                     }
 
                 }, throwable -> {
+                    throwable.printStackTrace();
                     iView.warning("获取订单详情失败");
                 });
     }

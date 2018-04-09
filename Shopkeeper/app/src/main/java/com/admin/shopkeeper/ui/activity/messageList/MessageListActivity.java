@@ -156,7 +156,6 @@ public class MessageListActivity extends BaseActivity<MessagePresenter> implemen
         intent.putExtra(Config.PARAM4, OrderDetailActivity.P3);
         intent.putExtra(Config.PARAM5, (Serializable) tPayTypes);
         startActivityForResult(intent, 109);
-
     }
 
     private void initRecyclerView() {

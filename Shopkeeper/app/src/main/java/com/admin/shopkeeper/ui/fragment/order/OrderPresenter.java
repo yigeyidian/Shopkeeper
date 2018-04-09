@@ -83,9 +83,19 @@ public class OrderPresenter extends BasePresenter<IOrderView> {
                     switch (stringModel.getCode()) {
                         case Config.REQUEST_SUCCESS:
                             String[] result = stringModel.getResult().split("\\^");
-                            OrderDetailFood[] detailFoods = new Gson().fromJson(result[0], OrderDetailFood[].class);
-                            TPayType[] tPayTypes = new Gson().fromJson(result[1],TPayType[].class);
-                            iView.toDetail(item, Arrays.asList(detailFoods), Arrays.asList(tPayTypes), position);
+                            if (result.length > 1) {
+                                OrderDetailFood[] detailFoods = new Gson().fromJson(result[0], OrderDetailFood[].class);
+                                TPayType[] tPayTypes = new Gson().fromJson(result[1], TPayType[].class);
+                                iView.toDetail(item, Arrays.asList(detailFoods), Arrays.asList(tPayTypes), position);
+                            } else {
+                                OrderDetailFood[] detailFoods = new Gson().fromJson(result[0], OrderDetailFood[].class);
+                                iView.toDetail(item, Arrays.asList(detailFoods), new ArrayList<TPayType>(), position);
+                            }
+
+//                            String[] result = stringModel.getResult().split("\\^");
+//                            OrderDetailFood[] detailFoods = new Gson().fromJson(result[0], OrderDetailFood[].class);
+//                            TPayType[] tPayTypes = new Gson().fromJson(result[1],TPayType[].class);
+//                            iView.toDetail(item, Arrays.asList(detailFoods), Arrays.asList(tPayTypes), position);
                             break;
                         case Config.REQUEST_FAILED:
                             iView.warning(stringModel.getMessage());

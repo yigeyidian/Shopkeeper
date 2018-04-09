@@ -405,44 +405,44 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
         table_id.setText(String.format(getString(R.string.string_table_id), order.getTableName()));
         orderOperator.setText(String.format(getString(R.string.string_order_operator), order.getUsername()));
         StringBuilder builder = new StringBuilder();
-        if (!tPayTypes.isEmpty() && tPayTypes.size() > 0) {
+        if (tPayTypes != null && tPayTypes.size() > 0) {
             for (int i = 0; i < tPayTypes.size(); i++) {
-                switch (tPayTypes.get(i).getPayType()){
+                switch (tPayTypes.get(i).getPayType()) {
                     case "1":
-                        builder = builder.append("现金："+tPayTypes.get(i).getPice()+" |");
+                        builder = builder.append("现金：" + tPayTypes.get(i).getPice() + " |");
                         break;
                     case "2":
-                        builder = builder.append("银行卡："+tPayTypes.get(i).getPice()+" |");
+                        builder = builder.append("银行卡：" + tPayTypes.get(i).getPice() + " |");
                         break;
                     case "3":
-                        builder = builder.append("主扫微信："+tPayTypes.get(i).getPice()+" |");
+                        builder = builder.append("主扫微信：" + tPayTypes.get(i).getPice() + " |");
                         break;
                     case "4":
-                        builder = builder.append("挂账："+tPayTypes.get(i).getPice()+" |");
+                        builder = builder.append("挂账：" + tPayTypes.get(i).getPice() + " |");
                         break;
                     case "5":
-                        builder = builder.append("会员卡："+tPayTypes.get(i).getPice()+" |");
+                        builder = builder.append("会员卡：" + tPayTypes.get(i).getPice() + " |");
                         break;
                     case "6":
-                        builder = builder.append("被扫支付宝："+tPayTypes.get(i).getPice()+" |");
+                        builder = builder.append("被扫支付宝：" + tPayTypes.get(i).getPice() + " |");
                         break;
                     case "7":
-                        builder = builder.append("被扫微信："+tPayTypes.get(i).getPice()+" |");
+                        builder = builder.append("被扫微信：" + tPayTypes.get(i).getPice() + " |");
                         break;
                     case "8":
-                        builder = builder.append("美团券："+tPayTypes.get(i).getPice()+" |");
+                        builder = builder.append("美团券：" + tPayTypes.get(i).getPice() + " |");
                         break;
                     case "9":
-                        builder = builder.append("大众点评券："+tPayTypes.get(i).getPice()+" |");
+                        builder = builder.append("大众点评券：" + tPayTypes.get(i).getPice() + " |");
                         break;
                     default:
-                        builder = builder.append("主扫支付宝："+tPayTypes.get(i).getPice()+" |");
+                        builder = builder.append("主扫支付宝：" + tPayTypes.get(i).getPice() + " |");
                         break;
                 }
             }
-            builder.deleteCharAt(builder.length()-1);
+            builder.deleteCharAt(builder.length() - 1);
         }
-        if(!builder.toString().isEmpty()){
+        if (!builder.toString().isEmpty()) {
             tPayType.setVisibility(View.VISIBLE);
             tPayType.setText(builder.toString());
         }
@@ -649,7 +649,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
     }
 
     @Override
-    public void toDetail(List<OrderDetailFood> orderDetailFoods , List<TPayType> tPayTypesList) {
+    public void toDetail(List<OrderDetailFood> orderDetailFoods, List<TPayType> tPayTypesList) {
         tPayTypes = tPayTypesList;
         menuListAdapter.setNewData(orderDetailFoods);
         double m = 0;

@@ -128,10 +128,15 @@ class OrderDetailPresenter extends BasePresenter<IOrderDetailView> {
                     DialogUtils.hintDialog();
                     switch (stringModel.getCode()) {
                         case Config.REQUEST_SUCCESS:
-                            String[] result = stringModel.getResult().split("^");
-                            OrderDetailFood[] detailFoods = new Gson().fromJson(result[0], OrderDetailFood[].class);
-                            TPayType[] tPayTypes = new Gson().fromJson(result[1], TPayType[].class);
-                            iView.toDetail(Arrays.asList(detailFoods) ,Arrays.asList(tPayTypes));
+                            String[] result = stringModel.getResult().split("\\^");
+                            if (result.length > 1) {
+                                OrderDetailFood[] detailFoods = new Gson().fromJson(result[0], OrderDetailFood[].class);
+                                TPayType[] tPayTypes = new Gson().fromJson(result[1], TPayType[].class);
+                                iView.toDetail(Arrays.asList(detailFoods), Arrays.asList(tPayTypes));
+                            } else {
+                                OrderDetailFood[] detailFoods = new Gson().fromJson(result[0], OrderDetailFood[].class);
+                                iView.toDetail(Arrays.asList(detailFoods), new ArrayList<TPayType>());
+                            }
                             break;
                         case Config.REQUEST_FAILED:
                             iView.warning(stringModel.getMessage());
@@ -143,6 +148,7 @@ class OrderDetailPresenter extends BasePresenter<IOrderDetailView> {
 
                 }, throwable -> {
                     DialogUtils.hintDialog();
+                    throwable.fillInStackTrace();
                     iView.warning("获取订单详情失败");
                 });
     }
