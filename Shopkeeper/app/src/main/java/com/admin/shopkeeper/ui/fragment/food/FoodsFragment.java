@@ -168,6 +168,11 @@ public class FoodsFragment extends BaseFragment<FoodsListPresenter> implements I
     }
 
     @Override
+    public void success() {
+
+    }
+
+    @Override
     public void getService() {
         ptrLayout.postDelayed(() -> ptrLayout.autoRefresh(), 100);
     }
