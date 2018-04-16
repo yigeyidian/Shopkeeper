@@ -83,7 +83,11 @@ public class FoodsListPresenter extends BasePresenter<IFoodsListView> {
                         List<FoodEntity> foodEntityList = Arrays.asList(foodEntities);
                         MenuTypeEntity[] menuTypeEntities = new Gson().fromJson(foodsModel.getFoodType(), MenuTypeEntity[].class);
                         List<MenuTypeEntity> menuTypeEntityList = Arrays.asList(menuTypeEntities);
-                        saveDB(foodEntityList, menuTypeEntityList);
+                        if(foodEntityList.size()<1 || menuTypeEntityList.size() <1){
+                            iView.success();
+                        }else{
+                            saveDB(foodEntityList, menuTypeEntityList);
+                        }
                     } else {
                         iView.error(foodsModel.getMessage());
                     }

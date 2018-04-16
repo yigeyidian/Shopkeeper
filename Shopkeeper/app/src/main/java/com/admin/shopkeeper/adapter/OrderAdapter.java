@@ -3,6 +3,7 @@ package com.admin.shopkeeper.adapter;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
+import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.entity.Order;
@@ -19,13 +20,14 @@ import java.util.List;
 public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
 
     int type = 0;
+    String orderType;
     List<MutiBean> payTypeList = new ArrayList<>();
 
     public OrderAdapter(int layoutResId) {
         super(layoutResId);
     }
 
-    public OrderAdapter(int layoutResId, int type) {
+    public OrderAdapter(int layoutResId, int type ) {
         super(layoutResId);
         this.type = type;
     }
@@ -36,7 +38,6 @@ public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
         helper.setText(R.id.tv_order_id, String.format(mContext.getString(R.string.string_order_id), item.getOrderNumber()));
         helper.setText(R.id.orderMoney, String.format(mContext.getString(R.string.string_order_money), item.getPayPrice()));
         helper.setText(R.id.orderTime, String.format(mContext.getString(R.string.string_order_time), item.getRecordDate()));
-        helper.setText(R.id.table_id, String.format(mContext.getString(R.string.string_table_id), item.getTableName()));
         helper.setText(R.id.orderOperator, String.format(mContext.getString(R.string.string_order_operator), item.getUsername()));
         if (!TextUtils.isEmpty(item.getRemark())) {
             helper.setText(R.id.remark_msg, String.format(mContext.getString(R.string.string_order_remark), item.getRemark()));
@@ -46,7 +47,15 @@ public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
 
 //        Type  1.预定菜品 2 预定桌位  3.外卖  4.快餐 5.扫码点餐 6.排队点餐 7.店内点餐
 //        OrderSate 1.待处理（未支付） 2.已确定（已支付） 3.已完成（已经开单）4.已取消 5.制作中（暂时未使用） 6.等待配送 （暂时未使用）
-
+        if(!TextUtils.isEmpty(App.INSTANCE().getUser().getMasterType())){
+            if(App.INSTANCE().getUser().getMasterType().equals("1") && item.getType().equals("3")){
+                helper.setText(R.id.table_id, String.format(mContext.getString(R.string.string_buy_shop), item.getTableName()));
+            }else{
+                helper.setText(R.id.table_id, String.format(mContext.getString(R.string.string_table_id), item.getTableName()));
+            }
+        }else {
+            helper.setText(R.id.table_id, String.format(mContext.getString(R.string.string_table_id), item.getTableName()));
+        }
         switch (item.getType()) {
             case "1":
                 helper.setText(R.id.orderType, "预定菜品");
@@ -55,7 +64,15 @@ public class OrderAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
                 helper.setText(R.id.orderType, "预定桌位");
                 break;
             case "3":
-                helper.setText(R.id.orderType, "外卖");
+                if(!TextUtils.isEmpty(App.INSTANCE().getUser().getMasterType())){
+                    if(App.INSTANCE().getUser().getMasterType().equals("1")){
+                        helper.setText(R.id.orderType, "商家采购");
+                    }else{
+                        helper.setText(R.id.orderType, "外卖");
+                    }
+                }else{
+                    helper.setText(R.id.orderType, "外卖");
+                }
                 break;
             case "4":
                 helper.setText(R.id.orderType, "快餐");

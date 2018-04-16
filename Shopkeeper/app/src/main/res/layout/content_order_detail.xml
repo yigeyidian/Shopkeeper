@@ -87,23 +87,36 @@
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="@+id/view"
                 app:layout_constraintTop_toBottomOf="@+id/orderMoney" />
-
+            <!--组合支付-->
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/payType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_26ssp"
+                android:paddingTop="@dimen/_15sdp"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="@+id/view"
+                app:layout_constraintTop_toBottomOf="@+id/table_id" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/orderOperator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_30sdp"
+                android:paddingTop="@dimen/_15sdp"
+                android:paddingBottom="@dimen/_15sdp"
                 android:text="点餐员：李红"
                 android:textColor="#CECECE"
-                app:layout_constraintTop_toBottomOf="@+id/table_id" />
+                app:layout_constraintLeft_toLeftOf="@+id/view"
+                app:layout_constraintTop_toBottomOf="@+id/payType" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/orderTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_30sdp"
                 android:text="下单时间：2小时前"
+                android:paddingTop="@dimen/_15sdp"
+                android:paddingBottom="@dimen/_15sdp"
+                android:paddingLeft="@dimen/_30sdp"
                 android:textColor="#CECECE"
                 app:layout_constraintLeft_toRightOf="@+id/orderOperator"
                 app:layout_constraintTop_toTopOf="@+id/orderOperator" />

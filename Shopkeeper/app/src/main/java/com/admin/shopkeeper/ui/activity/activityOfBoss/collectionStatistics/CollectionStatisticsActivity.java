@@ -124,11 +124,11 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
                     newData.addAll(datas);
                     Collections.sort(newData, (o1, o2) -> {
                         switch (col) {
-                            case 2:
-                                return o1.getTotalMoney() > o2.getTotalMoney() ? 1 : -1;
                             case 3:
-                                return o1.getChongzhi() > o2.getChongzhi() ? 1 : -1;
+                                return o1.getTotalMoney() > o2.getTotalMoney() ? 1 : -1;
                             case 4:
+                                return o1.getChongzhi() > o2.getChongzhi() ? 1 : -1;
+                            case 5:
                                 return o1.getFreeMoney() > o2.getFreeMoney() ? 1 : -1;
                             default:
                                 return o1.getChargeMoney() > o2.getChargeMoney() ? 1 : -1;
@@ -142,11 +142,11 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
                     newData.addAll(datas);
                     Collections.sort(newData, (o1, o2) -> {
                         switch (col) {
-                            case 2:
-                                return o1.getTotalMoney() > o2.getTotalMoney() ? -1 : 1;
                             case 3:
-                                return o1.getChongzhi() > o2.getChongzhi() ? -1 : 1;
+                                return o1.getTotalMoney() > o2.getTotalMoney() ? -1 : 1;
                             case 4:
+                                return o1.getChongzhi() > o2.getChongzhi() ? -1 : 1;
+                            case 5:
                                 return o1.getFreeMoney() > o2.getFreeMoney() ? -1 : 1;
                             default:
                                 return o1.getChargeMoney() > o2.getChargeMoney() ? -1 : 1;

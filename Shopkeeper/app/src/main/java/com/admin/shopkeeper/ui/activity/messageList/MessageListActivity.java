@@ -19,6 +19,7 @@ import com.admin.shopkeeper.adapter.OrderAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.entity.Order;
 import com.admin.shopkeeper.entity.OrderDetailFood;
+import com.admin.shopkeeper.entity.TPayType;
 import com.admin.shopkeeper.ui.activity.orderDetail.OrderDetailActivity;
 import com.admin.shopkeeper.ui.fragment.message.IMessageView;
 import com.admin.shopkeeper.ui.fragment.message.MessagePresenter;
@@ -147,14 +148,14 @@ public class MessageListActivity extends BaseActivity<MessagePresenter> implemen
     }
 
     @Override
-    public void toDetail(Order order, List<OrderDetailFood> detailFoods, int position) {
+    public void toDetail(Order order, List<OrderDetailFood> detailFoods, List<TPayType> tPayTypes, int position) {
         Intent intent = new Intent(this, OrderDetailActivity.class);
         intent.putExtra(Config.PARAM1, order);
         intent.putExtra(Config.PARAM2, (Serializable) detailFoods);
         intent.putExtra(Config.PARAM3, position);
         intent.putExtra(Config.PARAM4, OrderDetailActivity.P3);
+        intent.putExtra(Config.PARAM5, (Serializable) tPayTypes);
         startActivityForResult(intent, 109);
-
     }
 
     private void initRecyclerView() {

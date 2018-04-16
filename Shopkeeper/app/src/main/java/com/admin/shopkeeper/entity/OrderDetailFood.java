@@ -58,6 +58,17 @@ public class OrderDetailFood implements Serializable {
     private int count;
     private int sale;
 
+    @SerializedName("UNIT")
+    private String unit;
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     public int getSale() {
         return sale;
     }

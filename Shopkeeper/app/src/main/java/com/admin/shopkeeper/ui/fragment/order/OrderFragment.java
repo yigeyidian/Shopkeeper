@@ -10,8 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,6 +21,7 @@ import com.admin.shopkeeper.adapter.OrderAdapter;
 import com.admin.shopkeeper.base.BaseFragment;
 import com.admin.shopkeeper.entity.Order;
 import com.admin.shopkeeper.entity.OrderDetailFood;
+import com.admin.shopkeeper.entity.TPayType;
 import com.admin.shopkeeper.ui.activity.orderDetail.OrderDetailActivity;
 import com.admin.shopkeeper.weight.DropDownMenu;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -272,13 +271,13 @@ public class OrderFragment extends BaseFragment<OrderPresenter> implements IOrde
     }
 
     @Override
-    public void toDetail(Order order, List<OrderDetailFood> detailFoods, int position) {
+    public void toDetail(Order order, List<OrderDetailFood> detailFoods, List<TPayType> tPayTypes, int position) {
         Intent intent = new Intent(getActivity(), OrderDetailActivity.class);
         intent.putExtra(Config.PARAM1, order);
         intent.putExtra(Config.PARAM2, (Serializable) detailFoods);
         intent.putExtra(Config.PARAM3, position);
         intent.putExtra(Config.PARAM4, OrderDetailActivity.P1);
-
+        intent.putExtra(Config.PARAM5, (Serializable) tPayTypes);
         getActivity().startActivity(intent);
     }
 

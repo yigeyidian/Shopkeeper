@@ -99,8 +99,8 @@ public class FoodsListActivity extends BaseActivity<FoodsListPresenter> implemen
                 if (TextUtils.isEmpty(App.INSTANCE().getShopID())) {
                     warning("请先配置店铺ID");
                 } else {
-                    presenter.getFoods();
                     presenter.getMeal();
+                    presenter.getFoods();
                 }
 
             }
@@ -193,8 +193,16 @@ public class FoodsListActivity extends BaseActivity<FoodsListPresenter> implemen
     }
 
     @Override
+    public void success() {
+        refreshComplete();
+        SPUtils.getInstance().put(SPUtils.PREFERENCE_MEAL, true);
+        SPUtils.getInstance().put(SPUtils.PREFERENCE_MENU, true);
+        Toasty.normal(this, "刷新成功", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void getService() {
-        ptrLayout.postDelayed(() -> ptrLayout.autoRefresh(), 100);
+//        ptrLayout.postDelayed(() -> ptrLayout.autoRefresh(), 100);
     }
 
     private void refreshComplete() {

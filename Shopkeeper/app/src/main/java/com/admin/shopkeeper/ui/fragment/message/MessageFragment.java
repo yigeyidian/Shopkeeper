@@ -11,12 +11,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.MessageAdapter;
 import com.admin.shopkeeper.adapter.OrderAdapter;
 import com.admin.shopkeeper.base.BaseFragment;
-import com.admin.shopkeeper.entity.Message;
 import com.admin.shopkeeper.entity.Order;
 import com.admin.shopkeeper.entity.OrderDetailFood;
+import com.admin.shopkeeper.entity.TPayType;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -159,7 +158,7 @@ public class MessageFragment extends BaseFragment<MessagePresenter> implements I
     }
 
     @Override
-    public void toDetail(Order item, List<OrderDetailFood> orderDetailFoods, int position) {
+    public void toDetail(Order item, List<OrderDetailFood> orderDetailFoods, List<TPayType> tPayTypes , int position) {
 
     }
 

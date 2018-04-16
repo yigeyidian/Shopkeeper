@@ -3,11 +3,10 @@ package com.admin.shopkeeper.entity;
 import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 
 import java.io.Serializable;
-
-import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * Created by admin on 2017/3/28.
@@ -21,6 +20,7 @@ import org.greenrobot.greendao.annotation.Generated;
  * "STATE":1
  * \"CashPayType\":\"1,2\"
  * "PayType\":\"3\"
+ * "MasterType\":\"1\"
  * }
  */
 
@@ -69,6 +69,18 @@ public class User implements Serializable {
     @SerializedName("CashPayType")
 
     private String cashPayType;
+
+    @SerializedName("MasterType")
+    private String masterType;
+
+    public String getMasterType() {
+        return masterType;
+    }
+
+    public void setMasterType(String masterType) {
+        this.masterType = masterType;
+    }
+
     public String getCashPayType() {
         return cashPayType;
     }
@@ -113,11 +125,11 @@ public class User implements Serializable {
     public User() {
     }
 
-    @Generated(hash = 397902676)
+    @Generated(hash = 2035955160)
     public User(String id, String name, String roleID, String restaurantID,
             int state, String operaType, String permissionName,
             String permissionValue, String printSet, String payType,
-            String cashPayType) {
+            String cashPayType, String masterType) {
         this.id = id;
         this.name = name;
         this.roleID = roleID;
@@ -129,6 +141,7 @@ public class User implements Serializable {
         this.printSet = printSet;
         this.payType = payType;
         this.cashPayType = cashPayType;
+        this.masterType = masterType;
     }
 
     public String getId() {

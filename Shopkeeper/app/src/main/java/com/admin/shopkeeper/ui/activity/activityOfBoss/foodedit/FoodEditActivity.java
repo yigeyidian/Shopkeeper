@@ -185,7 +185,7 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
             ((RadioButton) rgShowSet.getChildAt(2)).setChecked(true);
         }
 
-        if (foodBean.getProtuctShuXing() == null || foodBean.getProtuctShuXing().equals("1")) {
+        if (foodBean.getProtuctShuXing() == null || foodBean.getProtuctShuXing().equals("0")) {
             ((RadioButton) rgShuxing.getChildAt(0)).setChecked(true);
         } else if (foodBean.getProtuctShuXing().equals("1")) {
             ((RadioButton) rgShuxing.getChildAt(1)).setChecked(true);

@@ -4,8 +4,8 @@ import com.admin.shopkeeper.base.IBaseView;
 import com.admin.shopkeeper.entity.Order;
 import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.RetreatReason;
+import com.admin.shopkeeper.entity.TPayType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +19,7 @@ public interface IOrderDetailView extends IBaseView {
 
     void message(String s);
 
-    void toDetail(List<OrderDetailFood> orderDetailFoods);
+    void toDetail(List<OrderDetailFood> orderDetailFoods , List<TPayType> tPayTypes);
 
     void undoSuccess();
 
