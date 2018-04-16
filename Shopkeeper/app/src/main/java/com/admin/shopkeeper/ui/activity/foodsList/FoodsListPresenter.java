@@ -63,11 +63,12 @@ public class FoodsListPresenter extends BasePresenter<IFoodsListView> {
 
                         Spec[] specs = new Gson().fromJson(foodsModel.getSpec(), Spec[].class);
                         List<Spec> specList = Arrays.asList(specs);
-                        saveDB(foodEntityList, menuTypeEntityList, kouWeiList,seasonList, productKouWeiList, specList);
+                        saveDB(foodEntityList, menuTypeEntityList, kouWeiList, seasonList, productKouWeiList, specList);
                     } else {
                         iView.error(foodsModel.getMessage());
                     }
                 }, throwable -> {
+                    throwable.printStackTrace();
                     iView.warning("菜单列表获取失败");
                 });
 
@@ -83,15 +84,16 @@ public class FoodsListPresenter extends BasePresenter<IFoodsListView> {
                         List<FoodEntity> foodEntityList = Arrays.asList(foodEntities);
                         MenuTypeEntity[] menuTypeEntities = new Gson().fromJson(foodsModel.getFoodType(), MenuTypeEntity[].class);
                         List<MenuTypeEntity> menuTypeEntityList = Arrays.asList(menuTypeEntities);
-                        if(foodEntityList.size()<1 || menuTypeEntityList.size() <1){
+                        if (foodEntityList.size() < 1 || menuTypeEntityList.size() < 1) {
                             iView.success();
-                        }else{
+                        } else {
                             saveDB(foodEntityList, menuTypeEntityList);
                         }
                     } else {
                         iView.error(foodsModel.getMessage());
                     }
                 }, throwable -> {
+                    throwable.printStackTrace();
                     iView.warning("菜单列表获取失败");
                 });
     }
@@ -104,10 +106,12 @@ public class FoodsListPresenter extends BasePresenter<IFoodsListView> {
                 .compose(getActivityLifecycleProvider().<List<MenuTypeEntity>>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(menuTypeEntities -> iView.success(menuTypeEntities), Throwable::printStackTrace);
+                .subscribe(menuTypeEntities -> iView.success(menuTypeEntities), throwable -> {
+                    throwable.printStackTrace();
+                });
     }
 
-    private void saveDB(List<FoodEntity> foodEntityList, List<MenuTypeEntity> menuTypeEntityList, List<KouWei> kouWeiList,List<Season> seasonList, List<KouWei> productKouWeiList, List<Spec> specList) {
+    private void saveDB(List<FoodEntity> foodEntityList, List<MenuTypeEntity> menuTypeEntityList, List<KouWei> kouWeiList, List<Season> seasonList, List<KouWei> productKouWeiList, List<Spec> specList) {
         AppDbHelper.INSTANCE().deleteMenu(App.INSTANCE().getShopID());
         AppDbHelper.INSTANCE().saveMenus(menuTypeEntityList).subscribeOn(Schedulers.io()).subscribe();
         AppDbHelper.INSTANCE().saveFoods(foodEntityList).subscribeOn(Schedulers.io()).subscribe();
@@ -119,9 +123,9 @@ public class FoodsListPresenter extends BasePresenter<IFoodsListView> {
                 .compose(getActivityLifecycleProvider().<List<MenuTypeEntity>>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(menuTypeEntities -> iView.success(menuTypeEntities), Throwable::printStackTrace);
-
-
+                .subscribe(menuTypeEntities -> iView.success(menuTypeEntities), throwable -> {
+                    throwable.printStackTrace();
+                });
     }
 
     public void getDBFood() {
@@ -135,7 +139,9 @@ public class FoodsListPresenter extends BasePresenter<IFoodsListView> {
                     } else {
                         iView.getService();
                     }
-                }, Throwable::printStackTrace);
+                }, throwable -> {
+                    throwable.printStackTrace();
+                });
     }
 
 }

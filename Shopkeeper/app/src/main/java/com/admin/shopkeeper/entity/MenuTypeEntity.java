@@ -1,5 +1,7 @@
 package com.admin.shopkeeper.entity;
 
+import android.util.Log;
+
 import com.admin.greendao.gen.DaoSession;
 import com.admin.greendao.gen.FoodEntityDao;
 import com.admin.greendao.gen.MenuTypeEntityDao;
@@ -94,7 +96,7 @@ public class MenuTypeEntity implements Serializable {
 
     @Generated(hash = 1148826198)
     public MenuTypeEntity(String productTypeID, String productTypeName, String restaurantID,
-            int orderNO, boolean isType, boolean check) {
+                          int orderNO, boolean isType, boolean check) {
         this.productTypeID = productTypeID;
         this.productTypeName = productTypeName;
         this.restaurantID = restaurantID;

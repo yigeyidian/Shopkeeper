@@ -1,5 +1,6 @@
 package com.admin.shopkeeper.adapter;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
@@ -24,6 +25,7 @@ public class MenuClassAdapter extends BaseQuickAdapter<MenuTypeEntity, MenuClass
 
     @Override
     protected void convert(ViewHolder helper, MenuTypeEntity item) {
+        Log.i("ttt", "----convert---" + item.getProductTypeName());
         helper.setText(R.id.textView, item.getProductTypeName());
         helper.getView(R.id.textView).setSelected(item.isSelected());
         helper.badgeView.setBadgeNumber(item.getCount());

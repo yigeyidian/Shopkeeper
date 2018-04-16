@@ -17,7 +17,6 @@
             android:id="@+id/leftRecyclerView"
             android:layout_width="@dimen/_153sdp"
             android:layout_height="0dp"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

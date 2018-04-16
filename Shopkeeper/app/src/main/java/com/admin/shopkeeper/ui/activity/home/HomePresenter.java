@@ -89,9 +89,10 @@ public class HomePresenter extends BasePresenter<IHomeView> {
                         List<Spec> specList = Arrays.asList(specs);
                         saveDB(foodEntityList, menuTypeEntityList, kouWeiList,seasonList, productKouWeiList, specList);
                     } else {
-                        iView.error(foodsModel.getMessage());
+                        iView.warning(foodsModel.getMessage());
                     }
                 }, throwable -> {
+                    throwable.printStackTrace();
                     iView.warning("菜单列表获取失败");
                 });
 
@@ -118,6 +119,7 @@ public class HomePresenter extends BasePresenter<IHomeView> {
                         iView.error(foodsModel.getMessage());
                     }
                 }, throwable -> {
+                    throwable.printStackTrace();
                     iView.warning("菜单列表获取失败");
                 });
     }
@@ -130,7 +132,12 @@ public class HomePresenter extends BasePresenter<IHomeView> {
                 .compose(getActivityLifecycleProvider().<List<MenuTypeEntity>>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(menuTypeEntities -> iView.success(menuTypeEntities), Throwable::printStackTrace);
+                .subscribe(menuTypeEntities -> {
+                    iView.success(menuTypeEntities);
+                },throwable -> {
+                    throwable.printStackTrace();
+                });
+                //.subscribe(menuTypeEntities -> iView.success(menuTypeEntities), Throwable::printStackTrace);
     }
 
     private void saveDB(List<FoodEntity> foodEntityList, List<MenuTypeEntity> menuTypeEntityList, List<KouWei> kouWeiList,List<Season> seasonList, List<KouWei> productKouWeiList, List<Spec> specList) {

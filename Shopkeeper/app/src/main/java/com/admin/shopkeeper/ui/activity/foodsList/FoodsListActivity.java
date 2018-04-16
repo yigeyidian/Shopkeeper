@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -181,7 +182,7 @@ public class FoodsListActivity extends BaseActivity<FoodsListPresenter> implemen
 
     @Override
     public void success(List<MenuTypeEntity> menuTypeEntities) {
-        if (menuTypeEntities.size() > 1) {
+        if (menuTypeEntities.size() > 0) {
             refreshComplete();
             SPUtils.getInstance().put(SPUtils.PREFERENCE_MEAL, true);
             SPUtils.getInstance().put(SPUtils.PREFERENCE_MENU, true);
