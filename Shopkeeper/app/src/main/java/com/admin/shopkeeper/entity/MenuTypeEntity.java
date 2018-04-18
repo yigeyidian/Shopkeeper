@@ -28,7 +28,7 @@ import java.util.List;
  */
 
 @Entity
-public class MenuTypeEntity implements Serializable {
+public class MenuTypeEntity implements Serializable, Comparable<MenuTypeEntity> {
 
     static final long serialVersionUID = 42L;
     @Id
@@ -250,4 +250,17 @@ public class MenuTypeEntity implements Serializable {
     public boolean getCheck() {
         return this.check;
     }
+
+    @Override
+    public int compareTo(MenuTypeEntity another) {
+        if (another.getProductTypeName().equals("普通菜品")) {
+            return 1;
+        }
+        if (getProductTypeName().equals("普通菜品")) {
+            return -1;
+        }
+        return getProductTypeName().compareTo(another.getProductTypeName());
+    }
+
+
 }

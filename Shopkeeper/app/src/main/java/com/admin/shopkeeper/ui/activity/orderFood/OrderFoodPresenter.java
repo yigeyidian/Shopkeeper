@@ -39,11 +39,6 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
                 .subscribeOn(Schedulers.io())
                 .subscribe(menuTypeEntities -> {
                     if (menuTypeEntities.size() > 0) {
-                        if (menuTypeEntities.get(0).getProductTypeName().equals("套餐")) {
-                            MenuTypeEntity menuTypeEntity = menuTypeEntities.get(0);
-                            menuTypeEntities.remove(0);
-                            menuTypeEntities.add(menuTypeEntity);
-                        }
                         iView.success(menuTypeEntities);
                     } else {
                         iView.warning("请前往配置页面获取菜单列表");

@@ -168,7 +168,7 @@ public class HomeActivity extends BaseActivity<HomePresenter>
                         App.INSTANCE().setAlias(App.INSTANCE().getShopID(), "PHONE");
                     }
                 });
-                builder.setNegativeButton("取消",null);
+                builder.setNegativeButton("取消", null);
                 builder.show();
                 break;
 
@@ -182,7 +182,7 @@ public class HomeActivity extends BaseActivity<HomePresenter>
                         App.INSTANCE().removeAlias(App.INSTANCE().getShopID(), "PHONE");
                     }
                 });
-                builder.setNegativeButton("取消",null);
+                builder.setNegativeButton("取消", null);
                 builder.show();
                 break;
         }
@@ -293,9 +293,7 @@ public class HomeActivity extends BaseActivity<HomePresenter>
 
     @Override
     public void success(List<MenuTypeEntity> menuTypeEntities) {
-        if (menuTypeEntities.size() > 3) {
-            Toasty.normal(this, "刷新成功", Toast.LENGTH_SHORT).show();
-        }
+        Toasty.normal(this, "刷新成功", Toast.LENGTH_SHORT).show();
     }
 
     @Override

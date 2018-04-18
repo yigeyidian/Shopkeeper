@@ -22,6 +22,7 @@ import com.admin.shopkeeper.utils.SPUtils;
 import com.gyf.barlibrary.ImmersionBar;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -181,6 +182,7 @@ public class FoodsListActivity extends BaseActivity<FoodsListPresenter> implemen
     @Override
     public void success(List<MenuTypeEntity> menuTypeEntities) {
         if (menuTypeEntities.size() > 0) {
+            Collections.sort(menuTypeEntities);
             refreshComplete();
             SPUtils.getInstance().put(SPUtils.PREFERENCE_MEAL, true);
             SPUtils.getInstance().put(SPUtils.PREFERENCE_MENU, true);

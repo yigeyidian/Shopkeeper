@@ -70,6 +70,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1199,6 +1200,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
 
     @Override
     public void success(List<MenuTypeEntity> menuTypeEntities) {
+        Collections.sort(menuTypeEntities);
         menuAdapter.setNewData(menuTypeEntities);
         for (int i = 0; i < QuickIndexBar.LETTERS.length; i++) {
             QuickIndexBar.INDEX[i] = 0;
