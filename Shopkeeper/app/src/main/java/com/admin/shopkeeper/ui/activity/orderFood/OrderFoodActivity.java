@@ -1200,14 +1200,6 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
 
     @Override
     public void success(List<MenuTypeEntity> menuTypeEntities) {
-        //Collections.sort(menuTypeEntities);
-        if (menuTypeEntities.get(0).getProductTypeName().equals("套餐")) {
-            MenuTypeEntity menuTypeEntity = menuTypeEntities.get(0);
-            menuTypeEntities.remove(0);
-            menuTypeEntities.add(menuTypeEntity);
-            Log.i("ttt", "----" + menuTypeEntity.getProductTypeName());
-        }
-
         for (int i = 0; i < QuickIndexBar.LETTERS.length; i++) {
             QuickIndexBar.INDEX[i] = 0;
 

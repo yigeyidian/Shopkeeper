@@ -74,10 +74,12 @@ public class FoodsListPresenter extends BasePresenter<IFoodsListView> {
                         List<FoodEntity> foodEntityList = Arrays.asList(foodEntities);
                         MenuTypeEntity[] menuTypeEntities = new Gson().fromJson(foodsModel.getFoodType(), MenuTypeEntity[].class);
                         List<MenuTypeEntity> menuTypeEntityList = Arrays.asList(menuTypeEntities);
-                        if (foodEntityList.size() < 1 || menuTypeEntityList.size() < 1) {
-                        } else {
-                            saveDB(foodEntityList, menuTypeEntityList);
-                        }
+//                        if (foodEntityList.size() < 1 || menuTypeEntityList.size() < 1) {
+//
+//                        } else {
+//                            saveDB(foodEntityList, menuTypeEntityList);
+//                        }
+                        saveDB(foodEntityList, menuTypeEntityList);
                     } else {
                         iView.error(foodsModel.getMessage());
                     }
@@ -91,11 +93,13 @@ public class FoodsListPresenter extends BasePresenter<IFoodsListView> {
         AppDbHelper.INSTANCE().deleteMeal(App.INSTANCE().getShopID());
         AppDbHelper.INSTANCE().saveMenus(menuTypeEntityList).subscribeOn(Schedulers.io()).subscribe();
         AppDbHelper.INSTANCE().saveFoods(foodEntityList).subscribeOn(Schedulers.io()).subscribe();
-        AppDbHelper.INSTANCE().getMenuTypesMeal(App.INSTANCE().getShopID())
+        AppDbHelper.INSTANCE().getMenuTypes(App.INSTANCE().getShopID())
                 .compose(getActivityLifecycleProvider().<List<MenuTypeEntity>>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(menuTypeEntities -> iView.success(menuTypeEntities), throwable -> {
+                .subscribe(menuTypeEntities -> {
+                    iView.success(menuTypeEntities);
+                }, throwable -> {
                     throwable.printStackTrace();
                 });
     }
