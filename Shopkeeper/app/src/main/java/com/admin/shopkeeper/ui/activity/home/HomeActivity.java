@@ -139,7 +139,7 @@ public class HomeActivity extends BaseActivity<HomePresenter>
                 //setSelect(2);
                 AppDbHelper.INSTANCE().deleteAll();
                 presenter.getFoods();
-                presenter.getMeal();
+                //presenter.getMeal();
                 break;
             case R.id.nav_exit:
                 builder = new AlertDialog.Builder(HomeActivity.this);

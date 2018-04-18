@@ -112,7 +112,10 @@ public class FoodsListPresenter extends BasePresenter<IFoodsListView> {
                 .compose(getActivityLifecycleProvider().<List<MenuTypeEntity>>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(menuTypeEntities -> iView.success(menuTypeEntities), throwable -> {
+                .subscribe(menuTypeEntities -> {
+                    //iView.success(menuTypeEntities);
+                    getMeal();
+                }, throwable -> {
                     throwable.printStackTrace();
                 });
     }

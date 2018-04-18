@@ -100,7 +100,7 @@ public class FoodsListActivity extends BaseActivity<FoodsListPresenter> implemen
                     warning("请先配置店铺ID");
                 } else {
                     presenter.getFoods();
-                    presenter.getMeal();
+                    //presenter.getMeal();
                 }
 
             }
@@ -182,7 +182,11 @@ public class FoodsListActivity extends BaseActivity<FoodsListPresenter> implemen
     @Override
     public void success(List<MenuTypeEntity> menuTypeEntities) {
         if (menuTypeEntities.size() > 0) {
-            Collections.sort(menuTypeEntities);
+            if(menuTypeEntities.get(0).getProductTypeName().equals("套餐")){
+                MenuTypeEntity menuTypeEntity = menuTypeEntities.get(0);
+                menuTypeEntities.remove(0);
+                menuTypeEntities.add(menuTypeEntity);
+            }
             refreshComplete();
             SPUtils.getInstance().put(SPUtils.PREFERENCE_MEAL, true);
             SPUtils.getInstance().put(SPUtils.PREFERENCE_MENU, true);

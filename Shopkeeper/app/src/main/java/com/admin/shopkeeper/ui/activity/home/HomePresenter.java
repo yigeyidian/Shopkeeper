@@ -152,6 +152,9 @@ public class HomePresenter extends BasePresenter<IHomeView> {
                 .compose(getActivityLifecycleProvider().<List<MenuTypeEntity>>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(menuTypeEntities -> iView.success(menuTypeEntities), Throwable::printStackTrace);
+                .subscribe(menuTypeEntities -> {
+                    //iView.success(menuTypeEntities);
+                    getMeal();
+                }, Throwable::printStackTrace);
     }
 }

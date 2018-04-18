@@ -150,17 +150,17 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 Log.i("ttt", "---" + tableEntity);
                 presenter.orderFood(App.INSTANCE().getShopID(),
                         tableEntity.getRoomTableID(), tableEntity.getBillID(), getInfo(), App.INSTANCE().getUser().getId(),
-                        App.INSTANCE().getUser().getName(), tableEntity.getTableName(), tableEntity.getTableWareCount(), getTotal(),"0");
+                        App.INSTANCE().getUser().getName(), tableEntity.getTableName(), tableEntity.getTableWareCount(), getTotal(), "0");
                 break;
             case P2:
                 presenter.orderFood(App.INSTANCE().getShopID(),
                         order.getTableId(), order.getBillid(), getInfo(), App.INSTANCE().getUser().getId(),
-                        App.INSTANCE().getUser().getName(), order.getTableName(), order.getPeopleCount() + "", getTotal(),"1");
+                        App.INSTANCE().getUser().getName(), order.getTableName(), order.getPeopleCount() + "", getTotal(), "1");
                 break;
             case P3:
                 presenter.orderFood(App.INSTANCE().getShopID(),
                         order.getTableId(), order.getBillid(), getInfo(), App.INSTANCE().getUser().getId(),
-                        App.INSTANCE().getUser().getName(), order.getTableName(), order.getPeopleCount() + "", getTotal(),"1");
+                        App.INSTANCE().getUser().getName(), order.getTableName(), order.getPeopleCount() + "", getTotal(), "1");
                 break;
             case P5:
                 double total = 0;
@@ -1200,8 +1200,14 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
 
     @Override
     public void success(List<MenuTypeEntity> menuTypeEntities) {
-        Collections.sort(menuTypeEntities);
-        menuAdapter.setNewData(menuTypeEntities);
+        //Collections.sort(menuTypeEntities);
+        if (menuTypeEntities.get(0).getProductTypeName().equals("套餐")) {
+            MenuTypeEntity menuTypeEntity = menuTypeEntities.get(0);
+            menuTypeEntities.remove(0);
+            menuTypeEntities.add(menuTypeEntity);
+            Log.i("ttt", "----" + menuTypeEntity.getProductTypeName());
+        }
+
         for (int i = 0; i < QuickIndexBar.LETTERS.length; i++) {
             QuickIndexBar.INDEX[i] = 0;
 
@@ -1212,7 +1218,6 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     break;
                 } else {
                     QuickIndexBar.INDEX[i] = -1;
-
                 }
             }
         }
@@ -1237,10 +1242,11 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             showCart();
         }
 
-        if (menuTypeEntities.get(0).getFoods().size() == 0) {
-            menuTypeEntities.remove(0);
-        }
+//        if (menuTypeEntities.get(0).getFoods().size() == 0) {
+//            menuTypeEntities.remove(0);
+//        }
         menuTypeEntities.get(0).setSelected(true);
+        menuAdapter.setNewData(menuTypeEntities);
         contactAdapter.setDatas(menuTypeEntities.get(0).getFoods());
     }
 
