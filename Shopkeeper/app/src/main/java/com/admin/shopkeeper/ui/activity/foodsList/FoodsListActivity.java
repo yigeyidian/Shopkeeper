@@ -3,13 +3,11 @@ package com.admin.shopkeeper.ui.activity.foodsList;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -100,8 +98,8 @@ public class FoodsListActivity extends BaseActivity<FoodsListPresenter> implemen
                 if (TextUtils.isEmpty(App.INSTANCE().getShopID())) {
                     warning("请先配置店铺ID");
                 } else {
-                    presenter.getMeal();
                     presenter.getFoods();
+                    presenter.getMeal();
                 }
 
             }
@@ -194,16 +192,8 @@ public class FoodsListActivity extends BaseActivity<FoodsListPresenter> implemen
     }
 
     @Override
-    public void success() {
-        refreshComplete();
-        SPUtils.getInstance().put(SPUtils.PREFERENCE_MEAL, true);
-        SPUtils.getInstance().put(SPUtils.PREFERENCE_MENU, true);
-        Toasty.normal(this, "刷新成功", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void getService() {
-//        ptrLayout.postDelayed(() -> ptrLayout.autoRefresh(), 100);
+        ptrLayout.postDelayed(() -> ptrLayout.autoRefresh(), 100);
     }
 
     private void refreshComplete() {

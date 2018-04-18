@@ -1,22 +1,17 @@
 package com.admin.shopkeeper.ui.fragment.food;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.FoodAdapter;
 import com.admin.shopkeeper.adapter.MenuClassAdapter;
 import com.admin.shopkeeper.base.BaseFragment;
-
 import com.admin.shopkeeper.entity.MenuTypeEntity;
-import com.admin.shopkeeper.ui.activity.foodsList.FoodsListActivity;
 import com.admin.shopkeeper.ui.activity.foodsList.FoodsListPresenter;
 import com.admin.shopkeeper.ui.activity.foodsList.IFoodsListView;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
@@ -158,7 +153,7 @@ public class FoodsFragment extends BaseFragment<FoodsListPresenter> implements I
 
     @Override
     public void success(List<MenuTypeEntity> menuTypeEntities) {
-        if (menuTypeEntities.size() > 1) {
+        if (menuTypeEntities.size() > 0) {
             refreshComplete();
             Toasty.normal(getActivity(), "刷新成功", Toast.LENGTH_SHORT).show();
             menuTypeEntities.get(0).setSelected(true);
@@ -167,10 +162,6 @@ public class FoodsFragment extends BaseFragment<FoodsListPresenter> implements I
         }
     }
 
-    @Override
-    public void success() {
-
-    }
 
     @Override
     public void getService() {

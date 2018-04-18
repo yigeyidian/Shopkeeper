@@ -16,8 +16,6 @@ public interface IFoodsListView extends IBaseView {
 
     void success(List<MenuTypeEntity> menuTypeEntities);
 
-    void success();
-
     void getService();
 
 }

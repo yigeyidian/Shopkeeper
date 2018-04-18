@@ -1,7 +1,6 @@
 package com.admin.shopkeeper.ui.activity.foodsList;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
@@ -14,22 +13,13 @@ import com.admin.shopkeeper.entity.Season;
 import com.admin.shopkeeper.entity.Spec;
 import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.model.FoodsModel;
-import com.admin.shopkeeper.model.StringModel;
-
-import com.admin.shopkeeper.utils.SPUtils;
 import com.google.gson.Gson;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 /**
  * Created by guxiaogasumi on 2017/4/24.
@@ -85,7 +75,6 @@ public class FoodsListPresenter extends BasePresenter<IFoodsListView> {
                         MenuTypeEntity[] menuTypeEntities = new Gson().fromJson(foodsModel.getFoodType(), MenuTypeEntity[].class);
                         List<MenuTypeEntity> menuTypeEntityList = Arrays.asList(menuTypeEntities);
                         if (foodEntityList.size() < 1 || menuTypeEntityList.size() < 1) {
-                            iView.success();
                         } else {
                             saveDB(foodEntityList, menuTypeEntityList);
                         }

@@ -29,10 +29,13 @@ public class ConfigIDActivity extends BaseActivity<ConfigIDPresenter> implements
 
     @OnClick(R.id.btn)
     void onClick() {
-        if (TextUtils.isEmpty(editText.getText())) {
+        String idStr = editText.getText().toString();
+        if (TextUtils.isEmpty(idStr)) {
             return;
+        }else{
+            idStr = idStr.replaceAll(" ","");
         }
-        presenter.saveID(editText.getText().toString().trim());
+        presenter.saveID(idStr);
     }
 
     @Override
