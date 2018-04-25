@@ -4,14 +4,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.PermissionRequest;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,14 +23,11 @@ import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.entity.MenuTypeEntity;
 import com.admin.shopkeeper.entity.PrintBean;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.edit.EditPresenter;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.edit.IEditView;
-import com.admin.shopkeeper.utils.Print;
+import com.admin.shopkeeper.utils.Tools;
 import com.fastaccess.permission.base.PermissionHelper;
 import com.fastaccess.permission.base.callback.OnPermissionCallback;
 import com.gyf.barlibrary.ImmersionBar;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,14 +52,14 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
     EditText etPinyin;
     @BindView(R.id.edit_unit)
     EditText etUnit;
-    @BindView(R.id.edit_minunit)
-    EditText etMinUnit;
+    /*@BindView(R.id.edit_minunit)
+    EditText etMinUnit;*/
     @BindView(R.id.edit_price)
     EditText etPrice;
     @BindView(R.id.edit_remark)
     EditText etRemark;
-    @BindView(R.id.edit_count)
-    EditText etCount;
+    /*@BindView(R.id.edit_count)
+    EditText etCount;*/
     @BindView(R.id.edit_warcount)
     EditText etWarCount;
     @BindView(R.id.edit_merberprice)
@@ -152,10 +146,10 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
         etId.setText(foodBean.getId());
         etPinyin.setText(foodBean.getPinyin());
         etUnit.setText(foodBean.getUnit());
-        etMinUnit.setText(foodBean.getMinunit());
+//        etMinUnit.setText(foodBean.getMinunit());
         etPrice.setText(foodBean.getPrice() + "");
         etRemark.setText(foodBean.getRemark());
-        etCount.setText(foodBean.getProductCount() + "");
+//        etCount.setText(foodBean.getProductCount() + "");
         etMerPrice.setText(foodBean.getMemberPice() + "");
         etWarCount.setText(foodBean.getWarCount());
 
@@ -232,13 +226,15 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
             etFoodName.requestFocus();
             return;
         }
-
-        String pinyinStr = etPinyin.getText().toString().trim();
-        if (TextUtils.isEmpty(pinyinStr)) {
-            showFailToast("请输入商品拼音");
-            etPinyin.requestFocus();
-            return;
+        String pinyinStr ="";
+        StringBuffer sb = new StringBuffer();
+        if(!TextUtils.isEmpty(foodNameStr)){
+            pinyinStr = Tools.convertHanzi2Pinyin(foodNameStr,false);
+            sb.append(pinyinStr);
+            sb.append(foodNameStr);
         }
+        pinyinStr = sb.toString();
+
 
         String unitStr = etUnit.getText().toString().trim();
         if (TextUtils.isEmpty(unitStr)) {
@@ -247,12 +243,12 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
             return;
         }
 
-        String minUnitStr = etMinUnit.getText().toString().trim();
+        /*String minUnitStr = etMinUnit.getText().toString().trim();
         if (TextUtils.isEmpty(minUnitStr)) {
             showFailToast("请输入商品最小单位");
             etMinUnit.requestFocus();
             return;
-        }
+        }*/
 
         String priceStr = etPrice.getText().toString().trim();
         if (TextUtils.isEmpty(priceStr)) {
@@ -297,18 +293,23 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
 
         String remarkStr = etRemark.getText().toString().trim();
 
-        String countStr = etCount.getText().toString().trim();
-        int count = 0;
-        try {
-            if (!TextUtils.isEmpty(countStr)) {
-                count = Integer.parseInt(countStr);
-            }
-        } catch (Exception e) {
-            showToast("请输入菜品库存");
-            return;
+//        String countStr = etCount.getText().toString().trim();
+//        int count = 0;
+//        try {
+//            if (!TextUtils.isEmpty(countStr)) {
+//                count = Integer.parseInt(countStr);
+//            }
+//        } catch (Exception e) {
+//            showToast("请输入菜品库存");
+//            return;
+//        }
+        String warcountStr;
+        if(TextUtils.isEmpty(etWarCount.getText().toString().trim())){
+            warcountStr = etWarCount.getHint().toString().trim();
+        }else{
+            warcountStr = etWarCount.getText().toString().trim();
         }
 
-        String warcountStr = etCount.getText().toString().trim();
         int warcount = 0;
         try {
             if (!TextUtils.isEmpty(warcountStr)) {
@@ -365,13 +366,13 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
         PrintBean printBean = (PrintBean) printSpinner.getSelectedItem();
 
         if (foodBean == null) {
-            presenter.submit("ADD", "", foodNameStr, idStr, pinyinStr, unitStr, minUnitStr, menuTypeEntity.getProductTypeID(),
-                    menuTypeEntity.getProductTypeName(), price, imageName, printBean == null ? "" : printBean.getId(), state, remarkStr, "", count, warcount, chucaiType,
+            presenter.submit("ADD", "", foodNameStr, idStr, pinyinStr, unitStr, "", menuTypeEntity.getProductTypeID(),
+                    menuTypeEntity.getProductTypeName(), price, imageName, printBean == null ? "" : printBean.getId(), state, remarkStr, "", "", warcount, chucaiType,
                     merPrice, position + 1, dazheType,shuxing, showType);
         } else {
-            presenter.submit("Update", foodBean.getProductId(), foodNameStr, idStr, pinyinStr, unitStr, minUnitStr,
+            presenter.submit("Update", foodBean.getProductId(), foodNameStr, idStr, pinyinStr, unitStr, "",
                     menuTypeEntity.getProductTypeID(), menuTypeEntity.getProductTypeName(), price, imageName, printBean == null ? "" : printBean.getId(), state, remarkStr, "",
-                    count, warcount, chucaiType, merPrice, position + 1, dazheType,shuxing, showType);
+                    "", warcount, chucaiType, merPrice, position + 1, dazheType,shuxing, showType);
         }
     }
 

@@ -243,7 +243,7 @@ public class AppDbHelper implements DbHelper {
         return Observable.fromCallable(() -> mDaoSession
                 .getFoodEntityDao()
                 .queryBuilder()
-                .whereOr(FoodEntityDao.Properties.ProductName.like("%" + text + "%"),
+                .whereOr(FoodEntityDao.Properties.ProductName.like("%" + text + "%"),FoodEntityDao.Properties.Id.like("%" + text + "%"),
                         FoodEntityDao.Properties.PinYin.like("%" + text + "%")).orderAsc(FoodEntityDao.Properties.PinYin).list());
     }
 

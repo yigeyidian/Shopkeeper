@@ -19,10 +19,12 @@
             android:background="@drawable/selector_item"
             android:gravity="center"
             android:text="口味"
+            android:visibility="gone"
             android:textColor="@color/black"
             android:textSize="@dimen/_36ssp" />
 
-        <View style="@style/LineHorStyle" />
+        <View style="@style/LineHorStyle"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/pop_jialiao"
