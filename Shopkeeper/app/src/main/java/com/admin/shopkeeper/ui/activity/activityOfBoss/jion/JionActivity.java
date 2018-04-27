@@ -17,7 +17,7 @@ import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
-import com.admin.shopkeeper.dialog.SingleSelectDialog;
+import com.admin.shopkeeper.dialog.TimeTypeDialog;
 import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.HandoverBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.jiondetail.JionDetailActivity;
@@ -260,20 +260,17 @@ public class JionActivity extends BaseActivity<JionPresenter> implements IJionVi
 
 
         tvTimeType.setOnClickListener(v -> {
-            SingleSelectDialog.Builder builder = new SingleSelectDialog.Builder(this, R.style.OrderDialogStyle);
+            TimeTypeDialog.Builder builder = new TimeTypeDialog.Builder(this, R.style.OrderDialogStyle);
             builder.setTitle("选择时间");
-            builder.setReasons(types);
-            builder.setButtonClick(new SingleSelectDialog.OnButtonClick() {
+            builder.setReasons(Tools.getTimeType());
+            builder.setSelect(tvTimeType.getText().toString());
+            builder.setButtonClick(new TimeTypeDialog.OnButtonClick() {
 
                 @Override
-                public void onOk(String text, int position) {
+                public void onOk(String text) {
                     tvTimeType.setText(text);
                 }
 
-                @Override
-                public void onCancel() {
-
-                }
             });
             builder.creater().show();
         });

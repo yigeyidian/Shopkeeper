@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.admin.shopkeeper.entity.TimeTypeBean;
+
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
@@ -13,9 +15,11 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +28,13 @@ import java.util.regex.Pattern;
  */
 
 public class Tools {
+
+    public static List<TimeTypeBean> getTimeType(){
+        List<TimeTypeBean> list = new ArrayList<>();
+        list.add(new TimeTypeBean("营业时间",false));
+        list.add(new TimeTypeBean("自定义时间",false));
+        return list;
+    }
 
     public static String valueOf(double d) {
         BigDecimal bg = new BigDecimal(d);

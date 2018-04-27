@@ -28,7 +28,7 @@ import com.admin.shopkeeper.adapter.CollectionAdapter;
 import com.admin.shopkeeper.adapter.ReturnBussinessAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
-import com.admin.shopkeeper.dialog.SingleSelectDialog;
+import com.admin.shopkeeper.dialog.TimeTypeDialog;
 import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.ShopCollectionBean;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.collectiondetail.CollectionDetailActivity;
@@ -163,10 +163,6 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
     Date entDate;
 
     private void showSearch() {
-        List<String> types = new ArrayList<>();
-        types.add("营业时间");
-        types.add("自定义时间");
-
         View laheiView = LayoutInflater.from(this).inflate(R.layout.pop_select_1, null);
         popupWindow = new PopupWindow(laheiView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
@@ -202,20 +198,17 @@ public class ShopCollectionActivity extends BaseActivity<ShopCollectionPresenter
         });
 
         tvTimeType.setOnClickListener(v -> {
-            SingleSelectDialog.Builder builder = new SingleSelectDialog.Builder(this, R.style.OrderDialogStyle);
-            builder.setTitle("应付金额");
-            builder.setReasons(types);
-            builder.setButtonClick(new SingleSelectDialog.OnButtonClick() {
+            TimeTypeDialog.Builder builder = new TimeTypeDialog.Builder(this, R.style.OrderDialogStyle);
+            builder.setTitle("选择时间");
+            builder.setReasons(Tools.getTimeType());
+            builder.setSelect(tvTimeType.getText().toString());
+            builder.setButtonClick(new TimeTypeDialog.OnButtonClick() {
 
                 @Override
-                public void onOk(String text, int position) {
+                public void onOk(String text) {
                     tvTimeType.setText(text);
                 }
 
-                @Override
-                public void onCancel() {
-
-                }
             });
             builder.creater().show();
         });

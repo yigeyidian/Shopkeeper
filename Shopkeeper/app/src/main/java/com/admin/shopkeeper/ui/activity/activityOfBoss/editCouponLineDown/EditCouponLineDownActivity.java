@@ -13,16 +13,11 @@ import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.CollectionSelectDialog;
-import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.ChainBean;
 import com.admin.shopkeeper.entity.CouponLineDownBean;
 import com.admin.shopkeeper.entity.FoodBean;
-import com.admin.shopkeeper.entity.MansongBean;
-import com.codbking.widget.DatePickDialog;
-import com.codbking.widget.bean.DateType;
 import com.gyf.barlibrary.ImmersionBar;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 

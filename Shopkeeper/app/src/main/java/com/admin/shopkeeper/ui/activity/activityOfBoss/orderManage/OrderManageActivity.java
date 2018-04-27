@@ -21,14 +21,10 @@ import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.OrderManageAdapter;
-import com.admin.shopkeeper.adapter.SaleStatisticsAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
-import com.admin.shopkeeper.dialog.FoodSelectDialog;
-import com.admin.shopkeeper.dialog.SingleSelectDialog;
+import com.admin.shopkeeper.dialog.TimeTypeDialog;
 import com.admin.shopkeeper.entity.FoodEntity;
 import com.admin.shopkeeper.entity.OrderManage;
-import com.admin.shopkeeper.entity.SaleStatisticsBean;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.integralTransactionItemDetail.IntegralTransactionItemDetailActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.orderManageDetail.OrderManageDetailActivity;
 import com.admin.shopkeeper.utils.Tools;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -162,20 +158,17 @@ public class OrderManageActivity extends BaseActivity<OrderManagePresenter> impl
 
 
         tvTimeType.setOnClickListener(v -> {
-            SingleSelectDialog.Builder builder = new SingleSelectDialog.Builder(this, R.style.OrderDialogStyle);
+            TimeTypeDialog.Builder builder = new TimeTypeDialog.Builder(this, R.style.OrderDialogStyle);
             builder.setTitle("选择时间");
-            builder.setReasons(types);
-            builder.setButtonClick(new SingleSelectDialog.OnButtonClick() {
+            builder.setReasons(Tools.getTimeType());
+            builder.setSelect(tvTimeType.getText().toString());
+            builder.setButtonClick(new TimeTypeDialog.OnButtonClick() {
 
                 @Override
-                public void onOk(String text, int position) {
+                public void onOk(String text) {
                     tvTimeType.setText(text);
                 }
 
-                @Override
-                public void onCancel() {
-
-                }
             });
             builder.creater().show();
         });
