@@ -235,7 +235,6 @@ public class MenuTypeEntity implements Serializable, Comparable<MenuTypeEntity> 
     public String toString() {
         return "MenuTypeEntity{" +
                 "productTypeID='" + productTypeID + '\'' +
-                ", foods=" + foods +
                 ", productTypeName='" + productTypeName + '\'' +
                 ", restaurantID='" + restaurantID + '\'' +
                 ", orderNO=" + orderNO +

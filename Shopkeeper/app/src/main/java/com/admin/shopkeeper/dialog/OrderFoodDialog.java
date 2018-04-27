@@ -142,9 +142,7 @@ public class OrderFoodDialog extends AppCompatDialog {
             AppCompatEditText weightText = (AppCompatEditText) view.findViewById(R.id.weightText);//称重
 
             if (entity.isShowWeight()) {
-
                 numLayout.setVisibility(View.GONE);
-
                 weightText.setOnFocusChangeListener((v, hasFocus) -> {
                     if (hasFocus) {
                         weightText.setText("");

@@ -263,6 +263,7 @@ public class OrderDetailFood implements Serializable {
                 ", seasonID='" + seasonID + '\'' +
                 ", seasonName='" + seasonName + '\'' +
                 ", seasonPrice=" + seasonPrice +
+                ", seasonSum='" + seasonSum + '\'' +
                 ", giving=" + giving +
                 ", productshuxin='" + productshuxin + '\'' +
                 ", productshuxingId='" + productshuxingId + '\'' +
@@ -270,6 +271,9 @@ public class OrderDetailFood implements Serializable {
                 ", remarkId='" + remarkId + '\'' +
                 ", chargeMoney='" + chargeMoney + '\'' +
                 ", weight=" + weight +
+                ", count=" + count +
+                ", sale=" + sale +
+                ", unit='" + unit + '\'' +
                 '}';
     }
 }
