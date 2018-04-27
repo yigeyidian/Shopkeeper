@@ -35,6 +35,8 @@ public class Season implements Serializable, MultiItemEntity {
 
     @Transient
     private boolean selected;
+    @Transient
+    private int count;
 
     public boolean isSelected() {
         return selected;
@@ -57,6 +59,14 @@ public class Season implements Serializable, MultiItemEntity {
 
     @Generated(hash = 1022390091)
     public Season() {
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public static long getSerialVersionUID() {

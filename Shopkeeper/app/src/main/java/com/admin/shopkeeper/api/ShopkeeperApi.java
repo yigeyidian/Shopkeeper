@@ -905,7 +905,7 @@ public interface ShopkeeperApi {
             @Field("STATE") int state,
             @Field("REMARK") String remark,
             @Field("TasteID") String tasteID,
-            @Field("ProductCount") int productCount,
+            @Field("ProductCount") String productCount,
             @Field("WarCount") int warCount,
             @Field("ChuCaiType") int chuCaiType,
             @Field("MemberPice") double memberPice,

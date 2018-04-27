@@ -241,5 +241,13 @@ java.lang.Object readResolve();
 
 -dontwarn com.iflytek.**
 -keep public class com.iflytek.**{*;}
+#<!-- pinyin4j -->
+-dontwarn demo.**
+-keep class demo.**{*;}
+-keep class com.hp.hpl.sparta.**{*;}
+-dontwarn net.sourceforge.pinyin4j.**
+-keep class net.sourceforge.pinyin4j.**{*;}
+-keep class net.sourceforge.pinyin4j.format.**{*;}
+-keep class net.sourceforge.pinyin4j.format.exception.**{*;}
 
 #---------------------------------------------------------------------------------------------------

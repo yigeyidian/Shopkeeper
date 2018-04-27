@@ -70,7 +70,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,7 +175,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     if (entity.getSeasons() != null && entity.getSeasons().size() > 0) {
                         for (Season season : entity.getSeasons()) {
                             if (season.isSelected()) {
-                                total += (entity.getNumber() - entity.getGivingnum()) * season.getPrice();
+                                //total += (entity.getNumber() - entity.getGivingnum()) * season.getPrice();
+                                total += (entity.getNumber() - entity.getGivingnum()) * season.getPrice() * season.getCount();
                             }
                         }
                     }
@@ -228,7 +228,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     if (entity.getSeasons() != null && entity.getSeasons().size() > 0) {
                         for (Season season : entity.getSeasons()) {
                             if (season.isSelected()) {
-                                t += season.getPrice();
+                                //t += season.getPrice();
+                                t += season.getPrice()*season.getCount();
                             }
                         }
                     }
@@ -253,7 +254,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     if (entity.getSeasons() != null && entity.getSeasons().size() > 0) {
                         for (Season season : entity.getSeasons()) {
                             if (season.isSelected()) {
-                                total += season.getPrice();
+                                //total += season.getPrice();
+                                total += season.getPrice()*season.getCount();
                             }
                         }
                     }
@@ -278,7 +280,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     if (entity.getSeasons() != null && entity.getSeasons().size() > 0) {
                         for (Season season : entity.getSeasons()) {
                             if (season.isSelected()) {
-                                total += season.getPrice();
+                                total += season.getPrice()*season.getCount();
+                                //total += season.getPrice();
                             }
                         }
                     }
@@ -302,7 +305,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             if (entity.getSeasons() != null && entity.getSeasons().size() > 0) {
                 for (Season season : entity.getSeasons()) {
                     if (season.isSelected()) {
-                        total += season.getPrice();
+                        //total += season.getPrice();
+                        total += season.getPrice()*season.getCount();
                     }
                 }
             }
@@ -354,7 +358,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     if (season.isSelected()) {
                         seasonName += season.getName() + "*";
                         seasonId += season.getGuId() + "*";
-                        seasonPrice += season.getPrice();
+                        //seasonPrice += season.getPrice();
+                        seasonPrice += season.getPrice()*season.getCount();
                     }
                 }
             }
@@ -1049,7 +1054,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     String seasonStr = "";
                     for (Season season : entity.getSeasons()) {
                         if (season.isSelected()) {
-                            seasonStr += season.getName() + "(￥" + season.getPrice() + ")、";
+                            //seasonStr += season.getName() + "(￥" + season.getPrice() + ")、";
+                            seasonStr += season.getName() + "(￥" + season.getPrice()*season.getCount() + ")、";
                         }
                     }
                     entity.setSeasoned(seasonStr);
@@ -1108,7 +1114,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             if (entity.getSeasons() != null && entity.getSeasons().size() > 0) {
                 for (Season season : entity.getSeasons()) {
                     if (season.isSelected()) {
-                        total += season.getPrice() * (entity.getNumber() - entity.getGivingnum());
+                        //total += season.getPrice() * (entity.getNumber() - entity.getGivingnum());
+                        total += season.getPrice()*season.getCount() * (entity.getNumber() - entity.getGivingnum());
                     }
                 }
             }
@@ -1542,7 +1549,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                             String seasonStr = "";
                             for (Season season : entity.getSeasons()) {
                                 if (season.isSelected()) {
-                                    seasonStr += season.getName() + "(￥" + season.getPrice() + ")、";
+                                    //seasonStr += season.getName() + "(￥" + season.getPrice() + ")、";
+                                    seasonStr += season.getName() + "(￥" + season.getPrice()*season.getCount() + ")、";
                                 }
                             }
                             entity.setSeasoned(seasonStr);
@@ -1674,7 +1682,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                                 String seasonStr = "";
                                 for (Season season : entity.getSeasons()) {
                                     if (season.isSelected()) {
-                                        seasonStr += season.getName() + "(￥" + season.getPrice() + ")、";
+                                        //seasonStr += season.getName() + "(￥" + season.getPrice() + ")、";
+                                        seasonStr += season.getName() + "(￥" + season.getPrice()*season.getCount() + ")、";
                                     }
                                 }
                                 entity.setSeasoned(seasonStr);
@@ -1764,7 +1773,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     String seasonStr = "";
                     for (Season season : entity.getSeasons()) {
                         if (season.isSelected()) {
-                            seasonStr += season.getName() + "(￥" + season.getPrice() + ")、";
+                            //seasonStr += season.getName() + "(￥" + season.getPrice() + ")、";
+                            seasonStr += season.getName() + "(￥" + season.getPrice()*season.getCount() + ")、";
                         }
                     }
                     entity.setSeasoned(seasonStr);
@@ -1841,7 +1851,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             if (entity.getSeasons() != null && entity.getSeasons().size() > 0) {
                 for (Season season : entity.getSeasons()) {
                     if (season.isSelected()) {
-                        total += (entity.getNumber() - entity.getGivingnum()) * season.getPrice();
+                        //total += (entity.getNumber() - entity.getGivingnum()) * season.getPrice();
+                        total += (entity.getNumber() - entity.getGivingnum()) * season.getPrice()*season.getCount();
                     }
                 }
             }

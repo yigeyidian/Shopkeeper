@@ -118,7 +118,7 @@ public class FoodManagerActivity extends BaseActivity<FoodManagerPresenter> impl
     private void searchFood(String str) {
         List<FoodBean> list = new ArrayList<>();
         for (FoodBean bean : datas) {
-            if (bean.getProductName().contains(str) || bean.getName().contains(str)) {
+            if (bean.getProductName().contains(str)) {
                 list.add(bean);
             }
         }

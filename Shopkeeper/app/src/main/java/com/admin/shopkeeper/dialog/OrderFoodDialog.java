@@ -8,6 +8,7 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,16 +24,12 @@ import com.admin.shopkeeper.adapter.KouWeiAdapter;
 import com.admin.shopkeeper.adapter.MaterialAdapter;
 import com.admin.shopkeeper.adapter.SpecAdapter;
 import com.admin.shopkeeper.entity.KouWei;
-import com.admin.shopkeeper.entity.Season;
 import com.admin.shopkeeper.entity.OrderfoodEntity;
+import com.admin.shopkeeper.entity.Season;
 import com.admin.shopkeeper.entity.Spec;
-
 import com.admin.shopkeeper.weight.MarginDecoration;
 import com.admin.shopkeeper.weight.SpacesItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -253,11 +250,39 @@ public class OrderFoodDialog extends AppCompatDialog {
 
             ConstraintLayout jialiaoLayout = (ConstraintLayout) view.findViewById(R.id.jialiaoLayout);//加料
             if (entity.getSeasons() != null && entity.getSeasons().size() > 0) {
+                if(entity.isEdit()){
+                    for (int i = 0; i < entity.getSeasons().size(); i++) {
+                        if (entity.getSeasons().get(i).isSelected()) {
+                            entity.getSeasons().get(i).setSelected(true);
+                        }
+                    }
+                }else{
+                    for (int i = 0; i < entity.getSeasons().size(); i++) {
+                        if (entity.getSeasons().get(i).isSelected()) {
+                            entity.getSeasons().get(i).setSelected(false);
+                        }
+                    }
+                }
+
                 RecyclerView jialiaoRecyclerView = (RecyclerView) view.findViewById(R.id.jialiaoRecyclerView);
                 MaterialAdapter jAdapter = new MaterialAdapter(entity.getSeasons());
-                jialiaoRecyclerView.setHasFixedSize(true);
-                jialiaoRecyclerView.setLayoutManager(new GridLayoutManager(context, 3) {
+                jAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+                    @Override
+                    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                        if(view.getId() == R.id.reduce){
 
+                        }
+                    }
+                });
+                jialiaoRecyclerView.setHasFixedSize(true);
+//                jialiaoRecyclerView.setLayoutManager(new GridLayoutManager(context, 3) {
+//
+//                    @Override
+//                    public boolean canScrollVertically() {
+//                        return false;
+//                    }
+//                });
+                jialiaoRecyclerView.setLayoutManager(new LinearLayoutManager(context){
                     @Override
                     public boolean canScrollVertically() {
                         return false;
@@ -266,7 +291,7 @@ public class OrderFoodDialog extends AppCompatDialog {
                 jialiaoRecyclerView.setAdapter(jAdapter);
                 jialiaoRecyclerView.addItemDecoration(new MarginDecoration(context, R.dimen._10sdp));
                 jAdapter.setOnItemClickListener((adapter, view1, position) -> {
-                    Season season = jAdapter.getItem(position);
+                   /* Season season = jAdapter.getItem(position);
                     assert season != null;
                     if (season.isSelected()) {
                         season.setSelected(false);
@@ -275,9 +300,13 @@ public class OrderFoodDialog extends AppCompatDialog {
                             s.setSelected(false);
                         }
                         season.setSelected(true);
-                    }
+                    }*/
+                        Season season = jAdapter.getItem(position);
+                        assert season != null;
+                        season.setSelected(!season.isSelected());
+                        jAdapter.notifyItemChanged(position, season);
                     //season.setSelected(!season.isSelected());
-                    jAdapter.notifyDataSetChanged();
+//                    jAdapter.notifyDataSetChanged();
                 });
             } else {
                 jialiaoLayout.setVisibility(View.GONE);
@@ -384,7 +413,6 @@ public class OrderFoodDialog extends AppCompatDialog {
                     button.setEnabled(entity.getNumber() > 0);
                 }
             }
-
         }
 
         private void showReduce(int number) {

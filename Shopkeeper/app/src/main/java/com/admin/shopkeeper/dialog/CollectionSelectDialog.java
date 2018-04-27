@@ -143,6 +143,7 @@ public class CollectionSelectDialog extends AppCompatDialog {
             recyclerView.addItemDecoration(new MarginDecoration(context, R.dimen._10sdp));
             recyclerView.setAdapter(adapter);
 
+
             adapter.setOnItemClickListener((adapter, view1, position) -> {
                 if (isSingleSelect) {
                     if (getReasons().get(position).isSelect()) {

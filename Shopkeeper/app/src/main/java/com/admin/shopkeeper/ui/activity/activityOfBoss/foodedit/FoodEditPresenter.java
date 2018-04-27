@@ -2,21 +2,14 @@ package com.admin.shopkeeper.ui.activity.activityOfBoss.foodedit;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.base.BasePresenter;
-import com.admin.shopkeeper.db.AppDbHelper;
-import com.admin.shopkeeper.db.DbHelper;
-import com.admin.shopkeeper.entity.BussinessBean;
 import com.admin.shopkeeper.entity.MenuTypeEntity;
-import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.PrintBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.model.FoodsModel;
-import com.admin.shopkeeper.model.StringModel;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.edit.IEditView;
 import com.admin.shopkeeper.utils.DeviceUtils;
 import com.admin.shopkeeper.utils.DialogUtils;
 import com.google.gson.Gson;
@@ -26,19 +19,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Administrator on 2017/8/24.
@@ -53,7 +39,7 @@ public class FoodEditPresenter extends BasePresenter<IFoodEditView> {
     public void submit(String type, String productId, String productName, String id,
                        String pinyin, String unit, String minunit, String productTypeId,
                        String productTypeName, double price, String productfile,String printId, int state,
-                       String remark, String tasteID, int productCount, int warCount,
+                       String remark, String tasteID, String productCount, int warCount,
                        int chuCaiType, double memberPice, int salesType, int canDiscount, int protuctShuXing,int accordIng) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
