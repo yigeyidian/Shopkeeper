@@ -39,6 +39,8 @@ public class AddPrintActivity extends BaseActivity<AddPrintPresenter> implements
     RadioGroup rgCutType;
     @BindView(R.id.edit_guige)
     RadioGroup rgGuige;
+    @BindView(R.id.print_way)
+    Spinner spinnerPrintWay;
 
     private PrintBean bean;
 
@@ -85,10 +87,16 @@ public class AddPrintActivity extends BaseActivity<AddPrintPresenter> implements
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(adapter1);
 
+        String[] saleTypes2 = getResources().getStringArray(R.array.printType3);
+        ArrayAdapter adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Arrays.asList(saleTypes2));
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPrintWay.setAdapter(adapter2);
+
         if (bean != null) {
 
             spinner.setSelection(bean.getPrintType());
             typeSpinner.setSelection(bean.getTypes());
+            spinnerPrintWay.setSelection(bean.getPrintWay());
             if (bean.getQiedao().equals("1")) {
                 ((RadioButton) rgQiedao.getChildAt(0)).setChecked(true);
             } else {
@@ -153,6 +161,7 @@ public class AddPrintActivity extends BaseActivity<AddPrintPresenter> implements
 
         int position = spinner.getSelectedItemPosition();
         int typePosition = typeSpinner.getSelectedItemPosition();
+        int printWay = spinnerPrintWay.getSelectedItemPosition();
 
         int qiedao = ((RadioButton) rgQiedao.getChildAt(0)).isChecked() ? 1 : 2;
         int cutType = ((RadioButton) rgCutType.getChildAt(0)).isChecked() ? 0 : 1;
@@ -160,9 +169,9 @@ public class AddPrintActivity extends BaseActivity<AddPrintPresenter> implements
 
 
         if (bean == null) {
-            presenter.submit("", nameStr, portStr, addressStr, position, qiedao, typePosition, cutType, guige);
+            presenter.submit("", nameStr, portStr, addressStr, position, qiedao, typePosition, cutType, guige , printWay);
         } else {
-            presenter.submit(bean.getId(), nameStr, portStr, addressStr, position, qiedao, typePosition, cutType, guige);
+            presenter.submit(bean.getId(), nameStr, portStr, addressStr, position, qiedao, typePosition, cutType, guige , printWay);
         }
     }
 

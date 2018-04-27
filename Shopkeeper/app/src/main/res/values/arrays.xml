@@ -107,6 +107,11 @@
         <item>安卓网口打印机</item>
         <item>苹果网口打印机</item>
     </string-array>
+    <string-array name="printType3">
+        <item></item>
+        <item>本地打印</item>
+        <item>驱动打印</item>
+    </string-array>
     <string-array name="couponType">
         <item>全部</item>
         <item>满送券</item>

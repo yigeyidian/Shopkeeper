@@ -72,7 +72,7 @@ public class MansongActivity extends BaseActivity<MansongPresenter> implements I
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-        toolbar.setTitle("满送规则");
+        toolbar.setTitle("微信满送规则");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 

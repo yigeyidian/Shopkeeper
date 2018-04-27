@@ -23,11 +23,11 @@ public class AddPrintPresenter extends BasePresenter<IAddPrinyView> {
         super(context, iView);
     }
 
-    public void submit(String id, String name, String port, String address, int printtype, int qiedao, int types, int cuttype, int printspec) {
+    public void submit(String id, String name, String port, String address, int printtype, int qiedao, int types, int cuttype, int printspec ,int printWay) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .addPrint(TextUtils.isEmpty(id) ? "2" : "3", id, name, port, address, printtype, qiedao, types, cuttype, printspec, App.INSTANCE().getShopID())
+                .addPrint(TextUtils.isEmpty(id) ? "2" : "3", id, name, port, address, printtype, qiedao, types, cuttype, printspec, printWay, App.INSTANCE().getShopID())
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -42,6 +42,6 @@ public class AddPrintPresenter extends BasePresenter<IAddPrinyView> {
                 }, throwable -> {
                     DialogUtils.hintDialog();
                     iView.error("提交失败");
-                });
-    }
+});
+        }
 }

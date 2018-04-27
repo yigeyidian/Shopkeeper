@@ -1722,8 +1722,18 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
                 if (type == 3) {
                     presenter.getDazhe(billId, i, dazheId);
                 } else presenter.getDazhe(order.getBillid(), i, dazheId);
-
                 dazhe.setText(i + "");
+                builder.dismiss();
+            }
+
+            @Override
+            public void onCancel() {
+                dazhe.setText("");
+                idazhe = 0;
+                youhuiMoney = ijianmian + idazhe;
+                initPay();
+                getNeed();
+                intText();
                 builder.dismiss();
             }
         });

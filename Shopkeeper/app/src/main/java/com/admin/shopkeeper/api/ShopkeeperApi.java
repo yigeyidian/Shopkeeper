@@ -1008,6 +1008,7 @@ public interface ShopkeeperApi {
             @Field("Types") int types,
             @Field("CutType") int cutType,
             @Field("PrintSpec") int printspec,
+            @Field("PrintWay") int printWay,
             @Field("RESTAURANTID") String restaurantId);
 
     @FormUrlEncoded

@@ -481,7 +481,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_21sdp"
                 android:layout_weight="1"
-                android:text="券明细表"
+                android:text="微信券明细表"
                 android:textColor="@color/black" />
 
             <ImageView

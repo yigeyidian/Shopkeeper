@@ -87,8 +87,8 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
                 .init();
         date = new StringBuffer();
         titleStr = getIntent().getStringExtra(Config.PARAM1);
-        if (titleStr.equals("优惠券管理")) {
-            toolbar.setTitle("优惠券管理");
+        if (titleStr.equals("微信券管理")) {
+            toolbar.setTitle("微信券管理");
         } else if (titleStr.equals("线下券管理")) {
             toolbar.setTitle("线下券管理");
         } else {

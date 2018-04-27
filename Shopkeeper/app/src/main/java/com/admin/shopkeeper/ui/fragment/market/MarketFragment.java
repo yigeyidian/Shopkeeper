@@ -43,7 +43,7 @@ public class MarketFragment extends BaseFragment<MarketPresenter> implements IMa
         startActivity(MemberLevelManageActivity.class);
     }
 
-    //会员交易明细
+    //会员交易管理
     @OnClick(R.id.member_manage_ll)
     public void setMemberManageClick() {
         startActivity(MemberManageActivity.class);
@@ -55,11 +55,11 @@ public class MarketFragment extends BaseFragment<MarketPresenter> implements IMa
         startActivity(RechargeManageActivity.class);
     }
 
-    //优惠券管理
+    //微信券管理
     @OnClick(R.id.market_coupon_manage_ll)
     public void setCouponManageClick() {
         Intent intent = new Intent(getActivity(), CouponManageActivity.class);
-        intent.putExtra(Config.PARAM1, "优惠券管理");
+        intent.putExtra(Config.PARAM1, "微信券管理");
         startActivity(intent);
     }
 

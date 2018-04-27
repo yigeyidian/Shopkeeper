@@ -89,7 +89,7 @@ public class MemberManageActivity extends BaseActivity<MemberManagePresenter> im
                 .titleBar(toolbar, true)
                 .init();
 
-        toolbar.setTitle("会员管理");
+        toolbar.setTitle("会员交易管理");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 

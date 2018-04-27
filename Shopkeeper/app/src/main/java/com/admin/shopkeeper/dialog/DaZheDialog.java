@@ -49,6 +49,7 @@ public class DaZheDialog extends AppCompatDialog {
         private Context context;
         private int theme;
         AppCompatButton oneBtn;
+        AppCompatButton cancelBtn;
         DaZhaAdapter daZhaAdapter;
 
         private String title;
@@ -107,6 +108,7 @@ public class DaZheDialog extends AppCompatDialog {
             dialog = new DaZheDialog(context, theme, view);
 
             oneBtn = (AppCompatButton) view.findViewById(R.id.OneBtn);
+            cancelBtn = (AppCompatButton) view.findViewById(R.id.btn_cancel);
             AppCompatTextView titletv = (AppCompatTextView) view.findViewById(R.id.title);
             titletv.setText(title);
             AppCompatImageButton button = (AppCompatImageButton) view.findViewById(R.id.tipBtn);
@@ -129,6 +131,15 @@ public class DaZheDialog extends AppCompatDialog {
                         }
 
                         buttonClick.onBtnClick(Integer.parseInt(editText.getText().toString().trim()));
+                    }
+                }
+            });
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (buttonClick != null) {
+                        buttonClick.onCancel();
+                        dismiss();
                     }
                 }
             });
@@ -171,5 +182,7 @@ public class DaZheDialog extends AppCompatDialog {
         void onBtnClick(int i);
 
         void onItemClick(int i , String id);
+
+        void onCancel();
     }
 }

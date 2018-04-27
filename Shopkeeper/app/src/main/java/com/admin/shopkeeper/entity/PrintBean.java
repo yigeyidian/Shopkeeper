@@ -46,7 +46,7 @@ public class PrintBean implements Serializable{
     @SerializedName("PrintSpec")
     private String printSpec;
     @SerializedName("PrintWay")
-    private String printWay;
+    private int printWay;
 
     public int getPrintType() {
         return printType;
@@ -96,11 +96,11 @@ public class PrintBean implements Serializable{
         this.printSpec = printSpec;
     }
 
-    public String getPrintWay() {
+    public int getPrintWay() {
         return printWay;
     }
 
-    public void setPrintWay(String printWay) {
+    public void setPrintWay(int printWay) {
         this.printWay = printWay;
     }
 

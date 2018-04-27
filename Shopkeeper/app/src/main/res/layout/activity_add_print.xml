@@ -185,5 +185,20 @@
         </RadioGroup>
 
     </LinearLayout>
+    <View style="@style/LineHor2Style" />
+    <LinearLayout style="@style/SettingItemStyle">
+
+        <TextView
+            style="@style/SettingItemTextStyle"
+            android:text="打印机方式" />
+
+        <Spinner
+            android:id="@+id/print_way"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_32sdp"
+            android:layout_marginRight="@dimen/_32sdp" />
+
+    </LinearLayout>
 
 </LinearLayout>

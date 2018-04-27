@@ -60,7 +60,7 @@ public class CouponLineDownActivity extends BaseActivity<CouponPresenter> implem
                 .statusBarColor(R.color.bosscolorPrimaryDark, 0.4f)
                 .titleBar(toolbar, true)
                 .init();
-        toolbar.setTitle("线下券管理");
+        toolbar.setTitle("其他券管理");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
