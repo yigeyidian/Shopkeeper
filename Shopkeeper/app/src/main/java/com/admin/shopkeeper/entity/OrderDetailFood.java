@@ -40,6 +40,8 @@ public class OrderDetailFood implements Serializable {
     private String seasonName;
     @SerializedName("SeasonPrice")
     private double seasonPrice;
+    @SerializedName("SeasonSum")
+    private String seasonSum;
     @SerializedName("Giving")
     private int giving;
     @SerializedName("PRODUCTSHUXIN")
@@ -60,6 +62,15 @@ public class OrderDetailFood implements Serializable {
 
     @SerializedName("UNIT")
     private String unit;
+
+
+    public String getSeasonSum() {
+        return seasonSum;
+    }
+
+    public void setSeasonSum(String seasonSum) {
+        this.seasonSum = seasonSum;
+    }
 
     public String getUnit() {
         return unit;

@@ -57,8 +57,8 @@ public class MaterialAdapter extends BaseMultiItemQuickAdapter<Season, BaseViewH
                 }
             });
             if (item.isSelected()) {
-                textView.setText("1");
-                item.setCount(1);
+                textView.setText(item.getCount()+"");
+                item.setCount(item.getCount());
             } else {
                 textView.setText("0");
                 item.setCount(0);
@@ -67,8 +67,8 @@ public class MaterialAdapter extends BaseMultiItemQuickAdapter<Season, BaseViewH
             helper.getView(R.id.textView).setSelected(item.isSelected());
             helper.getView(R.id.item_boot).setSelected(item.isSelected());
             if (item.isSelected()) {
-                textView.setText("1");
-                item.setCount(1);
+                textView.setText(item.getCount()+"");
+                item.setCount(item.getCount());
             } else {
                 textView.setText("0");
                 item.setCount(0);

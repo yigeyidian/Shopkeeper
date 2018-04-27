@@ -332,6 +332,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
             String seasonName = "";
             String seasonId = "";
             double seasonPrice = 0;
+            String seasonNum="";
 
             if (orderfoodEntity.getKouWeis() != null) {
                 for (int j = 0; j < orderfoodEntity.getKouWeis().size(); j++) {
@@ -356,7 +357,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 for (int j = 0; j < orderfoodEntity.getSeasons().size(); j++) {
                     Season season = orderfoodEntity.getSeasons().get(j);
                     if (season.isSelected()) {
-                        seasonName += season.getName() + "*";
+                        seasonName += season.getName()+"("+season.getCount() +"份)"+ "*";
+                        seasonNum += season.getCount()+"*";
                         seasonId += season.getGuId() + "*";
                         //seasonPrice += season.getPrice();
                         seasonPrice += season.getPrice()*season.getCount();
@@ -399,7 +401,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                         + 0 + "$"//$ 赠送份数
                         + seasonId + "$"//  作料ID
                         + seasonName + "$"// 作料名称
-                        + seasonPrice + ",";//作料价格;
+                        + seasonPrice + "$"//佐料价格
+                        + seasonNum+",";//佐料数量;
             } else {
                 if (orderfoodEntity.isShowWeight()) {
                     //if (orderfoodEntity.getGivingnum() == 0) {
@@ -434,7 +437,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                         + orderfoodEntity.getGivingnum() + "$"//$ 赠送份数
                         + seasonId + "$"//  作料ID
                         + seasonName + "$"// 作料名称
-                        + seasonPrice + ",";//作料价格;
+                        + seasonPrice + "$"//佐料价格
+                        + seasonNum+",";//佐料数量;
             }
 
 

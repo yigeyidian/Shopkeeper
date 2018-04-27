@@ -127,6 +127,7 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
         position = getIntent().getIntExtra(Config.PARAM3, 0);
 
         Log.i("ttt", "---order:" + order);
+        Log.i("ttt","---detailfood" + detailFoods);
 
         setView();
 

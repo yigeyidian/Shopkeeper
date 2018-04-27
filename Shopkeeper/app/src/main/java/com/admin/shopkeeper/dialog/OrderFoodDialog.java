@@ -301,9 +301,17 @@ public class OrderFoodDialog extends AppCompatDialog {
                         }
                         season.setSelected(true);
                     }*/
+
                         Season season = jAdapter.getItem(position);
                         assert season != null;
-                        season.setSelected(!season.isSelected());
+                    if(season.isSelected()){
+                        int seasonNum = season.getCount()+1;
+                        season.setCount(seasonNum);
+                        season.setSelected(true);
+                    }else {
+                        season.setCount(1);
+                        season.setSelected(true);
+                    }
                         jAdapter.notifyItemChanged(position, season);
                     //season.setSelected(!season.isSelected());
 //                    jAdapter.notifyDataSetChanged();
