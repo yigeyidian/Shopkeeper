@@ -145,10 +145,14 @@ public class CollectionSelectDialog extends AppCompatDialog {
 
             adapter.setOnItemClickListener((adapter, view1, position) -> {
                 if (isSingleSelect) {
-                    for (ChainBean chainBean : getReasons()) {
-                        chainBean.setSelect(false);
+                    if (getReasons().get(position).isSelect()) {
+                        getReasons().get(position).setSelect(false);
+                    } else {
+                        for (ChainBean chainBean : getReasons()) {
+                            chainBean.setSelect(false);
+                        }
+                        getReasons().get(position).setSelect(true);
                     }
-                    getReasons().get(position).setSelect(true);
                 } else {
                     if (getReasons().get(position).isSelect()) {
                         getReasons().get(position).setSelect(false);

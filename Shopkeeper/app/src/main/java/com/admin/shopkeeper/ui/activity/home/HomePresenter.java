@@ -95,7 +95,6 @@ public class HomePresenter extends BasePresenter<IHomeView> {
                     throwable.printStackTrace();
                     iView.warning("菜单列表获取失败");
                 });
-
     }
 
     public void getMeal() {
