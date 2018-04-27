@@ -279,7 +279,7 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
             builder.setTitle("选择门店");
             builder.setReasons(chainBeens);
             builder.setSelect(selectText);
-            builder.setSingleSelect(type == 1);
+            builder.setSingleSelect(type == 1 ? true :false);
             builder.setButtonClick((text, value) -> {
                 tvShop.setText(text);
                 shopId = value;
@@ -289,7 +289,7 @@ public class CollectionStatisticsActivity extends BaseActivity<CollectionStatist
 
         tvTimeType.setOnClickListener(v -> {
             SingleSelectDialog.Builder builder = new SingleSelectDialog.Builder(this, R.style.OrderDialogStyle);
-            builder.setTitle("应付金额");
+            builder.setTitle("选择时间");
             builder.setReasons(types);
             builder.setButtonClick(new SingleSelectDialog.OnButtonClick() {
 

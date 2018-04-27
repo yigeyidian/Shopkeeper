@@ -264,8 +264,9 @@ public class DeskOpenActivity extends BaseActivity<DeskopenPresenter> implements
         });
 
         tvTimeType.setOnClickListener(v -> {
+
             SingleSelectDialog.Builder builder = new SingleSelectDialog.Builder(this, R.style.OrderDialogStyle);
-            builder.setTitle("应付金额");
+            builder.setTitle("选择时间");
             builder.setReasons(types);
             builder.setButtonClick(new SingleSelectDialog.OnButtonClick() {
 
