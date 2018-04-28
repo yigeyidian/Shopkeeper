@@ -453,7 +453,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
 
     public static void moveToPosition(LinearLayoutManager manager, int n) {
         manager.scrollToPositionWithOffset(n, 0);
-        manager.setStackFromEnd(true);
+        //manager.setStackFromEnd(true);
     }
 
     @Override
@@ -556,6 +556,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
 
             @Override
             public void onLetterIndex(int position) {
+                Log.i("ttt", "---position:" + position);
                 if (position != -1) {
                     moveToPosition((LinearLayoutManager) rigth.getLayoutManager(), position);
                 }
