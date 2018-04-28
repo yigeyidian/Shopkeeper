@@ -133,11 +133,10 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 //        holder.tvPrice.setText(String.format(mContext.getString(R.string.string_money), item.getPrice()));
         holder.tvPrice.setText(item.getPrice()+"("+item.getMemberPice()+")");
 
-
+        holder.badgeView.setBadgeNumber(0);
         if (!item.getProductShuXing().equals("0")) { //1是称斤 2是规格菜品 0是默认菜品
             holder.clLayout.setVisibility(View.GONE);
-            holder.flLayout.setVisibility(View.GONE);
-            //holder.badgeView.setBadgeNumber(item.getNumber());
+            holder.flLayout.setVisibility(View.VISIBLE);
         } else {
             if (item.getTasteType() == 1) {
                 holder.clLayout.setVisibility(View.GONE);
