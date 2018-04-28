@@ -23,7 +23,6 @@ import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.entity.MenuTypeEntity;
 import com.admin.shopkeeper.entity.PrintBean;
-import com.admin.shopkeeper.utils.Tools;
 import com.fastaccess.permission.base.PermissionHelper;
 import com.fastaccess.permission.base.callback.OnPermissionCallback;
 import com.gyf.barlibrary.ImmersionBar;
@@ -48,8 +47,8 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
     ImageView imageView;
     @BindView(R.id.edit_foodname)
     EditText etFoodName;
-    @BindView(R.id.edit_pinyin)
-    EditText etPinyin;
+    /*@BindView(R.id.edit_pinyin)
+    EditText etPinyin;*/
     @BindView(R.id.edit_unit)
     EditText etUnit;
     /*@BindView(R.id.edit_minunit)
@@ -60,8 +59,8 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
     EditText etRemark;
     /*@BindView(R.id.edit_count)
     EditText etCount;*/
-    @BindView(R.id.edit_warcount)
-    EditText etWarCount;
+    /*@BindView(R.id.edit_warcount)
+    EditText etWarCount;*/
     @BindView(R.id.edit_merberprice)
     EditText etMerPrice;
     @BindView(R.id.edit_state)
@@ -144,14 +143,14 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
     private void updateView() {
         etFoodName.setText(foodBean.getProductName());
         etId.setText(foodBean.getId());
-        etPinyin.setText(foodBean.getPinyin());
+//        etPinyin.setText(foodBean.getPinyin());
         etUnit.setText(foodBean.getUnit());
 //        etMinUnit.setText(foodBean.getMinunit());
         etPrice.setText(foodBean.getPrice() + "");
         etRemark.setText(foodBean.getRemark());
 //        etCount.setText(foodBean.getProductCount() + "");
         etMerPrice.setText(foodBean.getMemberPice() + "");
-        etWarCount.setText(foodBean.getWarCount());
+//        etWarCount.setText(foodBean.getWarCount());
 
         if (foodBean.getState() == 1) {
             ((RadioButton) rgState.getChildAt(0)).setChecked(true);
@@ -226,14 +225,14 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
             etFoodName.requestFocus();
             return;
         }
-        String pinyinStr ="";
+        /*String pinyinStr ="";
         StringBuffer sb = new StringBuffer();
         if(!TextUtils.isEmpty(foodNameStr)){
             pinyinStr = Tools.convertHanzi2Pinyin(foodNameStr,false);
             sb.append(pinyinStr);
             sb.append(foodNameStr);
         }
-        pinyinStr = sb.toString();
+        pinyinStr = sb.toString();*/
 
 
         String unitStr = etUnit.getText().toString().trim();
@@ -303,14 +302,14 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
 //            showToast("请输入菜品库存");
 //            return;
 //        }
-        String warcountStr;
+        /*String warcountStr;
         if(TextUtils.isEmpty(etWarCount.getText().toString().trim())){
             warcountStr = etWarCount.getHint().toString().trim();
         }else{
             warcountStr = etWarCount.getText().toString().trim();
-        }
+        }*/
 
-        int warcount = 0;
+       /* int warcount = 0;
         try {
             if (!TextUtils.isEmpty(warcountStr)) {
                 warcount = Integer.parseInt(warcountStr);
@@ -318,7 +317,7 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
         } catch (Exception e) {
             showToast("请输入预警份数");
             return;
-        }
+        }*/
 
         int chucaiType = 0;
         if (((RadioButton) rgPrint.getChildAt(0)).isChecked()) {
@@ -366,13 +365,13 @@ public class FoodEditActivity extends BaseActivity<FoodEditPresenter> implements
         PrintBean printBean = (PrintBean) printSpinner.getSelectedItem();
 
         if (foodBean == null) {
-            presenter.submit("ADD", "", foodNameStr, idStr, pinyinStr, unitStr, "", menuTypeEntity.getProductTypeID(),
-                    menuTypeEntity.getProductTypeName(), price, imageName, printBean == null ? "" : printBean.getId(), state, remarkStr, "", "", warcount, chucaiType,
+            presenter.submit("ADD", "", foodNameStr, idStr, "", unitStr, "", menuTypeEntity.getProductTypeID(),
+                    menuTypeEntity.getProductTypeName(), price, imageName, printBean == null ? "" : printBean.getId(), state, remarkStr, "", "", "", chucaiType,
                     merPrice, position + 1, dazheType,shuxing, showType);
         } else {
-            presenter.submit("Update", foodBean.getProductId(), foodNameStr, idStr, pinyinStr, unitStr, "",
+            presenter.submit("Update", foodBean.getProductId(), foodNameStr, idStr, "", unitStr, "",
                     menuTypeEntity.getProductTypeID(), menuTypeEntity.getProductTypeName(), price, imageName, printBean == null ? "" : printBean.getId(), state, remarkStr, "",
-                    "", warcount, chucaiType, merPrice, position + 1, dazheType,shuxing, showType);
+                    "", "", chucaiType, merPrice, position + 1, dazheType,shuxing, showType);
         }
     }
 

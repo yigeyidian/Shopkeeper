@@ -39,7 +39,7 @@ public class FoodEditPresenter extends BasePresenter<IFoodEditView> {
     public void submit(String type, String productId, String productName, String id,
                        String pinyin, String unit, String minunit, String productTypeId,
                        String productTypeName, double price, String productfile,String printId, int state,
-                       String remark, String tasteID, String productCount, int warCount,
+                       String remark, String tasteID, String productCount, String warCount,
                        int chuCaiType, double memberPice, int salesType, int canDiscount, int protuctShuXing,int accordIng) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()

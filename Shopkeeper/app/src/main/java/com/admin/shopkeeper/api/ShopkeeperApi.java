@@ -345,7 +345,7 @@ public interface ShopkeeperApi {
 
     /**
      *
-     * @param s
+     * @param
      * @param billid
      * @param shopId
      * @param xiaPice 优惠金额
@@ -906,7 +906,7 @@ public interface ShopkeeperApi {
             @Field("REMARK") String remark,
             @Field("TasteID") String tasteID,
             @Field("ProductCount") String productCount,
-            @Field("WarCount") int warCount,
+            @Field("WarCount") String warCount,
             @Field("ChuCaiType") int chuCaiType,
             @Field("MemberPice") double memberPice,
             @Field("SalesType") int salesType,
