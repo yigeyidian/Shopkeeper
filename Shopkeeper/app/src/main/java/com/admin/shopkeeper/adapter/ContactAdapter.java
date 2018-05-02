@@ -138,7 +138,10 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             holder.clLayout.setVisibility(View.GONE);
             holder.flLayout.setVisibility(View.VISIBLE);
         } else {
-            if (item.getTasteType() == 1) {
+            if(item.getTasteType() ==null){
+                return;
+            }
+            if (item.getTasteType().equals("1")) {
                 holder.clLayout.setVisibility(View.GONE);
                 holder.flLayout.setVisibility(View.VISIBLE);
                 holder.badgeView.setBadgeNumber(item.getNumber());

@@ -918,7 +918,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         //        item.getTasteType();//口味 1。弹出口味   0.不弹出口
 //        item.getProductShuXing();//1是称斤 2是规格菜品 0是默认菜品
         Timber.d("-----" + item.getTasteType());
-        if (item.getTasteType() == 1) {
+        if (item.getTasteType().equals("1")) {
             List<KouWei> kouWeiList = AppDbHelper.INSTANCE().getOwnKouWeis(App.INSTANCE().getShopID(), item.getProductID());
             kouWeiList.addAll(AppDbHelper.INSTANCE().getKouWeis(App.INSTANCE().getShopID(), item.getProductID()));
             KouWei k = new KouWei();

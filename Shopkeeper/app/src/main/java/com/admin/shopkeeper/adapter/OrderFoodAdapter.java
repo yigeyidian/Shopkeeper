@@ -41,7 +41,7 @@ public class OrderFoodAdapter extends BaseQuickAdapter<FoodEntity, OrderFoodAdap
             helper.setVisible(R.id.root, true);
             helper.badgeView.setBadgeNumber(item.getNumber());
         } else {
-            if (item.getTasteType() == 1) {
+            if (item.getTasteType().equals("1")) {
                 helper.setVisible(R.id.layout, false);
                 helper.setVisible(R.id.root, true);
                 helper.badgeView.setBadgeNumber(item.getNumber());

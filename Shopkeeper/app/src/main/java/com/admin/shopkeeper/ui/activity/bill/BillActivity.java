@@ -1088,7 +1088,11 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         Log.d("ttt", "预付：" + weixinOrderBean.getYufupice() + "优惠：" + weixinOrderBean.getYouhui() + "餐具：" + weixinOrderBean.getCanju());
         Log.d("ttt", "应付：" + df.format(yinFu));
         double yinfu = Double.parseDouble(df.format(yinFu));
-        return yinfu;
+        if (yinfu < 0) {
+            return 0;
+        } else {
+            return yinfu;
+        }
     }
 
     private void intText() {
@@ -1100,15 +1104,19 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         BigDecimal yuanjia = new BigDecimal(weixinOrderBean.getYuanjia()).setScale(2, BigDecimal.ROUND_DOWN);
         BigDecimal canju = new BigDecimal(weixinOrderBean.getCanju()).setScale(2, BigDecimal.ROUND_DOWN);
         BigDecimal youhui = new BigDecimal(getYouhuiMoney() + weixinOrderBean.getYufupice() + weixinOrderBean.getYouhui()).setScale(2, BigDecimal.ROUND_DOWN);
-        BigDecimal yintui = new BigDecimal(weixinOrderBean.getYintui()).setScale(2, BigDecimal.ROUND_DOWN);
+        BigDecimal yintui = new BigDecimal(-weixinOrderBean.getYintui()).setScale(2, BigDecimal.ROUND_DOWN);
 //        BigDecimal yinfu = new BigDecimal(getYinfuMoney()).setScale(2, BigDecimal.ROUND_DOWN);
         BigDecimal need = new BigDecimal(needMoney).setScale(2, BigDecimal.ROUND_DOWN);
         BigDecimal yuFuPice = new BigDecimal(weixinOrderBean.getYufupice()).setScale(2, BigDecimal.ROUND_DOWN);
 
         tv1.setText("原价：￥" + nf.format(weixinOrderBean.getYuanjia()));
         tv2.setText("餐具：￥" + nf.format(weixinOrderBean.getCanju()));
-        tv3.setText("优惠：￥" + nf.format(getYouhuiMoney() + weixinOrderBean.getYufupice() + weixinOrderBean.getYouhui()));
-        tv5.setText("应退：￥" + nf.format(weixinOrderBean.getYintui()));
+        tv3.setText("优惠：￥" + nf.format(getYouhuiMoney() + weixinOrderBean.getYouhui()));
+        if(weixinOrderBean.getYintui()<0){
+            tv5.setText("应退：￥" + nf.format(-weixinOrderBean.getYintui()));
+        }else {
+            tv5.setText("应退：￥" + nf.format(weixinOrderBean.getYintui()));
+        }
         tv4.setText("应付：￥" + getYinfuMoney());
         tv6.setText("还需支付：￥" + nf.format(needMoney));
         tv7.setText("预定金：￥" + nf.format(weixinOrderBean.getYufupice()));
