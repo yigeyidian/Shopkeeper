@@ -138,14 +138,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             holder.clLayout.setVisibility(View.GONE);
             holder.flLayout.setVisibility(View.VISIBLE);
         } else {
-            if(item.getTasteType() ==null){
-                return;
-            }
-            if (item.getTasteType().equals("1")) {
-                holder.clLayout.setVisibility(View.GONE);
-                holder.flLayout.setVisibility(View.VISIBLE);
-                holder.badgeView.setBadgeNumber(item.getNumber());
-            } else {
+            if(item.getTasteType() == null){
                 holder.clLayout.setVisibility(View.VISIBLE);
                 holder.flLayout.setVisibility(View.GONE);
                 if (item.getNumber() > 0) {
@@ -156,7 +149,25 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                     holder.ibReduce.setVisibility(View.INVISIBLE);
                     holder.tvNumber.setVisibility(View.INVISIBLE);
                 }
+            }else{
+                if (item.getTasteType().equals("1")) {
+                    holder.clLayout.setVisibility(View.GONE);
+                    holder.flLayout.setVisibility(View.VISIBLE);
+                    holder.badgeView.setBadgeNumber(item.getNumber());
+                } else {
+                    holder.clLayout.setVisibility(View.VISIBLE);
+                    holder.flLayout.setVisibility(View.GONE);
+                    if (item.getNumber() > 0) {
+                        holder.ibReduce.setVisibility(View.VISIBLE);
+                        holder.tvNumber.setVisibility(View.VISIBLE);
+                        holder.tvNumber.setText(String.valueOf(item.getNumber()));
+                    } else {
+                        holder.ibReduce.setVisibility(View.INVISIBLE);
+                        holder.tvNumber.setVisibility(View.INVISIBLE);
+                    }
+                }
             }
+
         }
         //state=1上架
         if (item.getState() == 2) {
