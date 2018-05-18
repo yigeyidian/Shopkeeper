@@ -1455,7 +1455,12 @@ public interface ShopkeeperApi {
             @Field("CashPayType") String cashPayType,
             @Field("RESTAURANTID") String restaurantId,
             @Field("IsChan") String memberComUse,
-            @Field("UniFiedPice") String UnitePay);
+            @Field("UniFiedPice") String UnitePay,
+            @Field("Numberingrules") String numberingRules,
+            @Field("CountCoding") String countCoding,
+            @Field("RegularfoodID") String foodId,
+            @Field("RegularfoodName ") String foodName
+    );
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_MASTE + "MerChantPermission.ashx")

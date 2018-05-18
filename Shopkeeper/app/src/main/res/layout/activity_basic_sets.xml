@@ -272,8 +272,126 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/_30sdp" />
             </LinearLayout>
+            <View
+                android:layout_width="@dimen/_31sdp"
+                android:layout_height="@dimen/_1sdp"
+                android:background="@color/white" />
+            <LinearLayout
+                style="@style/SettingItemStyle">
 
+                <TextView
+                    style="@style/SettingItemText2Style"
+                    android:textSize="@dimen/_32ssp"
+                    android:text="打印排号规则" />
 
+                <RadioGroup
+                    android:id="@+id/rg_print_numeral_rules"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_32sdp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="循环排号" />
+
+                    <RadioButton
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="起始排号" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_90sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:background="@drawable/selector_item"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:text="会员充值校验码"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_32ssp" />
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/_21sdp"
+                    android:layout_marginRight="@dimen/_30sdp"
+                    android:background="@null"
+                    android:hint="请设置商家支付密码"
+                    android:textSize="@dimen/_32ssp"
+                    android:maxLength="15" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_90sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:background="@drawable/selector_item"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:text="循环（起始）编码"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_32ssp" />
+
+                <EditText
+                    android:id="@+id/countcoding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/_21sdp"
+                    android:layout_marginRight="@dimen/_30sdp"
+                    android:background="@null"
+                    android:hint="请设置循环（起始）编码"
+                    android:textSize="@dimen/_32ssp"
+                    android:maxLength="15" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_90sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:background="@drawable/selector_item"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/_32ssp"
+                    android:text="选择商品" />
+                <com.admin.shopkeeper.widget.MySpinner
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_30sdp"
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:text="请选择"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_28ssp" />
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/ll_pay"
                 android:layout_width="match_parent"
@@ -347,34 +465,6 @@
                     android:textColor="@color/text_grey" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_90sdp"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:background="@drawable/selector_item"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/_30sdp"
-                    android:text="会员充值校验码"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_32ssp" />
-
-                <EditText
-                    android:id="@+id/password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/_21sdp"
-                    android:layout_marginRight="@dimen/_30sdp"
-                    android:background="@null"
-                    android:hint="请设置商家支付密码"
-                    android:maxLength="15" />
-
-            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"

@@ -1,13 +1,11 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.basicSets;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.admin.shopkeeper.App;
-import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.entity.BasicSetBean;
-import com.admin.shopkeeper.entity.HouseBean;
+import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.helper.RetrofitHelper;
 import com.admin.shopkeeper.model.StringModel;
 import com.admin.shopkeeper.utils.DeviceUtils;
@@ -21,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -61,11 +58,11 @@ public class BasicSetsPresenter extends BasePresenter<IBasicSetsView> {
     }
 
     public void commit(String payImage, String printSet, String productSize, String payType, String chengjindazhe,
-                       String jiezhangPay, String guestShow, String password, String payTypeValue, String memberComUse, String unitePay) {
+                       String jiezhangPay, String guestShow, String password, String payTypeValue, String memberComUse, String unitePay ,String numberingrules , String countCoding ,String foodId , String foodName ) {
         DialogUtils.showDialog(context, "数据提交中");
         RetrofitHelper.getInstance()
                 .getApi()
-                .editBasicSet("1", payImage, printSet, productSize, payType, chengjindazhe, jiezhangPay, guestShow, password, payTypeValue, App.INSTANCE().getShopID(), memberComUse, unitePay)
+                .editBasicSet("1", payImage, printSet, productSize, payType, chengjindazhe, jiezhangPay, guestShow, password, payTypeValue, App.INSTANCE().getShopID(), memberComUse, unitePay ,numberingrules ,countCoding,foodId,foodName)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -124,5 +121,25 @@ public class BasicSetsPresenter extends BasePresenter<IBasicSetsView> {
     private RequestBody getValue(String value) {
         return RequestBody.create(
                 MediaType.parse("text/plain"), value);
+    }
+    public void getFood() {
+        RetrofitHelper.getInstance()
+                .getApi()
+                .getFoodsList("1", App.INSTANCE().getShopID())
+                .compose(getActivityLifecycleProvider().bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(stringModel -> {
+                    if (stringModel.getCode().equals("1")) {
+                        FoodBean[] foods = new Gson().fromJson(stringModel.getResult(), FoodBean[].class);
+                        iView.getFoodSuccess(Arrays.asList(foods));
+                    } else {
+                        iView.error("加载失败");
+                    }
+                }, throwable -> {
+                    throwable.printStackTrace();
+                    iView.error("加载失败");
+                });
+
     }
 }

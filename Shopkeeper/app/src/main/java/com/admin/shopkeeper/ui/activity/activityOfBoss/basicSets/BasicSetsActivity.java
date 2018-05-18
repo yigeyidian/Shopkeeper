@@ -10,26 +10,28 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
-import com.admin.shopkeeper.dialog.DaZheDialog;
 import com.admin.shopkeeper.dialog.ListDialog;
 import com.admin.shopkeeper.dialog.MutiSelectDialog;
 import com.admin.shopkeeper.entity.BasicSetBean;
+import com.admin.shopkeeper.entity.FoodBean;
+import com.admin.shopkeeper.entity.MenuTypeEntity;
 import com.admin.shopkeeper.entity.MutiBean;
-import com.admin.shopkeeper.ui.activity.bill.BillActivity;
+import com.admin.shopkeeper.widget.MySpinner;
 import com.bumptech.glide.Glide;
 import com.fastaccess.permission.base.PermissionHelper;
 import com.fastaccess.permission.base.callback.OnPermissionCallback;
 import com.gyf.barlibrary.ImmersionBar;
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +39,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 import me.iwf.photopicker.PhotoPickUtils;
 
 public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implements IBasicSetsView, OnPermissionCallback {
@@ -70,6 +73,12 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
     ImageView imageView;
     @BindView(R.id.password)
     EditText password;
+    @BindView(R.id.rg_print_numeral_rules)
+    RadioGroup rgPrintRules; //打印排号规则
+    @BindView(R.id.countcoding)
+    EditText countcoding; //循环起始编码
+    @BindView(R.id.tv_name)
+    MySpinner tvName;
     private PermissionHelper permissionHelper;
     private String imagePath;
     private List<MutiBean> payTypes = new ArrayList<>();
@@ -97,7 +106,8 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
         setSupportActionBar(toolbar);
 
         permissionHelper = PermissionHelper.getInstance(this);
-        presenter.getBasicSets();
+        presenter.getFood();
+//        presenter.getBasicSets();
 
         payTypes.add(new MutiBean("现金", false, 1));
         payTypes.add(new MutiBean("银行卡", false, 2));
@@ -132,6 +142,51 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private List<FoodBean> selectFoods;
+    private List<FoodBean> list;
+    String names = "";
+    String id = "";
+
+    @OnClick(R.id.tv_name)
+    public void selectProductClick() {
+        if (list == null || list.size() == 0) {
+            presenter.getFood();
+        }
+        tvName.initContent(list);
+        tvName.setButtonClick(new MySpinner.OnButtonClick() {
+            @Override
+            public void onSure(List<FoodBean> list) {
+                selectFoods = list;
+                if (selectFoods == null || selectFoods.size() == 0) {
+                    tvName.setText("请选择商品");
+                } else if (selectFoods.get(0).getProductName().equals("全选")) {
+                    tvName.setText("全选");
+                    for (FoodBean bean : selectFoods) {
+                        names += bean.getProductName() + ",";
+                        id += bean.getProductId() + ",";
+                    }
+                } else if (selectFoods.size() > 3) {
+                    tvName.setText(selectFoods.size() + "已选择");
+                    for (FoodBean bean : selectFoods) {
+                        names += bean.getProductName() + ",";
+                        id += bean.getProductId() + ",";
+                    }
+                } else {
+                    for (FoodBean bean : selectFoods) {
+                        names += bean.getProductName() + ",";
+                        id += bean.getProductId() + ",";
+                    }
+                    tvName.setText(names.substring(0, names.length() - 1));
+                }
+            }
+
+            @Override
+            public void onSureTypes(List<MenuTypeEntity> typeEntityList) {
+
+            }
+        });
     }
 
     @OnClick(R.id.imageview)
@@ -244,9 +299,19 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
 
 
     private void submit(String imageName) {
+        if (TextUtils.isEmpty(password.getText().toString())) {
+            Toasty.warning(BasicSetsActivity.this, "请输入会员充值校验码", Toast.LENGTH_SHORT, true).show();
+            password.requestFocus();
+            return;
+        }
+        if (TextUtils.isEmpty(countcoding.getText().toString())) {
+            Toasty.warning(BasicSetsActivity.this, "请输入循环（起始）编码", Toast.LENGTH_SHORT, true).show();
+            countcoding.requestFocus();
+            return;
+        }
         presenter.commit(imageName, cbPrint.isChecked() ? "1" : "2", sizeType + "", payType + "", cbSale.isChecked() ? "1" : "0",
                 priceType + "", cdShowOfGuest.isChecked() ? "1" : "0", password.getText().toString(), payTypeValues,
-                cbIsMemberComUse.isChecked() ? "1" : "0", cbIsUnitePay.isChecked() ? "1" : "0");
+                cbIsMemberComUse.isChecked() ? "1" : "0", cbIsUnitePay.isChecked() ? "1" : "0", ((RadioButton) rgPrintRules.getChildAt(0)).isChecked() ? "0" : "1", countcoding.getText().toString(), id, names);
     }
 
     @Override
@@ -291,7 +356,7 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
         showFailToast(failed);
     }
 
-
+    String productId[];
     @Override
     public void success(BasicSetBean bean) {
         if (bean.getPrintSet().equals("1")) {
@@ -311,7 +376,14 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
         if (bean.getUniFiedPice().equals("1")) {
             cbIsUnitePay.setChecked(true);
         }
-
+        if (bean.getNumeralRule().equals("0")) {
+            ((RadioButton) rgPrintRules.getChildAt(0)).setChecked(true);
+        } else {
+            ((RadioButton) rgPrintRules.getChildAt(1)).setChecked(true);
+        }
+        if (!TextUtils.isEmpty(bean.getNumeralNumber())) {
+            countcoding.setText(bean.getNumeralNumber());
+        }
         switch (bean.getPayType()) {
             case "1":
                 tvPay.setText("现金");
@@ -379,6 +451,39 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
             imageView.setImageResource(R.mipmap.list_add_image);
         }
         password.setText(bean.getPayPassord());
+
+        if (!TextUtils.isEmpty(bean.getChooseProduct())) {
+            productId = bean.getChooseProduct().split(",");
+        }
+        this.selectFoods = new ArrayList<>();
+        for (int i = 0; i < productId.length; i++) {
+            for (int j = 0; j < list.size(); j++) {
+                if(productId[i].equals(list.get(j).getProductId())){
+                    selectFoods.add(list.get(j));
+                }
+            }
+        }
+        if (selectFoods == null || selectFoods.size() == 0) {
+            tvName.setText("请选择商品");
+        } else if (selectFoods.get(0).getProductName().equals("全选")) {
+            tvName.setText("全选");
+            for (FoodBean fbean : selectFoods) {
+                names += fbean.getProductName() + ",";
+                id += fbean.getProductId() + ",";
+            }
+        } else if (selectFoods.size() > 3) {
+            tvName.setText(selectFoods.size() + "已选择");
+            for (FoodBean fbean : selectFoods) {
+                names += fbean.getProductName() + ",";
+                id += fbean.getProductId() + ",";
+            }
+        } else {
+            for (FoodBean fbean : selectFoods) {
+                names += fbean.getProductName() + ",";
+                id += fbean.getProductId() + ",";
+            }
+            tvName.setText(names.substring(0, names.length() - 1));
+        }
     }
 
     @Override
@@ -390,6 +495,15 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
     @Override
     public void imagesuccess(String name) {
         submit(name);
+    }
+
+    @Override
+    public void getFoodSuccess(List<FoodBean> foods) {
+        this.list = new ArrayList<>(foods);
+        FoodBean bean = new FoodBean();
+        bean.setProductName("全选");
+        this.list.add(0, bean);
+        presenter.getBasicSets();
     }
 
     @Override

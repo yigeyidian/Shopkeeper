@@ -4,8 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-import butterknife.BindView;
-
 /**
  * Created by Administrator on 2017/9/11.
  */
@@ -22,6 +20,7 @@ public class BasicSetBean implements Serializable {
     // \"JieZhangPay\":\"2\" PayPassWord:null
 //    "CashPayType\":\"1,2,5,3,7,4,8,9,10\"
 //    "UniFiedPice\":\"0\",\"IsChan\":\"1\"
+    //\"NumeralRule\":\"2\",\"NumeralNumber\":\"50\",\"ChooseProduct\":
 
 
     @SerializedName("GUID")
@@ -50,6 +49,36 @@ public class BasicSetBean implements Serializable {
     private String uniFiedPice;//统一支付
     @SerializedName("IsChan")
     private String isChan;//会员通用
+    @SerializedName("NumeralRule")
+    private String numeralRule;//打印排号规则
+    @SerializedName("NumeralNumber")
+    private String numeralNumber;//循环起始编码
+    @SerializedName("ChooseProduct")
+    private String chooseProduct;//选择商品id
+
+    public String getNumeralRule() {
+        return numeralRule;
+    }
+
+    public void setNumeralRule(String numeralRule) {
+        this.numeralRule = numeralRule;
+    }
+
+    public String getNumeralNumber() {
+        return numeralNumber;
+    }
+
+    public void setNumeralNumber(String numeralNumber) {
+        this.numeralNumber = numeralNumber;
+    }
+
+    public String getChooseProduct() {
+        return chooseProduct;
+    }
+
+    public void setChooseProduct(String chooseProduct) {
+        this.chooseProduct = chooseProduct;
+    }
 
     public String getUniFiedPice() {
         return uniFiedPice;
