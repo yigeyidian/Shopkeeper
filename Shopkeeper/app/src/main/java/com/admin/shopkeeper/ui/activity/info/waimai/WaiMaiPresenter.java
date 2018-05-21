@@ -28,7 +28,7 @@ public class WaiMaiPresenter extends BasePresenter<IWaiMaiView> {
         DialogUtils.showDialog(context, "数据提交中...");
         RetrofitHelper.getInstance().getApi().kuaiSu("0", "", App.INSTANCE().getShopID(), foodinfo, pdata, ptime, names, address,
                 phone, App.INSTANCE().getUser().getId(), App.INSTANCE().getUser().getName(),
-                remark, monery, tablid, tablename, types, "", monery,"","")
+                remark, monery, tablid, tablename, types, "", monery,"")
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

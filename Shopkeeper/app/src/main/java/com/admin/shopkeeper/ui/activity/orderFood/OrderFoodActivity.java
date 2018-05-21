@@ -204,7 +204,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                         public void onClick(DialogInterface dialogInterface, int i) {
                             tableName = editText.getText().toString();
                             if (!TextUtils.isEmpty(tableName)) {
-                                presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total1, "", tableName, "4", false, false, true,"","1");
+                                presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total1, "", tableName, "4", false, false, true,"1");
                             } else {
                                 Toasty.warning(OrderFoodActivity.this, "请输入桌号", Toast.LENGTH_SHORT, true).show();
                             }
@@ -219,7 +219,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     }
 
                 } else if (App.INSTANCE().getUser().getOperaType().contains("2")) {
-                    presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", false, false, false,etRowNumber.getText().toString().isEmpty()?"":etRowNumber.getText().toString(),"0");
+                    presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", etRowNumber.getText().toString().isEmpty()?"":etRowNumber.getText().toString(), "4", false, false, false,"0");
                 }
 
                 break;
@@ -316,12 +316,12 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         if(App.INSTANCE().getUser().getOperaType().contains("2")){
             etRowNumber.setVisibility(View.VISIBLE);
         }
-        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", true, false, false,etRowNumber.getText().toString().isEmpty()?"":etRowNumber.getText().toString(),App.INSTANCE().getUser().getOperaType().contains("2")?"0":"1");
+        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", etRowNumber.getText().toString().isEmpty()?"":etRowNumber.getText().toString(), "4", true, false, false,App.INSTANCE().getUser().getOperaType().contains("2")?"0":"1");
     }
 
     @OnClick(R.id.scanBill)
     public void scanClick() {
-        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", getTotal(), "", "", "4", false, true, false,etRowNumber.getText().toString().isEmpty()?"":etRowNumber.getText().toString(),App.INSTANCE().getUser().getOperaType().contains("2")?"0":"1");
+        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", getTotal(), "", etRowNumber.getText().toString().isEmpty()?"":etRowNumber.getText().toString(), "4", false, true, false,App.INSTANCE().getUser().getOperaType().contains("2")?"0":"1");
 
     }
 
@@ -925,15 +925,18 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
         //        item.getTasteType();//口味 1。弹出口味   0.不弹出口
 //        item.getProductShuXing();//1是称斤 2是规格菜品 0是默认菜品
         Timber.d("-----" + item.getTasteType());
-        if (item.getTasteType().equals("1")) {
-            List<KouWei> kouWeiList = AppDbHelper.INSTANCE().getOwnKouWeis(App.INSTANCE().getShopID(), item.getProductID());
-            kouWeiList.addAll(AppDbHelper.INSTANCE().getKouWeis(App.INSTANCE().getShopID(), item.getProductID()));
-            KouWei k = new KouWei();
-            k.setType(KouWei.EDIT);
-            k.setGuId("");
-            kouWeiList.add(0, k);
-            dialog.setKouWeis(kouWeiList);
+        if(item.getTasteType() != null){
+            if (item.getTasteType().equals("1")) {
+                List<KouWei> kouWeiList = AppDbHelper.INSTANCE().getOwnKouWeis(App.INSTANCE().getShopID(), item.getProductID());
+                kouWeiList.addAll(AppDbHelper.INSTANCE().getKouWeis(App.INSTANCE().getShopID(), item.getProductID()));
+                KouWei k = new KouWei();
+                k.setType(KouWei.EDIT);
+                k.setGuId("");
+                kouWeiList.add(0, k);
+                dialog.setKouWeis(kouWeiList);
+            }
         }
+
         switch (item.getProductShuXing()) {
             case "1":
                 dialog.setShowWeight(true);
