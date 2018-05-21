@@ -290,7 +290,7 @@ class TablePresenter extends BasePresenter<ITableView> {
                 .getApi()
                 .kuaiSu("0", "", App.INSTANCE().getShopID(), foodinfo, pdata, ptime, names, address,
                         phone, App.INSTANCE().getUser().getId(), App.INSTANCE().getUser().getName(), remark,
-                        0, tablid, tablename, types, "", monery)
+                        0, tablid, tablename, types, "", monery,"","")
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

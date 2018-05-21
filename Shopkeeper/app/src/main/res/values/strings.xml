@@ -161,4 +161,8 @@
     <string name="title_activity_yu_ding">YuDingActivity</string>
     <string name="title_activity_big_image">BigImageActivity</string>
     <string name="title_activity_meal">MealActivity</string>
+
+    <string name="quick_bill">快速\n结账</string>
+    <string name="scan_bill">扫码\n结账</string>
+    <string name="other_bill">其他\n结账</string>
 </resources>

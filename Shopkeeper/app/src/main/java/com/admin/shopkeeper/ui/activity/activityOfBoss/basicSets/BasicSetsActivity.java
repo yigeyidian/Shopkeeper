@@ -145,20 +145,19 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
     }
 
     private List<FoodBean> selectFoods;
-    private List<FoodBean> list;
+    private List<FoodBean> mList;
     String names = "";
     String id = "";
 
     @OnClick(R.id.tv_name)
     public void selectProductClick() {
-        if (list == null || list.size() == 0) {
-            presenter.getFood();
-        }
-        tvName.initContent(list);
+        tvName.initContent(mList);
         tvName.setButtonClick(new MySpinner.OnButtonClick() {
             @Override
             public void onSure(List<FoodBean> list) {
                 selectFoods = list;
+                names = "";
+                id = "";
                 if (selectFoods == null || selectFoods.size() == 0) {
                     tvName.setText("请选择商品");
                 } else if (selectFoods.get(0).getProductName().equals("全选")) {
@@ -456,13 +455,17 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
             productId = bean.getChooseProduct().split(",");
         }
         this.selectFoods = new ArrayList<>();
+        selectFoods.clear();
         for (int i = 0; i < productId.length; i++) {
-            for (int j = 0; j < list.size(); j++) {
-                if(productId[i].equals(list.get(j).getProductId())){
-                    selectFoods.add(list.get(j));
+            for (int j = 0; j < mList.size(); j++) {
+                if(productId[i].equals(mList.get(j).getProductId())){
+                    mList.get(j).setCheck(true);
+                    selectFoods.add(mList.get(j));
                 }
             }
         }
+        names = "";
+        id = "";
         if (selectFoods == null || selectFoods.size() == 0) {
             tvName.setText("请选择商品");
         } else if (selectFoods.get(0).getProductName().equals("全选")) {
@@ -499,10 +502,10 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
 
     @Override
     public void getFoodSuccess(List<FoodBean> foods) {
-        this.list = new ArrayList<>(foods);
+        mList = new ArrayList<>(foods);
         FoodBean bean = new FoodBean();
         bean.setProductName("全选");
-        this.list.add(0, bean);
+        mList.add(0, bean);
         presenter.getBasicSets();
     }
 

@@ -111,6 +111,8 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
     AppCompatButton btQuickBill;
     @BindView(R.id.scanBill)
     AppCompatButton btScanBill;
+    @BindView(R.id.row_number)
+    AppCompatEditText etRowNumber;
     @BindView(R.id.totalMoney)
     AppCompatTextView totalMoney;
     @BindView(R.id.bottomsheet)
@@ -202,7 +204,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                         public void onClick(DialogInterface dialogInterface, int i) {
                             tableName = editText.getText().toString();
                             if (!TextUtils.isEmpty(tableName)) {
-                                presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total1, "", tableName, "4", false, false, true);
+                                presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total1, "", tableName, "4", false, false, true,"","1");
                             } else {
                                 Toasty.warning(OrderFoodActivity.this, "请输入桌号", Toast.LENGTH_SHORT, true).show();
                             }
@@ -217,7 +219,7 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                     }
 
                 } else if (App.INSTANCE().getUser().getOperaType().contains("2")) {
-                    presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", false, false, false);
+                    presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", false, false, false,etRowNumber.getText().toString().isEmpty()?"":etRowNumber.getText().toString(),"0");
                 }
 
                 break;
@@ -311,12 +313,15 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 }
             }
         }
-        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", true, false, false);
+        if(App.INSTANCE().getUser().getOperaType().contains("2")){
+            etRowNumber.setVisibility(View.VISIBLE);
+        }
+        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", total, "", "", "4", true, false, false,etRowNumber.getText().toString().isEmpty()?"":etRowNumber.getText().toString(),App.INSTANCE().getUser().getOperaType().contains("2")?"0":"1");
     }
 
     @OnClick(R.id.scanBill)
     public void scanClick() {
-        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", getTotal(), "", "", "4", false, true, false);
+        presenter.KuaiSu(getInfo(), "", "", "", "", "", "", getTotal(), "", "", "4", false, true, false,etRowNumber.getText().toString().isEmpty()?"":etRowNumber.getText().toString(),App.INSTANCE().getUser().getOperaType().contains("2")?"0":"1");
 
     }
 
@@ -496,21 +501,23 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 toolbar.setTitle("快餐");
 //                "现金", "银行卡", "微信支付", "会员卡", "线下支付宝", "线下微信"
                 if (App.INSTANCE().getUser().getPayType().equals("1")) {
-                    btQuickBill.setText("现金支付");
+                    btQuickBill.setText("现金\n支付");
                 } else if (App.INSTANCE().getUser().getPayType().equals("2")) {
-                    btQuickBill.setText("银行卡支付");
+                    btQuickBill.setText("银行卡\n支付");
                 } else if (App.INSTANCE().getUser().getPayType().equals("3")) {
-                    btQuickBill.setText("微信支付");
+                    btQuickBill.setText("微信\n支付");
                 } else if (App.INSTANCE().getUser().getPayType().equals("5")) {
-                    btQuickBill.setText("会员卡支付");
+                    btQuickBill.setText("会员卡\n支付");
                 } else if (App.INSTANCE().getUser().getPayType().equals("6")) {
-                    btQuickBill.setText("线下支付宝支付");
+                    btQuickBill.setText("线下支\n付宝支付");
                 } else if (App.INSTANCE().getUser().getPayType().equals("7")) {
-                    btQuickBill.setText("线下微信支付");
+                    btQuickBill.setText("线下\n微信支付");
                 } else {
-                    btQuickBill.setText("快速支付");
+                    btQuickBill.setText("快速\n支付");
                 }
-
+                if(App.INSTANCE().getUser().getOperaType().contains("2")){
+                    etRowNumber.setVisibility(View.VISIBLE);
+                }
                 btQuickBill.setVisibility(View.VISIBLE);
                 btScanBill.setVisibility(View.VISIBLE);
                 break;

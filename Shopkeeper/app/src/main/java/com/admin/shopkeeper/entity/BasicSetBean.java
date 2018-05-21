@@ -20,7 +20,7 @@ public class BasicSetBean implements Serializable {
     // \"JieZhangPay\":\"2\" PayPassWord:null
 //    "CashPayType\":\"1,2,5,3,7,4,8,9,10\"
 //    "UniFiedPice\":\"0\",\"IsChan\":\"1\"
-    //\"NumeralRule\":\"2\",\"NumeralNumber\":\"50\",\"ChooseProduct\":
+    //\"Numberingrules\":\"2\",\"CountCoding\":\"50\",\"ChooseProduct\":
 
 
     @SerializedName("GUID")
@@ -49,9 +49,9 @@ public class BasicSetBean implements Serializable {
     private String uniFiedPice;//统一支付
     @SerializedName("IsChan")
     private String isChan;//会员通用
-    @SerializedName("NumeralRule")
+    @SerializedName("Numberingrules")
     private String numeralRule;//打印排号规则
-    @SerializedName("NumeralNumber")
+    @SerializedName("CountCoding")
     private String numeralNumber;//循环起始编码
     @SerializedName("ChooseProduct")
     private String chooseProduct;//选择商品id

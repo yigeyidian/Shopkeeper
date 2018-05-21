@@ -495,7 +495,9 @@ public interface ShopkeeperApi {
             @Field("tablename") String tablename,
             @Field("types") String types,
             @Field("FanBill") String fanBill,
-            @Field("price") double price);
+            @Field("price") double price,
+            @Field("Tablename")  String rowNumber,//排号
+            @Field("BillType")  String billType);//字段 BillType 0=无桌位  1=有桌位
 
     @FormUrlEncoded
     @POST(Config.BASE_URL + Config.BASE_URL_INTERFACE + "PortPlaceOrderASHX.ashx")

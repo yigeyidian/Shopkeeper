@@ -143,13 +143,14 @@ public class OrderFoodPresenter extends BasePresenter<IOrderFoodView> {
     }
 
     public void KuaiSu(String foodinfo, String pdata, String ptime, String names, String address, String phone, String remark,
-                       double monery, String tablid, String tablename, String types, boolean isquick, boolean isScan , boolean isEditTabName) {
+                       double monery, String tablid, String tablename, String types, boolean isquick, boolean isScan , boolean isEditTabName,
+                       String rowNumber , String billType) {
         DialogUtils.showDialog(context, "数据提交中...");
         RetrofitHelper.getInstance()
                 .getApi()
                 .kuaiSu("0", "", App.INSTANCE().getShopID(), foodinfo, pdata, ptime, names, address,
                         phone, App.INSTANCE().getUser().getId(), App.INSTANCE().getUser().getName(),
-                        remark, 0, tablid, tablename, types, "", monery)
+                        remark, 0, tablid, tablename, types, "", monery,rowNumber ,billType)
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

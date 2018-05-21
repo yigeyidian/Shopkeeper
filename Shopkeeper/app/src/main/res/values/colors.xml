@@ -56,6 +56,7 @@
     <color name="text_black">#333333</color>
     <color name="text_red">#e64340</color>
     <color name="text_grey">#888888</color>
+    <color name="grey_dark">#565656</color>
 
     <color name="navbar_selected_two">#4BAE4F</color>
 </resources>

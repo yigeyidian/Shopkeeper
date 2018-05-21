@@ -7,11 +7,9 @@ import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BasePresenter;
 import com.admin.shopkeeper.helper.RetrofitHelper;
-import com.admin.shopkeeper.model.StringModel;
 import com.admin.shopkeeper.utils.DialogUtils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -30,7 +28,7 @@ public class WaiMaiPresenter extends BasePresenter<IWaiMaiView> {
         DialogUtils.showDialog(context, "数据提交中...");
         RetrofitHelper.getInstance().getApi().kuaiSu("0", "", App.INSTANCE().getShopID(), foodinfo, pdata, ptime, names, address,
                 phone, App.INSTANCE().getUser().getId(), App.INSTANCE().getUser().getName(),
-                remark, monery, tablid, tablename, types, "", monery)
+                remark, monery, tablid, tablename, types, "", monery,"","")
                 .compose(getActivityLifecycleProvider().bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
