@@ -31,9 +31,7 @@ import com.admin.shopkeeper.dialog.ListDialog;
 import com.admin.shopkeeper.dialog.MutiSelectDialog;
 import com.admin.shopkeeper.entity.BasicSetBean;
 import com.admin.shopkeeper.entity.FoodBean;
-import com.admin.shopkeeper.entity.MenuTypeEntity;
 import com.admin.shopkeeper.entity.MutiBean;
-import com.admin.shopkeeper.entity.PayType;
 import com.admin.shopkeeper.widget.MySpinner;
 import com.admin.shopkeeper.widget.SpinnerDialog;
 import com.bumptech.glide.Glide;
@@ -42,7 +40,6 @@ import com.fastaccess.permission.base.callback.OnPermissionCallback;
 import com.gyf.barlibrary.ImmersionBar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -159,43 +156,9 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
 
     @OnClick(R.id.tv_name)
     public void selectProductClick() {
-//        tvName.initContent(mList);
-//        tvName.setButtonClick(new MySpinner.OnButtonClick() {
-//            @Override
-//            public void onSure(List<FoodBean> list) {
-//                selectFoods = list;
-//                names = "";
-//                id = "";
-//                if (selectFoods == null || selectFoods.size() == 0) {
-//                    tvName.setText("请选择商品");
-//                } else if (selectFoods.get(0).getProductName().equals("全选")) {
-//                    tvName.setText("全选");
-//                    for (FoodBean bean : selectFoods) {
-//                        names += bean.getProductName() + ",";
-//                        id += bean.getProductId() + ",";
-//                    }
-//                } else if (selectFoods.size() > 3) {
-//                    tvName.setText(selectFoods.size() + "已选择");
-//                    for (FoodBean bean : selectFoods) {
-//                        names += bean.getProductName() + ",";
-//                        id += bean.getProductId() + ",";
-//                    }
-//                } else {
-//                    for (FoodBean bean : selectFoods) {
-//                        names += bean.getProductName() + ",";
-//                        id += bean.getProductId() + ",";
-//                    }
-//                    tvName.setText(names.substring(0, names.length() - 1));
-//                }
-//            }
-//
-//            @Override
-//            public void onSureTypes(List<MenuTypeEntity> typeEntityList) {
-//
-//            }
-//        });
 
-        if (mList == null) {
+        if (mList == null || mList.size()==0) {
+            presenter.getFood();
             return;
         }
 
