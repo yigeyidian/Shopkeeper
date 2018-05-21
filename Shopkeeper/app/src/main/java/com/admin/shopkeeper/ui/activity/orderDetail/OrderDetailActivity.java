@@ -250,6 +250,10 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
                         }
                         break;
                     case Label.cancel:
+                        if (!App.INSTANCE().getUser().getPermissionValue().contains("quxiaojiezhang")) {
+                            warning("没有取消权限");
+                            return;
+                        }
                         presenter.cancel(order.getId());
                         break;
                     case Label.before:
@@ -263,6 +267,10 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
                         presenter.ofinis(order.getId());
                         break;
                     case Label.rebill:
+                        if (!App.INSTANCE().getUser().getPermissionValue().contains("fanjiezhang")) {
+                            warning("没有反结账权限");
+                            return;
+                        }
                         Intent intent1 = new Intent(OrderDetailActivity.this, OrderFoodActivity.class);
                         intent1.putExtra("foods", detailFoods);
                         intent1.putExtra("order", order);

@@ -66,9 +66,15 @@ public class ShopPermissionEditAdapter extends BaseQuickAdapter<PermissionsOfUse
                     }else if(item.getPermissionName().equals("修改人数")){
                         item.setPermissionValue("jiucancount");
                     }else if(item.getPermissionName().equals("账单结算")){
-                        item.setPermissionValue("jiucancount");
+                        item.setPermissionValue("jiesuan");
                     }else if(item.getPermissionName().equals("交班打印")){
                         item.setPermissionValue("jiaoban");
+                    }else if(item.getPermissionName().equals("取消结账")){
+                        item.setPermissionValue("quxiaojiezhang");
+                    }else if(item.getPermissionName().equals("反结账")){
+                        item.setPermissionValue("fanjiezhang");
+                    }else if(item.getPermissionName().equals("清台")){
+                        item.setPermissionValue("qingtai");
                     }
                 }else{
                     item.setPermissionValue("");
