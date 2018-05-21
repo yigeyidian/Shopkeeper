@@ -272,17 +272,18 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/_30sdp" />
             </LinearLayout>
+
             <View
                 android:layout_width="@dimen/_31sdp"
                 android:layout_height="@dimen/_1sdp"
                 android:background="@color/white" />
-            <LinearLayout
-                style="@style/SettingItemStyle">
+
+            <LinearLayout style="@style/SettingItemStyle">
 
                 <TextView
                     style="@style/SettingItemText2Style"
-                    android:textSize="@dimen/_32ssp"
-                    android:text="打印排号规则" />
+                    android:text="打印排号规则"
+                    android:textSize="@dimen/_32ssp" />
 
                 <RadioGroup
                     android:id="@+id/rg_print_numeral_rules"
@@ -308,6 +309,7 @@
                 </RadioGroup>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_90sdp"
@@ -333,10 +335,11 @@
                     android:layout_marginRight="@dimen/_30sdp"
                     android:background="@null"
                     android:hint="请设置商家支付密码"
-                    android:textSize="@dimen/_32ssp"
-                    android:maxLength="15" />
+                    android:maxLength="15"
+                    android:textSize="@dimen/_32ssp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_90sdp"
@@ -362,8 +365,8 @@
                     android:layout_marginRight="@dimen/_30sdp"
                     android:background="@null"
                     android:hint="请设置循环（起始）编码"
-                    android:textSize="@dimen/_32ssp"
-                    android:maxLength="15" />
+                    android:maxLength="15"
+                    android:textSize="@dimen/_32ssp" />
 
             </LinearLayout>
 
@@ -377,21 +380,23 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:layout_marginLeft="@dimen/_30sdp"
                     android:layout_gravity="center_vertical"
-                    android:textSize="@dimen/_32ssp"
-                    android:text="选择商品" />
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:text="选择商品"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_32ssp" />
+
                 <com.admin.shopkeeper.widget.MySpinner
                     android:id="@+id/tv_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_30sdp"
                     android:layout_marginLeft="@dimen/_30sdp"
+                    android:layout_marginRight="@dimen/_30sdp"
                     android:text="请选择"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_28ssp" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/ll_pay"
                 android:layout_width="match_parent"

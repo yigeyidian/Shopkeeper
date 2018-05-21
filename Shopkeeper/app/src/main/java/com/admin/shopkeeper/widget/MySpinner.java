@@ -29,6 +29,7 @@ public class MySpinner extends android.support.v7.widget.AppCompatButton {
     public void setButtonClick(OnButtonClick buttonClick) {
         this.buttonClick = buttonClick;
     }
+
     public MySpinner(Context context) {
         super(context);
     }
@@ -60,7 +61,7 @@ public class MySpinner extends android.support.v7.widget.AppCompatButton {
                         if (buttonClick != null) {
                             List<FoodBean> list = new ArrayList<>();
                             for (FoodBean food : foods) {
-                                if(food.isCheck()){
+                                if (food.isCheck()) {
                                     list.add(food);
                                 }
                             }
@@ -86,11 +87,11 @@ public class MySpinner extends android.support.v7.widget.AppCompatButton {
                             for (FoodBean food : foods) {
                                 food.setCheck(!check);
                             }
-                        } else{
-                            if(checktv.isChecked()){
+                        } else {
+                            if (checktv.isChecked()) {
                                 bean.setCheck(false);
                                 checktv.setChecked(false);
-                            }else{
+                            } else {
                                 bean.setCheck(true);
                                 checktv.setChecked(true);
                             }
@@ -110,6 +111,7 @@ public class MySpinner extends android.support.v7.widget.AppCompatButton {
         };
         super.setOnClickListener(listener);
     }
+
     public void initTypeContent(final List<MenuTypeEntity> menuTypeEntities) {
         if (menuTypeEntities == null) {
             setText("请选择", null);
@@ -128,7 +130,7 @@ public class MySpinner extends android.support.v7.widget.AppCompatButton {
                         if (buttonClick != null) {
                             List<MenuTypeEntity> list = new ArrayList<>();
                             for (MenuTypeEntity food : menuTypeEntities) {
-                                if(food.isCheck()){
+                                if (food.isCheck()) {
                                     list.add(food);
                                 }
                             }
@@ -154,11 +156,11 @@ public class MySpinner extends android.support.v7.widget.AppCompatButton {
                             for (MenuTypeEntity food : menuTypeEntities) {
                                 food.setCheck(!check);
                             }
-                        } else{
-                            if(checktv.isChecked()){
+                        } else {
+                            if (checktv.isChecked()) {
                                 bean.setCheck(false);
                                 checktv.setChecked(false);
-                            }else{
+                            } else {
                                 bean.setCheck(true);
                                 checktv.setChecked(true);
                             }
@@ -197,8 +199,10 @@ public class MySpinner extends android.support.v7.widget.AppCompatButton {
             window.setAttributes(params);
         }
     }
+
     public interface OnButtonClick {
         void onSure(List<FoodBean> list);
+
         void onSureTypes(List<MenuTypeEntity> typeEntityList);
     }
 }

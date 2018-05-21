@@ -10,8 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -20,6 +24,7 @@ import android.widget.Toast;
 import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
+import com.admin.shopkeeper.adapter.DialogSetFoodAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.ListDialog;
 import com.admin.shopkeeper.dialog.MutiSelectDialog;
@@ -28,6 +33,7 @@ import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.entity.MenuTypeEntity;
 import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.widget.MySpinner;
+import com.admin.shopkeeper.widget.SpinnerDialog;
 import com.bumptech.glide.Glide;
 import com.fastaccess.permission.base.PermissionHelper;
 import com.fastaccess.permission.base.callback.OnPermissionCallback;
@@ -151,14 +157,63 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
 
     @OnClick(R.id.tv_name)
     public void selectProductClick() {
-        tvName.initContent(mList);
-        tvName.setButtonClick(new MySpinner.OnButtonClick() {
+//        tvName.initContent(mList);
+//        tvName.setButtonClick(new MySpinner.OnButtonClick() {
+//            @Override
+//            public void onSure(List<FoodBean> list) {
+//                selectFoods = list;
+//                names = "";
+//                id = "";
+//                if (selectFoods == null || selectFoods.size() == 0) {
+//                    tvName.setText("请选择商品");
+//                } else if (selectFoods.get(0).getProductName().equals("全选")) {
+//                    tvName.setText("全选");
+//                    for (FoodBean bean : selectFoods) {
+//                        names += bean.getProductName() + ",";
+//                        id += bean.getProductId() + ",";
+//                    }
+//                } else if (selectFoods.size() > 3) {
+//                    tvName.setText(selectFoods.size() + "已选择");
+//                    for (FoodBean bean : selectFoods) {
+//                        names += bean.getProductName() + ",";
+//                        id += bean.getProductId() + ",";
+//                    }
+//                } else {
+//                    for (FoodBean bean : selectFoods) {
+//                        names += bean.getProductName() + ",";
+//                        id += bean.getProductId() + ",";
+//                    }
+//                    tvName.setText(names.substring(0, names.length() - 1));
+//                }
+//            }
+//
+//            @Override
+//            public void onSureTypes(List<MenuTypeEntity> typeEntityList) {
+//
+//            }
+//        });
+
+        if (mList == null) {
+            return;
+        }
+
+        SpinnerDialog dialog = new SpinnerDialog(this);
+        TextView textView = (TextView) dialog.findViewById(R.id.over_text);
+        textView.setText("完成");
+        textView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSure(List<FoodBean> list) {
-                selectFoods = list;
+            public void onClick(View v) {
+                List<FoodBean> selectList = new ArrayList<>();
+                for (FoodBean food : mList) {
+                    if (food.isCheck()) {
+                        selectList.add(food);
+                    }
+                }
+
+                selectFoods = selectList;
                 names = "";
                 id = "";
-                if (selectFoods == null || selectFoods.size() == 0) {
+                if (selectFoods.size() == 0) {
                     tvName.setText("请选择商品");
                 } else if (selectFoods.get(0).getProductName().equals("全选")) {
                     tvName.setText("全选");
@@ -179,13 +234,38 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
                     }
                     tvName.setText(names.substring(0, names.length() - 1));
                 }
-            }
-
-            @Override
-            public void onSureTypes(List<MenuTypeEntity> typeEntityList) {
-
+                dialog.cancel();
             }
         });
+        ListView listView = (ListView) dialog.findViewById(R.id.listview);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        DialogSetFoodAdapter adapter = new DialogSetFoodAdapter(this, mList);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FoodBean bean = mList.get(position);
+                CheckedTextView checktv = (CheckedTextView) view.findViewById(R.id.text1);
+                if (bean.getProductName().equals("全选")) {
+                    boolean check = bean.isCheck();
+                    for (FoodBean food : mList) {
+                        food.setCheck(!check);
+                    }
+                } else {
+                    if (checktv.isChecked()) {
+                        bean.setCheck(false);
+                        checktv.setChecked(false);
+                    } else {
+                        bean.setCheck(true);
+                        checktv.setChecked(true);
+                    }
+                }
+
+                adapter.notifyDataSetChanged();
+            }
+        });
+        dialog.show();
     }
 
     @OnClick(R.id.imageview)
@@ -356,6 +436,7 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
     }
 
     String productId[];
+
     @Override
     public void success(BasicSetBean bean) {
         if (bean.getPrintSet().equals("1")) {
@@ -458,7 +539,7 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
         selectFoods.clear();
         for (int i = 0; i < productId.length; i++) {
             for (int j = 0; j < mList.size(); j++) {
-                if(productId[i].equals(mList.get(j).getProductId())){
+                if (productId[i].equals(mList.get(j).getProductId())) {
                     mList.get(j).setCheck(true);
                     selectFoods.add(mList.get(j));
                 }
