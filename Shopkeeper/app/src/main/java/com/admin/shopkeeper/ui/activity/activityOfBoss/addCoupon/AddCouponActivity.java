@@ -1,11 +1,9 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.addCoupon;
 
 import android.content.DialogInterface;
-import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,17 +15,13 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.admin.shopkeeper.App;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
-import com.admin.shopkeeper.adapter.EditFoodTypeAdapter;
 import com.admin.shopkeeper.adapter.ProductAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
-import com.admin.shopkeeper.dialog.ListDialog;
 import com.admin.shopkeeper.dialog.MutiSelectDialog;
 import com.admin.shopkeeper.entity.CouponManageBean;
 import com.admin.shopkeeper.entity.GuizeBean;
-import com.admin.shopkeeper.entity.MemberLevelManageBean;
 import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.entity.ProductBean;
 import com.codbking.widget.DatePickDialog;
@@ -36,7 +30,6 @@ import com.gyf.barlibrary.ImmersionBar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 

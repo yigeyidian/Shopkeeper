@@ -7,6 +7,7 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -97,7 +98,8 @@ public class ListDialog extends AppCompatDialog {
                 dismiss();
             });
 
-            recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
+            //recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
             daZhaAdapter = new ListDialogAdapter(R.layout.item_da_zhe_dialog, getReasons());
             recyclerView.setHasFixedSize(true);
             recyclerView.addItemDecoration(new MarginDecoration(context, R.dimen._10sdp));

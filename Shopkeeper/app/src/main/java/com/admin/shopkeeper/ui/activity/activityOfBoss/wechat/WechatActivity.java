@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.base.BaseActivity;
-import com.admin.shopkeeper.dialog.ListDialog;
 import com.admin.shopkeeper.dialog.MutiSelectDialog;
 import com.admin.shopkeeper.dialog.SingleSelectDialog;
 import com.admin.shopkeeper.entity.MutiBean;

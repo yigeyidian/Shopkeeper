@@ -32,6 +32,7 @@ import com.admin.shopkeeper.entity.BasicSetBean;
 import com.admin.shopkeeper.entity.FoodBean;
 import com.admin.shopkeeper.entity.MenuTypeEntity;
 import com.admin.shopkeeper.entity.MutiBean;
+import com.admin.shopkeeper.entity.PayType;
 import com.admin.shopkeeper.widget.MySpinner;
 import com.admin.shopkeeper.widget.SpinnerDialog;
 import com.bumptech.glide.Glide;
@@ -522,6 +523,14 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
         }
 
         payTypeValues = bean.getCashPayType();
+
+        if (!TextUtils.isEmpty(payTypeValues)) {
+            for (MutiBean mutiBean : payTypes) {
+                if (payTypeValues.contains(mutiBean.getValue() + "")) {
+                    mutiBean.setSelect(true);
+                }
+            }
+        }
         String payTypeStr;
 
 
