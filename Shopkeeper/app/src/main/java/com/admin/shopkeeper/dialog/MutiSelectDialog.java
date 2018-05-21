@@ -43,10 +43,19 @@ public class MutiSelectDialog extends AppCompatDialog {
         private Context context;
         private int theme;
         MutiDialogAdapter adapter;
+        private boolean isSingle = false;
 
         private String title;
         private List<MutiBean> reasons;
         private String select;
+
+        public boolean isSingle() {
+            return isSingle;
+        }
+
+        public void setSingle(boolean single) {
+            isSingle = single;
+        }
 
         public String getSelect() {
             return select;
@@ -122,7 +131,7 @@ public class MutiSelectDialog extends AppCompatDialog {
 
             if (!TextUtils.isEmpty(select)) {
                 for (MutiBean mutiBean : getReasons()) {
-                    if (select.contains(mutiBean.getValue() + "")) {
+                    if (select.contains(mutiBean.getValue() + "") || select.contains(mutiBean.getText())) {
                         mutiBean.setSelect(true);
                     } else {
                         mutiBean.setSelect(false);
@@ -138,10 +147,21 @@ public class MutiSelectDialog extends AppCompatDialog {
 
 
             adapter.setOnItemClickListener((adapter, view1, position) -> {
-                if (getReasons().get(position).isSelect()) {
-                    getReasons().get(position).setSelect(false);
+                if (isSingle) {
+                    if (getReasons().get(position).isSelect()) {
+                        getReasons().get(position).setSelect(false);
+                    } else {
+                        for (MutiBean mutiBean : getReasons()) {
+                            mutiBean.setSelect(false);
+                        }
+                        getReasons().get(position).setSelect(true);
+                    }
                 } else {
-                    getReasons().get(position).setSelect(true);
+                    if (getReasons().get(position).isSelect()) {
+                        getReasons().get(position).setSelect(false);
+                    } else {
+                        getReasons().get(position).setSelect(true);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             });

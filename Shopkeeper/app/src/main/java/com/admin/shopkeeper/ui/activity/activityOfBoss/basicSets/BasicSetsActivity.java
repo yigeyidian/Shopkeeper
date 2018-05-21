@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -278,17 +279,29 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
 
     @OnClick(R.id.ll_money)
     public void priceClick() {
-        showDialog("应付金额", Arrays.asList(priceStrs));
+        //showDialog("应付金额", Arrays.asList(priceStrs));
+        showSingleDialog("应付金额", getList(priceStrs), tvPrice.getText().toString());
+    }
+
+    public List<MutiBean> getList(String[] priceStrs) {
+        List<MutiBean> list = new ArrayList<>();
+        for (String str : priceStrs) {
+            list.add(new MutiBean(str, false, 0));
+        }
+        return list;
     }
 
     @OnClick(R.id.ll_size)
     public void sizeClick() {
-        showDialog("菜品大小", Arrays.asList(sizeStrs));
+        //showDialog("菜品大小", Arrays.asList(sizeStrs));
+        showSingleDialog("菜品大小", getList(sizeStrs), productSize.getText().toString());
     }
 
     @OnClick(R.id.ll_pay)
     public void payClick() {
-        showDialog("快速支付", Arrays.asList(payStrs));
+        //showDialog("快速支付", Arrays.asList(payStrs));
+
+        showSingleDialog("快速支付", getList(payStrs), tvPay.getText().toString());
     }
 
     String payTypeValues = "";
@@ -313,6 +326,73 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
     int priceType;
     int payType;
     int sizeType;
+
+    private void showSingleDialog(String title, List<MutiBean> list, String select) {
+        Log.i("ttt", "----" + select);
+        MutiSelectDialog.Builder builder = new MutiSelectDialog.Builder(this, R.style.OrderDialogStyle);
+        builder.setTitle(title);
+        builder.setReasons(list);
+        builder.setSelect(select);
+        builder.setSingle(true);
+        builder.setButtonClick(new MutiSelectDialog.OnButtonClick() {
+
+            @Override
+            public void onOk(String str, String value) {
+                switch (str) {
+                    case "现金":
+                        payType = 1;
+                        tvPay.setText(str);
+                        break;
+                    case "银行卡":
+                        payType = 2;
+                        tvPay.setText(str);
+                        break;
+                    case "微信支付":
+                        payType = 3;
+                        tvPay.setText(str);
+                        break;
+                    case "会员卡":
+                        payType = 5;
+                        tvPay.setText(str);
+                        break;
+                    case "线下支付宝":
+                        payType = 6;
+                        tvPay.setText(str);
+                        break;
+                    case "线下微信":
+                        payType = 7;
+                        tvPay.setText(str);
+                        break;
+                    case "大":
+                        sizeType = 2;
+                        productSize.setText(str);
+                        break;
+                    case "中":
+                        sizeType = 1;
+                        productSize.setText(str);
+                        break;
+                    case "小":
+                        sizeType = 0;
+                        productSize.setText(str);
+                        break;
+                    case "四舍五入":
+                        priceType = 0;
+                        tvPrice.setText(str);
+                        break;
+                    case "原价":
+                        priceType = 1;
+                        tvPrice.setText(str);
+                        break;
+                    case "抹零":
+                        priceType = 2;
+                        tvPrice.setText(str);
+                        break;
+                }
+            }
+        });
+
+        builder.creater().show();
+    }
 
     private void showDialog(String title, List<String> list) {
         ListDialog.Builder builder = new ListDialog.Builder(this, R.style.OrderDialogStyle);
@@ -525,12 +605,18 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
         payTypeValues = bean.getCashPayType();
 
         if (!TextUtils.isEmpty(payTypeValues)) {
+            String text = "";
             for (MutiBean mutiBean : payTypes) {
                 if (payTypeValues.contains(mutiBean.getValue() + "")) {
                     mutiBean.setSelect(true);
+                    text += mutiBean.getText() + ",";
                 }
             }
+            if (!TextUtils.isEmpty(text)) {
+                tvPayTypeOfShop.setText(text.substring(0, text.length() - 1));
+            }
         }
+
         String payTypeStr;
 
 
