@@ -250,10 +250,6 @@ public class OrderDetailActivity extends BaseActivity<OrderDetailPresenter> impl
                         }
                         break;
                     case Label.cancel:
-                        if (!App.INSTANCE().getUser().getPermissionValue().contains("quxiaojiezhang")) {
-                            warning("没有取消权限");
-                            return;
-                        }
                         presenter.cancel(order.getId());
                         break;
                     case Label.before:

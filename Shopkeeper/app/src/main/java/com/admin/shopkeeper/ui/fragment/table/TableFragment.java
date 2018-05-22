@@ -644,6 +644,10 @@ public class TableFragment extends DelayFragment<TablePresenter> implements ITab
 
     @Override
     public void showCancelDialog(Order order) {
+        if (!App.INSTANCE().getUser().getPermissionValue().contains("quxiaojiezhang")) {
+            warning("该桌位结账中");
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("提示");
         builder.setMessage("是否取消结账？");
