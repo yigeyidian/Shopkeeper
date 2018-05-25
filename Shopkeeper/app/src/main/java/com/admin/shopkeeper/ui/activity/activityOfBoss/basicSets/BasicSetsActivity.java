@@ -434,7 +434,7 @@ public class BasicSetsActivity extends BaseActivity<BasicSetsPresenter> implemen
         }
         presenter.commit(imageName, cbPrint.isChecked() ? "1" : "2", sizeType + "", payType + "", cbSale.isChecked() ? "1" : "0",
                 priceType + "", cdShowOfGuest.isChecked() ? "1" : "0", password.getText().toString(), payTypeValues,
-                cbIsMemberComUse.isChecked() ? "1" : "0", cbIsUnitePay.isChecked() ? "1" : "0", ((RadioButton) rgPrintRules.getChildAt(0)).isChecked() ? "0" : "1", countcoding.getText().toString(), id, names);
+                "", "", ((RadioButton) rgPrintRules.getChildAt(0)).isChecked() ? "0" : "1", countcoding.getText().toString(), id, names);
     }
 
     @Override

@@ -121,7 +121,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_21sdp"
                 android:layout_weight="1"
-                android:text="微信规则设置"
+                android:text="微信规则管理"
                 android:textColor="@color/black" />
 
             <ImageView
@@ -333,7 +333,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_21sdp"
                 android:layout_weight="1"
-                android:text="套餐类型管理"
+                android:text="套餐类别管理"
                 android:textColor="@color/black" />
 
             <ImageView
@@ -500,40 +500,6 @@
                 android:layout_marginLeft="@dimen/_21sdp"
                 android:layout_weight="1"
                 android:text="对接电子秤管理"
-                android:textColor="@color/black" />
-
-            <ImageView
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_24sdp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/_30sdp"
-                android:src="@mipmap/list_icon_arrow_right" />
-        </LinearLayout>
-
-        <View style="@style/LineHor2Style" />
-
-        <!--自定义打折-->
-        <LinearLayout
-            android:id="@+id/basic_sale"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_90sdp"
-            android:background="@drawable/selector_item"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="@dimen/_58sdp"
-                android:layout_height="@dimen/_58sdp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/_30sdp"
-                android:src="@mipmap/basics_icon_sale" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/_21sdp"
-                android:layout_weight="1"
-                android:text="打折管理"
                 android:textColor="@color/black" />
 
             <ImageView

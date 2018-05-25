@@ -19,13 +19,13 @@
         <TextView
             style="@style/SettingItemTextStyle"
             android:layout_width="wrap_content"
-            android:text="个人中心1积分等于" />
+            android:text="消费1元等于" />
 
         <EditText
             android:id="@+id/edit_center"
             style="@style/SettingItemEditStyle"
             android:inputType="numberDecimal"
-            android:hint="请输入等于多少" />
+            android:hint="请输入等于多少积分" />
 
     </LinearLayout>
 
@@ -42,7 +42,7 @@
             android:id="@+id/edit_order"
             style="@style/SettingItemEditStyle"
             android:inputType="numberDecimal"
-            android:hint="请输入等于多少" />
+            android:hint="请输入等于多少元" />
 
     </LinearLayout>
 

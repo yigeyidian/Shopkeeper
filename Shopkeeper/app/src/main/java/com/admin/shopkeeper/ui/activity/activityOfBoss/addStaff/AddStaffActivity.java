@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.admin.shopkeeper.Config;
 import com.admin.shopkeeper.R;
 import com.admin.shopkeeper.adapter.DepartmentAdapter;
-import com.admin.shopkeeper.adapter.EditFoodTypeAdapter;
 import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.entity.DepartmentBean;
 import com.admin.shopkeeper.entity.StaffManageBean;
@@ -184,7 +183,7 @@ public class AddStaffActivity extends BaseActivity<AddStaffPresenter> implements
         } else {
             stateSex = 2;
         }
-        presenter.submit((staffManageBean == null) ? "" : staffManageBean.getUserID(), acconutStr, passwordStr, stateRole, stateSex, birthdayStr, departmentBean.getId());
+        presenter.submit((staffManageBean == null) ? "" : staffManageBean.getUserID(), acconutStr, passwordStr, stateRole, stateSex, birthdayStr, "");
 
     }
 

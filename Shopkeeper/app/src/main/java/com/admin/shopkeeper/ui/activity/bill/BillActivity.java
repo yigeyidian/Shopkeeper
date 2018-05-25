@@ -54,6 +54,7 @@ import com.admin.shopkeeper.entity.OrderDetailFood;
 import com.admin.shopkeeper.entity.PayMeEntity;
 import com.admin.shopkeeper.entity.TableEntity;
 import com.admin.shopkeeper.entity.WeixinOrderBean;
+import com.admin.shopkeeper.ui.activity.orderFood.OrderFoodActivity;
 import com.admin.shopkeeper.utils.Tools;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -1366,6 +1367,9 @@ public class BillActivity extends BaseActivity<BillPresenter> implements IBillVi
         } else if (type == P3) {
             MsgEvent msgEvent = new MsgEvent(MsgEvent.kuaicanSuccess);
             EventBus.getDefault().post(msgEvent);
+            Intent intent = new Intent(this , OrderFoodActivity.class);
+            intent.putExtra(Config.PARAM1, OrderFoodActivity.P5);
+            startActivity(intent);
         } else if (type == P4) {
             MsgEvent msgEvent = new MsgEvent(MsgEvent.waimaiSuccess);
             EventBus.getDefault().post(msgEvent);

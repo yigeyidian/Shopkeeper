@@ -91,9 +91,11 @@
 
     </LinearLayout>
 
-    <View style="@style/LineHor2Style" />
+    <View style="@style/LineHor2Style"
+        android:visibility="gone"/>
 
-    <LinearLayout style="@style/SettingItemStyle">
+    <LinearLayout style="@style/SettingItemStyle"
+        android:visibility="gone">
 
         <TextView
             style="@style/SettingItemTextStyle"

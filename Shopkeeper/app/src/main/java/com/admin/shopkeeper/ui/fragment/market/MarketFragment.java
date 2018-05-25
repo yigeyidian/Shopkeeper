@@ -12,8 +12,7 @@ import com.admin.shopkeeper.ui.activity.activityOfBoss.mansong.MansongActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.memberLevelManage.MemberLevelManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.memberManager.MemberManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.rechargeManage.RechargeManageActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.wechat.WechatActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.wxsetting.WXSettingActivity;
+import com.admin.shopkeeper.ui.activity.activityOfBoss.sale.SaleActivity;
 
 import butterknife.OnClick;
 
@@ -100,5 +99,8 @@ public class MarketFragment extends BaseFragment<MarketPresenter> implements IMa
     public void lineDownClick() {
         startActivity(CouponLineDownActivity.class);
     }
-
+    @OnClick(R.id.basic_sale)
+    public void saleClick() {
+        startActivity(SaleActivity.class);
+    }
 }

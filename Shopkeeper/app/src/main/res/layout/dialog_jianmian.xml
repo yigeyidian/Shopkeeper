@@ -75,7 +75,7 @@
                 android:background="@drawable/bg_blue"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="抹份"
+                android:text="抹分"
                 android:layout_marginLeft="@dimen/_40sdp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_32ssp" />

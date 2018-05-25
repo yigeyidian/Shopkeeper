@@ -81,6 +81,7 @@
         <activity
             android:name=".ui.activity.orderFood.OrderFoodActivity"
             android:label="@string/title_activity_order"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.table.TableOperationActivity"

@@ -122,7 +122,7 @@ public class CouponManageActivity extends BaseActivity<CouponManagePresenter> im
                 presenter.getCouponInfo(1, "");
             }
         });
-        if (titleStr.equals("优惠券管理")) {
+        if (titleStr.equals("微信券管理")) {
             presenter.getCouponInfo(1, "");
         } else if (titleStr.equals("线下券管理")) {
             presenter.getLineDownInfo(1);

@@ -20,7 +20,6 @@ import com.admin.shopkeeper.ui.activity.activityOfBoss.mealTypemanager.MealTypeM
 import com.admin.shopkeeper.ui.activity.activityOfBoss.my.MyActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.print.PrintManagerActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.returncause.ReturnCauseActivity;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.sale.SaleActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.shopPermissionManage.ShopPermissionManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.staffManager.StaffManageActivity;
 import com.admin.shopkeeper.ui.activity.activityOfBoss.wechat.WechatActivity;
@@ -106,10 +105,7 @@ public class SettingFragment extends BaseFragment<SettingPresenter> implements I
         startActivity(PrintManagerActivity.class);
     }
 
-    @OnClick(R.id.basic_sale)
-    public void saleClick() {
-        startActivity(SaleActivity.class);
-    }
+
 
     @OnClick(R.id.basic_weight)
     public void weightClick() {

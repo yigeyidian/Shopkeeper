@@ -59,7 +59,7 @@
 
                 <TextView
                     style="@style/SettingItemTextStyle"
-                    android:text="角色" />
+                    android:text="员工角色" />
 
                 <RadioGroup
                     android:id="@+id/radioGroup_role"
@@ -140,9 +140,12 @@
             </LinearLayout>
 
 
-            <View style="@style/LineHor2Style" />
+            <View style="@style/LineHor2Style"
+                android:visibility="gone"/>
 
-            <LinearLayout style="@style/SettingItemStyle">
+            <LinearLayout
+                android:visibility="gone"
+                style="@style/SettingItemStyle">
 
                 <TextView
                     style="@style/SettingItemTextStyle"

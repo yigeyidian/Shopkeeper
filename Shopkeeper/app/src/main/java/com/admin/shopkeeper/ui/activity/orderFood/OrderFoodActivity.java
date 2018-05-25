@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -1181,6 +1182,13 @@ public class OrderFoodActivity extends BaseActivity<OrderFoodPresenter> implemen
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SpannableString s = new SpannableString("排号");//这里输入自己想要的提示文字
+        etRowNumber.setHint(s);
     }
 
     @Override

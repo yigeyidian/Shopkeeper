@@ -189,6 +189,15 @@
         <item name="android:textSize">@dimen/_30ssp</item>
     </style>
 
+    <style name="SettingItemTextStyle3">
+        <item name="android:layout_width">@dimen/_220sdp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">@dimen/_32sdp</item>
+        <item name="android:textColor">@color/text_red</item>
+        <item name="android:textSize">@dimen/_34ssp</item>
+    </style>
+
     <style name="SettingItemEditStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>

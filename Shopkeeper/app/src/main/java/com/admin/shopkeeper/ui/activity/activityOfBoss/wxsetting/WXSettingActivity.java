@@ -1,7 +1,5 @@
 package com.admin.shopkeeper.ui.activity.activityOfBoss.wxsetting;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -16,8 +14,6 @@ import com.admin.shopkeeper.base.BaseActivity;
 import com.admin.shopkeeper.dialog.MutiSelectDialog;
 import com.admin.shopkeeper.entity.MutiBean;
 import com.admin.shopkeeper.entity.WechatBean;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.wechat.IWechatView;
-import com.admin.shopkeeper.ui.activity.activityOfBoss.wechat.WechatPresenter;
 import com.gyf.barlibrary.ImmersionBar;
 
 import java.util.ArrayList;
@@ -72,7 +68,7 @@ public class WXSettingActivity extends BaseActivity<WXSettingPresenter> implemen
                 .titleBar(toolbar, true)
                 .init();
 
-        toolbar.setTitle("微信规则设置");
+        toolbar.setTitle("微信规则管理");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
@@ -88,13 +84,13 @@ public class WXSettingActivity extends BaseActivity<WXSettingPresenter> implemen
     public void saveClick() {
         String centerStr = etCenter.getText().toString().trim();
         if (TextUtils.isEmpty(centerStr)) {
-            showToast("请输入个人中心");
+            showToast("请输入等于多少积分");
             return;
         }
 
         String orderStr = etOrder.getText().toString().trim();
-        if (TextUtils.isEmpty(centerStr)) {
-            showToast("请输入微信下单");
+        if (TextUtils.isEmpty(orderStr)) {
+            showToast("请输入1积分等于多少元");
             return;
         }
 
@@ -175,8 +171,8 @@ public class WXSettingActivity extends BaseActivity<WXSettingPresenter> implemen
 
     @Override
     public void success(WechatBean bean) {
-        etCenter.setText(bean.getPersonCenter() + "");
-        etOrder.setText(bean.getWeixinOrder() + "");
+        etCenter.setText(bean.getPersonCenter() + "积分");
+        etOrder.setText(bean.getWeixinOrder() + "元");
 
         etCenter.setSelection(etCenter.length());
         etOrder.setSelection(etOrder.length());

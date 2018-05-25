@@ -56,7 +56,7 @@ public class MealTypeManagerActivity extends BaseActivity<MealTypeManagerPresent
                 .titleBar(toolbar, true)
                 .init();
 
-        toolbar.setTitle("套餐类型管理");
+        toolbar.setTitle("套餐类别管理");
         toolbar.setNavigationIcon(R.mipmap.navigation_icon_repeat);
         setSupportActionBar(toolbar);
 
