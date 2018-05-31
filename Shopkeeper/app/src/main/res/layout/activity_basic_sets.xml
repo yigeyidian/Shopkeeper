@@ -277,16 +277,18 @@
                     android:layout_marginRight="@dimen/_30sdp" />
             </LinearLayout>
 
-            <View
-                android:layout_width="@dimen/_31sdp"
-                android:layout_height="@dimen/_1sdp"
-                android:background="@color/white" />
 
-            <LinearLayout style="@style/SettingItemStyle">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_90sdp"
+                android:background="@drawable/selector_item"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:orientation="horizontal">
 
                 <TextView
                     style="@style/SettingItemText2Style"
-                    android:text="打印排号规则"
+                    android:text="排号规则"
                     android:textSize="@dimen/_32ssp" />
 
                 <RadioGroup
@@ -313,7 +315,70 @@
                 </RadioGroup>
 
             </LinearLayout>
+            <View
+                android:layout_width="@dimen/_31sdp"
+                android:layout_height="@dimen/_1sdp"
+                android:background="@color/white" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_90sdp"
+                android:background="@drawable/selector_item"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:text="循环（起始）编码"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_32ssp" />
+
+                <EditText
+                    android:id="@+id/countcoding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/_21sdp"
+                    android:layout_marginRight="@dimen/_30sdp"
+                    android:background="@null"
+                    android:hint="请设置循环（起始）编码"
+                    android:maxLength="15"
+                    android:textSize="@dimen/_32ssp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/_31sdp"
+                android:layout_height="@dimen/_1sdp"
+                android:background="@color/white" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_90sdp"
+                android:background="@drawable/selector_item"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:text="不排号商品"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_32ssp" />
+
+                <com.admin.shopkeeper.widget.MySpinner
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:layout_marginRight="@dimen/_30sdp"
+                    android:text="请选择"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_28ssp" />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_90sdp"
@@ -343,64 +408,6 @@
                     android:textSize="@dimen/_32ssp" />
 
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_90sdp"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:background="@drawable/selector_item"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/_30sdp"
-                    android:text="循环（起始）编码"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_32ssp" />
-
-                <EditText
-                    android:id="@+id/countcoding"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/_21sdp"
-                    android:layout_marginRight="@dimen/_30sdp"
-                    android:background="@null"
-                    android:hint="请设置循环（起始）编码"
-                    android:maxLength="15"
-                    android:textSize="@dimen/_32ssp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_90sdp"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:background="@drawable/selector_item"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/_30sdp"
-                    android:text="选择商品"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_32ssp" />
-
-                <com.admin.shopkeeper.widget.MySpinner
-                    android:id="@+id/tv_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_30sdp"
-                    android:layout_marginRight="@dimen/_30sdp"
-                    android:text="请选择"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_28ssp" />
-            </LinearLayout>
-
             <LinearLayout
                 android:id="@+id/ll_pay"
                 android:layout_width="match_parent"

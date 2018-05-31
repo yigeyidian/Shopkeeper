@@ -147,6 +147,7 @@
             android:theme="@style/BossTheme" />
         <activity
             android:name=".ui.activity.activityOfBoss.basicSets.BasicSetsActivity"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/BossTheme" />
         <activity
             android:name=".ui.activity.activityOfBoss.shopPermissionManage.ShopPermissionManageActivity"

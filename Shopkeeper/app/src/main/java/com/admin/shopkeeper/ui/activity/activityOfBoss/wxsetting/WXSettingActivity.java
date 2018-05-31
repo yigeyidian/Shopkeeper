@@ -84,13 +84,13 @@ public class WXSettingActivity extends BaseActivity<WXSettingPresenter> implemen
     public void saveClick() {
         String centerStr = etCenter.getText().toString().trim();
         if (TextUtils.isEmpty(centerStr)) {
-            showToast("请输入等于多少积分");
+            showToast("请输入获取1积分需消费多少元");
             return;
         }
 
         String orderStr = etOrder.getText().toString().trim();
         if (TextUtils.isEmpty(orderStr)) {
-            showToast("请输入1积分等于多少元");
+            showToast("请输入使用1积分抵用多少元");
             return;
         }
 
@@ -171,8 +171,8 @@ public class WXSettingActivity extends BaseActivity<WXSettingPresenter> implemen
 
     @Override
     public void success(WechatBean bean) {
-        etCenter.setText(bean.getPersonCenter() + "积分");
-        etOrder.setText(bean.getWeixinOrder() + "元");
+        etCenter.setText(bean.getPersonCenter() +"");
+        etOrder.setText(bean.getWeixinOrder() + "");
 
         etCenter.setSelection(etCenter.length());
         etOrder.setSelection(etOrder.length());
